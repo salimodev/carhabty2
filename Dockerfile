@@ -1,48 +1,43 @@
-# Image PHP avec Apache
+# Étape 1 : utiliser PHP avec Apache
 FROM php:8.2-apache
 
-# Copier Composer depuis l'image officielle
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Installer les dépendances nécessaires
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libicu-dev \
+    libzip-dev \
+    zip \
+    && docker-php-ext-install intl pdo pdo_mysql zip opcache \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Activer mod_rewrite pour Symfony
 RUN a2enmod rewrite
 
-# Configuration OPCache pour production
-RUN echo "opcache.enable=1\n\
-opcache.memory_consumption=128\n\
-opcache.interned_strings_buffer=8\n\
-opcache.max_accelerated_files=10000\n\
-opcache.revalidate_freq=0\n\
-opcache.validate_timestamps=0" > /usr/local/etc/php/conf.d/opcache.ini
-
-# Installer les extensions PHP nécessaires par étapes pour réduire la RAM
-RUN apt-get update && apt-get install -y --no-install-recommends libonig-dev libzip-dev zlib1g-dev \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip opcache \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Installer les utilitaires légers séparément
-RUN apt-get update && apt-get install -y --no-install-recommends zip unzip git \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Définir le ServerName pour supprimer le warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Copier le projet dans le conteneur
 COPY . /var/www/html/
 
-# Définir le répertoire de travail
-WORKDIR /var/www/html/
+# Définir le dossier racine (Symfony = public/)
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
-# Variables d'environnement Symfony
-ENV APP_ENV=prod
-ENV APP_DEBUG=0
+# Adapter la configuration Apache pour le dossier public/
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Installer les dépendances PHP
-RUN composer install --no-dev --optimize-autoloader --classmap-authoritative
+# Installer Composer (pour gérer les dépendances Symfony)
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Créer les dossiers nécessaires et définir les permissions
-RUN mkdir -p var/cache var/log var/sessions \
-    && chown -R www-data:www-data var
+# Aller dans le dossier de l’application
+WORKDIR /var/www/html
 
-# Exposer le port 80 pour Apache
+# Donner les bons droits
+RUN chown -R www-data:www-data /var/www/html/var
+
+# Exposer le port 80
 EXPOSE 80
 
-# Commande par défaut
+# Lancer Apache au démarrage du conteneur
 CMD ["apache2-foreground"]

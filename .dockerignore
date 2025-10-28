@@ -1,0 +1,35 @@
+# Ignorer le contrôle de version
+.git
+.gitignore
+
+# Ignorer les dépendances locales
+node_modules
+vendor
+
+# Ignorer les caches et logs Symfony
+var/cache
+var/log
+var/sessions
+
+# Ignorer les fichiers de configuration locaux
+.env.local
+.env.test
+.env.dev
+.env.backup
+.env.example
+
+# Ignorer les fichiers temporaires ou système
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+
+# Ignorer les fichiers Docker inutiles
+docker-compose.yml
+Dockerfile
+
+# Ignorer les fichiers du build frontend
+/public/build
+/public/node_modules

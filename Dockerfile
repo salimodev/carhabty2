@@ -1,5 +1,5 @@
 # Image PHP avec Apache
-FROM php:8.2-apache
+FROM php:8.2-fpm-alpine
 
 # Copier Composer depuis l'image officielle
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

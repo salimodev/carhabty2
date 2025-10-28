@@ -31,5 +31,8 @@ RUN mkdir -p var/cache var/log var/sessions \
 # Exposer le port 80 pour Apache
 EXPOSE 80
 
+# Définir un nom de serveur global pour Apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Lancer Apache
 CMD ["apache2-foreground"]

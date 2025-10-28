@@ -7,9 +7,9 @@ services:
       dockerfile: Dockerfile
     container_name: carhabty-app
     ports:
-      - "8080:80" # http://vps-ip:8080
+      - "8080:80"  # Ton site accessible sur http://vps-ip:8080
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html:cached
     environment:
       APP_ENV: prod
       APP_DEBUG: 0
@@ -26,9 +26,21 @@ services:
       MYSQL_USER: symfony
       MYSQL_PASSWORD: symfony
     ports:
-      - "3307:3306"
+      - "3307:3306"  # Change si 3306 est déjà utilisé sur le VPS
     volumes:
       - db_data:/var/lib/mysql
+    restart: always
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: carhabty-phpmyadmin
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8081:80"  # PhpMyAdmin accessible sur http://vps-ip:8081
+    depends_on:
+      - db
     restart: always
 
 volumes:

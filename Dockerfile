@@ -37,8 +37,9 @@ ENV APP_DEBUG=0
 # Installer les dépendances PHP
 RUN composer install --no-dev --optimize-autoloader --classmap-authoritative
 
-# Permissions correctes pour Symfony (var/cache, var/log, var/sessions)
-RUN chown -R www-data:www-data var/cache var/log var/sessions
+# Créer les dossiers nécessaires et définir les permissions
+RUN mkdir -p var/cache var/log var/sessions \
+    && chown -R www-data:www-data var
 
 # Exposer le port 80 pour Apache
 EXPOSE 80

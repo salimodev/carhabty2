@@ -1,6 +1,6 @@
 FROM php:8.2-fpm-alpine
 
-# Installer les extensions PHP nécessaires et paquets système essentiels
+# Installer les extensions PHP nécessaires et paquets système
 RUN apk update && apk add --no-cache \
     icu-dev \
     libzip-dev \

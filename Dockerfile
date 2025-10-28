@@ -1,7 +1,6 @@
-# Image de base PHP avec Apache
 FROM php:8.2-apache-buster
 
-# Installation des extensions et utilitaires requis
+# Installer les dépendances système
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libicu-dev \
         libzip-dev \
@@ -10,17 +9,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         git \
         libonig-dev \
         libxml2-dev \
-        gnupg \
-        dirmngr \
+        g++ \
+        make \
+        autoconf \
+        pkg-config \
     && docker-php-ext-install intl pdo pdo_mysql mbstring zip opcache \
     && a2enmod rewrite \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Installation de Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Installer Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Répertoire de travail
+# Définir le répertoire de travail
 WORKDIR /var/www/html
 
 # Copier le code source
@@ -29,12 +30,10 @@ COPY . .
 # Installer les dépendances PHP
 RUN composer install --no-dev --optimize-autoloader --classmap-authoritative
 
-# Permissions Symfony
+# Créer et donner les permissions pour Symfony
 RUN mkdir -p var/cache var/log var/sessions \
     && chown -R www-data:www-data var
 
-# Exposer le port 80
 EXPOSE 80
 
-# Commande par défaut
 CMD ["apache2-foreground"]

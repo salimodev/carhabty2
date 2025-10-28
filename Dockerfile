@@ -1,47 +1,29 @@
-# Étape 1 : PHP 8.2 avec Apache
-FROM php:8.2-apache
+# Étape 1 : Image de base PHP avec Apache
+FROM php:8.2-apache-buster
 
-# Installer les dépendances nécessaires
+# Étape 2 : Installation des extensions PHP requises
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
     libicu-dev \
     libzip-dev \
-    zip \
-    && docker-php-ext-install intl pdo pdo_mysql zip opcache \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    unzip \
+    git \
+    && docker-php-ext-install intl zip \
+    && a2enmod rewrite
 
-# Activer mod_rewrite pour Symfony
-RUN a2enmod rewrite
+# Étape 3 : Installation de Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Définir le ServerName pour supprimer le warning
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
-# Copier le projet dans le conteneur
-COPY . /var/www/html/
-
-# Définir le dossier racine (Symfony = public/)
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-
-# Adapter la configuration Apache pour le dossier public/
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# Installer Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Définir le dossier de travail
+# Étape 4 : Configuration du répertoire de travail
 WORKDIR /var/www/html
 
-# Installer les dépendances PHP Symfony
-RUN composer install --no-dev --optimize-autoloader --classmap-authoritative
+# Étape 5 : Copie du code source dans le conteneur
+COPY . .
 
-# Créer les dossiers nécessaires et définir les permissions
-RUN mkdir -p var/cache var/log var/sessions \
-    && chown -R www-data:www-data var
+# Étape 6 : Installation des dépendances PHP
+RUN composer install --no-dev --optimize-autoloader
 
-# Exposer le port 80
+# Étape 7 : Configuration des permissions
+RUN chown -R www-data:www-data /var/www/html/var
+
+# Étape 8 : Exposition du port 80
 EXPOSE 80
-
-# Lancer Apache au démarrage
-CMD ["apache2-foreground"]

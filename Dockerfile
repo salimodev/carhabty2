@@ -1,4 +1,4 @@
-# Étape 1 : utiliser PHP avec Apache
+# Étape 1 : PHP 8.2 avec Apache
 FROM php:8.2-apache
 
 # Installer les dépendances nécessaires
@@ -27,17 +27,21 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
     && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Installer Composer (pour gérer les dépendances Symfony)
+# Installer Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Aller dans le dossier de l’application
+# Définir le dossier de travail
 WORKDIR /var/www/html
 
-# Donner les bons droits
-RUN chown -R www-data:www-data /var/www/html/var
+# Installer les dépendances PHP Symfony
+RUN composer install --no-dev --optimize-autoloader --classmap-authoritative
+
+# Créer les dossiers nécessaires et définir les permissions
+RUN mkdir -p var/cache var/log var/sessions \
+    && chown -R www-data:www-data var
 
 # Exposer le port 80
 EXPOSE 80
 
-# Lancer Apache au démarrage du conteneur
+# Lancer Apache au démarrage
 CMD ["apache2-foreground"]

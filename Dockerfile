@@ -1,34 +1,35 @@
-FROM php:8.2-fpm-alpine
+# Image PHP avec Apache
+FROM php:8.2-apache
 
-# Installer les extensions PHP nécessaires et paquets système
-RUN apk update && apk add --no-cache \
-    icu-dev \
-    libzip-dev \
-    zlib-dev \
-    unzip \
-    git \
-    oniguruma-dev \
-    libxml2-dev \
-    g++ \
-    make \
-    autoconf \
-    pkgconfig \
-    bash \
-    && docker-php-ext-install intl pdo pdo_mysql mbstring zip opcache
+# Installer les extensions nécessaires
+RUN apt-get update && apt-get install -y \
+    libicu-dev libzip-dev zlib1g-dev unzip git libonig-dev libxml2-dev \
+    && docker-php-ext-install intl pdo pdo_mysql mbstring zip opcache \
+    && a2enmod rewrite \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copier Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copier le projet
-WORKDIR /var/www/html
-COPY . .
+# Copier le projet Symfony
+COPY . /var/www/html/
 
-# Installer dépendances PHP
-RUN composer install --no-dev --optimize-autoloader --classmap-authoritative
+# Définir le répertoire de travail
+WORKDIR /var/www/html/
 
-# Créer dossiers Symfony si absents et donner les permissions
+# Variables d'environnement Symfony
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+
+# Installer les dépendances
+RUN composer install --no-dev --optimize-autoloader --classmap-authoritative || true
+
+# Permissions correctes pour Symfony
 RUN mkdir -p var/cache var/log var/sessions \
     && chown -R www-data:www-data var
 
-EXPOSE 9000
-CMD ["php-fpm"]
+# Exposer le port 80 pour Apache
+EXPOSE 80
+
+# Lancer Apache
+CMD ["apache2-foreground"]

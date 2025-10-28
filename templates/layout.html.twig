@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+	
+    <title>{% block title %}Quart de Tour - تهنى على سيارتك من الطولة للموطور{% endblock %}</title>
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{{ asset ('css/stylePrincipale.css')}}">
+    {% block LinksCss %}{% endblock %}
+</head>
+
+<body> 
+
+    {% block Header %}
+        {{ render(controller('App\\Controller\\HomeController::header', {'uri': app.request.uri})) }}
+    {% endblock %}
+
+    {% block Content %}
+        {% block loader %}{% endblock %}
+
+      
+    {% endblock %}
+
+    {% block footer %}
+        {{ render(controller('App\\Controller\\HomeController::footer', {'uri': app.request.uri})) }}
+    {% endblock %}
+
+    {% block javascript %}
+        <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    {% endblock %}
+</body>
+</html>

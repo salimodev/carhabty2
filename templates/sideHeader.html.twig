@@ -1,0 +1,134 @@
+{% if is_granted('ROLE_PROPRIETAIRE') %}
+	<div class="aiz-user-sidenav-wrap pt-4 position-relative z-1 shadow-sm">
+		<div class="absolute-top-right d-xl-none">
+			<button class="btn btn-sm p-2" data-toggle="class-toggle" data-target=".aiz-mobile-side-nav" data-same=".mobile-side-nav-thumb">
+				<i class="las la-times la-2x"></i>
+			</button>
+		</div>
+		<div class="absolute-top-left d-xl-none">
+			<a class="btn btn-sm p-2" href="{{path('app_logout')}}">
+				<i class="las la-sign-out-alt la-2x"></i>
+			</a>
+		</div>
+		{% if app.user %}
+			<div class="aiz-user-sidenav rounded overflow-hidden  c-scrollbar-light">
+				<div class="px-4 text-center mb-4">
+					<span class="avatar avatar-md mb-3">
+						<img src="" class="image rounded-circle" onerror="this.onerror=null;this.src='img/avatar-place.png';">
+					</span>
+					<h4 class="h5 fw-600">{{app.user.nom}}</h4>
+				</div>
+				{% set PageMenu = app.session.get('PageMenu') %}
+				<div class="sidemnenu mb-3">
+					<ul class="aiz-side-nav-list metismenu" data-toggle="aiz-side-menu">
+
+						<li {% if PageMenu is defined and PageMenu == "proprietaire"%} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
+							<a href="{{path('app_proprietaire')}}" {% if PageMenu is defined and PageMenu == "proprietaire"%} class="aiz-side-nav-link " {% else %} class="aiz-side-nav-link" {% endif %} aria-expanded="true">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 16 16">
+									<g id="Group_24768" data-name="Group 24768" transform="translate(3495.144 -602)">
+										<path id="Path_2916" data-name="Path 2916" d="M15.3,5.4,9.561.481A2,2,0,0,0,8.26,0H7.74a2,2,0,0,0-1.3.481L.7,5.4A2,2,0,0,0,0,6.92V14a2,2,0,0,0,2,2H14a2,2,0,0,0,2-2V6.92A2,2,0,0,0,15.3,5.4M10,15H6V9A1,1,0,0,1,7,8H9a1,1,0,0,1,1,1Zm5-1a1,1,0,0,1-1,1H11V9A2,2,0,0,0,9,7H7A2,2,0,0,0,5,9v6H2a1,1,0,0,1-1-1V6.92a1,1,0,0,1,.349-.76l5.74-4.92A1,1,0,0,1,7.74,1h.52a1,1,0,0,1,.651.24l5.74,4.92A1,1,0,0,1,15,6.92Z" transform="translate(-3495.144 602)" fill="#b5b5bf"></path>
+									</g>
+								</svg>
+								<span class="aiz-side-nav-text ml-3">Tableau de board</span>
+							</a>
+						</li>
+
+						<li {% if PageMenu is defined and PageMenu == ""%} class="aiz-side-nav-item " {% else %} class="aiz-side-nav-item" {% endif %}>
+							<a href="" {% if PageMenu is defined and PageMenu == ""%} class="aiz-side-nav-link " {% else %} class="aiz-side-nav-link" {% endif %}>
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 16 16">
+									<g id="Group_8109" data-name="Group 8109" transform="translate(-27.466 -542.963)">
+										<path id="Path_2953" data-name="Path 2953" d="M14.5,5.963h-4a1.5,1.5,0,0,0,0,3h4a1.5,1.5,0,0,0,0-3m0,2h-4a.5.5,0,0,1,0-1h4a.5.5,0,0,1,0,1" transform="translate(22.966 537)" fill="#b5b5bf"></path>
+										<path id="Path_2954" data-name="Path 2954" d="M12.991,8.963a.5.5,0,0,1,0-1H13.5a2.5,2.5,0,0,1,2.5,2.5v10a2.5,2.5,0,0,1-2.5,2.5H2.5a2.5,2.5,0,0,1-2.5-2.5v-10a2.5,2.5,0,0,1,2.5-2.5h.509a.5.5,0,0,1,0,1H2.5a1.5,1.5,0,0,0-1.5,1.5v10a1.5,1.5,0,0,0,1.5,1.5h11a1.5,1.5,0,0,0,1.5-1.5v-10a1.5,1.5,0,0,0-1.5-1.5Z" transform="translate(27.466 536)" fill="#b5b5bf"></path>
+										<path id="Path_2955" data-name="Path 2955" d="M7.5,15.963h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1-.5-.5v-1a.5.5,0,0,1,.5-.5" transform="translate(23.966 532)" fill="#b5b5bf"></path>
+										<path id="Path_2956" data-name="Path 2956" d="M7.5,21.963h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1-.5-.5v-1a.5.5,0,0,1,.5-.5" transform="translate(23.966 529)" fill="#b5b5bf"></path>
+										<path id="Path_2957" data-name="Path 2957" d="M7.5,27.963h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1-.5-.5v-1a.5.5,0,0,1,.5-.5" transform="translate(23.966 526)" fill="#b5b5bf"></path>
+										<path id="Path_2958" data-name="Path 2958" d="M13.5,16.963h5a.5.5,0,0,1,0,1h-5a.5.5,0,0,1,0-1" transform="translate(20.966 531.5)" fill="#b5b5bf"></path>
+										<path id="Path_2959" data-name="Path 2959" d="M13.5,22.963h5a.5.5,0,0,1,0,1h-5a.5.5,0,0,1,0-1" transform="translate(20.966 528.5)" fill="#b5b5bf"></path>
+										<path id="Path_2960" data-name="Path 2960" d="M13.5,28.963h5a.5.5,0,0,1,0,1h-5a.5.5,0,0,1,0-1" transform="translate(20.966 525.5)" fill="#b5b5bf"></path>
+									</g>
+								</svg>
+								<span class="aiz-side-nav-text ml-3">Demande de prix</span>
+							</a>
+						</li>
+
+						<li {% if PageMenu is defined and PageMenu == ''%} class="aiz-side-nav-item " {% else %} class="aiz-side-nav-item" {% endif %}>
+							<a href="" {% if PageMenu is defined and PageMenu == ""%} class="aiz-side-nav-link " {% else %} class="aiz-side-nav-link" {% endif %}>
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 16 16">
+									<g id="Group_8109" data-name="Group 8109" transform="translate(-27.466 -542.963)">
+										<path id="Path_2953" data-name="Path 2953" d="M14.5,5.963h-4a1.5,1.5,0,0,0,0,3h4a1.5,1.5,0,0,0,0-3m0,2h-4a.5.5,0,0,1,0-1h4a.5.5,0,0,1,0,1" transform="translate(22.966 537)" fill="#b5b5bf"></path>
+										<path id="Path_2954" data-name="Path 2954" d="M12.991,8.963a.5.5,0,0,1,0-1H13.5a2.5,2.5,0,0,1,2.5,2.5v10a2.5,2.5,0,0,1-2.5,2.5H2.5a2.5,2.5,0,0,1-2.5-2.5v-10a2.5,2.5,0,0,1,2.5-2.5h.509a.5.5,0,0,1,0,1H2.5a1.5,1.5,0,0,0-1.5,1.5v10a1.5,1.5,0,0,0,1.5,1.5h11a1.5,1.5,0,0,0,1.5-1.5v-10a1.5,1.5,0,0,0-1.5-1.5Z" transform="translate(27.466 536)" fill="#b5b5bf"></path>
+										<path id="Path_2955" data-name="Path 2955" d="M7.5,15.963h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1-.5-.5v-1a.5.5,0,0,1,.5-.5" transform="translate(23.966 532)" fill="#b5b5bf"></path>
+										<path id="Path_2956" data-name="Path 2956" d="M7.5,21.963h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1-.5-.5v-1a.5.5,0,0,1,.5-.5" transform="translate(23.966 529)" fill="#b5b5bf"></path>
+										<path id="Path_2957" data-name="Path 2957" d="M7.5,27.963h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1-.5-.5v-1a.5.5,0,0,1,.5-.5" transform="translate(23.966 526)" fill="#b5b5bf"></path>
+										<path id="Path_2958" data-name="Path 2958" d="M13.5,16.963h5a.5.5,0,0,1,0,1h-5a.5.5,0,0,1,0-1" transform="translate(20.966 531.5)" fill="#b5b5bf"></path>
+										<path id="Path_2959" data-name="Path 2959" d="M13.5,22.963h5a.5.5,0,0,1,0,1h-5a.5.5,0,0,1,0-1" transform="translate(20.966 528.5)" fill="#b5b5bf"></path>
+										<path id="Path_2960" data-name="Path 2960" d="M13.5,28.963h5a.5.5,0,0,1,0,1h-5a.5.5,0,0,1,0-1" transform="translate(20.966 525.5)" fill="#b5b5bf"></path>
+									</g>
+								</svg>
+								<span class="aiz-side-nav-text ml-3">Offres proposés</span>
+							</a>
+						</li>
+						<li {% if PageMenu is defined and PageMenu == ''%} class="aiz-side-nav-item " {% else %} class="aiz-side-nav-item" {% endif %}>
+							<a href="" {% if PageMenu is defined and PageMenu == ""%} class="aiz-side-nav-link " {% else %} class="aiz-side-nav-link" {% endif %}>
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 16 16">
+									<g id="Group_8114" data-name="Group 8114" transform="translate(-1501.679 -486)">
+										<path id="Path_2977" data-name="Path 2977" d="M193.408,3.756,192.05.862A1.5,1.5,0,0,0,190.692,0H180.666a1.5,1.5,0,0,0-1.357.862L177.95,3.756l.029-.062A3,3,0,0,0,179.373,7.7a3.091,3.091,0,0,0,.306.128V16h12V9.5a.5.5,0,0,0-1,0V15h-3V10.5a.5.5,0,0,0-.5-.5h-3a.5.5,0,0,0-.5.5V15h-3V8a3,3,0,0,0,2.5-1.342,3,3,0,0,0,5,0,3,3,0,0,0,5.229-2.9M184.679,11h2v4h-2Zm6.4-4.041A2,2,0,0,1,188.719,5.4a.5.5,0,0,0-.49-.4h-.1a.5.5,0,0,0-.49.4,2,2,0,0,1-3.919,0,.5.5,0,0,0-.49-.4h-.1a.5.5,0,0,0-.49.4,2,2,0,1,1-3.781-1.225l1.357-2.888A.5.5,0,0,1,180.666,1h10.025a.5.5,0,0,1,.452.288L192.5,4.175a2,2,0,0,1-1.422,2.784" transform="translate(1324 486)" fill="#b5b5bf"></path>
+									</g>
+								</svg>
+								<span class="aiz-side-nav-text ml-3">Vendeurs Neuf</span>
+							</a>
+						</li>
+
+
+						
+
+						<li {% if PageMenu is defined and PageMenu == ""%} class="aiz-side-nav-item " {% else %} class="aiz-side-nav-item" {% endif %}>
+							<a href="" {% if PageMenu is defined and PageMenu == ""%} class="aiz-side-nav-link " {% else %} class="aiz-side-nav-link" {% endif %}>
+								<svg id="Group_22071" data-name="Group 22071" xmlns="http://www.w3.org/2000/svg" width="14.6" height="16" viewbox="0 0 14.6 16">
+									<g id="LWPOLYLINE" transform="translate(0.158)">
+										<path id="Path_25677" data-name="Path 25677" d="M304.755,426.408v-2.032a.5.5,0,1,1,.993,0v3.239a.5.5,0,0,1-.5.5h-3.216a.5.5,0,0,1,0-1h2.006a6.924,6.924,0,0,0-11.8,1,.5.5,0,0,1-.666.221.5.5,0,0,1-.219-.672,7.913,7.913,0,0,1,13.4-1.256Z" transform="translate(-291.306 -423.268)" fill="#b5b5bf"></path>
+									</g>
+									<g id="LWPOLYLINE-2" data-name="LWPOLYLINE" transform="translate(0 10.879)">
+										<path id="Path_25678" data-name="Path 25678" d="M292.141,414.371V416.4a.5.5,0,1,1-.993,0v-3.238a.5.5,0,0,1,.5-.5h3.216a.5.5,0,0,1,0,1h-2.006a6.924,6.924,0,0,0,11.8-1,.493.493,0,0,1,.666-.221.5.5,0,0,1,.219.671,7.913,7.913,0,0,1-13.4,1.256Z" transform="translate(-291.148 -412.39)" fill="#b5b5bf"></path>
+									</g>
+								</svg>
+								<span class="aiz-side-nav-text ml-3">Vendeur occasion</span>
+								</a>
+						</li>
+
+						 <li {% if PageMenu is defined and PageMenu == ""%} class="aiz-side-nav-item " {% else %} class="aiz-side-nav-item" {% endif %}>
+                    <a href="" {% if PageMenu is defined and PageMenu == ""%} class="aiz-side-nav-link " {% else %} class="aiz-side-nav-link" {% endif %}>
+                        <svg id="Group_22071" data-name="Group 22071" xmlns="http://www.w3.org/2000/svg" width="14.6" height="16" viewBox="0 0 14.6 16">
+                            <g id="LWPOLYLINE" transform="translate(0.158)">
+                                <path id="Path_25677" data-name="Path 25677" d="M304.755,426.408v-2.032a.5.5,0,1,1,.993,0v3.239a.5.5,0,0,1-.5.5h-3.216a.5.5,0,0,1,0-1h2.006a6.924,6.924,0,0,0-11.8,1,.5.5,0,0,1-.666.221.5.5,0,0,1-.219-.672,7.913,7.913,0,0,1,13.4-1.256Z" transform="translate(-291.306 -423.268)" fill="#b5b5bf"></path>
+                            </g>
+                            <g id="LWPOLYLINE-2" data-name="LWPOLYLINE" transform="translate(0 10.879)">
+                                <path id="Path_25678" data-name="Path 25678" d="M292.141,414.371V416.4a.5.5,0,1,1-.993,0v-3.238a.5.5,0,0,1,.5-.5h3.216a.5.5,0,0,1,0,1h-2.006a6.924,6.924,0,0,0,11.8-1,.493.493,0,0,1,.666-.221.5.5,0,0,1,.219.671,7.913,7.913,0,0,1-13.4,1.256Z" transform="translate(-291.148 -412.39)" fill="#b5b5bf"></path>
+                            </g>
+                        </svg>
+                        <span class="aiz-side-nav-text ml-3">Mécanicien</span>
+                       </a>
+                </li>
+
+						<li {% if PageMenu is defined and PageMenu == ""%} class="aiz-side-nav-item " {% else %} class="aiz-side-nav-item" {% endif %}>
+							<a href="" {% if PageMenu is defined and PageMenu == ""%} class="aiz-side-nav-link " {% else %} class="aiz-side-nav-link" {% endif %}>
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 16 16">
+									<g id="Group_8094" data-name="Group 8094" transform="translate(3176 -602)">
+										<path id="Path_2924" data-name="Path 2924" d="M331.144,0a4,4,0,1,0,4,4,4,4,0,0,0-4-4m0,7a3,3,0,1,1,3-3,3,3,0,0,1-3,3" transform="translate(-3499.144 602)" fill="#b5b5bf"></path>
+										<path id="Path_2925" data-name="Path 2925" d="M332.144,20h-10a3,3,0,0,0,0,6h10a3,3,0,0,0,0-6m0,5h-10a2,2,0,0,1,0-4h10a2,2,0,0,1,0,4" transform="translate(-3495.144 592)" fill="#b5b5bf"></path>
+									</g>
+								</svg>
+								<span class="aiz-side-nav-text ml-3">Modifier Profile</span>
+							</a>
+						</li>
+
+					</ul>
+					<br>
+					<a href="{{path('app_logout')}}" class="btn btn-primary btn-block fs-14 fw-700 mb-5 mb-md-0" style="border-radius: 25px;width: 214px;margin-left: 20px;margin-right: 20px;">Déconnexion</a>
+
+				</div>
+
+			</div>
+		{% endif %}
+	</div>
+{% endif %}

@@ -68,15 +68,14 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . /var/www/html
 
+# Créer les dossiers nécessaires avant chown pour éviter l'erreur
+RUN mkdir -p var /var/www/certbot/.well-known/acme-challenge
+
 # Installer les dépendances Symfony sans exécuter les scripts (évite crash si DB non accessible)
 RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --ignore-platform-reqs --no-scripts
 
 # Permissions
-RUN chown -R www-data:www-data var
-
-# Créer le dossier pour Certbot et lui donner les permissions
-RUN mkdir -p /var/www/certbot/.well-known/acme-challenge \
-    && chown -R www-data:www-data /var/www/certbot
+RUN chown -R www-data:www-data var /var/www/certbot
 
 EXPOSE 80 443
 CMD ["apache2-foreground"]

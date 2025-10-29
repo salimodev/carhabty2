@@ -1,12 +1,12 @@
 # Image PHP + Apache
 FROM php:8.2-apache
 
-# Variables d'environnement pour production
+# Variables d'environnement
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Installer dépendances système et extensions PHP nécessaires
+# Installer dépendances système et extensions PHP
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git unzip libicu-dev libzip-dev libxml2-dev libonig-dev zlib1g-dev mariadb-client \
     g++ make autoconf pkg-config libsodium-dev \
@@ -33,13 +33,13 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Travailler dans le dossier projet
 WORKDIR /var/www/html
-
-# Copier le projet + dépendances pré-installées
 COPY . /var/www/html
-COPY ./vendor /var/www/html/vendor
+
+# Installer les dépendances Symfony sans exécuter les scripts
+RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --ignore-platform-reqs --no-scripts
 
 # Permissions
-RUN chown -R www-data:www-data var vendor
+RUN chown -R www-data:www-data var
 
 # Créer le dossier pour Certbot
 RUN mkdir -p /var/www/certbot/.well-known/acme-challenge \

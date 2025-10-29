@@ -9,8 +9,8 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 # Installer les dépendances système et extensions PHP
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git unzip libicu-dev libzip-dev libxml2-dev libonig-dev zlib1g-dev mariadb-client \
-    g++ make autoconf pkg-config \
-    && docker-php-ext-install intl mbstring pdo pdo_mysql zip opcache \
+    g++ make autoconf pkg-config libsodium-dev \
+    && docker-php-ext-install intl mbstring pdo pdo_mysql zip opcache sodium \
     && a2enmod rewrite ssl headers \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -22,7 +22,6 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
         AllowOverride All\n\
         Require all granted\n\
     </Directory>\n\
-    # Alias pour Certbot\n\
     Alias /.well-known/acme-challenge /var/www/certbot/.well-known/acme-challenge\n\
     <Directory /var/www/certbot/.well-known/acme-challenge>\n\
         AllowOverride None\n\
@@ -68,8 +67,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . /var/www/html
 
-# Installer les dépendances Symfony
-RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+# Installer les dépendances Symfony (mode verbose pour debug si erreur)
+RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --ignore-platform-reqs -vvv
 
 # Permissions
 RUN chown -R www-data:www-data var vendor

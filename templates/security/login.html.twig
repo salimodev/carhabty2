@@ -1,0 +1,89 @@
+{% extends 'layout.html.twig' %}
+
+{% block Head %}
+	{{ parent() }}
+
+ {% block LinksCss %}
+ {{ parent() }}
+ {% endblock %}
+
+{% endblock %}
+
+{% block title %}Connexion
+{% endblock %}
+ {% block Header %}
+  {{ parent() }}
+ {% endblock %}
+
+{% block Content %}
+	<section class="gry-bg py-5" style="background: linear-gradient(135deg, #1a1a2e 0%, #2c2c54 100%); min-height: 100vh; display: flex; align-items: center;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8">
+                <div class="card shadow-lg border-0 rounded-4" style="background-color: #fffff;">
+                    <div class="text-center pt-5">
+                        <h1 class="h3 fw-bold">Connexion</h1>
+                        <p class="text-muted" style="--bs-text-opacity: 1;
+    color: #000000ff !important;">Bienvenue, connectez-vous pour continuer</p>
+                    </div>
+
+                    <div class="px-4 py-5">
+                        {% for type in ['message', 'warning', 'danger'] %}
+                            {% for msg in app.flashes(type) %}
+                                <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
+                                    {{ msg }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+
+                        <form method="POST" class="form-default">
+                            {% if error %}
+                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            {% endif %}
+
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                            <div class="mb-4">
+                                <input type="email" class="form-control form-control rounded-pill" placeholder="Email" name="email" value="{{ last_username }}" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <input type="password" class="form-control rounded-pill" placeholder="Mot de passe" name="password" required>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+
+                                </div>
+                                <div>
+                                    <a href="#" class="text-info text-decoration-none" style="color:#ff6b35!important">Mot de passe oublié?</a>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-info w-100 rounded-pill fw-bold py-2" style="background-color: #2ec4b6; color: #fff; border: none;">Connexion</button>
+                        </form>
+
+                        <div class="text-center mt-4 text-white">
+                            <p class="mb-1" style="--bs-text-opacity: 1;
+    color: #000000ff !important;">Vous n'avez pas de compte ?</p>
+                            <a href="{{ path('app_register') }}" class="btn btn-register btn-outline-light rounded-pill">S'inscrire maintenant</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}
+
+{% block footer %}
+{{ parent() }}
+{% endblock %}
+{% block javascript %}
+{{ parent() }}
+		
+{% endblock %}

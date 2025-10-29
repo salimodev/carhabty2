@@ -6,9 +6,11 @@
     <!-- Favicon -->
 	
     <title>{% block title %}Quart de Tour - تهنى على سيارتك من الطولة للموطور{% endblock %}</title>
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    
+    {% block LinksCss %}
+    <link href="{{ asset ('css/bootstrap.min.css') }}" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="{{ asset ('css/stylePrincipale.css')}}">
-    {% block LinksCss %}{% endblock %}
+    {% endblock %}
 </head>
 
 <body> 

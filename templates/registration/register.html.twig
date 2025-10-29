@@ -1,0 +1,88 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Quart de Tour{% endblock %}
+ {% block Head %}
+        {{ parent() }}
+{% block LinksCss %}
+     {{ parent() }} 
+
+     {% endblock %}
+    
+    {% endblock %}
+{% block Content %}
+<section class="gry-bg py-4" style="background: linear-gradient(135deg, #1a1a2e 0%, #2c2c54 100%); min-height: 100vh; display: flex; align-items: center;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12">
+                <div class="card shadow-lg border-0 rounded-4" style="background-color:#ffff;">
+                    <div class="text-center pt-5">
+                        <h1 class="h3 fw-bold">Créer un compte</h1>
+                        <p class="text-muted">Remplissez le formulaire pour vous inscrire</p>
+                    </div>
+
+                    <div class="px-4 py-5">
+                        <form id="reg-form" class="form-default" method="POST">
+                            {{ form_start(registrationForm) }}
+
+                             <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    {{ form_row(registrationForm.nom, {'attr': {'class': 'form-control  rounded-pill', 'placeholder':'Nom'}}) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_row(registrationForm.prenom, {'attr': {'class': 'form-control  rounded-pill', 'placeholder':'Prénom'}}) }}
+                                </div>
+                                 <div class="col-md-4">
+                                   {{ form_row(registrationForm.roles, {'attr': {'class': 'form-control  rounded-pill'}}) }}
+                                </div>
+                            </div>
+
+                             <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    {{ form_row(registrationForm.adresse, {'attr': {'class': 'form-control  rounded-pill', 'placeholder':'Adresse'}}) }}
+                                </div>
+                                <div class="col-md-4">
+                                {{ form_row(registrationForm.tel1, {'attr': {'class': 'form-control  rounded-pill', 'placeholder':'Téléphone 1'}}) }}
+                            
+                                 </div>
+                                 <div class="col-md-4">
+                                  {{ form_row(registrationForm.tel2, {'attr': {'class': 'form-control  rounded-pill', 'placeholder':'Téléphone 2'}}) }}
+                                </div>
+                            </div>
+
+                           
+
+                            
+
+                         
+
+                            <div class="mb-3">
+                                {{ form_row(registrationForm.email, {'attr': {'class': 'form-control  rounded-pill', 'placeholder':'Email'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form_row(registrationForm.plainPassword, {'attr': {'class': 'form-control rounded-pill', 'placeholder':'Mot de passe'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="g-recaptcha" data-sitekey="6Ld_nrsZAAAAAO-MowQQPfbD9yoio52GiMgUrmRX"></div>
+                            </div>
+
+                            <button type="submit" class="btn btn-info w-100 rounded-pill fw-bold py-2" style="background-color: #2ec4b6; color: #fff; border: none;">Créer un compte</button>
+
+                            {{ form_end(registrationForm) }}
+                        </form>
+
+                        <div class="text-center mt-4 text-white">
+                            <p class="mb-1"style="--bs-text-opacity: 1;
+    color: #000000ff !important;">Vous avez déjà un compte ?</p>
+                            <a href="{{ path('app_login') }}" class="btn btn-register btn-outline-light ">Connexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+   
+{% endblock %}

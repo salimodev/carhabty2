@@ -4,7 +4,8 @@
 
 {% block LinksCss %}
     {{ parent() }}
-   
+    <link type="text/css" rel="stylesheet" href="{{ asset ('css/popup.css')}}">
+ 
 {% endblock %}
 
 {% block Content %}
@@ -13,7 +14,7 @@
     <!-- Section héro -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Quart de Tour</h1>
+            <h1>Carhabty</h1>
             <p class="hero-subtitle">La plateforme qui révolutionne l'achat et la vente de pièces automobiles en Tunisie</p>
         </div>
     </section>

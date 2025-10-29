@@ -1,4 +1,4 @@
-# 🧱 Image de base PHP + Apache
+# 🧱 Image PHP + Apache
 FROM php:8.2-apache
 
 # 🌍 Variables d'environnement
@@ -14,75 +14,63 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && a2enmod rewrite ssl headers \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# ⚙️ Configuration Apache HTTP et HTTPS
+# ⚙️ Apache configuration HTTP
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
-# HTTP
-RUN echo "<VirtualHost *:80>
-    DocumentRoot /var/www/html/public
-    <Directory /var/www/html/public>
-        AllowOverride All
-        Options FollowSymLinks
-        Require all granted
-    </Directory>
-
-    Alias /.well-known/acme-challenge /var/www/certbot/.well-known/acme-challenge
-    <Directory /var/www/certbot/.well-known/acme-challenge>
-        AllowOverride None
-        Options MultiViews Indexes SymLinksIfOwnerMatch
-        Require all granted
-    </Directory>
-
-    ErrorLog \${APACHE_LOG_DIR}/error.log
-    CustomLog \${APACHE_LOG_DIR}/access.log combined
+RUN echo "<VirtualHost *:80>\n\
+    DocumentRoot /var/www/html/public\n\
+    <Directory /var/www/html/public>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+    </Directory>\n\
+    ErrorLog \${APACHE_LOG_DIR}/error.log\n\
+    CustomLog \${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>" > /etc/apache2/sites-available/000-default.conf
 
-# HTTPS (certificat temporaire pour build)
-RUN mkdir -p /etc/ssl/certs /etc/ssl/private \
-    && touch /etc/ssl/certs/fullchain.pem /etc/ssl/private/privkey.pem \
-    && echo "<IfModule mod_ssl.c>
-<VirtualHost *:443>
-    DocumentRoot /var/www/html/public
-    SSLEngine on
-    SSLCertificateFile /etc/ssl/certs/fullchain.pem
-    SSLCertificateKeyFile /etc/ssl/private/privkey.pem
-    <Directory /var/www/html/public>
-        AllowOverride All
-        Options FollowSymLinks
-        Require all granted
-    </Directory>
-    ErrorLog \${APACHE_LOG_DIR}/error_ssl.log
-    CustomLog \${APACHE_LOG_DIR}/access_ssl.log combined
-</VirtualHost>
+# 🔐 Apache configuration HTTPS (certificats letsencrypt montés depuis docker-compose)
+RUN mkdir -p /etc/ssl/certs /etc/ssl/private
+
+RUN echo "<IfModule mod_ssl.c>\n\
+<VirtualHost *:443>\n\
+    DocumentRoot /var/www/html/public\n\
+    SSLEngine on\n\
+    SSLCertificateFile /etc/ssl/certs/fullchain.pem\n\
+    SSLCertificateKeyFile /etc/ssl/private/privkey.pem\n\
+    <Directory /var/www/html/public>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+    </Directory>\n\
+    ErrorLog \${APACHE_LOG_DIR}/error_ssl.log\n\
+    CustomLog \${APACHE_LOG_DIR}/access_ssl.log combined\n\
+</VirtualHost>\n\
 </IfModule>" > /etc/apache2/sites-available/default-ssl.conf \
     && a2ensite default-ssl.conf
 
-# 🚀 OPCache pour prod
-RUN echo "opcache.enable=1
-opcache.memory_consumption=256
-opcache.interned_strings_buffer=16
-opcache.max_accelerated_files=20000
-opcache.revalidate_freq=0
+# 🚀 OPCache
+RUN echo "opcache.enable=1\n\
+opcache.memory_consumption=256\n\
+opcache.interned_strings_buffer=16\n\
+opcache.max_accelerated_files=20000\n\
+opcache.revalidate_freq=0\n\
 opcache.validate_timestamps=0" > /usr/local/etc/php/conf.d/opcache.ini
 
 # 📦 Copier Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# 📁 Travailler dans le dossier projet
+# 📁 Dossier de travail
 WORKDIR /var/www/html
+
+# 🔥 Copier le projet
 COPY . .
 
-# 🗂 Créer dossiers Symfony nécessaires
-RUN mkdir -p var/cache var/log var/sessions /var/www/certbot/.well-known/acme-challenge
+# 🗂️ Créer les dossiers Symfony nécessaires
+RUN mkdir -p var/cache var/log var/sessions /var/www/certbot/.well-known/acme-challenge \
+    && chown -R www-data:www-data var /var/www/certbot
 
-# ⚠️ Vérifier que .htaccess existe
+# ⚠️ Vérifier que public/.htaccess existe
 RUN test -f public/.htaccess || echo "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteRule ^(.*)$ index.php [QSA,L]" > public/.htaccess
 
-# 🧰 Installer dépendances Symfony (sans scripts pour éviter crash si DB inaccessible)
+# 🧰 Installer dépendances Symfony
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
-
-# 🔑 Permissions
-RUN chown -R www-data:www-data var /var/www/certbot
 
 EXPOSE 80 443
 

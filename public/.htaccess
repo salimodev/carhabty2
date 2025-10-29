@@ -1,4 +1,5 @@
-<Directory /var/www/html/public>
-    AllowOverride All
-    Require all granted
-</Directory>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>

@@ -1,11 +1,10 @@
-# Image PHP avec Apache
 FROM php:8.2-apache
 
 # Variables d'environnement Symfony
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
 
-# Installer les dépendances système nécessaires pour Symfony et extensions PHP
+# Installer dépendances système et extensions PHP
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git unzip libicu-dev libonig-dev libzip-dev libxml2-dev zlib1g-dev \
     mariadb-client g++ make autoconf pkg-config \
@@ -15,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Activer mod_rewrite pour Symfony
 RUN a2enmod rewrite
 
-# Configuration OPCache pour la production
+# Configuration OPCache
 RUN echo "opcache.enable=1\n\
 opcache.memory_consumption=128\n\
 opcache.interned_strings_buffer=8\n\
@@ -23,7 +22,8 @@ opcache.max_accelerated_files=10000\n\
 opcache.revalidate_freq=0\n\
 opcache.validate_timestamps=0" > /usr/local/etc/php/conf.d/opcache.ini
 
-# Configuration Apache explicite pour Symfony
+# Configuration Apache pour Symfony
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 RUN echo "<VirtualHost *:80>\n\
     ServerAdmin webmaster@localhost\n\
     DocumentRoot /var/www/html/public\n\
@@ -35,22 +35,22 @@ RUN echo "<VirtualHost *:80>\n\
     CustomLog \${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>" > /etc/apache2/sites-available/000-default.conf
 
-# Copier Composer depuis l'image officielle
+# Copier Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Définir le répertoire de travail et copier le projet
+# Copier le projet
 WORKDIR /var/www/html
 COPY . /var/www/html
 
-# Créer les dossiers nécessaires et installer les dépendances Symfony
+# Créer les dossiers Symfony nécessaires
 RUN mkdir -p var/cache var/log var/sessions vendor \
     && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
-# Définir les permissions correctes
-RUN chown -R www-data:www-data var vendor
+# Permissions correctes
+RUN chown -R www-data:www-data var vendor public
 
-# Exposer le port 80 pour Apache
+# Exposer port Apache
 EXPOSE 80
 
-# Lancer Apache au premier plan
+# Lancer Apache
 CMD ["apache2-foreground"]

@@ -2,9 +2,9 @@
 .git
 .gitignore
 
-# Ignorer les dépendances locales
+# Ignorer les dépendances locales (vendor sera généré dans le conteneur)
+# node_modules peut rester ignoré si frontend build ailleurs
 node_modules
-vendor
 
 # Ignorer les caches et logs Symfony
 var/cache
@@ -30,6 +30,6 @@ Thumbs.db
 docker-compose.yml
 Dockerfile
 
-# Ignorer les fichiers du build frontend
+# Ignorer seulement le build frontend, pas tout public
 /public/build
 /public/node_modules

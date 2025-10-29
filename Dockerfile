@@ -11,10 +11,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git unzip libicu-dev libzip-dev libxml2-dev libonig-dev zlib1g-dev mariadb-client \
     g++ make autoconf pkg-config \
     && docker-php-ext-install intl mbstring pdo pdo_mysql zip opcache \
-    && a2enmod rewrite \
+    && a2enmod rewrite ssl headers \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Configuration Apache
+# Configuration Apache HTTP
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && echo "<VirtualHost *:80>\n\
     DocumentRoot /var/www/html/public\n\
@@ -32,6 +32,26 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     ErrorLog ${APACHE_LOG_DIR}/error.log\n\
     CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>" > /etc/apache2/sites-available/000-default.conf
+
+# Configuration Apache HTTPS
+RUN echo "<IfModule mod_ssl.c>\n\
+<VirtualHost *:443>\n\
+    ServerName carahba.cloud\n\
+    DocumentRoot /var/www/html/public\n\
+    SSLEngine on\n\
+    SSLCertificateFile /etc/ssl/certs/fullchain.pem\n\
+    SSLCertificateKeyFile /etc/ssl/private/privkey.pem\n\
+    <Directory /var/www/html/public>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+    </Directory>\n\
+    ErrorLog ${APACHE_LOG_DIR}/error_ssl.log\n\
+    CustomLog ${APACHE_LOG_DIR}/access_ssl.log combined\n\
+</VirtualHost>\n\
+</IfModule>" > /etc/apache2/sites-available/default-ssl.conf
+
+# Activer le site HTTPS
+RUN a2ensite default-ssl.conf
 
 # Configuration OPCache
 RUN echo "opcache.enable=1\n\
@@ -52,11 +72,11 @@ COPY . /var/www/html
 RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
 # Permissions
-RUN chown -R www-data:www-data var vendor 
+RUN chown -R www-data:www-data var vendor
 
 # Créer le dossier pour Certbot et lui donner les permissions
 RUN mkdir -p /var/www/certbot/.well-known/acme-challenge \
     && chown -R www-data:www-data /var/www/certbot
 
-EXPOSE 80
+EXPOSE 80 443
 CMD ["apache2-foreground"]

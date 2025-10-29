@@ -10,8 +10,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - /etc/letsencrypt/live/carahba.cloud/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
+      - /etc/letsencrypt/live/carahba.cloud/privkey.pem:/etc/ssl/private/privkey.pem:ro
       - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt
     environment:
       APP_ENV: prod
       APP_DEBUG: 0

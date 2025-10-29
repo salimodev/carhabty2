@@ -1,4 +1,4 @@
-# 🧱 Image de base PHP + Apache
+# 🧱 Image PHP + Apache
 FROM php:8.2-apache
 
 # 🌍 Variables d'environnement
@@ -6,7 +6,7 @@ ENV APP_ENV=prod
 ENV APP_DEBUG=0
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# ⚙️ Installation des dépendances système + extensions PHP nécessaires
+# ⚙️ Installer dépendances système + extensions PHP
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git unzip libicu-dev libzip-dev libxml2-dev libonig-dev zlib1g-dev mariadb-client \
     g++ make autoconf pkg-config libsodium-dev \
@@ -16,22 +16,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # ⚙️ Apache configuration HTTP
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
 RUN echo "<VirtualHost *:80>\n\
     DocumentRoot /var/www/html/public\n\
     <Directory /var/www/html/public>\n\
         AllowOverride All\n\
-        Options FollowSymLinks\n\
         Require all granted\n\
     </Directory>\n\
     ErrorLog \${APACHE_LOG_DIR}/error.log\n\
     CustomLog \${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>" > /etc/apache2/sites-available/000-default.conf
 
-# 🔐 Apache configuration HTTPS (factice pour build)
-RUN mkdir -p /etc/ssl/certs /etc/ssl/private \
-    && touch /etc/ssl/certs/fullchain.pem /etc/ssl/private/privkey.pem \
-    && echo "<IfModule mod_ssl.c>\n\
+# 🔐 Apache configuration HTTPS (certificats letsencrypt montés depuis docker-compose)
+RUN mkdir -p /etc/ssl/certs /etc/ssl/private
+
+RUN echo "<IfModule mod_ssl.c>\n\
 <VirtualHost *:443>\n\
     DocumentRoot /var/www/html/public\n\
     SSLEngine on\n\
@@ -39,7 +37,6 @@ RUN mkdir -p /etc/ssl/certs /etc/ssl/private \
     SSLCertificateKeyFile /etc/ssl/private/privkey.pem\n\
     <Directory /var/www/html/public>\n\
         AllowOverride All\n\
-        Options FollowSymLinks\n\
         Require all granted\n\
     </Directory>\n\
     ErrorLog \${APACHE_LOG_DIR}/error_ssl.log\n\
@@ -48,7 +45,7 @@ RUN mkdir -p /etc/ssl/certs /etc/ssl/private \
 </IfModule>" > /etc/apache2/sites-available/default-ssl.conf \
     && a2ensite default-ssl.conf
 
-# 🚀 Optimisation OPCache
+# 🚀 OPCache
 RUN echo "opcache.enable=1\n\
 opcache.memory_consumption=256\n\
 opcache.interned_strings_buffer=16\n\
@@ -56,26 +53,24 @@ opcache.max_accelerated_files=20000\n\
 opcache.revalidate_freq=0\n\
 opcache.validate_timestamps=0" > /usr/local/etc/php/conf.d/opcache.ini
 
-# 📦 Copier Composer depuis l'image officielle
+# 📦 Copier Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # 📁 Dossier de travail
 WORKDIR /var/www/html
 
-# 🔥 Copie du projet (assure-toi que tu fais le build depuis le dossier racine Symfony)
+# 🔥 Copier le projet
 COPY . .
 
-# 🗂️ Créer les dossiers nécessaires
-RUN mkdir -p var /var/www/certbot/.well-known/acme-challenge
+# 🗂️ Créer les dossiers Symfony nécessaires
+RUN mkdir -p var/cache var/log var/sessions /var/www/certbot/.well-known/acme-challenge \
+    && chown -R www-data:www-data var /var/www/certbot
 
-# ⚠️ S’assurer que public/.htaccess existe
+# ⚠️ Vérifier que public/.htaccess existe
 RUN test -f public/.htaccess || echo "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteRule ^(.*)$ index.php [QSA,L]" > public/.htaccess
 
-# 🧰 Installer les dépendances Symfony
+# 🧰 Installer dépendances Symfony
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
-
-# 🔑 Permissions correctes
-RUN chown -R www-data:www-data var /var/www/certbot
 
 EXPOSE 80 443
 

@@ -54,5 +54,9 @@ RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloa
 # Permissions
 RUN chown -R www-data:www-data var vendor 
 
+# Créer le dossier pour Certbot et lui donner les permissions
+RUN mkdir -p /var/www/certbot/.well-known/acme-challenge \
+    && chown -R www-data:www-data /var/www/certbot
+
 EXPOSE 80
 CMD ["apache2-foreground"]

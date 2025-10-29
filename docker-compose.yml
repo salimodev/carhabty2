@@ -8,6 +8,8 @@ services:
     container_name: carhabty-app
     ports:
       - "80:80"
+    volumes:
+      - ./certbot/www:/var/www/certbot
     environment:
       APP_ENV: prod
       APP_DEBUG: 0
@@ -40,6 +42,7 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
+
   certbot:
     image: certbot/certbot
     container_name: certbot
@@ -48,6 +51,6 @@ services:
       - ./certbot/conf:/etc/letsencrypt
     entrypoint: /bin/sh
     command: -c "sleep infinity"
-    
+
 volumes:
   db_data:

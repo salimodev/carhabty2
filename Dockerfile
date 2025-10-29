@@ -6,7 +6,7 @@ ENV APP_ENV=prod
 ENV APP_DEBUG=0
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Installer les dépendances système
+# Installer les dépendances système et extensions PHP
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git unzip libicu-dev libzip-dev libxml2-dev libonig-dev zlib1g-dev mariadb-client \
     g++ make autoconf pkg-config \
@@ -14,19 +14,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && a2enmod rewrite \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Configuration d'Apache pour Symfony
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
-    echo "<VirtualHost *:80>\n\
+# Configuration Apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
+    && echo "<VirtualHost *:80>\n\
     DocumentRoot /var/www/html/public\n\
     <Directory /var/www/html/public>\n\
         AllowOverride All\n\
         Require all granted\n\
     </Directory>\n\
-    ErrorLog \${APACHE_LOG_DIR}/error.log\n\
-    CustomLog \${APACHE_LOG_DIR}/access.log combined\n\
+    # Alias pour Certbot\n\
+    Alias /.well-known/acme-challenge /var/www/certbot/.well-known/acme-challenge\n\
+    <Directory /var/www/certbot/.well-known/acme-challenge>\n\
+        AllowOverride None\n\
+        Options MultiViews Indexes SymLinksIfOwnerMatch\n\
+        Require all granted\n\
+    </Directory>\n\
+    ErrorLog ${APACHE_LOG_DIR}/error.log\n\
+    CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>" > /etc/apache2/sites-available/000-default.conf
 
-# Configuration OPCache pour accélérer Symfony
+# Configuration OPCache
 RUN echo "opcache.enable=1\n\
 opcache.memory_consumption=256\n\
 opcache.interned_strings_buffer=16\n\
@@ -37,17 +44,15 @@ opcache.validate_timestamps=0" > /usr/local/etc/php/conf.d/opcache.ini
 # Copier Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Définir le répertoire de travail
+# Travailler dans le dossier projet
 WORKDIR /var/www/html
-
-# Copier le code Symfony
 COPY . /var/www/html
 
-# Installer les dépendances PHP
+# Installer les dépendances Symfony
 RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
-# Donner les bons droits
-RUN chown -R www-data:www-data /var/www/html/var /var/www/html/vendor
+# Permissions
+RUN chown -R www-data:www-data var vendor /var/www/certbot
 
 EXPOSE 80
 CMD ["apache2-foreground"]

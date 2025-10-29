@@ -52,7 +52,7 @@ COPY . /var/www/html
 RUN php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
 # Permissions
-RUN chown -R www-data:www-data var vendor /var/www/certbot
+RUN chown -R www-data:www-data var vendor 
 
 EXPOSE 80
 CMD ["apache2-foreground"]

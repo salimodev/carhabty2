@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Users;
+use App\Service\SendMailService;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,7 +17,7 @@ use App\Security\UsersAuthenticator;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request,UserAuthenticatorInterface $userAuthenticator, UsersAuthenticator $authenticator,  UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request,UserAuthenticatorInterface $userAuthenticator,SendMailService $mail, UsersAuthenticator $authenticator,  UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -35,6 +36,16 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
+            $context = compact('user');
+              // Envoi du mail
+            $mail->sendBienvenue(
+                'salimabbessi.dev@gmail.com',
+                $user->getEmail(),
+                'Bienvenue',
+                'bienvenue',
+                $context
+            );
+            
 
           // --- Authentification automatique ---
         return $userAuthenticator->authenticateUser(

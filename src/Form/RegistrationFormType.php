@@ -86,8 +86,8 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-                'first_options' => ['label' => false,'attr' =>['class'=>'form-control','placeholder'=>'Mot de passe', 'style'=>'margin-bottom: 16px;']],
-                'second_options' => ['label' => false,'attr' =>['class'=>'form-control','placeholder'=>'Confirmer votre mot de passe']],
+                'first_options' => ['label' => false,'attr' =>['class'=>'form-control rounded-pill','placeholder'=>'Mot de passe', 'style'=>'background-color: #dfdfdf;margin-bottom: 16px;']],
+                'second_options' => ['label' => false,'attr' =>['class'=>'form-control rounded-pill','placeholder'=>'Confirmer votre mot de passe', 'style'=>'background-color: #dfdfdf;']],
                 'invalid_message' => 'votre mot de passe de confirmation incorrect'
             ])
         ;

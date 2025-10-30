@@ -45,11 +45,11 @@
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                             <div class="mb-4">
-                                <input type="email" class="form-control form-control rounded-pill" placeholder="Email" name="email" value="{{ last_username }}" required>
+                                <input type="email" class="form-control form-control rounded-pill" placeholder="Email" name="email" style="background-color: #dfdfdf;" value="{{ last_username }}" required>
                             </div>
 
                             <div class="mb-4">
-                                <input type="password" class="form-control rounded-pill" placeholder="Mot de passe" name="password" required>
+                                <input type="password" class="form-control rounded-pill" placeholder="Mot de passe" style="background-color: #dfdfdf;" name="password" required>
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -57,7 +57,7 @@
 
                                 </div>
                                 <div>
-                                    <a href="#" class="text-info text-decoration-none" style="color:#ff6b35!important">Mot de passe oublié?</a>
+                                    <a href="{{path ('forgotten_password')}}" class="text-info text-decoration-none" style="color:#ff6b35!important">Mot de passe oublié?</a>
                                 </div>
                             </div>
 

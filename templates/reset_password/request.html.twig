@@ -1,0 +1,73 @@
+{% extends 'layout.html.twig' %}
+{% block Head %}
+	{{ parent() }}
+
+ {% block LinksCss %}
+ {{ parent() }}
+ {% endblock %}
+
+{% endblock %}
+{% block title %}mot de passe oublier
+{% endblock %}
+
+{% block Content %}
+ {% for flash_error in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+       <section class="gry-bg py-5" style="background: linear-gradient(135deg, #1a1a2e 0%, #2c2c54 100%); min-height: 100vh; display: flex; align-items: center;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8">
+                <div class="card shadow-lg border-0 rounded-4" style="background-color: #ffffff;">
+                    <div class="text-center pt-5">
+                        <h1 class="h3 fw-bold">Mot de passe oublié ?</h1>
+                        <p class="text-muted" style="color: #000000ff !important;">
+                            Entrez votre adresse email pour récupérer votre mot de passe
+                        </p>
+                    </div>
+
+                    <div class="px-4 py-5">
+                        {% for flash_error in app.flashes('reset_password_error') %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ flash_error }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+
+                        {{ form_start(requestPassForm) }}
+                            <div class="mb-4">
+                                {{ form_row(requestPassForm.email, {
+                                    'attr': {
+                                        'class': 'form-control rounded-pill',
+                                        'placeholder': 'Email',
+                                        'style': 'background-color: #dfdfdf;'
+                                    }
+                                }) }}
+                            </div>
+
+                            <button class="btn w-100 rounded-pill fw-bold py-2"
+                                    style="background-color: #2ec4b6; color: #fff; border: none;">
+                                Envoyer
+                            </button>
+                        {{ form_end(requestPassForm) }}
+
+                        <div class="text-center mt-4">
+                            <a href="{{ path('app_login') }}" class="btn btn-outline-light rounded-pill" style="color: #000000ff !important;">
+                                Retour à la connexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block footer %}
+{{ parent() }}
+{% endblock %}
+{% block javascript %}
+{{ parent() }}
+{% endblock %}

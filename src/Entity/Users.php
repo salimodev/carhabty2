@@ -48,6 +48,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?int $tel2 = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $resetToken = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -174,6 +177,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTel2(?int $tel2): static
     {
         $this->tel2 = $tel2;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): static
+    {
+        $this->resetToken = $resetToken;
 
         return $this;
     }

@@ -1,0 +1,27 @@
+ .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--light-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .btn-register {
+            background: linear-gradient(45deg, #ff6b35, #ff9f1c);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+            color: white;
+        }

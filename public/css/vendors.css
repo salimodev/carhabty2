@@ -176,13 +176,13 @@ sup {
 }
 
 a {
-    color: #f62718;
+    color: #007bff;
     text-decoration: none;
     background-color: transparent
 }
 
 a:hover {
-    color: #f62718;
+    color: #0056b3;
     text-decoration: underline
 }
 
@@ -606,7 +606,7 @@ pre code {
 
 @media (min-width:1200px) {
     .container {
-        max-width: 1400px !important
+        max-width: 1140px
     }
 }
 
@@ -652,7 +652,7 @@ pre code {
     .container-md,
     .container-sm,
     .container-xl {
-        max-width: 1400px !important
+        max-width: 1140px
     }
 }
 
@@ -2722,15 +2722,15 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary {
-     background: linear-gradient(45deg, var(--primary-color), var(--accent-color)) !important;
-            color: white !important;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3) !important;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff
 }
 
 .btn-primary:hover {
-   background: linear-gradient(45deg, var(--primary-color), var(--accent-color)) !important;
-            color: white !important;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3) !important;
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc
 }
 
 .btn-primary.focus,
@@ -5034,7 +5034,7 @@ input[type=submit].btn-block {
     word-wrap: break-word;
     background-color: #fff;
     background-clip: border-box;
-    border: 2px solid var(--accent-color);
+    border: 1px solid rgba(0, 0, 0, .125);
     border-radius: .25rem
 }
 
@@ -10519,7 +10519,7 @@ a.text-dark:hover {
 }
 
 .text-muted {
-    color: #fff!important
+    color: #6c757d!important
 }
 
 .text-black-50 {

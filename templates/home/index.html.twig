@@ -1,141 +1,34 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Quart de Tour{% endblock %}
+{% block title %}Carhabty
+{% endblock %}
 
 {% block LinksCss %}
-    {{ parent() }}
-    <link type="text/css" rel="stylesheet" href="{{ asset ('css/popup.css')}}">
- 
+	{{ parent() }}
+	<link type="text/css" rel="stylesheet" href="{{ asset ('css/popup.css')}}">
 {% endblock %}
 
 {% block Content %}
-    {{ parent() }}
+	{{ parent() }}
 
-    <!-- Section héro -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Carhabty</h1>
-            <p class="hero-subtitle">La plateforme qui révolutionne l'achat et la vente de pièces automobiles en Tunisie</p>
-        </div>
-    </section>
+	
+				<div class=" col-lg-12">
 
-    <!-- Profils utilisateurs -->
-    <section class="user-sections">
-        <h2 class="section-title">Choisissez votre <span class="highlight">profil</span></h2>
-        <div class="circle-container">
-            <div class="center-circle">Quart de Tour<br>Platform</div>
+					<div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true" data-dots="true" data-autoplay="true" data-infinite="true">
 
-            <div class="user-circle" style="--angle: 0deg;" data-role="proprietaire">
-                <div class="user-icon">🚗</div>
-                <h3>Propriétaire</h3>
-            </div>
-            <div class="user-circle" style="--angle: 72deg;">
-                <div class="user-icon">🔧</div>
-                <h3>Mécanicien</h3>
-            </div>
-            <div class="user-circle" style="--angle: 144deg;">
-                <div class="user-icon">🏢</div>
-                <h3>Vendeur Neuf</h3>
-            </div>
-            <div class="user-circle" style="--angle: 216deg;">
-                <div class="user-icon">🔄</div>
-                <h3>Vendeur Occasion</h3>
-            </div>
-            <div class="user-circle" style="--angle: 288deg;">
-                <div class="user-icon">🎯</div>
-                <h3>Particulier</h3>
-            </div>
-        </div>
-    </section>
+						<div class="carousel-box">
+							<a href="">
+								<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1761942372/Red_Black_Modern_Car_Service_Banner_uke5vw.png" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
+							</a>
+						</div>
 
-  
-        <div class="role-popup" id="rolePopup" style="display: none;">
-            <div class="popup-content">
-                <h3 id="popupRole" style="color:#fff">Propriétaire</h3>
-                <div class="popup-buttons">
-                    <button class="btn-popup" onclick="'">Se connecter</button>
-                    <button class="btn-popup" onclick="'">S'inscrire</button>
-                    <button class="btn-popup">Inviter</button>
-                </div>
-                <button class="popup-close">✖</button>
-            </div>
-        </div>
-  
+						
 
-    <!-- Demandes récentes -->
-   <section class="recent-requests">
-        <h2 class="section-title">Demandes <span class="highlight">récentes</span></h2>
-        <div class="requests-grid">
-            <!-- طلب 1 -->
-            <div class="request-card">
-                <div class="request-header">
-                    <div class="request-title">Freins avant BMW X5 2015</div>
-                    <div class="request-badge">Nouvelle</div>
-                </div>
-                <div class="request-meta">
-                    <span>📍 Tunis</span>
-                    <span>👤 Mohamed</span>
-                    <span>🕒 2h</span>
-                </div>
-                <div class="request-image">📷 Image de la pièce demandée</div>
-                <p>Je cherche des disques et plaquettes de frein avant originaux pour BMW X5 2015. État neuf uniquement.</p>
-                <button class="btn btn-offer">📩 Proposer un prix</button>
-            </div>
-            
-            <!-- طلب 2 -->
-            <div class="request-card">
-                <div class="request-header">
-                    <div class="request-title">Rétroviseur Renault Clio 4</div>
-                    <div class="request-badge">Occasion</div>
-                </div>
-                <div class="request-meta">
-                    <span>📍 Sfax</span>
-                    <span>👤 Sarah</span>
-                    <span>🕒 5h</span>
-                </div>
-                <div class="request-image">📷 Image de la pièce demandée</div>
-                <p>Rétroviseur côté conducteur, couleur noir. État correct accepté. Budget maximum 80 DT.</p>
-                <button class="btn btn-offer">📩 Proposer un prix</button>
-            </div>
-            
-            <!-- طلب 3 -->
-            <div class="request-card">
-                <div class="request-header">
-                    <div class="request-title">Service réparation embrayage</div>
-                    <div class="request-badge">Service</div>
-                </div>
-                <div class="request-meta">
-                    <span>📍 Sousse</span>
-                    <span>👤 Mécanicien Pro</span>
-                    <span>🕒 1j</span>
-                </div>
-                <div class="request-image">📷 Photo du véhicule</div>
-                <p>Propose service de remplacement d'embrayage pour tous modèles. Garantie 6 mois.</p>
-                <button class="btn btn-offer">📞 Contacter</button>
-            </div>
-        </div>
-    </section>
-{% endblock %}
 
-{% block javascript %}
-    {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const circles = document.querySelectorAll('.user-circle');
-            const popup = document.getElementById('rolePopup');
-            const popupRole = document.getElementById('popupRole');
-            const closeBtn = document.querySelector('.popup-close');
-
-            circles.forEach(circle => {
-                circle.addEventListener('click', () => {
-                    popupRole.textContent = circle.querySelector('h3').textContent;
-                    popup.style.display = 'flex';
-                });
-            });
-            closeBtn.addEventListener('click', () => popup.style.display = 'none');
-            popup.addEventListener('click', e => {
-                if (e.target === popup) popup.style.display = 'none';
-            });
-        });
-    </script>
-{% endblock %}
+					</div>
+				</div>
+			{% endblock %}
+			{% block javascript %}
+				{{ parent() }}
+				<script type="text/javascript"></script>
+			{% endblock %}

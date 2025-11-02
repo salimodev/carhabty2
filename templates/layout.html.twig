@@ -20,13 +20,6 @@
     <link rel="stylesheet" href="{{ asset ('css/vendors.css') }}">
     <link rel="stylesheet" href="{{ asset ('css/aiz-core.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset ('css/responsive.bootstrap4.min.css')}}">
-				<link rel="stylesheet" href="{{ asset ('css/dropzone.css') }}">
-				<link rel="stylesheet" href="{{ asset ('css/uppy.css') }}">
-				<link rel="stylesheet" href="{{ asset ('css/uppy.css') }}">
-
-				<link rel="stylesheet" href="{{ asset ('footable/css/footable.bootstrap.css') }}">
-				<link rel="stylesheet" href="{{ asset ('footable/css/footable.bootstrap.min.css') }}">
-
 				<link type="text/css" rel="stylesheet" href="{{ asset ('css/dataTables.bootstrap4.min.css')}}">
                 <link rel="stylesheet"  href="{{ asset ('css/bootstrap-select.min.css')}}">
     <style>
@@ -37,7 +30,7 @@
     {% endblock %}
 </head>
 
-<body style="background-color: #fff !important;"> 
+<body style="background-color: #f5f5f5;"> 
 
     {% block Header %}
         {{ render(controller('App\\Controller\\HomeController::header', {'uri': app.request.uri})) }}
@@ -64,33 +57,20 @@
             <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"> </script>
             <script src="https://code.jquery.com/jquery-migrate-3.3.2.js"></script>
 			<script type="text/javascript" src="{{ asset ('js/bootstrap.min.js') }}"></script>
-
-	<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
-
 			<script src="{{ asset ('js/vendors.js') }}"></script>
 			<script src="{{ asset ('js/aiz-core.js') }}"></script>
 			<script src="{{ asset ('js/dropzone.js') }}"></script>
 			<script src="{{ asset ('js/dropzone.min.js') }}"></script>
 			<script src="{{ asset ('js/uppy.js') }}"></script>
-
-			<script src="{{ asset ('footable/js/footable.min.js') }}"></script>
-			<script src="{{ asset ('footable/js/footable.js') }}"></script>
-            {#<script type="text/javascript" src="{{ asset ('assets/js/dataTables.buttons.min.js') }}"></script>#}
-			<script type="text/javascript" src="{{ asset ('js/jquery.dataTables.min.js') }}"></script>
-			{#<script type="text/javascript" src="{{ asset ('assets/js/Data.Select.min.js') }}"></script>#}
-			
 			<script type="text/javascript" src="{{ asset ('js/jquery.dataTables.min.js') }}"></script>
 			<script type="text/javascript" src="{{ asset ('js/dataTables.bootstrap4.min.js') }}"></script>
 			<script type="text/javascript" src="{{ asset ('js/dataTables.responsive.min.js') }}"></script>
 			<script type="text/javascript" src="{{ asset ('js/responsive.bootstrap4.min.js') }}"></script>
-
+            <script type="text/javascript" src="{{ asset ('js/demande.js') }}"></script>
             <script type="text/javascript" src="{{ asset ('js/bootstrap-select.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset ('js/alert.js') }}" ></script>
-    
-			{#<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>#}
-			<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
-			{#<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>#}
-
+            <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+			
 			<!--contact js-->
             <script>
             function opensidebar(){
@@ -100,6 +80,12 @@
                }); 
               $('#menumobilenav').addClass('active');
              }
+             function closenavbar(){
+                  var elem = document.getElementById('menumobilenav')
+               $('#menumobilenav').each(function(){
+                   $('#menumobilenav').removeClass('active');
+               }); 
+            }
             </script>
     {% endblock %}
 </body>

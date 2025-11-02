@@ -1,0 +1,635 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Quart de Tour
+{% endblock %}
+
+{% block Head %}
+	{{ parent() }}
+	{% block LinksCss %}
+		{{ parent() }}
+        <link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
+		<style>
+			.infovéhicule {
+				color: #ff4d00;
+				font-size: 20px;
+				font-weight: 700;
+				margin-bottom: 15px;
+				border-left: 4px solid #ff4d00;
+				padding-left: 8px;
+			}
+			div.dataTables_wrapper div.dataTables_filter input {
+				margin-left: 0.5em;
+				display: inline-block;
+				width: 75%;
+			}
+			.btn-record {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border: 1px solid #ff4500;
+				color: #ff4500;
+				background: #fff;
+				border-radius: 6px;
+				padding: 10px;
+				font-weight: 600;
+				margin-top: 10px;
+				cursor: pointer;
+			}
+
+			.btn-record:hover {
+				background: #ffe9e0;
+			}
+			.checkbox-group {
+				margin-top: 15px;
+			}
+
+			.checkbox-group label {
+				display: block;
+				margin-top: 8px;
+			}
+			.link {
+				color: #ff5a1f;
+				text-decoration: none;
+				font-weight: 600;
+			}
+
+			.link:hover {
+				text-decoration: underline;
+			}
+		</style>
+
+	{% endblock %}
+{% endblock %}
+
+{% block Content %}
+	{% block loader %}
+		{{ parent() }}
+	{% endblock %}
+	<!-- modal adress -->
+	<div class="modal" id="new-address-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="z-index: 1040; display: none;" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Nouvelle pièce</h5>
+
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<form class="form-default" role="form">
+					<input type="hidden" name="_token" id="idadress" value="">
+					<div class="modal-body">
+						<div class="p-3">
+
+							<div class="row">
+								<div class="col-md-2">
+									<label>Désignation</label>
+								</div>
+								<div class="col-md-10 voice_to_text">
+									<textarea class="form-control mb-3" id="convert_text" placeholder="Désignation" rows="2" required></textarea>
+
+									<div style="display: flex; align-items: center; gap: 10px;">
+										<select id="language_select" class="form-control" style="width: 180px;">
+											<option value="fr-FR">Français</option>
+											<option value="ar-TN">العربية (تونس)</option>
+										</select>
+
+										<button type="button" class="btn-record" id="click_to_convert">🎙️ Enregistrer</button>
+									</div>
+								</div>
+							</div>
+
+							<br>
+
+
+							<div class="row">
+								<div class="col-md-2">
+									<label>Référence</label>
+								</div>
+								<div class="col-md-10">
+									<input type="text" id="reference" class="form-control mb-3" placeholder="Référence" name="postal_code">
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-2">
+									<label>
+										Photo
+									</label>
+								</div>
+								<div class="col-md-10">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text bg-soft-secondary font-weight-medium" style="cursor:pointer;" onclick="cloudDinaryCreationLogomarque()">Browse</div>
+										</div>
+										<div class="form-control file-amount" style="cursor:pointer;" onclick="cloudDinaryCreationLogomarque()">Sélèctionez</div>
+										<input type="hidden" id="srcLogo" value="">
+
+										<input type="hidden" name="logo" value="99" class="selected-files">
+									</div>
+									<div class="file-preview box sm" id="NewPhotos" style="display:none">
+										<div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="99" title="1626638583730.jpg">
+											<div class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+												<img src="" id="logoImg" class="img-fit"></div>
+											<div class="col body">
+												<h6 class="d-flex">
+													<span class="text-truncate title">1626638583730</span>
+													<span class="ext">.jpg</span>
+												</h6>
+												<p>2 KB</p>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-md-2">
+									<label>Observation</label>
+								</div>
+								<div class="col-md-10">
+									<textarea class="form-control mb-3" id="observation" placeholder="Observation" rows="2" name="address" required=""></textarea>
+								</div>
+							</div>
+
+							<div class="form-group text-right">
+								<button type="button" onclick="ajouterpiece();" class="btn btn btn-register">Enregistrer</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- fin modal adress -->
+
+	<section class="pt-5 mb-4" style="background-color: #f5f5f5 !important">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-8 mx-auto">
+                    <div class="row aiz-steps arrow-divider">
+                        <div class="col auto active">
+                            <div class="text-center text-primary">
+                               <i class="la-3x mb-2 las la-car"></i>
+                               <h3 class="fs-14 fw-600 d-none d-lg-block text-capitalize">
+									1. Informations véhicule
+								</h3>
+                            </div>
+                        </div>
+                        <div class="col pieceauto">
+                            <div class="text-center ">
+                               <i class="la-3x mb-2 lab la-whmcs"></i>
+                               <h3 class="fs-14 fw-600 d-none d-lg-block text-capitalize">
+									2. Pièces demandées
+								</h3>
+                            </div>
+                        </div>
+                        <div class="col dest">
+                            <div class="text-center">
+                                <i class="la-3x mb-2  lab la-telegram-plane"></i>
+								<h3 class="fs-14 fw-600 d-none d-lg-block text-capitalize">
+									3. Destinataires
+								</h3>
+							</div>
+                        </div>
+                        <div class="col recep">
+                            <div class="text-center">
+                               <i class="la-3x mb-2 las la-envelope"></i>
+								<h3 class="fs-14 fw-600 d-none d-lg-block text-capitalize">
+									4. Mode de réception
+								</h3>
+							</div>
+                        </div>
+                        <div class="col confirm">
+                            <div class="text-center">
+                               <i class="la-3x mb-2  las la-check-circle"></i>
+								<h3 class="fs-14 fw-600 d-none d-lg-block  text-capitalize">
+									5. Confirmation
+								</h3>
+							 </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+	<!-- Informations véhicule -->
+	<section class="mb-4 gry-bg autoinfo" style="background-color: #f5f5f5;">
+		<div class="container">
+			<div class="row cols-xs-space cols-sm-space cols-md-space">
+				<div class="col-xxl-8 col-xl-10 mx-auto">
+					<form class="form-default" data-toggle="validator">
+						<input type="hidden" name="_token" value="a4D4gZ4hUcMLA1GXLgNbVQKLUNS5GiTC3sEWBLE7">
+						<div class="shadow-sm bg-white p-4 rounded mb-4">
+							<div class="row gutters-5">
+								<div class="col-md-12 mb-3" id="adressSelect">
+									<form class="" action="" method="POST" enctype="multipart/form-data">
+										<input type="hidden" name="_token" id="idStore" value="2">
+										<div class="form-box bg-white mt-4">
+											<div class="form-box-title px-3 py-2 infovéhicule">
+												Informations véhicule
+											</div>
+											<div class="form-box-content p-3">
+												<div class="row">
+													<div class="col-md-2">
+														<h6>Marque
+															<span class="text-danger">*</span>
+														</h6>
+													</div>
+													<div class="col-md-10">
+														<input type="text" id="marque" class="form-control mb-3" value="" placeholder="Ex : Peugeot" name="element_0" required="">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-2">
+														<h6>Modèle
+															<span class="text-danger">*</span>
+														</h6>
+													</div>
+													<div class="col-md-10">
+														<input type="text" id="modele" class="form-control mb-3" value="" placeholder="Ex : 308" name="element_1" required="">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-2">
+														<h6>N° Châssis
+															<span class="text-danger">*</span>
+														</h6>
+													</div>
+													<div class="col-md-10">
+														<input type="text" id="numerochassis" class="form-control mb-3" value="" placeholder="Ex : VF3*********" name="element_2" required="">
+													</div>
+												</div>
+
+
+												<br>
+
+												<div class="row">
+													<div class="col-md-2">
+														<h6>
+															Photo de la carte grise (1ʳᵉ face)<span class="text-danger">*</span>
+														</h6>
+													</div>
+													<div class="col-md-10">
+														<div class="input-group">
+															<div class="input-group-prepend">
+																<div class="input-group-text bg-soft-secondary font-weight-medium" style="cursor:pointer;" onclick="cloudDinaryimageProd()">Browse</div>
+															</div>
+															<div class="form-control file-amount" style="cursor:pointer;" onclick="cloudDinaryimageCINrecto()">Sélèctionez</div>
+															<input type="hidden" id="srcLogo2" value="">
+
+															<input type="hidden" name="logo" value="99" class="selected-files">
+														</div>
+														<div class="file-preview box sm" id="NewPhotos2" style="display:none">
+															<div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="99" title="1626638583730.jpg">
+																<div class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+																	<img src="" id="logoImg2" class="img-fit"></div>
+																<div class="col body">
+																	<h6 class="d-flex">
+																		<span class="text-truncate title">1626638583730</span>
+																		<span class="ext">.jpg</span>
+																	</h6>
+																	<p>2 KB</p>
+																</div>
+																<div class="remove">
+																	<button class="btn btn-sm btn-link remove-attachment" type="button">
+																		<i class="la la-close"></i>
+																	</button>
+
+																</div>
+															</div>
+														</div>
+														<small class="text-danger" style="color:ff4d00 !important;">Insertion de Photo de carte Grise 1er Face pour mieux vérifier le numéro de châssis</small>
+													</div>
+												</div>
+												<br>
+
+												<h6>Type de carburant <span class="text-danger">*</span></h6>
+												<div class="checkbox-group">
+													<label class="aiz-switch aiz-switch-success mb-0">
+														<input class="switch" id="essence" name="carb" type="checkbox"/>
+														<span class="slider round" style="margin: 5px;margin-bottom: -5px"></span>
+														Essence</label>
+													<label class="aiz-switch aiz-switch-success mb-0">
+														<input class="switch" id="diesel" name="carb" type="checkbox"/>
+														<span class="slider round" style="margin: 5px;margin-bottom: -5px"></span>
+														Diesel</label>
+													<label class="aiz-switch aiz-switch-success mb-0">
+														<input class="switch" id="hybride" name="carb" type="checkbox"/>
+														<span class="slider round" style="margin: 5px;margin-bottom: -5px"></span>
+														Hybride</label>
+													<label class="aiz-switch aiz-switch-success mb-0">
+														<input class="switch" id="electrique" name="carb" type="checkbox"/>
+														<span class="slider round" style="margin: 5px;margin-bottom: -5px"></span>
+														Électrique</label>
+												</div>
+												<br>
+												<h6>État du moteur <span class="text-danger">*</span></h6>
+												<div class="checkbox-group">
+													<label class="aiz-switch aiz-switch-success mb-0">
+														<input class="switch1" id="Origine" name="etatmoteurinput" type="checkbox"/>
+														<span class="slider round" style="margin: 5px;margin-bottom: -5px"></span>
+														Origine</label>
+													<label class="aiz-switch aiz-switch-success mb-0">
+														<input class="switch1" id="Changé" name="etatmoteurinput" type="checkbox"/>
+														<span class="slider round" style="margin: 5px;margin-bottom: -5px"></span>
+														Changé</label>
+													<label class="aiz-switch aiz-switch-success mb-0">
+														<input class="switch1" id="autreetat" name="etatmoteurinput" type="checkbox"/>
+														<span class="slider round" style="margin: 5px;margin-bottom: -5px"></span>
+														Je ne sais pas</label>
+												</div>
+											</div>
+
+										</div>
+
+									</form>
+
+								</div>
+							</div>
+						</div>
+						<div class="row align-items-center">
+							<div class="col-md-6 text-center text-md-left order-1 order-md-0">
+								<a href="/" class="btn-link">
+									<i class="las la-arrow-left"></i>
+									Retour vers Accueil
+								</a>
+							</div>
+							<div class="col-md-6 text-center text-md-right">
+								<button type="button" onclick="piece();" class="btn btn-register fw-600 optioselctbtn">Continuer vers pièces demandées
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Fin Informations véhicule -->
+	<!--  Demande de pièces -->
+	<section class="mb-4 gry-bg piece" style="display:none ;background-color: #f5f5f5;">
+		<div class="container">
+			<div class="row cols-xs-space cols-sm-space cols-md-space">
+				<div class="col-xxl-8 col-xl-10 mx-auto">
+					<form class="form-default" data-toggle="validator">
+						<input type="hidden" name="_token" value="a4D4gZ4hUcMLA1GXLgNbVQKLUNS5GiTC3sEWBLE7">
+						<div class="shadow-sm bg-white p-4 rounded mb-4">
+							<div class="row gutters-5">
+								<div class="col-md-12 mb-3" id="adressSelect">
+									<form class="" action="http://localhost/aladinv4/seller/shop/apply_for_verification" method="POST" enctype="multipart/form-data">
+										<input type="hidden" name="_token" id="idStore" value="2">
+										<div class="form-box bg-white mt-4">
+											<div class="form-box-title px-3 py-2 infovéhicule">
+												Demande de pièces
+											</div>
+
+											<div class="row">
+												<div class="col-md-12">
+													<div class="card">
+														<div class="card-header">
+															<h5 class="mb-0 h6">Pièces demander</h5>
+														</div>
+														<div class="card-body">
+															<table id="tab" style="width:100%">
+																<thead>
+																	<tr>
+																	    
+																		<th>désignation</th>
+																		<th>réferance</th>
+																		<th>photo</th>
+																		<th>observation</th>
+
+																		<th>Action</th>
+																	</tr>
+																</thead>
+																<tbody>
+
+																	<tr>
+																		<td>
+																			<a href=""></a>
+																		</td>
+																		<td></td
+                                                                        <td></td>
+																		<td></td>
+																		<td></td>
+																		<td class="text-right footable-last-visible" style="display: table-cell;"></td>
+																	</tr>
+
+																</tbody>
+
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col text-end" data-target="#new-address-modal" data-toggle="modal">
+												<a href="#" class="btn btn-register fw-600 px-4">
+													<i class="las la-plus-circle me-1"></i>
+													Ajouter une pièce
+												</a>
+											</div>
+										</div>
+
+
+									</div>
+
+								</form>
+
+
+							</div>
+						</div>
+						<div class="row align-items-center">
+							<div class="col-md-6 text-center text-md-left order-1 order-md-0">
+								<a href="/" class="btn-link">
+									<i class="las la-arrow-left"></i>
+									Retour vers Accueil
+								</a>
+							</div>
+							<div class="col-md-6 text-center text-md-right">
+								<button type="button" onclick="destinataire();" class="btn btn-register fw-600 optioselctbtn">Continuer vers destinataires
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section><!--  Fin Demande de pièces --><!--  destinataire de pièces --><section class="mb-4 gry-bg destinataire" style="display:none ;background-color: #f5f5f5;">
+		<div class="container">
+			<div class="row cols-xs-space cols-sm-space cols-md-space">
+				<div class="col-xxl-8 col-xl-10 mx-auto">
+					<form class="form-default" data-toggle="validator">
+						<input type="hidden" name="_token" value="a4D4gZ4hUcMLA1GXLgNbVQKLUNS5GiTC3sEWBLE7">
+						<div class="shadow-sm bg-white p-4 rounded mb-4">
+							<div class="row gutters-5">
+								<div class="col-md-12 mb-3" id="adressSelect">
+									<form class="" action="" method="POST" enctype="multipart/form-data">
+										<input type="hidden" name="_token" id="idStore" value="2">
+										<div class="form-box bg-white mt-4">
+											<div class="form-box-title px-3 py-2 infovéhicule">
+												À qui souhaitez-vous envoyer cette demande ?
+											</div>
+											<div class="shadow-sm bg-white p-3 p-lg-4 rounded text-left">
+
+												<div class="checkbox-group" style="color: #000000; font-weight: 500;">
+													<h6>
+														<input type="checkbox" style="accent-color: #000000;"/ id="vendNeuf" name="vendeurneuf">
+														Vendeur de pièces de rechange neuves
+													</h6>
+													<br>
+
+													<h6>
+														<input type="checkbox" style="accent-color: #000000;"/ id="vendOcc" name="vendeuroccasion">
+														Vendeur de pièces de rechange d’occasion ("Férailleur")
+													</h6>
+													<br>
+
+													<h6>
+														<input type="checkbox" style="accent-color: #000000;"/>
+														Recevoir seulement des offres provenant d’une zone préférée
+													</h6>
+
+													<h6 style="margin-top: 8px; display: block; color: #000000;">Zone préférée :</h6>
+													<select id="zone" style="
+																										      width: 100%;
+																										      padding: 10px;
+																										      border: 1px solid #000000;
+																										      border-radius: 8px;
+																										      margin-top: 6px;
+																										      font-size: 15px;
+																										      color: #000000;
+																										    ">
+														<option>Toute la Tunisie</option>
+														<option>Ariana</option>
+														<option>Beja</option>
+														<option>Ben Arous</option>
+														<option>Bizerte</option>
+														<option>Gabès</option>
+														<option>Gafsa</option>
+														<option>Jendouba</option>
+														<option>Kairouan</option>
+														<option>Kasserine</option>
+														<option>Kebili</option>
+														<option>La Manouba</option>
+														<option>Le Kef</option>
+														<option>Mahdia</option>
+														<option>Médenine</option>
+														<option>Monastir</option>
+														<option>Nabeul</option>
+														<option>Sfax</option>
+														<option>Sidi Bouzid</option>
+														<option>Siliana</option>
+														<option>Sousse</option>
+														<option>Tataouine</option>
+														<option>Tozeur</option>
+														<option>Tunis</option>
+														<option>Zaghouan</option>
+													</select>
+												</div>
+											</div>
+
+										</div>
+
+									</form>
+
+								</div>
+							</div>
+						</div>
+						<div class="row align-items-center">
+							<div class="col-md-6 text-center text-md-left order-1 order-md-0">
+								<a href="/" class="btn-link">
+									<i class="las la-arrow-left"></i>
+									Retour vers Accueil
+								</a>
+							</div>
+							<div class="col-md-6 text-center text-md-right">
+								<button type="button" onclick="reception();" class="btn btn-register fw-600 optioselctbtn">Continuer vers réception
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section><!--  Fin destinataire --><!--  réception --><section class="mb-4 gry-bg reception" style="display:none ;background-color: #f5f5f5;">
+		<div class="container">
+			<div class="row cols-xs-space cols-sm-space cols-md-space">
+				<div class="col-xxl-8 col-xl-10 mx-auto">
+					<form class="form-default" data-toggle="validator">
+						<input type="hidden" name="_token" value="a4D4gZ4hUcMLA1GXLgNbVQKLUNS5GiTC3sEWBLE7">
+						<div class="shadow-sm bg-white p-4 rounded mb-4">
+							<div class="row gutters-5">
+								<div class="col-md-12 mb-3" id="adressSelect">
+									<form class="" action="http://localhost/aladinv4/seller/shop/apply_for_verification" method="POST" enctype="multipart/form-data">
+										<input type="hidden" name="_token" id="idStore" value="2">
+										<div class="form-box bg-white mt-4">
+											<div class="form-box-title px-3 py-2 infovéhicule">
+												Comment vous préférez recevoir et gérer les offres  ?
+											</div>
+											<div class="shadow-sm bg-white p-3 p-lg-4 rounded text-left">
+
+										<div class="checkbox-group">
+    <h6>
+        <input type="checkbox" id="choix_email" style="accent-color: #000000;">
+        Sur mon email :
+    </h6>
+    <input type="email" id="emailrecv" class="form-control mb-2" placeholder="Ex : monadresse@email.com">
+
+    <h6>
+        {% if app.user %}
+        <input type="hidden" id="user_id" value="{{ app.user.id }}">
+        {% endif %}
+
+        <input type="checkbox" id="choix_compte" style="accent-color: #000000;">
+        Sur mon compte <strong>Quart de Tour</strong>
+    </h6>
+    <label>
+        Vous n’avez pas de compte ?
+        <a href="{{ path('app_register') }}" class="link">Créer un nouveau compte</a>
+    </label>
+</div>
+
+
+
+
+											</div>
+
+										</div>
+
+									</form>
+
+								</div>
+							</div>
+						</div>
+						<div class="row align-items-center">
+							<div class="col-md-6 text-center text-md-left order-1 order-md-0">
+								<a href="/" class="btn-link">
+									<i class="las la-arrow-left"></i>
+									Retour vers Accueil
+								</a>
+							</div>
+							<div class="col-md-6 text-center text-md-right">
+								<button type="button" onclick="envoyerdemande();" class="btn btn-register fw-600 optioselctbtn">Envoyer la demande
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section><!--  Fin réception --><!--  confirmation -->
+	<section class="py-4 confirmationsection" id="confirmation">
+        
+</section><!--  Fin confirmation -->{% endblock %}
+{% block javascript %}
+	{{ parent() }}
+	<script type="text/javascript">
+		var pathaddpiece = '{{ path('add_piece') }}';
+		var pathenvoyerdemande = "{{ path('envoyer_demande') }}";
+	</script>
+	
+	
+{% endblock %}
+

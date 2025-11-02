@@ -8,36 +8,41 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(): Response
+    #[Route('/', name: 'Accueil')]
+    public function index(Request $request): Response
     {
+        $session =$request->getSession();
+        $session->set('PageMenu', 'Accueil');
+
         return $this->render('home/index.html.twig');
     }
 
      #[Route(path: '/footer', name: 'app_footer')]
-     public function footer(): Response
+     public function footer(Request $request): Response
     {
-       
+    
         return $this->render('/footer.html.twig');
     }
 
       #[Route(path: '/header', name: 'app_header')]
-    public function header(): Response
+    public function header(Request $request): Response
     {
-       
+            
         return $this->render('/header.html.twig');
     }
 
       #[Route(path: '/sideheader', name: 'sideheader')]
     public function sideheader(Request $request): Response
     {
-        $session =$request->getSession();
+           
         return $this->render('/sideHeader.html.twig');
     }
 
     #[Route('/contact', name: 'app_contact')]
-    public function contact(): Response
+    public function contact(Request $request): Response
     {
+               $session =$request->getSession();
+        $session->set('PageMenu', 'app_contact');
         return $this->render('contact.html.twig');
     }
 }

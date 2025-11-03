@@ -200,22 +200,22 @@
 	</div>
 </footer>
 <div class="aiz-mobile-bottom-nav d-xl-none fixed-bottom bg-white shadow-lg border-top rounded-top" >
-
+{% set PageMenu = app.session.get('PageMenu') %}
 <div class="row align-items-center gutters-5">
-        <div class="col"  style="color:#ef1c00 !important">
+        <div class="col"{% if PageMenu is defined and PageMenu == "Accueil"%}  style="color:#ef1c00 !important"{% endif %}>
             <a  href=""   class="text-reset d-block text-center pb-2 pt-3">
                 <i class="las la-home fs-20 opacity-60 "></i>
                 <span class="d-block fs-10 fw-600 opacity-60 ">Accueil</span>
             </a>
         </div>
-        <div class="col"  style="color:#ef1c00 !important">
-            <a href="{"  class="text-reset d-block text-center pb-2 pt-3">
+        <div class="col" {% if PageMenu is defined and PageMenu == "demande_all"%}  style="color:#ef1c00 !important"{% endif %}>
+            <a href=""  class="text-reset d-block text-center pb-2 pt-3">
                 <i class="las la-list-ul fs-20 opacity-60 "></i>
-                <span class="d-block fs-10 fw-600 opacity-60 ">Categories</span>
+                <span class="d-block fs-10 fw-600 opacity-60 ">Demandes</span>
             </a>
         </div>
         
-        <div class="col"  style="color:#ef1c00 !important">
+        <div class="col" {% if PageMenu is defined and PageMenu == "notifcations"%}  style="color:#ef1c00 !important" {% endif %}>
             <a  {% if app.user and is_granted('ROLE_PROPRIETAIRE') %} href="" {% else %} href="{{path('app_login')}}"  {% endif %} class="text-reset d-block text-center pb-2 pt-3">
                 <span class="d-inline-block position-relative px-2">
                     <i class="las la-bell fs-20 opacity-60 "></i>
@@ -244,6 +244,7 @@
         {% endif %}
         </div>
     </div>
+	       
 </div>
 
 {% if is_granted('ROLE_PROPRIETAIRE') %}

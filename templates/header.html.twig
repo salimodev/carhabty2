@@ -73,7 +73,7 @@
 	{% endif %}
 </ul></div></div></div></div><header class=" sticky-top  z-1020 bg-white border-bottom shadow-sm"><div class="position-relative logo-bar-area z-1"><div class="container"><div class="d-flex align-items-center">
 <div class="col-auto col-xl-3 pl-0 pr-3 d-flex align-items-center" style="height: 100px;">
-	<a class="d-block py-10px mr-3 ml-0" href="/"><img src="{{ asset ('image/logo1.png')}}" style="height: 197px;max-width:100% !important" onerror="this.onerror=null;this.src='image/logo10.png';style='height: 50px;max-width:100% !important'" alt="carhabty" height="50"></a>
+	<a class="d-block py-10px mr-3 ml-0" href="/"><img src="{{ asset ('image/logo1.png')}}" style="height: 197px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/logo10.png';style='height: 50px;max-width:100% !important'" alt="carhabty" height="50"></a>
 </div>
 <div class="d-lg-none ml-auto mr-0">
 	<a class="p-2 d-block text-reset" href="javascript:void(0);" data-toggle="class-toggle" data-target=".front-header-search">
@@ -141,7 +141,7 @@
 			</span>
 		</a>
 	</div>
-</div></div></div></div><div class="bg-white border-top border-gray-200 py-1">
+</div></div></div></div><div class="bg-white border-top border-gray-200 py-1" style="position:relative;z-index:10;">
    {% set PageMenu = app.session.get('PageMenu') %}
 <div class="container"><ul class="list-inline mb-0 pl-0 mobile-hor-swipe text-center">
 <li {% if PageMenu == "Accueil" %} class="list-inline-item mr-0 active" style="border-bottom: solid;" {% else %} class="list-inline-item mr-0" {% endif %}>

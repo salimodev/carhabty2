@@ -9,6 +9,7 @@
     {% block LinksCss %}
         {{ parent() }}
         <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
+       
     {% endblock %}
 {% endblock %}
 
@@ -84,7 +85,7 @@
                                             <h5 class="mb-0 h6">Demandes</h5>
                                         </div>
                                         <div class="card-body">
-                                            <table id="tabdemande" style="width:100%">
+                                            <table id="tab" style="width:100%">
                                                 <thead>
                                                     <tr>
                                                         <th>Code</th>
@@ -135,25 +136,29 @@
                     </div><!-- /.d-flex -->
                 </div><!-- /.container -->
             </section>
+           
         {% endif %}
     {% endif %}
 {% endblock %}
 
 {% block javascript %}
     {{ parent() }}
-<script type="text/javascript">
-	$(document).ready(function () {
-$('#tabdemande').DataTable({
-  responsive: true,
-    autoWidth: false,
-    columnDefs: [
-        { targets: '_all', className: 'text-nowrap text-center align-middle' },
-        { targets: -1, orderable: false } // dernière colonne (Action)
-    ],
-    language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
-    }
-});
-});
+    
+   <script type="text/javascript">
+     $(document).ready(function() {
+        var table = $('#tab').DataTable( {
+           language: {
+                 url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+             },
+            rowReorder: {
+                selector: 'td:nth-child(2)'
+            },
+            responsive: true,
+        } );
+          
+    } );
+    
+    </script>  
+
 </script>{% endblock %}
 

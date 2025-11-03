@@ -169,12 +169,6 @@ $('body').css('overflow', 'auto');
             console.error(xhr.responseText);
             AIZ.plugins.notify('danger', "Erreur lors de l’ajout de la pièce !");
         },
-        beforeSend: function () {
-            $('#loaderAcc1').show();
-        },
-        complete: function () {
-            $('#loaderAcc1').hide();
-        }
     });
 
 }
@@ -375,7 +369,7 @@ function envoyerdemande() {
             html += "<i class='la la-check-circle la-3x text-success mb-3'></i>";
             html += "<h1 class='h3 mb-3 fw-600'>Merci pour votre demande !</h1>";
             html += "<h2 class='h5'>Code de demande : <span class='fw-700 text-primary'>" + response.code + "</span></h2>";
-            html += "<p class='opacity-70 font-italic'>Un récapitulatif de votre demande a été envoyé à " + response.reception + "</p>";
+            html += "<p class='opacity-70 font-italic'>Un e-mail de confirmation de votre demande a été envoyé à " + response.reception + "</p>";
             html += "</div>";
 
            html += "<div class='mb-4'>";

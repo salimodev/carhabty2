@@ -9,10 +9,12 @@ security:
                 property: email
 
     firewalls:
+        # 🔓 Firewall pour les fichiers du profiler et les assets
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        # 🔐 Firewall principal
         main:
             lazy: true
             provider: app_user_provider
@@ -23,6 +25,11 @@ security:
                 target: app_login
 
     access_control:
+        # ✅ Autoriser l’accès public au Web Debug Toolbar et au Profiler
+        - { path: ^/_wdt, roles: PUBLIC_ACCESS }
+        - { path: ^/_profiler, roles: PUBLIC_ACCESS }
+
+        # 🔒 Routes protégées (après)
         - { path: ^/Accueil, roles: ROLE_USER }
 
     role_hierarchy:

@@ -40,4 +40,16 @@ class DemandeRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function countByUser($user): int
+{
+    return $this->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.offrecompte = :user')
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+
+
 }

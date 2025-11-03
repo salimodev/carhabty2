@@ -11,12 +11,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class DemandeController extends AbstractController
+
 {
+     
+    private $mailer;
+    
+    public function __construct(\Doctrine\ORM\EntityManagerInterface $em,MailerInterface $mailer) {
+       
+        $this->mailer = $mailer;
+    }
+
       #[Route('/demande', name: 'app_demande')]
     public function demande2(Request $request): Response
     {
@@ -121,7 +132,27 @@ foreach ($pieces as $prod) {
         $piecesData[] = $arrayprod;
     }
 }
+$email = (new TemplatedEmail())
+    ->from('salimabbessi.dev@gmail.com')
+    ->to($email)
+    ->subject('Votre demande a été bien creé')
+    ->htmlTemplate('emails/demande.html.twig')
+    ->context([
+        'demande' => $demande,
+    ]);
 
+
+// Embed images
+$email 
+    ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1762169290/logo1_hdbhq8.png', 'logo', 'image/png')
+    ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422924/h2qdkkms0lmucs44rc6s.png', 'facebook', 'image/png')
+    ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422987/jtxpgab3dhykivmpw6y5.png', 'instagram', 'image/png')
+    ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423044/gchpepwboglj5oyudqr8.png', 'twitter', 'image/png')
+    ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423097/afyzbcguyosyjfbhpn8v.png', 'Linkidin', 'image/png')
+    ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423192/irpvbr5wdjsewm0i5jgu.png', 'Tick', 'image/png');
+                 
+// Send the email
+$this->mailer->send($email);
 return new JsonResponse([
     'status' => 'success',
     'message' => 'Demande enregistrée avec succès !',
@@ -138,6 +169,9 @@ return new JsonResponse([
     'statut' => $demande->getStatut(),
     'pieces' => $piecesData,
 ]);
+
+
+
 
 }
 

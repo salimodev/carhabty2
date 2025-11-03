@@ -23,6 +23,61 @@
 				<link type="text/css" rel="stylesheet" href="{{ asset ('css/dataTables.bootstrap4.min.css')}}">
                 <link rel="stylesheet"  href="{{ asset ('css/bootstrap-select.min.css')}}">
     <style>
+     /***************************************/
+            /* Style Loader */
+            /***************************************/
+          
+            .fadet {
+                opacity: 0;
+                visibility: hidden;
+            }
+   
+
+
+            .loaderAcc {
+                position: fixed;
+                inset: 0;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 9999;
+                background-color: #fff;
+                display: grid;
+                place-items: center;
+                align-items: center;
+                justify-content: center;
+                transition: opacity .25s, visibility 1s;
+            }
+            .loaderAcc > .spinner-border.text-info {
+               margin-top: 15%;
+               width: 5rem;
+               height: 5rem;
+               border-left-color: red !important;
+               border-right-color: red !important;
+               border-bottom-color: red !important;
+            }
+           
+    	/* Style Loader */
+				/***************************************/
+				.loaderAcc1 {
+					position: fixed;
+					width: 100%;
+					height: 100%;
+					text-align: center;
+					background-color: rgb(255 255 255 / 72%);
+					z-index: 9999;
+					display: none;
+				}
+				.loaderAcc1 > .spinner-border.text-info {
+					margin-top: 22%;
+					width: 5rem;
+					height: 5rem;
+					border-left-color: red !important;
+					border-right-color: red !important;
+					border-bottom-color: red !important;
+				}
+				/***************************************/
       .list-inline-item.mr-0.active{
                color: #ee2e14;
             }
@@ -37,7 +92,16 @@
     {% endblock %}
 
     {% block Content %}
-        {% block loader %}{% endblock %}
+        {% block loader %}
+        <div class="loaderAcc" id="loaderAcc">
+		<img src="{{ asset ('assets/img/preloader.gif')}}" alt="preloader">
+	</div>
+    <div class="loaderAcc1" id="loaderAcc1">
+		<div class="spinner-border text-info" role="status">
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>
+        {% endblock %}
 {% block sideHeader %}
 
         {{ render(controller('App\\Controller\\HomeController::sideheader', {'uri': app.request.uri})) }}
@@ -87,6 +151,16 @@
                }); 
             }
             </script>
+             <script type="text/javascript">
+               const fadeOut = () => {
+                const loaderWrapper = document.querySelector('.loaderAcc');
+                if (loaderWrapper) {
+                  loaderWrapper.classList.add('fadet');
+                }
+              };
+              window.addEventListener('load', fadeOut);
+                 </script> 
     {% endblock %}
+
 </body>
 </html>

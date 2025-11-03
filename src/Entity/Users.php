@@ -59,6 +59,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Demande::class, mappedBy: 'offrecompte')]
     private Collection $demandes;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
+
     public function __construct()
     {
         $this->demandes = new ArrayCollection();
@@ -232,6 +235,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
                 $demande->setOffrecompte(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): static
+    {
+        $this->photo = $photo;
 
         return $this;
     }

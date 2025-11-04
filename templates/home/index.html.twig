@@ -6,36 +6,358 @@
 {% block LinksCss %}
 	{{ parent() }}
 	<link type="text/css" rel="stylesheet" href="{{ asset ('css/popup.css')}}">
-	 <link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
+	<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
+	<style>
+	.btn-propdemande {
+    background: linear-gradient(45deg, #ff6b35, #ff9f1c);
+    background: linear-gradient(45deg, #2ec4b6, #ff9f1c);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+	.request-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.request-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.request-title {
+    font-weight: 700;
+    font-size: 18px;
+    color: #333;
+}
+.request-badge {
+    background:linear-gradient(45deg, #2ec4b6, #ff9f1c);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+.request-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+.request-image {
+    text-align: center;
+    margin-bottom: 12px;
+}
+.request-image img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+.request-description {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 15px;
+}
+.btn-offer {
+    background-color: #ff4d00;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.btn-offer:hover {
+    background-color: #e64300;
+}
+
+		.badge-custom {
+			display: inline-block;
+			padding: 3px;
+			font-size: 11px;
+			border-radius: 0 50em 50em 0;
+			color: #ffffff;
+			font-weight: 600;
+			line-height: 23px;
+			position: absolute;
+			background: linear-gradient(45deg, #ff6b35, #ff9f1c);
+			z-index: 1;
+			top: 20px;
+			box-shadow: 2px 1px 6px 2px rgb(0 0 0 / 10%), 0 4px 4px 0 rgb(0 0 0 / 15%) !important;
+		}
+		.badge-custom .box {
+			height: 26px;
+			width: 26px;
+			background: linear-gradient(45deg, #ff6b35, #ff9f1c);
+			color: #fff;
+			display: inline-block;
+			border-radius: 50%;
+			text-align: center;
+		}
+		/* تصميم الدائري للمتعاملين */
+		.user-sections {
+			max-width: 1400px;
+			margin: 2rem auto;
+			padding: 0 20px;
+		}
+
+		.section-title {
+			text-align: center;
+			margin-bottom: 3rem;
+			font-size: 2.5rem;
+			color: var(--light-color);
+		}
+
+		.highlight {
+			color: var(--accent-color);
+		}
+
+		.circle-container {
+			position: relative;
+			width: 600px;
+			height: 600px;
+			margin: 0 auto;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.center-circle {
+			position: absolute;
+			width: 200px;
+			height: 200px;
+			background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			font-weight: bold;
+			font-size: 1.2rem;
+			text-align: center;
+			box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+			z-index: 2;
+			border: 8px solid var(--dark-color);
+		}
+
+		.user-circle {
+			position: absolute;
+			width: 150px;
+			height: 150px;
+			background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+			backdrop-filter: blur(15px);
+			border-radius: 50%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			border: 3px solid;
+			transition: all 0.3s ease;
+			cursor: pointer;
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+			z-index: 1;
+		}
+
+		.user-circle:hover {
+			transform: scale(1.1);
+			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+			z-index: 3;
+		}
+
+		.user-circle::before {
+			content: '';
+			position: absolute;
+			top: -5px;
+			left: -5px;
+			right: -5px;
+			bottom: -5px;
+			border-radius: 50%;
+			background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+			z-index: -1;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		.user-circle:hover::before {
+			opacity: 1;
+		}
+
+		.user-icon {
+			font-size: 2.5rem;
+			margin-bottom: 0.5rem;
+			display: block;
+		}
+
+		.user-circle h3 {
+			font-size: 0.9rem;
+			color: var(--light-color);
+			margin: 0;
+			font-weight: 600;
+		}
+
+		/* تحديد مواقع الدوائر بشكل دائري */
+		.user-circle:nth-child(2) {
+			top: 7%;
+			left: 30%;
+			border-color: var(--secondary-color);
+		}
+
+		.user-circle:nth-child(3) {
+			top: 23%;
+			right: 9%;
+			border-color: var(--primary-color);
+		}
+
+		.user-circle:nth-child(4) {
+			bottom: 18%;
+			right: 13%;
+			border-color: var(--accent-color);
+		}
+
+		.user-circle:nth-child(5) {
+			bottom: 8%;
+			left: 27%;
+			border-color: var(--secondary-color);
+		}
+
+		.user-circle:nth-child(6) {
+			top: 39%;
+			left: 6%;
+			border-color: var(--primary-color);
+		}
+
+		.user-circle:nth-child(7) {
+			bottom: 30%;
+			left: 15%;
+			border-color: var(--accent-color);
+		}
+	</style>
 {% endblock %}
 
 {% block Content %}
-					
 
 
-	
-				<div class=" col-lg-12">
+	<div class=" col-lg-12">
 
-					<div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true" data-dots="true" data-autoplay="true" data-infinite="true">
+		<div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true" data-dots="true" data-autoplay="true" data-infinite="true">
 
-						<div class="carousel-box">
-							<a href="">
-								<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1645467378/icones/1645395075573_cykvht.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
-							</a>
-						</div>
-<div class="carousel-box">
-							<a href="">
-								<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1645467377/icones/1645395075579_vgrob4.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
-							</a>
-						</div>
-
-						
+			<div class="carousel-box">
+				<a href="">
+					<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1645467378/icones/1645395075573_cykvht.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
+				</a>
+			</div>
+			<div class="carousel-box">
+				<a href="">
+					<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1645467377/icones/1645395075579_vgrob4.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
+				</a>
+			</div>
 
 
-					</div>
-				</div>
-			{% endblock %}
-			{% block javascript %}
-				{{ parent() }}
-				<script type="text/javascript"></script>
-			{% endblock %}
+		</div>
+	</div>
+
+	{# categorie parent  #}
+	<div id="section_home_categories">
+    <section class="mb-4">
+        <div class="container">
+            <div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">
+
+                <div class="d-flex mb-3 align-items-baseline border-bottom">
+                    <h3 class="h5 fw-700 mb-0">
+                        <span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
+                            Demandes récentes
+                        </span>
+                    </h3>
+                    <a href="#" class="ml-auto btn btn-register btn-sm shadow-md">Voir plus</a>
+                </div>
+
+                <!-- Carrousel -->
+                <div class="aiz-carousel gutters-15"
+                     data-items="3"
+                     data-md-items="2"
+                     data-sm-items="1"
+                     data-xs-items="1"
+                     data-arrows="true"
+                     data-infinite="true">
+
+                    {% for demande in lastDemandes %}
+                        <div class="carousel-box px-3">
+                            <div class="request-card shadow-sm">
+                                <div class="request-header">
+                                    <div class="request-title">
+                                        {% if demande.pieces|length > 0 %}
+                                            {% for piece in demande.pieces %}
+                                                {{ piece.designation }}{% if not loop.last %}, {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            {{ demande.marque }} {{ demande.modele }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="request-badge">
+                                        {% if demande.vendeuroccasion == 1 %}
+                                            Occasion
+                                        {% else %}
+                                            Neuf
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="request-meta">
+                                    <span>📍 {{ demande.zone }}</span>
+                                    <span>👤 {{ demande.offrecompte ? demande.offrecompte.nom : 'Anonyme' }}</span>
+                                    <span>🕒 {{ demande.datecreate|time_ago }}</span>
+                                </div>
+
+                                <div class="request-image mb-2">
+                                    {% set photo = (demande.Pieces|first).photo ?? '/assets/img/placeholder.png' %}
+                                    {% if photo %}
+                                        <img src="{{ photo }}" class="img-fit mx-auto rounded h-250px w-100" alt="image demande">
+                                    {% else %}
+                                        📷 Aucune image disponible
+                                    {% endif %}
+                                </div>
+
+                                <p class="request-description px-2">
+                                    {% if demande.pieces|length > 0 %}
+                                        {% for piece in demande.pieces|slice(0,3) %}
+                                            {{ piece.observation }}{% if not loop.last %}, {% endif %}
+                                        {% endfor %}
+                                        {% if demande.pieces|length > 3 %}...{% endif %}
+                                    {% else %}
+                                        Pas de description disponible.
+                                    {% endif %}
+                                </p>
+
+                                <div class="px-2 pb-2">
+                                    <button class="btn btn-register w-100">📩 Proposer un prix</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="text-center text-muted">Aucune demande récente.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{# fin categorie parent  #}
+{% endblock %}
+{% block javascript %}
+	{{ parent() }}
+	<script type="text/javascript"></script>
+{% endblock %}
+

@@ -50,6 +50,19 @@ public function countByUser($user): int
         ->getSingleScalarResult();
 }
 
+// src/Repository/DemandeRepository.php
+public function findLastTen(): array
+{
+    return $this->createQueryBuilder('d')
+        ->leftJoin('d.Pieces', 'p')->addSelect('p')
+        ->leftJoin('d.offrecompte', 'u')->addSelect('u')
+        ->orderBy('d.datecreate', 'DESC')
+        ->setMaxResults(10)
+        ->getQuery()
+        ->getResult();
+}
+
+
 
 
 }

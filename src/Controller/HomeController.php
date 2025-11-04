@@ -5,16 +5,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use App\Repository\DemandeRepository;
 
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'Accueil')]
-    public function index(Request $request): Response
+    public function index(Request $request,DemandeRepository $demandeRepository): Response
     {
         $session =$request->getSession();
         $session->set('PageMenu', 'Accueil');
+        $lastDemandes = $demandeRepository->findLastTen();
 
-        return $this->render('home/index.html.twig');
+        return $this->render('home/index.html.twig', [
+        'lastDemandes' => $lastDemandes,
+    ]);
     }
 
      #[Route(path: '/footer', name: 'app_footer')]

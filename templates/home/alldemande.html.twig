@@ -8,6 +8,28 @@
 	<link type="text/css" rel="stylesheet" href="{{ asset ('css/popup.css')}}">
 	<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
 <style>
+
+.filter-center {
+    flex-wrap: nowrap;
+}
+
+.form-select-sm {
+    min-width: 150px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-select-sm:hover {
+    border-color: #ff6b35;
+    box-shadow: 0 0 5px rgba(255,107,53,0.4);
+}
+
+.form-label {
+    font-weight: 500;
+    color: #444;
+}
+
 		.request-card {
 			background: linear-gradient(135deg, #ffffff, #f7f8fc);
 			border-radius: 15px;
@@ -223,69 +245,65 @@
             <div class="row">
                 <div class="col-12">
 
-                    <!-- 🔹 En-tête + Filtres sur une seule ligne -->
+                    <!-- 🔹 Titre centré -->
+                    <div class="text-center mb-3">
+                        <h1 class="h5 fw-bold text-body mb-0">
+                            🧾 Toutes les Demandes
+                        </h1>
+                    </div>
+
+                    <!-- 🔹 Filtres centrés sur une ligne -->
                     <div class="mb-4 border-bottom pb-3">
-                        <div class="row g-3 align-items-end flex-wrap justify-content-between">
+                        <div class="d-flex justify-content-center align-items-end gap-3 flex-wrap filter-center">
 
-                            <!-- Titre à gauche -->
-                            <div class="col-lg-auto col-12">
-                                <h1 class="h5 fw-bold text-body mb-0">
-                                    🧾 Toutes les Demandes
-                                </h1>
+                            <!-- Marque -->
+                            <div>
+                                <label class="form-label small opacity-75 mb-1">Marque</label>
+                                <select class="form-select form-select-sm" onchange="filter()" id="marque" name="brand">
+                                    <option value="">Toutes les marques</option>
+                                    <option value="Audi">Audi</option>
+                                    <option value="BMW">BMW</option>
+                                    <option value="Mercedes">Mercedes</option>
+                                    <option value="Toyota">Toyota</option>
+                                    <option value="Volkswagen">Volkswagen</option>
+                                </select>
                             </div>
 
-                            <!-- Filtres à droite -->
-                            <div class="col-lg d-flex flex-wrap justify-content-end gap-2">
-
-                                <!-- Marque -->
-                                <div>
-                                    <label class="form-label small opacity-75 mb-1">Marque</label>
-                                    <select class="form-select form-select-sm" onchange="filter()" id="marque" name="brand">
-                                        <option value="">Toutes les marques</option>
-                                        <option value="Audi">Audi</option>
-                                        <option value="BMW">BMW</option>
-                                        <option value="Mercedes">Mercedes</option>
-                                        <option value="Toyota">Toyota</option>
-                                        <option value="Volkswagen">Volkswagen</option>
-                                    </select>
-                                </div>
-
-                                <!-- État -->
-                                <div>
-                                    <label class="form-label small opacity-75 mb-1">État</label>
-                                    <select class="form-select form-select-sm" onchange="filter()" id="etat" name="etat">
-                                        <option value="">Tous</option>
-                                        <option value="neuf">Neuf</option>
-                                        <option value="occasion">Occasion</option>
-                                    </select>
-                                </div>
-
-                                <!-- Zone -->
-                                <div>
-                                    <label class="form-label small opacity-75 mb-1">Zone</label>
-                                    <select class="form-select form-select-sm" onchange="filter()" id="zone" name="zone">
-                                        <option value="">Toute la Tunisie</option>
-                                        <option value="Tunis">Tunis</option>
-                                        <option value="Sfax">Sfax</option>
-                                        <option value="Sousse">Sousse</option>
-                                        <option value="Nabeul">Nabeul</option>
-                                        <option value="Gabès">Gabès</option>
-                                        <option value="Bizerte">Bizerte</option>
-                                        <option value="Kairouan">Kairouan</option>
-                                        <option value="Mahdia">Mahdia</option>
-                                    </select>
-                                </div>
-
-                                <!-- Tri -->
-                                <div>
-                                    <label class="form-label small opacity-75 mb-1">Trier par</label>
-                                    <select class="form-select form-select-sm" onchange="filter()" name="sort_by" id="trier">
-                                        <option value="date-desc">Date décroissante</option>
-                                        <option value="date-asc">Date croissante</option>
-                                    </select>
-                                </div>
-
+                            <!-- État -->
+                            <div>
+                                <label class="form-label small opacity-75 mb-1">État</label>
+                                <select class="form-select form-select-sm" onchange="filter()" id="etat" name="etat">
+                                    <option value="">Tous</option>
+                                    <option value="neuf">Neuf</option>
+                                    <option value="occasion">Occasion</option>
+                                </select>
                             </div>
+
+                            <!-- Zone -->
+                            <div>
+                                <label class="form-label small opacity-75 mb-1">Zone</label>
+                                <select class="form-select form-select-sm" onchange="filter()" id="zone" name="zone">
+                                    <option value="">Toute la Tunisie</option>
+                                    <option value="Tunis">Tunis</option>
+                                    <option value="Sfax">Sfax</option>
+                                    <option value="Sousse">Sousse</option>
+                                    <option value="Nabeul">Nabeul</option>
+                                    <option value="Gabès">Gabès</option>
+                                    <option value="Bizerte">Bizerte</option>
+                                    <option value="Kairouan">Kairouan</option>
+                                    <option value="Mahdia">Mahdia</option>
+                                </select>
+                            </div>
+
+                            <!-- Tri -->
+                            <div>
+                                <label class="form-label small opacity-75 mb-1">Trier par</label>
+                                <select class="form-select form-select-sm" onchange="filter()" name="sort_by" id="trier">
+                                    <option value="date-desc">Date décroissante</option>
+                                    <option value="date-asc">Date croissante</option>
+                                </select>
+                            </div>
+
                         </div>
                     </div>
 

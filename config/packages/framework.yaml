@@ -14,3 +14,6 @@ when@test:
         session:
             name: "CARHABTY2_SESSION"
             storage_factory_id: session.storage.factory.mock_file
+        translator:
+            default_path: '%kernel.project_dir%/translations'
+            fallbacks: ['fr']

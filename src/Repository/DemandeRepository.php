@@ -71,5 +71,51 @@ public function findAllDemandes(): array
 }
 
 
+public function filterDemandes($marque = null, $zone = null, $date = null, $type = null): array
+{
+    $qb = $this->createQueryBuilder('d');
+
+    if (!empty($marque)) {
+        $qb->andWhere('d.marque = :marque')
+           ->setParameter('marque', $marque);
+    }
+
+    if (!empty($zone)) {
+        $qb->andWhere('d.zone = :zone')
+           ->setParameter('zone', $zone);
+    }
+
+    if (!empty($date) && !in_array($date, ['recent', 'ancien'])) {
+        try {
+            $qb->andWhere('d.dateCreation BETWEEN :start AND :end')
+               ->setParameter('start', new \DateTime($date . ' 00:00:00'))
+               ->setParameter('end', new \DateTime($date . ' 23:59:59'));
+        } catch (\Exception $e) {}
+    }
+
+    // 🔹 Filtrage selon type (neuf / occasion)
+    if (!empty($type)) {
+        if ($type === 'neuf') {
+            $qb->andWhere('d.vendeurneuf = 1');
+        } elseif ($type === 'occasion') {
+            $qb->andWhere('d.vendeuroccasion = 1');
+        }
+    }
+
+    // 🔹 Tri par date
+    if ($date === 'recent') {
+        $qb->orderBy('d.datecreate', 'DESC');
+    } elseif ($date === 'ancien') {
+        $qb->orderBy('d.datecreate', 'ASC');
+    }
+
+    return $qb->getQuery()->getResult();
+}
+
+public function findAllDemandesQB(): \Doctrine\ORM\QueryBuilder
+{
+    return $this->createQueryBuilder('d')
+                ->orderBy('d.datecreate', 'DESC');
+}
 
 }

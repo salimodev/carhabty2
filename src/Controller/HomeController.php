@@ -1,11 +1,15 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Demande;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\DemandeRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Knp\Component\Pager\PaginatorInterface;
 
 class HomeController extends AbstractController
 {
@@ -50,15 +54,78 @@ class HomeController extends AbstractController
         return $this->render('contact.html.twig');
     }
 
-      #[Route('/demande/tous', name: 'app_demande_all')]
-    public function all_demande(Request $request, DemandeRepository $demandeRepository): Response
-    {
-       $session =$request->getSession();
-       $session->set('PageMenu', 'demande_all');
-         $demandes = $demandeRepository->findAllDemandes();
-        return $this->render('home/alldemande.html.twig', [
-        'lastDemandes' => $demandes,
-    ]);
+   #[Route('/demande/tous', name: 'app_demande_all')]
+public function all_demande(Request $request, DemandeRepository $demandeRepository, PaginatorInterface $paginator): Response
+{
+    $session = $request->getSession();
+    $session->set('PageMenu', 'demande_all');
 
+    $qb = $demandeRepository->findAllDemandesQB(); // retourne un QueryBuilder
+    $dem = $paginator->paginate(
+        $qb,
+        $request->query->getInt('page', 1),
+        10
+    );
+
+    return $this->render('home/alldemande.html.twig', [
+        'lastDemandes' => $dem,
+    ]);
+}
+
+
+   #[Route('/recherche/demande', name: 'recherche_demande')]
+    public function rechercheDemande(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $marque = $request->get('marque');
+        $zone   = $request->get('zone');
+        $date   = $request->get('date');
+        $type   = $request->get('type');
+        $trier  = $request->get('trier');
+$page   = max(1, (int)$request->get('page', 1)); // page par défaut = 1
+    $limit  = 10; // 
+        $demandes = $em->getRepository(Demande::class)
+                        ->filterDemandes($marque, $zone, $date, $type, $trier);
+
+        $result = [];
+
+        foreach ($demandes as $d) {
+            // Récupérer les pièces
+            $pieces = [];
+            foreach ($d->getPieces() as $p) {
+                $pieces[] = [
+                    'designation' => $p->getDesignation(),
+                    'observation' => $p->getObservation(),
+                    'photo'       => $p->getPhoto() ?: '/assets/img/placeholder.png',
+                ];
+            }
+
+            $result[] = [
+                'id'         => $d->getId(),
+                'marque'     => $d->getMarque(),
+                'modele'     => $d->getModele(),
+                'zone'       => $d->getZone(),
+                'date'       => $d->getDatecreate()->format('Y-m-d H:i'),
+                'time_ago'   => $this->timeAgo($d->getDatecreate()),
+                'type'       => $d->getVendeuroccasion() == 1 ? 'occasion' : 'neuf',
+                'offrecompte'=> $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
+                'pieces'     => $pieces,
+            ];
+        }
+
+        return new JsonResponse($result);
+    }
+
+    // Fonction compatible DateTimeImmutable et DateTime
+    private function timeAgo(\DateTimeInterface $datetime): string
+    {
+        $now  = new \DateTimeImmutable();
+        $diff = $now->diff($datetime);
+
+        if ($diff->y > 0) return $diff->y . ' an(s) ago';
+        if ($diff->m > 0) return $diff->m . ' mois ago';
+        if ($diff->d > 0) return $diff->d . ' jour(s) ago';
+        if ($diff->h > 0) return $diff->h . ' heure(s) ago';
+        if ($diff->i > 0) return $diff->i . ' minute(s) ago';
+        return 'à l\'instant';
     }
 }

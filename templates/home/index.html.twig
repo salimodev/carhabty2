@@ -264,8 +264,8 @@
 										<div class="request-title">
 											{% if demande.pieces|length > 0 %}
 												{% for piece in demande.pieces %}
-													{{ piece.designation }}
-													{% if not loop.last %},
+														{{ piece.designation }},{{ demande.marque }},{{ demande.modele }}
+														{% if not loop.last %},
 													{% endif %}
 												{% endfor %}
 											{% else %}

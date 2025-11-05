@@ -5,8 +5,8 @@
 
 {% block LinksCss %}
 	{{ parent() }}
-<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
-<style>
+	<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
+	<style>
 		.request-card {
 			background: linear-gradient(135deg, #ffffff, #f7f8fc);
 			border-radius: 15px;
@@ -212,163 +212,370 @@
 			border-radius: 50%;
 			text-align: center;
 		}
+
+        /* Container centré */
+.aiz-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Style générique pour l'élément pagination (KNP peut générer <ul class="pagination"> ou <div>) */
+.aiz-pagination .pagination,
+.aiz-pagination ul.pagination {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+
+/* Liens / boutons */
+.aiz-pagination a,
+.aiz-pagination .page-link,
+.aiz-pagination li a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  background: #fff;
+  border: 1px solid rgba(34,41,47,0.08);
+  box-shadow: 0 1px 2px rgba(34,41,47,0.03);
+  transition: transform .06s ease, box-shadow .06s ease, background .12s;
+  font-weight: 600;
+}
+
+/* Hover */
+.aiz-pagination a:hover,
+.aiz-pagination .page-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(34,41,47,0.08);
+  background: #ffffff;
+  color: #111827;
+}
+
+/* Bouton actif */
+.aiz-pagination .active,
+.aiz-pagination .page-link.active,
+.aiz-pagination li.active a {
+  background: linear-gradient(90deg,#ff7a00,#ff4d00); /* orange dégradé */
+  color: #fff;
+  border: none;
+  box-shadow: 0 8px 24px rgba(255,77,0,0.12);
+  transform: none;
+}
+
+/* Disabled */
+.aiz-pagination .disabled,
+.aiz-pagination .page-link.disabled,
+.aiz-pagination li.disabled a {
+  opacity: 0.45;
+  pointer-events: none;
+  background: #f8fafc;
+  color: #6b7280;
+  border: 1px solid rgba(34,41,47,0.03);
+}
+
+/* Prev / Next petites flèches */
+.aiz-pagination .prev,
+.aiz-pagination .next {
+  min-width: 36px;
+  padding: 0 10px;
+  border-radius: 6px;
+}
+
+/* Responsive : réduire les boutons sur petits écrans */
+@media (max-width: 576px) {
+  .aiz-pagination a,
+  .aiz-pagination .page-link {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 8px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .aiz-pagination .pagination { gap: 0.35rem; }
+}
+
 	</style>
 {% endblock %}
 
 {% block Content %}
+{% block loader %}
+		{{ parent() }}
+	{% endblock %}
 	<section class="mb-4 pt-3">
 		<div class="container sm-px-0">
 			<form class="" id="search-form" action="" method="GET">
 				<div class="row">
-					
-					<div class="col-xl-12">
 
+					<div class="col-xl-12">
 
 
 						<div class="text-left">
 							<div class="row gutters-5 flex-wrap align-items-center">
-								<div class="col-lg col-10">
+								<div class="col col-10">
 									<h1 class="h6 fw-600 text-body">
 										Toutes les demandes
 									</h1>
 								</div>
-								<div class="row justify-content-end align-items-end g-2 mb-4 filtre-demandes">
+								<div
+									class="row justify-content-end align-items-end g-2 mb-4 filtre-demandes">
 
-    <!-- Filtre Marque -->
-    <div class="col-6 col-md-auto">
-        <label class="mb-0 opacity-50 small">Marque</label>
-        <select class="form-control form-control-sm" onchange="filter()" id="marque" data-live-search="true">
-            <option value="">Toutes les marques</option>
-            <option value="Audi">Audi</option>
-            <option value="BMW">BMW</option>
-            <option value="Mercedes">Mercedes</option>
-            <option value="Toyota">Toyota</option>
-        </select>
-    </div>
+									<!-- Filtre Marque -->
+									<div class="col-6 col-md-auto">
+										<label class="mb-0 opacity-50 small">Marque</label>
+										<select class="form-control form-control-sm" onchange="filtrerDemandes()" id="marque" data-live-search="true">
+											<option value="">Toutes les marques</option>
+											<option value="Audi">Audi</option>
+											<option value="BMW">BMW</option>
+											<option value="Mercedes">Mercedes</option>
+											<option value="Toyota">Toyota</option>
+										</select>
+									</div>
 
-    <!-- Filtre Zone -->
-    <div class="col-6 col-md-auto">
-        <label class="mb-0 opacity-50 small">Zone</label>
-        <select class="form-control form-control-sm" onchange="filter()" id="zone" data-live-search="true">
-            <option value="">Toute la Tunisie</option>
-            <option value="Tunis">Tunis</option>
-            <option value="Sfax">Sfax</option>
-            <option value="Sousse">Sousse</option>
-            <option value="Nabeul">Nabeul</option>
-        </select>
-    </div>
+									<!-- Filtre Zone -->
+									<div class="col-6 col-md-auto">
+										<label class="mb-0 opacity-50 small">Zone</label>
+										<select class="form-control form-control-sm" onchange="filtrerDemandes()" id="zone" data-live-search="true">
+										<option value="">Toute la Tunisie</option>
+<option value="Tunis">Tunis</option>
+<option value="Ariana">Ariana</option>
+<option value="Ben Arous">Ben Arous</option>
+<option value="Manouba">Manouba</option>
+<option value="Nabeul">Nabeul</option>
+<option value="Zaghouan">Zaghouan</option>
+<option value="Bizerte">Bizerte</option>
+<option value="Béja">Béja</option>
+<option value="Jendouba">Jendouba</option>
+<option value="Kef">Kef</option>
+<option value="Siliana">Siliana</option>
+<option value="Sousse">Sousse</option>
+<option value="Monastir">Monastir</option>
+<option value="Mahdia">Mahdia</option>
+<option value="Kairouan">Kairouan</option>
+<option value="Kasserine">Kasserine</option>
+<option value="Sidi Bouzid">Sidi Bouzid</option>
+<option value="Gabès">Gabès</option>
+<option value="Médenine">Médenine</option>
+<option value="Tataouine">Tataouine</option>
+<option value="Gafsa">Gafsa</option>
+<option value="Tozeur">Tozeur</option>
+<option value="Kébili">Kébili</option>
 
-    <!-- Filtre Date -->
-    <div class="col-6 col-md-auto">
-        <label class="mb-0 opacity-50 small">Date</label>
-        <select class="form-control form-control-sm" onchange="filter()" id="date">
-            <option value="recent">Le plus récent</option>
-            <option value="ancien">Le plus ancien</option>
-        </select>
-    </div>
+										</select>
+									</div>
 
-    <!-- Filtre Type -->
-    <div class="col-6 col-md-auto">
-        <label class="mb-0 opacity-50 small">Type</label>
-        <select class="form-control form-control-sm" onchange="filter()" id="type">
-            <option value="">Tous</option>
-            <option value="neuf">Neuf</option>
-            <option value="occasion">Occasion</option>
-        </select>
-    </div>
+									<!-- Filtre Date -->
+									<div class="col-6 col-md-auto">
+										<label class="mb-0 opacity-50 small">Date</label>
+										<select class="form-control form-control-sm" onchange="filtrerDemandes()" id="date">
+											<option value="recent">Le plus récent</option>
+											<option value="ancien">Le plus ancien</option>
+										</select>
+									</div>
 
-</div>
+									<!-- Filtre Type -->
+									<div class="col-6 col-md-auto">
+										<label class="mb-0 opacity-50 small">Type</label>
+										<select class="form-control form-control-sm" onchange="filtrerDemandes()" id="type">
+											<option value="">Tous</option>
+											<option value="neuf">Neuf</option>
+											<option value="occasion">Occasion</option>
+										</select>
+									</div>
 
-								
-                                
-                               
-								
+								</div>
+
+
 							</div>
 						</div>
 						<input type="hidden" name="min_price" value="">
 						<input type="hidden" name="max_price" value="">
 						<div class="row gutters-5 row-cols-xxl-3 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1" id="filterrech">
 							{% for demande in lastDemandes %}
-                            <div class="col mb-3">
-								<div class="carousel-box">
-								<div class="request-card">
+								<div class="col mb-3">
+									<div class="carousel-box">
+										<div class="request-card">
 
-									<div class="request-header">
-										<div class="request-title">
-											{% if demande.pieces|length > 0 %}
-												{% for piece in demande.pieces %}
-													{{ piece.designation }}
-													{% if not loop.last %},
+											<div class="request-header">
+												<div class="request-title">
+													{% if demande.pieces|length > 0 %}
+														{% for piece in demande.pieces %}
+														{{ demande.marque }}
+															{{ piece.designation }},{{ demande.marque }},{{ demande.modele }}
+															{% if not loop.last %},
+															{% endif %}
+														{% endfor %}
+													{% else %}
+														{{ demande.marque }}
+														{{ demande.modele }}
 													{% endif %}
-												{% endfor %}
-											{% else %}
-												{{ demande.marque }}
-												{{ demande.modele }}
-											{% endif %}
-										</div>
-										<div class="request-badge">
-											{% if demande.vendeuroccasion == 1 %}
-												Occasion
-											{% else %}
-												Neuf
-											{% endif %}
-										</div>
-									</div>
+												</div>
+												<div class="request-badge">
+													{% if demande.vendeuroccasion == 1 %}
+														Occasion
+													{% else %}
+														Neuf
+													{% endif %}
+												</div>
+											</div>
 
-									<div class="request-meta">
-										<span>
-											<i class="fas fa-map-marker-alt"></i>
-											{{ demande.zone }}</span>
-										<span>
-											<i class="fas fa-user"></i>
-											{{ demande.offrecompte ? demande.offrecompte.nom : 'Anonyme' }}</span>
-										<span>
-											<i class="far fa-clock"></i>
-											{{ demande.datecreate|time_ago }}</span>
-									</div>
+											<div class="request-meta">
+												<span>
+													<i class="fas fa-map-marker-alt"></i>
+													{{ demande.zone }}</span>
+												<span>
+													<i class="fas fa-user"></i>
+													{{ demande.offrecompte ? demande.offrecompte.nom : 'Anonyme' }}</span>
+												<span>
+													<i class="far fa-clock"></i>
+													{{ demande.datecreate|time_ago }}</span>
+											</div>
 
 
-									<div class="request-image">
-										{% set photo = (demande.Pieces|first).photo ?? '/assets/img/placeholder.png' %}
-										<img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
-									</div>
+											<div class="request-image">
+												{% set photo = (demande.Pieces|first).photo ?? '/assets/img/placeholder.png' %}
+												<img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
+											</div>
 
-									<p class="request-description">
-										{% if demande.pieces|length > 0 %}
-											{% for piece in demande.pieces|slice(0,3) %}
-												{{ piece.observation }}
-												{% if not loop.last %},
+											<p class="request-description">
+												{% if demande.pieces|length > 0 %}
+													{% for piece in demande.pieces|slice(0,3) %}
+														{{ piece.observation }}
+														{% if not loop.last %},
+														{% endif %}
+													{% endfor %}
+													{% if demande.pieces|length > 3 %}...
+													{% endif %}
+												{% else %}
+													Pas de description disponible.
 												{% endif %}
-											{% endfor %}
-											{% if demande.pieces|length > 3 %}...
-											{% endif %}
-										{% else %}
-											Pas de description disponible.
-										{% endif %}
-									</p>
+											</p>
 
-									<button class="btn btn-register w-100">
-										<i class="fas fa-envelope-open-text"></i>
-										Proposer un prix
-									</button>
+											<button class="btn btn-register w-100">
+												<i class="fas fa-envelope-open-text"></i>
+												Proposer un prix
+											</button>
+
+										</div>
+									</div>
 
 								</div>
-							</div>
 
-							</div>
-							
 							{% endfor %}
-							
+
 						</div>
 					</div>
 				</div>
-				<div class="aiz-pagination aiz-pagination-center mt-4"></div>
+			<div class="aiz-pagination aiz-pagination-center mt-4">
+                {{ knp_pagination_render(lastDemandes) }}
+                </div>
+
 			</form>
 		</div>
 	</section>
 {% endblock %}
 {% block javascript %}
 	{{ parent() }}
-	<script type="text/javascript"></script>
+	<script>
+
+    function timeAgo(dateString) {
+    var now = new Date();
+    var past = new Date(dateString);
+    var diff = Math.floor((now - past) / 1000); // en secondes
+
+    if (diff < 60) return 'à l\'instant';
+    if (diff < 3600) return Math.floor(diff / 60) + ' minute(s) ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + ' heure(s) ago';
+    if (diff < 2592000) return Math.floor(diff / 86400) + ' jour(s) ago';
+    return past.toLocaleDateString(); // ou "d/m/Y" selon besoin
+}
+ 
+		function filtrerDemandes() {
+var url = "{{ path('recherche_demande') }}";
+
+var marque = $('#marque').val();
+var zone = $('#zone').val();
+var date = $('#date').val();
+var type = $('#type').val();
+var trier = $('#trier').val();
+
+var data = {
+marque: marque,
+zone: zone,
+date: date,
+type: type,
+trier: trier
+};
+
+$.ajax({
+type: "POST",
+url: url,
+data: data,
+success: function(demandes) {
+    var html = "";
+
+    if (demandes.length === 0) {
+        html = `<div class="text-center p-3"style="margin: auto">
+                    <i class="las la-frown la-3x opacity-60 mb-3"></i>
+                    <h3 class="h6 fw-700">Aucune demande trouvée</h3>
+                </div>`;
+    } else {
+        demandes.forEach(function(d) {
+            // Construire les titres des pièces
+            var piecesTitle = "";
+            var piecesDesc  = "";
+
+            if (d.pieces && d.pieces.length > 0) {
+                piecesTitle = d.pieces.map(p => p.designation).join(", ");
+                piecesDesc  = d.pieces.slice(0,3).map(p => p.observation).join(", ");
+                if (d.pieces.length > 3) piecesDesc += "...";
+            }
+
+            html += `
+            <div class="col mb-3">
+                <div class="carousel-box">
+                    <div class="request-card">
+                        <div class="request-header">
+                            <div class="request-title">${piecesTitle || (d.marque + " " + d.modele)}</div>
+                            <div class="request-badge">${d.type === 'occasion' ? 'Occasion' : 'Neuf'}</div>
+                        </div>
+                        <div class="request-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>
+                            <span><i class="fas fa-user"></i> ${d.offrecompte}</span>
+                            <span><i class="far fa-clock"></i> ${timeAgo(d.date)}</span>
+                        </div>
+                        <div class="request-image">
+                            <img src="${(d.pieces[0] && d.pieces[0].photo) || '/assets/img/placeholder.png'}" alt="photo" class="img-fit mx-auto rounded">
+                        </div>
+                        <p class="request-description">${piecesDesc || 'Pas de description disponible.'}</p>
+                        <button class="btn btn-register w-100">
+                            <i class="fas fa-envelope-open-text"></i> Proposer un prix
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+        });
+    }
+
+    $('#filterrech').html(html);
+}
+
+,
+  beforeSend: function(){ $('#loaderAcc1').show();},
+complete: function()  { $('#loaderAcc1').hide(); }
+});
+}
+	</script>
+
 {% endblock %}
 

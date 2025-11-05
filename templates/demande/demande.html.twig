@@ -628,6 +628,31 @@
 	<script type="text/javascript">
 		var pathaddpiece = '{{ path('add_piece') }}';
 		var pathenvoyerdemande = "{{ path('envoyer_demande') }}";
+
+		document.addEventListener('DOMContentLoaded', function() {
+    const vendeurneuf = document.getElementById('vendNeuf');
+    const vendeuroccasion = document.getElementById('vendOcc');
+   
+
+    // Quand on coche "email"
+    vendeurneuf.addEventListener('change', function() {
+        if (this.checked) {
+            vendeuroccasion.checked = false;
+            
+        } 
+    });
+
+    // Quand on coche "compte"
+    vendeuroccasion.addEventListener('change', function() {
+        if (this.checked) {
+            vendeurneuf.checked = false;
+           
+        }
+    });
+
+    // Désactive le champ email par défaut
+    emailInput.disabled = true;
+}); 
 	</script>
 	
 	

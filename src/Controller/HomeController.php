@@ -49,4 +49,16 @@ class HomeController extends AbstractController
         $session->set('PageMenu', 'app_contact');
         return $this->render('contact.html.twig');
     }
+
+      #[Route('/demande/tous', name: 'app_demande_all')]
+    public function all_demande(Request $request, DemandeRepository $demandeRepository): Response
+    {
+       $session =$request->getSession();
+       $session->set('PageMenu', 'demande_all');
+         $demandes = $demandeRepository->findAllDemandes();
+        return $this->render('home/alldemande.html.twig', [
+        'lastDemandes' => $demandes,
+    ]);
+
+    }
 }

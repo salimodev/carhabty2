@@ -62,6 +62,13 @@ public function findLastTen(): array
         ->getResult();
 }
 
+public function findAllDemandes(): array
+{
+    return $this->createQueryBuilder('d')
+        ->orderBy('d.datecreate', 'DESC')
+        ->getQuery()
+        ->getResult();
+}
 
 
 

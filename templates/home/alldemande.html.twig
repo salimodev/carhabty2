@@ -222,45 +222,76 @@
         <form id="search-form" action="" method="GET">
             <div class="row">
                 <div class="col-12">
-                    <!-- Titre et filtres -->
-                    <div class="mb-4">
-                        <div class="row g-3 align-items-center flex-wrap">
-                            <div class="col-lg col-12">
+
+                    <!-- 🔹 En-tête + Filtres sur une seule ligne -->
+                    <div class="mb-4 border-bottom pb-3">
+                        <div class="row g-3 align-items-end flex-wrap justify-content-between">
+
+                            <!-- Titre à gauche -->
+                            <div class="col-lg-auto col-12">
                                 <h1 class="h5 fw-bold text-body mb-0">
-                                    🧾 Demandes
+                                    🧾 Toutes les Demandes
                                 </h1>
                             </div>
 
-                            <!-- Filtre Marques -->
-                            <div class="col-6 col-md-auto">
-                                <label class="form-label small opacity-75 mb-1">Marques</label>
-                                <select class="form-select form-select-sm" onchange="filter()" id="marque" name="brand">
-                                    <option value="" selected>Toutes les marques</option>
-                                    <option value="Audi">Audi</option>
-                                    <option value="BMW">BMW</option>
-                                    <option value="Mercedes">Mercedes</option>
-                                    <option value="Toyota">Toyota</option>
-                                    <option value="Volkswagen">Volkswagen</option>
-                                </select>
-                            </div>
+                            <!-- Filtres à droite -->
+                            <div class="col-lg d-flex flex-wrap justify-content-end gap-2">
 
-                            <!-- Tri -->
-                            <div class="col-6 col-md-auto">
-                                <label class="form-label small opacity-75 mb-1">Trier par</label>
-                                <select class="form-select form-select-sm" onchange="filter()" name="sort_by" id="trier">
-                                    <option value="desc">Le plus récent</option>
-                                    <option value="asc">Le plus ancien</option>
-                                    <option value="price-asc">Prix croissant</option>
-                                    <option value="price-desc">Prix décroissant</option>
-                                </select>
+                                <!-- Marque -->
+                                <div>
+                                    <label class="form-label small opacity-75 mb-1">Marque</label>
+                                    <select class="form-select form-select-sm" onchange="filter()" id="marque" name="brand">
+                                        <option value="">Toutes les marques</option>
+                                        <option value="Audi">Audi</option>
+                                        <option value="BMW">BMW</option>
+                                        <option value="Mercedes">Mercedes</option>
+                                        <option value="Toyota">Toyota</option>
+                                        <option value="Volkswagen">Volkswagen</option>
+                                    </select>
+                                </div>
+
+                                <!-- État -->
+                                <div>
+                                    <label class="form-label small opacity-75 mb-1">État</label>
+                                    <select class="form-select form-select-sm" onchange="filter()" id="etat" name="etat">
+                                        <option value="">Tous</option>
+                                        <option value="neuf">Neuf</option>
+                                        <option value="occasion">Occasion</option>
+                                    </select>
+                                </div>
+
+                                <!-- Zone -->
+                                <div>
+                                    <label class="form-label small opacity-75 mb-1">Zone</label>
+                                    <select class="form-select form-select-sm" onchange="filter()" id="zone" name="zone">
+                                        <option value="">Toute la Tunisie</option>
+                                        <option value="Tunis">Tunis</option>
+                                        <option value="Sfax">Sfax</option>
+                                        <option value="Sousse">Sousse</option>
+                                        <option value="Nabeul">Nabeul</option>
+                                        <option value="Gabès">Gabès</option>
+                                        <option value="Bizerte">Bizerte</option>
+                                        <option value="Kairouan">Kairouan</option>
+                                        <option value="Mahdia">Mahdia</option>
+                                    </select>
+                                </div>
+
+                                <!-- Tri -->
+                                <div>
+                                    <label class="form-label small opacity-75 mb-1">Trier par</label>
+                                    <select class="form-select form-select-sm" onchange="filter()" name="sort_by" id="trier">
+                                        <option value="date-desc">Date décroissante</option>
+                                        <option value="date-asc">Date croissante</option>
+                                    </select>
+                                </div>
+
                             </div>
                         </div>
                     </div>
 
-                    <!-- Liste des demandes -->
+                    <!-- 🔸 Liste des demandes -->
                     <div class="row g-4" id="filterrech">
                         {% for demande in lastDemandes %}
-                            <!-- 🟢 3 cartes par ligne sur desktop -->
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                 <div class="request-card shadow-sm h-100">
                                     <div class="request-header d-flex justify-content-between align-items-center">
@@ -314,16 +345,11 @@
                             <p class="text-center text-muted">Aucune demande trouvée.</p>
                         {% endfor %}
                     </div>
-
-                    <!-- Pagination -->
-                    <div class="aiz-pagination aiz-pagination-center mt-4"></div>
                 </div>
             </div>
         </form>
     </div>
 </section>
-
-
 
 {% endblock %}
 {% block javascript %}

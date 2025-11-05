@@ -8,25 +8,56 @@
 	<link type="text/css" rel="stylesheet" href="{{ asset ('css/popup.css')}}">
 	<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
 	<style>
-	.btn-propdemande {
-    background: linear-gradient(45deg, #ff6b35, #ff9f1c);
-    background: linear-gradient(45deg, #2ec4b6, #ff9f1c);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-}
-	.request-card {
-    background: #fff;
+	
+.request-card {
+    background: linear-gradient(145deg, #ffffff, #f8f9fb);
     border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    padding: 20px;
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid #eee;
+    position: relative;
+    height: 100%;
 }
+
 .request-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(145deg, #fff8f4, #fefefe);
+}
+
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.request-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: #222;
+    line-height: 1.3;
+    flex: 1;
+}
+
+.request-badge {
+    background: linear-gradient(135deg, #ff6b35 0%, #fca311 50%, #2ec4b6 100%);
+    color: #fff;
+    font-size: 12px;
+    border-radius: 12px;
+    padding: 5px 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.request-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
 .request-header {
     display: flex;
@@ -34,40 +65,114 @@
     align-items: center;
     margin-bottom: 8px;
 }
-.request-title {
-    font-weight: 700;
-    font-size: 18px;
-    color: #333;
-}
-.request-badge {
-    background:linear-gradient(45deg, #2ec4b6, #ff9f1c);
-    color: white;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-}
+
+
 .request-meta {
+    font-size: 13px;
+    color: #666;
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
-    color: #777;
+    flex-wrap: wrap;
+    gap: 4px;
     margin-bottom: 10px;
 }
-.request-image {
-    text-align: center;
-    margin-bottom: 12px;
-}
+
 .request-image img {
     width: 100%;
-    height: 180px;
+    height: 220px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
+
 .request-description {
-    font-size: 15px;
-    color: #555;
-    margin-bottom: 15px;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+    min-height: 50px;
+    margin-bottom: 10px;
 }
+
+.request-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: #555;
+    font-size: 14px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.request-meta i {
+    color: #ff6b35;
+    margin-right: 5px;
+    font-size: 15px;
+}
+
+.btn-register i {
+    margin-right: 8px;
+    font-size: 16px;
+    color: #fff;
+}
+.btn-register {
+    background: linear-gradient(45deg, #ff6b35, #ff8c00);
+    border: none;
+    color: white;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+.btn-register:hover {
+    background: linear-gradient(45deg, #ff8c00, #ff6b35);
+    transform: translateY(-2px);
+}
+/* Effet au survol */
+.btn-register:hover {
+    background: linear-gradient(45deg, #ff8c00, #ff6b35);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 107, 53, 0.4);
+}
+
+/* Animation vibration de l’icône */
+.btn-register:hover i {
+    animation: vibrate 0.3s linear infinite;
+}
+
+@keyframes vibrate {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }
+    50% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+/* 📱 Responsive fixes */
+@media (max-width: 768px) {
+    .request-card {
+        padding: 12px;
+        min-height: auto;
+    }
+    .request-title {
+        font-size: 15px;
+    }
+    .request-meta {
+        font-size: 12px;
+    }
+    .request-image img {
+        height: 180px;
+    }
+}
+
+
+
+
+	.btn-propdemande {
+    background: linear-gradient(45deg, #ff6b35, #ff9f1c);
+    background: linear-gradient(45deg, #2ec4b6, #ff9f1c);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+	
+
+
 .btn-offer {
     background-color: #ff4d00;
     color: white;
@@ -106,144 +211,7 @@
 			border-radius: 50%;
 			text-align: center;
 		}
-		/* تصميم الدائري للمتعاملين */
-		.user-sections {
-			max-width: 1400px;
-			margin: 2rem auto;
-			padding: 0 20px;
-		}
-
-		.section-title {
-			text-align: center;
-			margin-bottom: 3rem;
-			font-size: 2.5rem;
-			color: var(--light-color);
-		}
-
-		.highlight {
-			color: var(--accent-color);
-		}
-
-		.circle-container {
-			position: relative;
-			width: 600px;
-			height: 600px;
-			margin: 0 auto;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.center-circle {
-			position: absolute;
-			width: 200px;
-			height: 200px;
-			background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			color: white;
-			font-weight: bold;
-			font-size: 1.2rem;
-			text-align: center;
-			box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
-			z-index: 2;
-			border: 8px solid var(--dark-color);
-		}
-
-		.user-circle {
-			position: absolute;
-			width: 150px;
-			height: 150px;
-			background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-			backdrop-filter: blur(15px);
-			border-radius: 50%;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			text-align: center;
-			border: 3px solid;
-			transition: all 0.3s ease;
-			cursor: pointer;
-			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-			z-index: 1;
-		}
-
-		.user-circle:hover {
-			transform: scale(1.1);
-			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-			z-index: 3;
-		}
-
-		.user-circle::before {
-			content: '';
-			position: absolute;
-			top: -5px;
-			left: -5px;
-			right: -5px;
-			bottom: -5px;
-			border-radius: 50%;
-			background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-			z-index: -1;
-			opacity: 0;
-			transition: opacity 0.3s ease;
-		}
-
-		.user-circle:hover::before {
-			opacity: 1;
-		}
-
-		.user-icon {
-			font-size: 2.5rem;
-			margin-bottom: 0.5rem;
-			display: block;
-		}
-
-		.user-circle h3 {
-			font-size: 0.9rem;
-			color: var(--light-color);
-			margin: 0;
-			font-weight: 600;
-		}
-
-		/* تحديد مواقع الدوائر بشكل دائري */
-		.user-circle:nth-child(2) {
-			top: 7%;
-			left: 30%;
-			border-color: var(--secondary-color);
-		}
-
-		.user-circle:nth-child(3) {
-			top: 23%;
-			right: 9%;
-			border-color: var(--primary-color);
-		}
-
-		.user-circle:nth-child(4) {
-			bottom: 18%;
-			right: 13%;
-			border-color: var(--accent-color);
-		}
-
-		.user-circle:nth-child(5) {
-			bottom: 8%;
-			left: 27%;
-			border-color: var(--secondary-color);
-		}
-
-		.user-circle:nth-child(6) {
-			top: 39%;
-			left: 6%;
-			border-color: var(--primary-color);
-		}
-
-		.user-circle:nth-child(7) {
-			bottom: 30%;
-			left: 15%;
-			border-color: var(--accent-color);
-		}
+	
 	</style>
 {% endblock %}
 
@@ -284,9 +252,11 @@
                     <a href="#" class="ml-auto btn btn-register btn-sm shadow-md">Voir plus</a>
                 </div>
 
-                <!-- Carrousel -->
-                <div class="aiz-carousel gutters-15"
+                <!-- ✅ AIZ Carousel -->
+                <div class="aiz-carousel half-outside-arrow gutters-10"
                      data-items="3"
+                     data-xl-items="3"
+                     data-lg-items="2"
                      data-md-items="2"
                      data-sm-items="1"
                      data-xs-items="1"
@@ -294,8 +264,9 @@
                      data-infinite="true">
 
                     {% for demande in lastDemandes %}
-                        <div class="carousel-box px-3">
-                            <div class="request-card shadow-sm">
+                        <div class="carousel-box">
+                            <div class="request-card">
+
                                 <div class="request-header">
                                     <div class="request-title">
                                         {% if demande.pieces|length > 0 %}
@@ -315,22 +286,19 @@
                                     </div>
                                 </div>
 
-                                <div class="request-meta">
-                                    <span>📍 {{ demande.zone }}</span>
-                                    <span>👤 {{ demande.offrecompte ? demande.offrecompte.nom : 'Anonyme' }}</span>
-                                    <span>🕒 {{ demande.datecreate|time_ago }}</span>
-                                </div>
+<div class="request-meta">
+    <span><i class="fas fa-map-marker-alt"></i> {{ demande.zone }}</span>
+    <span><i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.nom : 'Anonyme' }}</span>
+    <span><i class="far fa-clock"></i> {{ demande.datecreate|time_ago }}</span>
+</div>
 
-                                <div class="request-image mb-2">
+
+                                <div class="request-image">
                                     {% set photo = (demande.Pieces|first).photo ?? '/assets/img/placeholder.png' %}
-                                    {% if photo %}
-                                        <img src="{{ photo }}" class="img-fit mx-auto rounded h-250px w-100" alt="image demande">
-                                    {% else %}
-                                        📷 Aucune image disponible
-                                    {% endif %}
+                                    <img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
                                 </div>
 
-                                <p class="request-description px-2">
+                                <p class="request-description">
                                     {% if demande.pieces|length > 0 %}
                                         {% for piece in demande.pieces|slice(0,3) %}
                                             {{ piece.observation }}{% if not loop.last %}, {% endif %}
@@ -341,9 +309,10 @@
                                     {% endif %}
                                 </p>
 
-                                <div class="px-2 pb-2">
-                                    <button class="btn btn-register w-100">📩 Proposer un prix</button>
-                                </div>
+                               <button class="btn btn-register w-100">
+    <i class="fas fa-envelope-open-text"></i> Proposer un prix
+</button>
+
                             </div>
                         </div>
                     {% else %}
@@ -354,6 +323,7 @@
         </div>
     </section>
 </div>
+
 {# fin categorie parent  #}
 {% endblock %}
 {% block javascript %}

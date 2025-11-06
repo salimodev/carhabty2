@@ -1,76 +1,40 @@
 <!-- Top Bar -->
-<div class="top-navbar bg-white border-bottom border-soft-secondary z-1035">
+<div class="top-navbar bg-white border-bottom border-soft-secondary z-1035" style="background-color: #ff6600 !important;">
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-7 col"></ul>
-		</ul>
-	</li>
-</ul></div><div class="col-5 text-right d-none d-lg-block">
+			<div class="col-lg-7 col">
+			
+	        </div>
+		<div class="col-5 text-right d-none d-lg-block">
 <ul class="list-inline mb-0 h-100 d-flex justify-content-end align-items-center">
 	<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-		<a href="tel:+216 90256692" class="text-reset d-inline-block opacity-60 py-2">
+		<a href="tel:+216 90256692" class="text-reset d-inline-block opacity-100 py-2" style="color:#fff !important">
 			<i class="la la-phone"></i>
-			<span>+216 90 256 692</span>
+			<span>
+Contactez-nous : +216 90 256 692</span>
 		</a>
 	</li>
-	{% if app.user %}
-		{% if is_granted('ROLE_PROPRIETAIRE') %}
-			<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0 dropdown">
-				<a class="dropdown-toggle no-arrow text-reset" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
-					<span class="">
-						<span class="position-relative d-inline-block">
-							<i class="las la-bell fs-18"></i>
-							{% if app.user and is_granted('ROLE_PROPRIETAIRE')  %}
-								<span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right"></span>
-							{% endif %}
-						</span>
-					</span>
-				</a>
-				{% if app.user and is_granted('ROLE_PROPRIETAIRE') %}
-					<div class="dropdown-menu dropdown-menu-right dropdown-menu-lg py-0" style="">
-						<div class="p-3 bg-light border-bottom">
-							<h6 class="mb-0">Notifications</h6>
-						</div>
-						<div class="px-3 c-scrollbar-light overflow-auto " style="max-height:300px;">
-							<ul class="list-group list-group-flush">
+	<div class="col-lg-4">
+				<ul class="list-inline my-3 my-md-0 social colored text-center">
+					<li class="list-inline-item">
+						<a href="#" target="_blank">
+							<img src="{{ asset ('image/facebook.png')}}" style="height: 25px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/facebook.png';style='height: 50px;max-width:100% !important'" alt="carhabty" height="50">
+						</a>
+					</li>
+					<li class="list-inline-item">
+						<a href="#" target="_blank">
+							<img src="{{ asset ('image/instagram.png')}}" style="height: 25px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/instagram.png';style='height: 50px;max-width:100% !important'" alt="carhabty" height="50">
+						</a>
+					</li>
+					
+				</ul>
+			</div>
+	
 
 
-								<li class="list-group-item">
-									<div class="py-4 text-center fs-16">
-										Aucune notification trouvé
-									</div>
-								</li>
+	
 
-							</ul>
-						</div>
-						<div class="text-center border-top">
-							<a href="" class="text-reset d-block py-2">
-								Voir toutes les notifications
-							</a>
-						</div>
-					</div>
-				{% endif %}
-			</li>
-
-			<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-				<a href="{{path('app_proprietaire')}}" class="text-reset d-inline-block opacity-60">Dashboard</a>
-			</li>
-		{% endif %}
-
-
-		<li class="list-inline-item">
-			<a href="{{path('app_logout')}}" class="text-reset d-inline-block opacity-60">Déconnexion</a>
-		</li>
-
-
-	{% else %}
-		<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-			<a href="{{path('app_login')}}" class="text-reset d-inline-block opacity-60">Connexion</a>
-		</li>
-		<li class="list-inline-item">
-			<a href="{{path('app_register')}}" class="text-reset d-inline-block opacity-60">Inscription</a>
-		</li>
-	{% endif %}
+	
 </ul></div></div></div></div><header class=" sticky-top  z-1020 bg-white border-bottom shadow-sm"><div class="position-relative logo-bar-area z-1"><div class="container"><div class="d-flex align-items-center">
 <div class="col-auto col-xl-3 pl-0 pr-3 d-flex align-items-center" style="height: 100px;">
 	<a class="d-block py-10px mr-3 ml-0" href="/"><img src="{{ asset ('image/logo1.png')}}" style="height: 197px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/logo10.png';style='height: 50px;max-width:100% !important'" alt="carhabty" height="50"></a>
@@ -80,7 +44,7 @@
 		<i class="las la-search la-flip-horizontal la-2x"></i>
 	</a>
 </div>
-<div class="flex-grow-1 front-header-search d-flex align-items-center bg-white" id="searchnav">
+<div class="flex-grow-1 front-header-search d-flex align-items-center bg-white p-3" id="searchnav">
 	<div class="position-relative flex-grow-1">
 		<form action="javascript:void(0);" method="GET" class="stop-propagation">
 			<div class="d-flex position-relative align-items-center">
@@ -116,69 +80,50 @@
 <div class="d-none d-lg-none ml-3 mr-0">
 	<div class="nav-search-box">
 		<a href="#" class="nav-box-link">
-			<i class="la la-search la-flip-horizontal d-inline-block nav-box-icon"></i>
+			<i class="la la-search la-flip-horizontal d-inline-block nav-box-icon p-2"></i>
 		</a>
 	</div>
 </div>
-<div class="d-none d-lg-block ml-3 mr-0">
-	<div class="" id="compare">
-		<a href="/compare" class="d-flex align-items-center text-reset">
-			<i class="la la-refresh la-2x opacity-80"></i>
-			<span class="flex-grow-1 ml-1">
-				<span class="badge badge-primary badge-inline badge-pill" id="totalCOMPARE">0</span>
-				<span class="nav-box-text d-none d-xl-block opacity-70">Comparer</span>
-			</span>
-		</a>
-	</div>
-</div>
-<div class="d-none d-lg-block ml-3 mr-0">
-	<div class="" id="wishlist">
-		<a href="/connexion" class="d-flex align-items-center text-reset">
-			<i class="la la-heart-o la-2x opacity-80"></i>
-			<span class="flex-grow-1 ml-1">
-				<span class="badge badge-primary badge-inline badge-pill">0</span>
-				<span class="nav-box-text d-none d-xl-block opacity-70">liste de souhaits</span>
-			</span>
-		</a>
-	</div>
-</div></div></div></div><div class="bg-white border-top border-gray-200 py-1" style="position:relative;z-index:10;">
-   {% set PageMenu = app.session.get('PageMenu') %}
-<div class="container"><ul class="list-inline mb-0 pl-0 mobile-hor-swipe text-center">
+{% if app.user %}
+		{% if is_granted('ROLE_PROPRIETAIRE') %}
+			
+
+			<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
+				<a href="{{path('app_proprietaire')}}" class="btn btn-Dashboard">Dashboard</a>
+			</li>
+		{% endif %}
+
+
+		<li class="list-inline-item">
+			<a href="{{path('app_logout')}}" class="btn btn-loginto">Déconnexion</a>
+		</li>
+
+
+	{% else %}
+		<li class="list-inline-item  border-right border-left-0 pr-3 pl-0">
+			<a href="{{path('app_login')}}" class="btn btn-register">Se connecter</a>
+		</li>
+		<li class="list-inline-item">
+			<a href="{{path('app_register')}}" class="btn btn-Dashboard">S'inscrire</a>
+		</li>
+	{% endif %}
+</div></div></div><div class="bg-white border-top border-gray-200 py-1" style="position:relative;z-index:10;">{% set PageMenu = app.session.get('PageMenu') %}<div class="container"><ul class="list-inline mb-0 pl-0 mobile-hor-swipe text-center">
 <li {% if PageMenu == "Accueil" %} class="list-inline-item mr-0 active" style="border-bottom: solid;" {% else %} class="list-inline-item mr-0" {% endif %}>
-    <a href="{{ path('Accueil') }}" class="fs-14 px-3 py-2 d-inline-block fw-600 text-reset {% if PageMenu != 'Accueil' %}opacity-60{% endif %}">
-        Accueil
-    </a>
-</li>
-
-<li {% if PageMenu is defined and PageMenu == "test"%} class="list-inline-item mr-0 active" style="border-bottom: solid;" {% else %} class="list-inline-item mr-0" {% endif %}>
-	<a href="" {% if PageMenu is defined and PageMenu == "test"%} class="fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% else %} class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% endif %}>
-		Vendeur Neuf
+	<a href="{{ path('Accueil') }}" class="fs-14 px-3 py-2 d-inline-block fw-600 text-reset {% if PageMenu != 'Accueil' %}opacity-60{% endif %}">
+		Accueil
 	</a>
-
 </li>
+
+
 
 <li {% if PageMenu is defined and PageMenu == "test"%} class="list-inline-item mr-0 active" style="border-bottom: solid;" {% else %} class="list-inline-item mr-0" {% endif %}>
 	<a href="" {% if PageMenu is defined and PageMenu == "test"%} class="fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% else %} class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% endif %}>
-		Vendeur Occasion
+		Pièces auto d’occasion
 	</a>
-
-</li>
-
-<li {% if PageMenu is defined and PageMenu == "test"%} class="list-inline-item mr-0 active" style="border-bottom: solid;" {% else %} class="list-inline-item mr-0" {% endif %}>
-	<a href="" {% if PageMenu is defined and PageMenu == "test"%} class="fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% else %} class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% endif %}>
-		Mécancien
-	</a>
-
-</li>
-
-<li {% if PageMenu is defined and PageMenu == "test"%} class="list-inline-item mr-0 active" style="border-bottom: solid;" {% else %} class="list-inline-item mr-0" {% endif %}>
-	<a href="" {% if PageMenu is defined and PageMenu == "test"%} class="fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% else %} class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% endif %}>
-Pièces auto d’occasion	</a>
 
 </li>
 
 <li class="list-inline-item mr-0">
 	<a href="{{ path('app_demande') }}" class="btn btn-register">Fiare une demande</a>
-</li>
-</ul></div></div></header>
+</li></ul></div></div></header>
 

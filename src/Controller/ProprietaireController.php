@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\DemandeRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class ProprietaireController extends AbstractController
@@ -152,5 +153,61 @@ public function profile(
         $session->set('PageMenu', 'app_prop_mecancien');
         return $this->render('contact.html.twig');
     }
+
+   #[Route('/proprietaire/demande/detail/{id}', name: 'detail_demande')]
+public function detailDemande(
+    int $id,
+    Request $request,
+    SessionInterface $session,
+    DemandeRepository $demandeRepository
+): Response {
+    $session = $request->getSession();
+    $session->set('PageMenu', 'detail_demande');
+
+    // 🔹 Récupérer la demande
+    $demande = $demandeRepository->find($id);
+
+    if (!$demande) {
+        throw $this->createNotFoundException('Demande introuvable');
+    }
+
+    // 🔹 Récupérer les pièces liées
+    $pieces = $demande->getPieces();
+
+    // 🔹 Récupérer le client
+    $client = $demande->getOffrecompte();
+
+    return $this->render('proprietaire/detailDemande.html.twig', [
+        'demande' => $demande,
+        'pieces' => $pieces,
+        'client' => $client,
+    ]);
+}
+
+#[Route(path: '/demande/supprimer', name: 'supprimer_demande')]
+public function supprimerDemande(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $idDemande = $request->get('id');
+    $demande = $em->getRepository(Demande::class)->find($idDemande);
+
+    if (!$demande) {
+        return new JsonResponse('error');
+    }
+
+    // Supprimer toutes les pièces associées
+    foreach ($demande->getPieces() as $piece) {
+        $em->remove($piece);
+    }
+
+    // Supprimer la demande
+    $em->remove($demande);
+    $em->flush();
+
+    return new JsonResponse('done');
+}
+
+
+
+
 
 }

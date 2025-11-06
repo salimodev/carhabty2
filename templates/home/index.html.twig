@@ -8,238 +8,242 @@
 	<link type="text/css" rel="stylesheet" href="{{ asset ('css/popup.css')}}">
 	<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
 	<style>
-/***** 🎨 Style amélioré des cartes utilisateurs *****/
-.user {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 25px 20px;
-  width: 260px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s ease;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-}
+		/***** 🎨 Style amélioré des cartes utilisateurs *****/
+		.user {
+			background: #ffffff;
+			border-radius: 16px;
+			padding: 25px 20px;
+			width: 260px;
+			text-align: center;
+			position: relative;
+			overflow: hidden;
+			transition: all 0.4s ease;
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+			border: 1px solid rgba(0, 0, 0, 0.04);
+		}
 
-/* Effet lumineux animé au survol */
-.user::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,102,0,0.15) 0%, transparent 60%);
-  transform: scale(0);
-  transition: transform 0.4s ease;
-  z-index: 0;
-}
+		/* Effet lumineux animé au survol */
+		.user::before {
+			content: "";
+			position: absolute;
+			top: -50%;
+			left: -50%;
+			width: 200%;
+			height: 200%;
+			background: radial-gradient(circle, rgba(255,102,0,0.15) 0%, transparent 60%);
+			transform: scale(0);
+			transition: transform 0.4s ease;
+			z-index: 0;
+		}
 
-.user:hover::before {
-  transform: scale(1);
-}
+		.user:hover::before {
+			transform: scale(1);
+		}
 
-/* Animation de la carte */
-.user:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(255, 102, 0, 0.15);
-}
+		/* Animation de la carte */
+		.user:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 12px 30px rgba(255, 102, 0, 0.15);
+		}
 
-/* === Icône au centre === */
-.user-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 95px;
-  height: 95px;
-  margin: 0 auto 18px;
-  background: linear-gradient(135deg, #fff5ee, #fff);
-  border-radius: 50%;
-  box-shadow: 0 4px 10px rgba(255, 102, 0, 0.15);
-  position: relative;
-  z-index: 1;
-  transition: all 0.3s ease;
-}
+		/* === Icône au centre === */
+		.user-icon {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 95px;
+			height: 95px;
+			margin: 0 auto 18px;
+			background: linear-gradient(135deg, #fff5ee, #fff);
+			border-radius: 50%;
+			box-shadow: 0 4px 10px rgba(255, 102, 0, 0.15);
+			position: relative;
+			z-index: 1;
+			transition: all 0.3s ease;
+		}
 
-.user:hover .user-icon {
-  transform: scale(1.08);
-  box-shadow: 0 6px 16px rgba(255, 102, 0, 0.3);
-}
+		.user:hover .user-icon {
+			transform: scale(1.08);
+			box-shadow: 0 6px 16px rgba(255, 102, 0, 0.3);
+		}
 
-.user-icon i {
-  font-size: 2.8rem;
-  color: #ff6600;
-  transition: color 0.3s ease;
-}
+		.user-icon i {
+			font-size: 2.8rem;
+			color: #ff6600;
+			transition: color 0.3s ease;
+		}
 
-.user:hover .user-icon i {
-  color: #e65c00;
-}
+		.user:hover .user-icon i {
+			color: #e65c00;
+		}
 
-/* === Texte === */
-.user-name {
-  font-weight: 700;
-  font-size: 1.15rem;
-  margin-top: 10px;
-  color: #222;
-  letter-spacing: 0.5px;
-  position: relative;
-  z-index: 1;
-}
+		/* === Texte === */
+		.user-name {
+			font-weight: 700;
+			font-size: 1.15rem;
+			margin-top: 10px;
+			color: #222;
+			letter-spacing: 0.5px;
+			position: relative;
+			z-index: 1;
+		}
 
-.user-location {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 15px;
-  line-height: 1.4;
-  position: relative;
-  z-index: 1;
-}
-
-
-/* Animation et visibilité des boutons */
-.user-buttons {
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.4s ease;
-  pointer-events: none; /* désactive pendant caché */
-}
-
-.user:hover .user-buttons {
-  opacity: 1;
-  max-height: 200px;
-  margin-top: 15px;
-  pointer-events: auto; /* réactive les clics */
-}
+		.user-location {
+			font-size: 0.9rem;
+			color: #666;
+			margin-bottom: 15px;
+			line-height: 1.4;
+			position: relative;
+			z-index: 1;
+		}
 
 
-/* Style général des boutons */
-.user-buttons button {
-  width: 85%;
-  padding: 10px 0;
-  border-radius: 25px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  display: block;
-  margin: 8px auto;
-  transition: all 0.3s ease;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-   cursor: pointer;
-}
+		/* Animation et visibilité des boutons */
+		.user-buttons {
+			opacity: 0;
+			max-height: 0;
+			overflow: hidden;
+			transition: all 0.4s ease;
+			pointer-events: none; /* désactive pendant caché */
+		}
 
-/* Bouton principal */
-.btn-register {
-  background: linear-gradient(45deg, #ff6b35, #ff8c00);
-  color: #fff;
-  border: none;
-}
-.btn-register:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(255, 107, 53, 0.5);
-}
-.user-buttons {
-  cursor: pointer;
-}
-/* Bouton contour orange */
-.btn-outline-primary {
-  border: 2px solid #ff6600;
-  color: #ff6600;
-  background: #fff;
-}
-.btn-outline-primary:hover {
-  background-color: #ff6600;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-/* --- Bouton secondaire : Inviter --- */
-.btn-secondary {
-  background: linear-gradient(135deg, #2ec4b6 0%, #25a89d 100%);
-  border: none;
-  color: #fff;
-  font-weight: 600;
-  letter-spacing: 0.4px;
-  box-shadow: 0 4px 12px rgba(46, 196, 182, 0.4);
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-  background: linear-gradient(135deg, #25a89d 0%, #1f8f86 100%);
-  box-shadow: 0 6px 18px rgba(31, 143, 134, 0.5);
-  transform: translateY(-3px);
-}
+		.user:hover .user-buttons {
+			opacity: 1;
+			max-height: 200px;
+			margin-top: 15px;
+			pointer-events: auto; /* réactive les clics */
+		}
 
 
-/* Effet global de survol sur la carte */
-.user {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.user:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 25px rgba(255, 102, 0, 0.25);
-}
-/* === Assure le curseur pointer sur tous les boutons === */
-/* Empêche les éléments décoratifs de bloquer les clics */
-.user::before,
-.user::after {
-  pointer-events: none; /* ne bloque plus les clics */
-}
+		/* Style général des boutons */
+		.user-buttons button {
+			width: 85%;
+			padding: 10px 0;
+			border-radius: 25px;
+			font-size: 0.95rem;
+			font-weight: 600;
+			display: block;
+			margin: 8px auto;
+			transition: all 0.3s ease;
+			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+			cursor: pointer;
+		}
 
-/* Conteneur des boutons (initialement caché) */
-.user-buttons {
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.4s ease;
-  pointer-events: none; /* désactive les clics tant que caché */
-  position: relative;
-  z-index: 1;
-}
+		/* Bouton principal */
+		.btn-register {
+			background: linear-gradient(45deg, #ff6b35, #ff8c00);
+			color: #fff;
+			border: none;
+		}
+		.btn-register:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 15px rgba(255, 107, 53, 0.5);
+		}
+		.user-buttons {
+			cursor: pointer;
+		}
+		/* Bouton contour orange */
+		.btn-outline-primary {
+			border: 2px solid #ff6600;
+			color: #ff6600;
+			background: #fff;
+		}
+		.btn-outline-primary:hover {
+			background-color: #ff6600;
+			color: #fff;
+			transform: translateY(-2px);
+		}
 
-/* Quand la carte est survolée, les boutons apparaissent */
-.user:hover .user-buttons,
-.user .user-buttons.active {
-  opacity: 1;
-  max-height: 220px;
-  margin-top: 15px;
-  pointer-events: auto; /* clics activés */
-}
+		/* --- Bouton secondaire : Inviter --- */
+		.btn-secondary {
+			background: linear-gradient(135deg, #2ec4b6 0%, #25a89d 100%);
+			border: none;
+			color: #fff;
+			font-weight: 600;
+			letter-spacing: 0.4px;
+			box-shadow: 0 4px 12px rgba(46, 196, 182, 0.4);
+			transition: all 0.3s ease;
+		}
 
-/* Style des boutons */
-.user-buttons button {
-  position: relative;
-  z-index: 3;
-  cursor: pointer; /* le curseur main */
-}
+		.btn-secondary:hover {
+			background: linear-gradient(135deg, #25a89d 0%, #1f8f86 100%);
+			box-shadow: 0 6px 18px rgba(31, 143, 134, 0.5);
+			transform: translateY(-3px);
+		}
 
-/* Optionnel : rendre toute la carte cliquable */
-.user { cursor: default; }
-.user.clickable { cursor: pointer; }
 
-/* === 🖥️ Style par défaut (desktop) === */
-.user {
-  width: 260px;
-}
+		/* Effet global de survol sur la carte */
+		.user {
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+		}
+		.user:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 10px 25px rgba(255, 102, 0, 0.25);
+		}
+		/* === Assure le curseur pointer sur tous les boutons === */
+		/* Empêche les éléments décoratifs de bloquer les clics */
+		.user::before,
+		.user::after {
+			pointer-events: none; /* ne bloque plus les clics */
+		}
 
-/* === 📱 Sur mobile (moins de 768px) === */
-@media (max-width: 767.98px) {
-  .user {
-    width: 100% !important;
-    max-width: 100%;
-    margin: 0 auto;
-  }
-}
+		/* Conteneur des boutons (initialement caché) */
+		.user-buttons {
+			opacity: 0;
+			max-height: 0;
+			overflow: hidden;
+			transition: all 0.4s ease;
+			pointer-events: none; /* désactive les clics tant que caché */
+			position: relative;
+			z-index: 1;
+		}
 
-/* === 💻 Sur tablette (768px à 991px) === */
-@media (min-width: 768px) and (max-width: 991.98px) {
-  .user {
-    width: 90% !important;
-    max-width: 90%;
-    margin: 0 auto;
-  }
-}
+		/* Quand la carte est survolée, les boutons apparaissent */
+		.user:hover .user-buttons,
+		.user .user-buttons.active {
+			opacity: 1;
+			max-height: 220px;
+			margin-top: 15px;
+			pointer-events: auto; /* clics activés */
+		}
+
+		/* Style des boutons */
+		.user-buttons button {
+			position: relative;
+			z-index: 3;
+			cursor: pointer; /* le curseur main */
+		}
+
+		/* Optionnel : rendre toute la carte cliquable */
+		.user {
+			cursor: default;
+		}
+		.user.clickable {
+			cursor: pointer;
+		}
+
+		/* === 🖥️ Style par défaut (desktop) === */
+		.user {
+			width: 260px;
+		}
+
+		/* === 📱 Sur mobile (moins de 768px) === */
+		@media(max-width: 767.98px) {
+			.user {
+				width: 100% !important;
+				max-width: 100%;
+				margin: 0 auto;
+			}
+		}
+
+		/* === 💻 Sur tablette (768px à 991px) === */
+		@media(min-width: 768px) and(max-width: 991.98px) {
+			.user {
+				width: 90% !important;
+				max-width: 90%;
+				margin: 0 auto;
+			}
+		}
 
 		/***** users ****/
 		.request-card {
@@ -451,7 +455,7 @@
 {% endblock %}
 
 {% block Content %}
-
+<br>
 
 	<div class=" col-lg-12">
 
@@ -473,130 +477,128 @@
 	</div>
 	{# categorie parent  #}
 	<div id="section_home_categories">
-  <section class="mb-4">
-    <div class="container">
-      <div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">
+		<section class="mb-4">
+			<div class="container">
+				<div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">
 
-        <div class="d-flex mb-3 align-items-baseline border-bottom">
-          <h3 class="h5 fw-700 mb-0">
-            <span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
-              Choisissez votre rôle
-            </span>
-          </h3>
-        </div>
+					<div class="d-flex mb-3 align-items-baseline border-bottom">
+						<h3 class="h5 fw-700 mb-0">
+							<span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
+								Choisissez votre rôle
+							</span>
+						</h3>
+					</div>
 
-        <!-- ✅ AIZ Carousel des Profils -->
-        <div
-          class="aiz-carousel half-outside-arrow gutters-10"
-          data-items="5" data-xl-items="4" data-lg-items="3" data-md-items="2" data-sm-items="1"
-          data-arrows="true" data-infinite="true" data-autoplay="true">
+					<!-- ✅ AIZ Carousel des Profils -->
+					<div
+						class="aiz-carousel half-outside-arrow gutters-10" data-items="5" data-xl-items="4" data-lg-items="3" data-md-items="2" data-sm-items="1" data-arrows="true" data-infinite="true" data-autoplay="true">
 
-          <!-- Rôle : Propriétaire -->
-          <div class="carousel-box">
-            <div class="user text-center p-4 shadow-sm rounded bg-white">
-              <div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-                <div class="user-icon text-primary">
-                  <i class="fas fa-car fa-3x"></i>
-                </div>
-              </div>
-              <div class="user-meta mb-3">
-                <div class="user-name fw-bold">Propriétaire</div>
-                <div class="user-location text-muted">Gérez vos véhicules et vos demandes facilement.</div>
-              </div>
-              <div class="user-buttons mt-3">
-                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
-                <button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
-                <button class="btn btn-secondary w-100">Inviter</button>
-              </div>
-            </div>
-          </div>
+						<!-- Rôle : Propriétaire -->
+						<div class="carousel-box">
+							<div class="user text-center p-4 shadow-sm rounded bg-white">
+								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
+									<div class="user-icon text-primary">
+										<i class="fas fa-car fa-3x"></i>
+									</div>
+								</div>
+								<div class="user-meta mb-3">
+									<div class="user-name fw-bold">Propriétaire</div>
+									<div class="user-location text-muted">Gérez vos véhicules et vos demandes facilement.</div>
+								</div>
+								<div class="user-buttons mt-3">
+									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+									<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
+									<button class="btn btn-secondary w-100">Inviter</button>
+								</div>
+							</div>
+						</div>
 
-          <!-- Rôle : Mécanicien -->
-          <div class="carousel-box">
-            <div class="user text-center p-4 shadow-sm rounded bg-white">
-              <div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-                <div class="user-icon text-success">
-                  <i class="fas fa-tools fa-3x"></i>
-                </div>
-              </div>
-              <div class="user-meta mb-3">
-                <div class="user-name fw-bold">Mécanicien</div>
-                <div class="user-location text-muted">Recevez des demandes et aidez vos clients.</div>
-              </div>
-              <div class="user-buttons mt-3">
-                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
-                <button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
-                <button class="btn btn-secondary w-100">Inviter</button>
-              </div>
-            </div>
-          </div>
+						<!-- Rôle : Mécanicien -->
+						<div class="carousel-box">
+							<div class="user text-center p-4 shadow-sm rounded bg-white">
+								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
+									<div class="user-icon text-success">
+										<i class="fas fa-tools fa-3x"></i>
+									</div>
+								</div>
+								<div class="user-meta mb-3">
+									<div class="user-name fw-bold">Mécanicien</div>
+									<div class="user-location text-muted">Recevez des demandes et aidez vos clients.</div>
+								</div>
+								<div class="user-buttons mt-3">
+									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+									<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
+									<button class="btn btn-secondary w-100">Inviter</button>
+								</div>
+							</div>
+						</div>
 
-          <!-- Rôle : Vendeur Neuf -->
-          <div class="carousel-box">
-            <div class="user text-center p-4 shadow-sm rounded bg-white">
-              <div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-                <div class="user-icon text-info">
-                  <i class="fas fa-store fa-3x"></i>
-                </div>
-              </div>
-              <div class="user-meta mb-3">
-                <div class="user-name fw-bold">Vendeur Neuf</div>
-                <div class="user-location text-muted">Proposez vos voitures neuves sur Carhabty.</div>
-              </div>
-              <div class="user-buttons mt-3">
-                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
-                <button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
-                <button class="btn btn-secondary w-100">Inviter</button>
-              </div>
-            </div>
-          </div>
+						<!-- Rôle : Vendeur Neuf -->
+						<div class="carousel-box">
+							<div class="user text-center p-4 shadow-sm rounded bg-white">
+								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
+									<div class="user-icon text-info">
+										<i class="fas fa-store fa-3x"></i>
+									</div>
+								</div>
+								<div class="user-meta mb-3">
+									<div class="user-name fw-bold">Vendeur Neuf</div>
+									<div class="user-location text-muted">Proposez vos voitures neuves sur Carhabty.</div>
+								</div>
+								<div class="user-buttons mt-3">
+									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+									<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
+									<button class="btn btn-secondary w-100">Inviter</button>
+								</div>
+							</div>
+						</div>
 
-          <!-- Rôle : Vendeur Occasion -->
-          <div class="carousel-box">
-            <div class="user text-center p-4 shadow-sm rounded bg-white">
-              <div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-                <div class="user-icon text-warning">
-                  <i class="fas fa-car-side fa-3x"></i>
-                </div>
-              </div>
-              <div class="user-meta mb-3">
-                <div class="user-name fw-bold">Vendeur Occasion</div>
-                <div class="user-location text-muted">Publiez vos voitures d’occasion rapidement.</div>
-              </div>
-              <div class="user-buttons mt-3">
-                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
-                <button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
-                <button class="btn btn-secondary w-100">Inviter</button>
-              </div>
-            </div>
-          </div>
+						<!-- Rôle : Vendeur Occasion -->
+						<div class="carousel-box">
+							<div class="user text-center p-4 shadow-sm rounded bg-white">
+								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
+									<div class="user-icon text-warning">
+										<i class="fas fa-car-side fa-3x"></i>
+									</div>
+								</div>
+								<div class="user-meta mb-3">
+									<div class="user-name fw-bold">Vendeur Occasion</div>
+									<div class="user-location text-muted">Publiez vos voitures d’occasion rapidement.</div>
+								</div>
+								<div class="user-buttons mt-3">
+									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+									<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
+									<button class="btn btn-secondary w-100">Inviter</button>
+								</div>
+							</div>
+						</div>
 
-          <!-- Rôle : Particulier -->
-          <div class="carousel-box">
-            <div class="user text-center p-4 shadow-sm rounded bg-white">
-              <div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-                <div class="user-icon text-danger">
-                  <i class="fas fa-user fa-3x"></i>
-                </div>
-              </div>
-              <div class="user-meta mb-3">
-                <div class="user-name fw-bold">Particulier</div>
-                <div class="user-location text-muted">Achetez ou vendez facilement entre particuliers.</div>
-              </div>
-              <div class="user-buttons mt-3">
-                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
-                <button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
-                <button class="btn btn-secondary w-100">Inviter</button>
-              </div>
-            </div>
-          </div>
+						<!-- Rôle : Particulier -->
+						<div class="carousel-box">
+							<div class="user text-center p-4 shadow-sm rounded bg-white">
+								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
+									<div class="user-icon text-danger">
+										<i class="fas fa-user fa-3x"></i>
+									</div>
+								</div>
+								<div class="user-meta mb-3">
+									<div class="user-name fw-bold">Particulier</div>
+									<div class="user-location text-muted">Achetez ou vendez facilement entre particuliers.</div>
+								</div>
+								<div class="user-buttons mt-3">
+									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+									<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
+									<button class="btn btn-secondary w-100">Inviter</button>
+								</div>
+							</div>
+						</div>
 
-        </div>
+					</div>
 
-      </div>
-    </div>
-  </section>
-</div>
+				</div>
+			</div>
+		</section>
+	</div>
 
 
 	{# fin categorie parent  #}
@@ -676,10 +678,10 @@
 										{% endif %}
 									</p>
 
-									<button class="btn btn-register w-100">
+									<a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}" class="btn btn-register w-100">
 										<i class="fas fa-envelope-open-text"></i>
 										Proposer un prix
-									</button>
+									</a>
 
 								</div>
 							</div>

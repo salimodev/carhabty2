@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Service\pieceService;
 use App\Entity\Pieces;
 use App\Entity\Demande;
+use App\Repository\DemandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -184,6 +185,51 @@ private function generateCode(): string
     return substr($millis, 0, 3) . '-' . $timestamp;
 }
 
-  
+  #[Route(path: '/piece/supprimer', name: 'supprimer_piece')]
+public function supprimerPiece(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $id = $request->get('id');
+    $piece = $em->getRepository(Pieces::class)->find($id);
+
+    if (!$piece) {
+        return new JsonResponse('error');
+    }
+
+    $em->remove($piece);
+    $em->flush();
+
+    return new JsonResponse('done');
+}
+
+
+   #[Route('demande/detail/{id}', name: 'detail_demande_accuill')]
+public function detailDemande(
+    int $id,
+    Request $request,
+    SessionInterface $session,
+    DemandeRepository $demandeRepository
+): Response {
+    $session = $request->getSession();
+    $session->set('PageMenu', 'detail_demande');
+
+    // 🔹 Récupérer la demande
+    $demande = $demandeRepository->find($id);
+
+    if (!$demande) {
+        throw $this->createNotFoundException('Demande introuvable');
+    }
+
+    // 🔹 Récupérer les pièces liées
+    $pieces = $demande->getPieces();
+
+    // 🔹 Récupérer le client
+    $client = $demande->getOffrecompte();
+
+    return $this->render('home/demandeDetail.html.twig', [
+        'demande' => $demande,
+        'pieces' => $pieces,
+        'client' => $client,
+    ]);
+}
 
 }

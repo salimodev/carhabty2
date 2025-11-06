@@ -26,8 +26,88 @@
 				<link type="text/css" rel="stylesheet" href="{{ asset ('css/dataTables.bootstrap4.min.css')}}">
                 <link rel="stylesheet"  href="{{ asset ('css/bootstrap-select.min.css')}}">
     <style>
-    
-            
+    .btn-loginto {
+  background: linear-gradient(90deg, #ff6600, #ff9500);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 25px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(255, 102, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+  background: linear-gradient(90deg, #ff9500, #ff6600);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(255, 102, 0, 0.6);
+}
+
+.btn-login:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(255, 102, 0, 0.3);
+}
+
+        .btn-Dashboard {
+  background: linear-gradient(90deg, #1f1f1f, #3b3b3b);
+  color: #ff8800;
+  font-weight: 600;
+  border: 2px solid #ff8800;
+  border-radius: 12px;
+  padding: 10px 25px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-Dashboard:hover {
+  background: linear-gradient(90deg, #ff8800, #ff6600);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 136, 0, 0.6);
+}
+
+.btn-Dashboard:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(255, 136, 0, 0.3);
+}
+
+.btn-toconnect {
+  background: transparent;
+  color: #2ec4b6;
+  border: 2px solid #2ec4b6;
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 10px 25px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.btn-toconnect:hover {
+  background: linear-gradient(90deg, #2ec4b6, #25b2a5);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(46, 196, 182, 0.4);
+  transform: translateY(-3px);
+}
+
+.btn-toconnect:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(46, 196, 182, 0.2);
+}
+    /* Cacher les boutons sur tablettes et mobiles */
+@media (max-width: 991px) {
+  .btn-Dashboard,
+  .btn-loginto,
+  .btn-toconnect,
+  .btn-register {
+    display: none !important;
+  }
+}
+
     div.dataTables_wrapper div.dataTables_filter input {
 					margin-left: 0.5em !important;
 					display: inline-block;

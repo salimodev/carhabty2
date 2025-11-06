@@ -58,22 +58,22 @@ if ($('#Origine').is(':checked')){
 
     // Validation basique
    if (marque === ""){
-         AIZ.plugins.notify('danger', "Merci de remplire le champs marque");
+         AIZ.plugins.notify('danger', "Merci de remplire le champ marque");
 		 return;
    } else if(modele === "" ){
-	    AIZ.plugins.notify('danger', "Merci de remplire le champs modele");
+	    AIZ.plugins.notify('danger', "Merci de remplire le champ modèle");
 		return;
  }else if (chassis === "" ){
-	AIZ.plugins.notify('danger', "Merci de remplire tous le champs chassis");
+	AIZ.plugins.notify('danger', "Merci de remplire tous le champ n° chassis");
 	return;
    }else if (NewPhotos2 === ""){
-	AIZ.plugins.notify('danger', "Merci de remplire tous le champs photo chassis");
+	AIZ.plugins.notify('danger', "Merci d'importer une photo pour la catre grise");
 	return;
    }else if (carbu === ""){
-		AIZ.plugins.notify('danger', "Merci de remplire tous le champs carburant");
+		AIZ.plugins.notify('danger', "Merci de choisi type du carburant");
 		return;
    }else if(etatmoteur === ""){
-		AIZ.plugins.notify('danger', "Merci de remplire tous le champs etatmoteur");
+		AIZ.plugins.notify('danger', "Merci de choisi l'etat du moteur");
      return;
    }
 
@@ -153,9 +153,14 @@ $('body').css('overflow', 'auto');
                     ? `<img src="${photo}" alt="photo" style="width:60px;height:60px;border-radius:6px;">`
                     : '—',
                 observation,
-                `<button class="btn btn-danger btn-sm delete-piece"  data-id="${result.id}" style="padding: 0.416rem !important;width: calc(2.02rem + 2px);height: calc(2.02rem + 2px);" data-id="${result.id}">
-                    <i class="la la-trash"></i>
-                </button>`
+               `<button class="btn btn-danger btn-sm"
+         onclick="supprimerPiece($(this), '${result.id}')"
+         style="padding: 0.416rem !important;
+                width: calc(2.02rem + 2px);
+                height: calc(2.02rem + 2px);">
+     <i class="la la-trash"></i>
+ </button>`
+
             ]).draw(false);
 
             // 🔹 Réinitialiser le formulaire
@@ -173,6 +178,7 @@ $('body').css('overflow', 'auto');
 
 }
 
+// 🔹 Événement clic pour supprimer une pièce
 
 function destinataire() {
     // Récupération des valeurs pour vérification

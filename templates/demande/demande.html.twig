@@ -652,7 +652,56 @@
 
     // Désactive le champ email par défaut
     emailInput.disabled = true;
-}); 
+});
+
+
+function supprimerPiece(element, $id) {
+    var $_data = {'id': $id};
+
+    Swal.fire({
+        title: 'Êtes-vous sûr de vouloir supprimer cette pièce ?',
+        icon: 'warning', // ✅ version actuelle de SweetAlert2
+        showCancelButton: true,
+        confirmButtonColor: '#25a89d',
+        cancelButtonColor: '#ff6b35',
+        confirmButtonText: 'Supprimer',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.isConfirmed) { // ✅ condition correcte
+            $.ajax({
+                type: "POST",
+                url: "{{ path('supprimer_piece') }}", // 🔹 route Symfony
+                data: $_data,
+                success: function (response) {
+                    if (response === 'done') {
+                        element.parent().remove();
+                        Swal.fire({
+                            title: "Succès !",
+                            text: "La pièce a été supprimée avec succès !",
+                            icon: "success",
+                        });
+                        location.reload();
+                    } else {
+                        Swal.fire({
+                            title: "Erreur !",
+                            text: "Impossible de supprimer la pièce.",
+                            icon: "error",
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Erreur !",
+                        text: "Une erreur est survenue lors de la suppression.",
+                        icon: "error",
+                    });
+                }
+            });
+        }
+    });
+}
+
+
 	</script>
 	
 	

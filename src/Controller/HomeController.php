@@ -64,7 +64,7 @@ public function all_demande(Request $request, DemandeRepository $demandeReposito
     $dem = $paginator->paginate(
         $qb,
         $request->query->getInt('page', 1),
-        10
+        12
     );
 
     return $this->render('home/alldemande.html.twig', [
@@ -82,7 +82,7 @@ public function all_demande(Request $request, DemandeRepository $demandeReposito
         $type   = $request->get('type');
         $trier  = $request->get('trier');
 $page   = max(1, (int)$request->get('page', 1)); // page par défaut = 1
-    $limit  = 10; // 
+    $limit  = 12; // 
         $demandes = $em->getRepository(Demande::class)
                         ->filterDemandes($marque, $zone, $date, $type, $trier);
 

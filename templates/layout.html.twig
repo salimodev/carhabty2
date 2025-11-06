@@ -33,7 +33,7 @@
 					display: inline-block;
 					width: 170px;
 				}
-     /***************************************/
+            /***************************************/
             /* Style Loader */
             /***************************************/
           
@@ -67,27 +67,67 @@
                border-right-color: red !important;
                border-bottom-color: red !important;
             }
-           
-    	/* Style Loader */
-				/***************************************/
-				.loaderAcc1 {
-					position: fixed;
-					width: 100%;
-					height: 100%;
-					text-align: center;
-					background-color: rgb(255 255 255 / 72%);
-					z-index: 9999;
-					display: none;
-				}
-				.loaderAcc1 > .spinner-border.text-info {
-					margin-top: 22%;
-					width: 5rem;
-					height: 5rem;
-					border-left-color: red !important;
-					border-right-color: red !important;
-					border-bottom-color: red !important;
-				}
-				/***************************************/
+           /*--------------------------------------*/
+/* 🌐 Responsive Modern Loader          */
+/*--------------------------------------*/
+.loaderAcc1 {
+  position: fixed;
+  inset: 0; /* ersetzt top/left/right/bottom */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 9999;
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.loaderAcc1 > .spinner-border.text-info {
+  width: 5rem;
+  height: 5rem;
+  border-left-color: #ff6600 !important; /* orange Markenfarbe */
+  border-right-color: #ff6600 !important;
+  border-bottom-color: #ff6600 !important;
+  margin-top: 24%;
+    margin-left: 47%;
+}
+
+/* 🔄 Animations-Effekt */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (max-width: 1024px) {
+      .loaderAcc1 > .spinner-border.text-info {
+        width: 3.5rem;
+        height: 3.5rem;
+        margin-top: 47%;
+        margin-left: 47%;
+    }
+}
+/* 📱 Responsivität */
+@media (max-width: 768px) {
+      .loaderAcc1 > .spinner-border.text-info {
+        width: 3.5rem;
+        height: 3.5rem;
+        margin-top: 100%;
+        margin-left: 42%;
+    }
+}
+
+@media (max-width: 480px) {
+  .loaderAcc1 > .spinner-border.text-info {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+}
+
       .list-inline-item.mr-0.active{
                color: #ee2e14;
             }

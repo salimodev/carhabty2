@@ -411,7 +411,7 @@
 													{% if demande.pieces|length > 0 %}
 														{% for piece in demande.pieces %}
 														{{ demande.marque }}
-															{{ piece.designation }},{{ demande.marque }},{{ demande.modele }}
+															{{ piece.designation }}
 															{% if not loop.last %},
 															{% endif %}
 														{% endfor %}

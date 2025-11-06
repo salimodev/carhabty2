@@ -218,6 +218,28 @@
 .user { cursor: default; }
 .user.clickable { cursor: pointer; }
 
+/* === 🖥️ Style par défaut (desktop) === */
+.user {
+  width: 260px;
+}
+
+/* === 📱 Sur mobile (moins de 768px) === */
+@media (max-width: 767.98px) {
+  .user {
+    width: 100% !important;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
+
+/* === 💻 Sur tablette (768px à 991px) === */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .user {
+    width: 90% !important;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+}
 
 		/***** users ****/
 		.request-card {
@@ -482,8 +504,8 @@
                 <div class="user-location text-muted">Gérez vos véhicules et vos demandes facilement.</div>
               </div>
               <div class="user-buttons mt-3">
-                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_register')}}'">Se connecter</button>
-                <button class="btn btn-outline-primary w-100 mb-2">S’inscrire</button>
+                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+                <button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
                 <button class="btn btn-secondary w-100">Inviter</button>
               </div>
             </div>
@@ -502,8 +524,8 @@
                 <div class="user-location text-muted">Recevez des demandes et aidez vos clients.</div>
               </div>
               <div class="user-buttons mt-3">
-                <button class="btn btn-register w-100 mb-2">Se connecter</button>
-                <button class="btn btn-outline-primary w-100 mb-2">S’inscrire</button>
+                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+                <button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
                 <button class="btn btn-secondary w-100">Inviter</button>
               </div>
             </div>
@@ -522,8 +544,8 @@
                 <div class="user-location text-muted">Proposez vos voitures neuves sur Carhabty.</div>
               </div>
               <div class="user-buttons mt-3">
-                <button class="btn btn-register w-100 mb-2">Se connecter</button>
-                <button class="btn btn-outline-primary w-100 mb-2">S’inscrire</button>
+                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+                <button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
                 <button class="btn btn-secondary w-100">Inviter</button>
               </div>
             </div>
@@ -542,8 +564,8 @@
                 <div class="user-location text-muted">Publiez vos voitures d’occasion rapidement.</div>
               </div>
               <div class="user-buttons mt-3">
-                <button class="btn btn-register w-100 mb-2">Se connecter</button>
-                <button class="btn btn-outline-primary w-100 mb-2">S’inscrire</button>
+                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+                <button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
                 <button class="btn btn-secondary w-100">Inviter</button>
               </div>
             </div>
@@ -562,8 +584,8 @@
                 <div class="user-location text-muted">Achetez ou vendez facilement entre particuliers.</div>
               </div>
               <div class="user-buttons mt-3">
-                <button class="btn btn-register w-100 mb-2">Se connecter</button>
-                <button class="btn btn-outline-primary w-100 mb-2">S’inscrire</button>
+                <button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+                <button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
                 <button class="btn btn-secondary w-100">Inviter</button>
               </div>
             </div>

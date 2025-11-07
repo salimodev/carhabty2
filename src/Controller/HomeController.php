@@ -95,6 +95,7 @@ public function all_demande(
         $zoneVendeur = $user->getAdresse();
 
         $qb->andWhere('d.zone = :zone OR d.zone = :toute')
+           ->andWhere('d.vendeurneuf = 1')
            ->setParameter('zone', $zoneVendeur)
            ->setParameter('toute', 'Toute la Tunisie');
     }

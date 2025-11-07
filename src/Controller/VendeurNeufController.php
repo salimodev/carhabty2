@@ -31,7 +31,14 @@ class VendeurNeufController extends AbstractController
         $user = $this->getUser();
         $zoneVendeur = $user->getAdresse(); // suppose que l’utilisateur a une zone enregistrée
         $countDemandes = $demandeRepository->countDemandesDispoVendeur($zoneVendeur);
-        $dernieresDemandes = $demandeRepository->findLatestForVendeurNeuf($zoneVendeur);
+         $dernieresDemandes = $demandeRepository->createQueryBuilder('d')
+            ->where('d.zone = :zone OR d.zone = :toute')
+            ->setParameter('zone', $zoneVendeur)
+            ->setParameter('toute', 'Toute la Tunisie')
+            ->orderBy('d.datecreate', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
 
         return $this->render('vendeurNeuf/dashboardVN.html.twig', [
             'countDemandes' => $countDemandes,

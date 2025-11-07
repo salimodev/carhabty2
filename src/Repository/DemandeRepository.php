@@ -190,11 +190,13 @@ public function countDemandesDispoVendeur(string $zoneVendeur): int
 {
     return $this->createQueryBuilder('d')
         ->select('COUNT(d.id)')
-        ->where('d.zone = :zone OR d.zone = :toute')
+        ->where('(d.zone = :zone OR d.zone = :toute)')
+        ->andWhere('d.vendeurNeuf = 1')
         ->setParameter('zone', $zoneVendeur)
         ->setParameter('toute', 'Toute la Tunisie')
         ->getQuery()
         ->getSingleScalarResult();
 }
+
  
 }

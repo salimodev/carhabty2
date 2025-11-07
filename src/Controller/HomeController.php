@@ -27,6 +27,7 @@ public function index(Request $request, DemandeRepository $demandeRepository): R
 
         $lastDemandes = $demandeRepository->createQueryBuilder('d')
             ->where('d.zone = :zone OR d.zone = :toute')
+            ->andWhere('d.vendeurneuf = 1')
             ->setParameter('zone', $zoneVendeur)
             ->setParameter('toute', 'Toute la Tunisie')
             ->orderBy('d.datecreate', 'DESC')

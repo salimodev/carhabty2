@@ -1,0 +1,299 @@
+{% extends 'vendeurNeuf/layoutVN.html.twig' %}
+{% block Head %}
+	{{ parent() }}
+
+	{% block LinksCss %}
+		{{ parent() }}
+		<link rel="stylesheet" href="{{ asset ('css/carousel.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/carouselle.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/fontawesome.css') }}">
+       <style>
+.card-gradient {
+	border: none;
+	border-radius: 1rem;
+	color: #fff;
+	box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+.bg-gradient-primary {
+	background: linear-gradient(135deg, #007bff 0%, #00c6ff 100%);
+}
+.bg-gradient-success {
+	background: linear-gradient(135deg, #28a745 0%, #85e085 100%);
+}
+.bg-gradient-info {
+	background: linear-gradient(135deg, #17a2b8 0%, #5bc0de 100%);
+}
+.bg-gradient-warning {
+	background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+}
+.card-gradient i {
+	opacity: 0.85;
+}
+</style>
+	{% endblock %}
+
+{% endblock %}
+
+{% block title %}Tableau de bord
+{% endblock %}
+{% block Header %}
+	{{ parent() }}
+{% endblock %}
+
+
+{% block page %}
+	{{ parent() }}
+	{% block loader %}
+		{{ parent() }}
+	{% endblock %}
+	<div class="px-15px px-lg-25px">
+		<div class="aiz-titlebar mt-2 mb-4">
+			<div class="row align-items-center">
+				<div class="col-md-6">
+					<h1 class="h3 text-primary">Tableau de bord</h1>
+				</div>
+			</div>
+		</div>
+
+		<div class="row g-4">
+	<div class="col-sm-6 col-md-6 col-xxl-3">
+		<div class="card card-gradient bg-gradient-primary py-4">
+			<div class="card-body d-flex justify-content-between align-items-center">
+				<div>
+					<p class=" mb-1"><i class="fas fa-clipboard-list me-1"></i> Demandes disponibles</p>
+					<h3 class="mb-0 fs-30">{{ countDemandes }}</h3>
+				</div>
+				<div class="text-end">
+					<i class="fas fa-search fa-3x"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-6 col-xxl-3">
+		<div class="card card-gradient bg-gradient-success py-4">
+			<div class="card-body d-flex justify-content-between align-items-center">
+				<div>
+					<p class=" mb-1"><i class="fas fa-paper-plane me-1"></i> Offres envoyées</p>
+					<h3 class="mb-0 fs-30">3</h3>
+				</div>
+				<div class="text-end">
+					<i class="fas fa-envelope-open-text fa-3x"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-6 col-xxl-3">
+		<div class="card card-gradient bg-gradient-info py-4">
+			<div class="card-body d-flex justify-content-between align-items-center">
+				<div>
+					<p class=" mb-1"><i class="fas fa-check-circle me-1"></i> Offres acceptées</p>
+					<h3 class="mb-0 fs-30">200</h3>
+				</div>
+				<div class="text-end">
+					<i class="fas fa-handshake fa-3x"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6 col-md-6 col-xxl-3">
+		<div class="card card-gradient bg-gradient-warning py-4">
+			<div class="card-body d-flex justify-content-between align-items-center">
+				<div>
+					<p class=" mb-1"><i class="fas fa-chart-line me-1"></i> Taux d’acceptation</p>
+					<h3 class="mb-0 fs-30">45%</h3>
+				</div>
+				<div class="text-end">
+					<i class="fas fa-percentage fa-3x"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+		<br>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="mb-0 h6">Dernières demandes reçues</h5>
+					</div>
+					<div class="card-body">
+						<table id="tabprod" style="width:100%">
+							<thead>
+								<tr>
+									<th>Code</th>
+									<th>Marque</th>
+									<th>Modèle</th>
+									<th>N° Châssis</th>
+									<th>Énergie</th>
+									<th>État moteur</th>
+									<th>Date</th>
+									<th>Status</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for demande in demandes %}
+									<tr>
+										<td>
+											<a href="{{path('detail_demande_vendeur',{'id':demande.id})}}">{{ demande.code }}</a>
+										</td>
+										<td>{{ demande.marque }}</td>
+										<td>{{ demande.modele }}</td>
+										<td>{{ demande.chassis }}</td>
+										<td>{{ demande.energie }}</td>
+										<td>{{ demande.etatmoteur }}</td>
+										<td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
+										<td>
+											{% if demande.statut == 'ouvert' %}
+												<span class="badge badge-inline badge-success">ouvert</span>
+											{% elseif demande.statut == 'fermé' %}
+												<span class="badge badge-inline badge-danger">fermé</span>
+											{% endif %}
+										</td>
+										<td class="text-right">
+											<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande_vendeur',{'id':demande.id})}}">
+												<i class="las la-eye"></i>
+											</a>
+											
+
+										</td>
+
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="mb-0 h6">Dernières offres envoyées</h5>
+					</div>
+					<div class="card-body">
+						<table id="tabprod1" style="width:100%">
+							<thead>
+								<tr>
+									<th>Code</th>
+									<th>Marque</th>
+									<th>Modèle</th>
+									<th>N° Châssis</th>
+									<th>Énergie</th>
+									<th>État moteur</th>
+									<th>Date</th>
+									<th>Status</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<tr>
+									<td>
+										<a href=""></a>
+									</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td>
+
+										<span class="badge badge-inline badge-success">ouvert</span>
+
+
+									</td>
+									<td class="text-right">
+										<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="">
+											<i class="las la-eye"></i>
+										</a>
+										<a onclick="" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Supprimer">
+											<i class="las la-trash"></i>
+										</a>
+
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div></div>{% endblock %}{% block footer %}{{ parent() }}{% endblock %}{% block javascript %}{{ parent() }}<script type="text/javascript" src="{{asset ('assets/js/carousel.js') }}"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script type="text/javascript"></script><script type="text/javascript">
+$(document).ready(function () {
+var table = $('#tabprod').DataTable({
+language: {
+processing: "Traitement en cours...",
+search: "Rechercher :",
+lengthMenu: "Afficher _MENU_ éléments",
+info: " _START_-_END_/_TOTAL_ éléments",
+infoEmpty: " 0 -  0 / 0 éléments",
+infoFiltered: "(filtré de _MAX_ éléments au total)",
+infoPostFix: "",
+loadingRecords: "Chargement en cours...",
+zeroRecords: "Aucun élément à afficher",
+emptyTable: "Aucun élément à afficher",
+paginate: {
+first: "Premier",
+previous: "Précédent",
+next: "Suivant",
+last: "Dernier"
+}
+},
+rowReorder: {
+selector: 'td:nth-child(2)'
+},
+responsive: true
+});
+});
+
+
+$(document).ready(function () {
+var table = $('#tabprod1').DataTable({
+language: {
+processing: "Traitement en cours...",
+search: "Rechercher :",
+lengthMenu: "Afficher _MENU_ éléments",
+info: " _START_-_END_/_TOTAL_ éléments",
+infoEmpty: " 0 -  0 / 0 éléments",
+infoFiltered: "(filtré de _MAX_ éléments au total)",
+infoPostFix: "",
+loadingRecords: "Chargement en cours...",
+zeroRecords: "Aucun élément à afficher",
+emptyTable: "Aucun élément à afficher",
+paginate: {
+first: "Premier",
+previous: "Précédent",
+next: "Suivant",
+last: "Dernier"
+}
+},
+rowReorder: {
+selector: 'td:nth-child(2)'
+},
+responsive: true
+});
+});
+
+function PasdeStore() {
+AIZ.plugins.notify('warning', "vous n'avez pas un store");
+}
+
+function dejaeffectue() {
+AIZ.plugins.notify('warning', "vous avez déja effectuer une vérification");
+}
+function verfier() {
+AIZ.plugins.notify('warning', "Il faut que votre store doit etre verfier!");
+}</script>{% endblock %}
+

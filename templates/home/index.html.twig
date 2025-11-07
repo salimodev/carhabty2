@@ -475,6 +475,7 @@
 
 		</div>
 	</div>
+	{% if not app.user %}
 	{# categorie parent  #}
 	<div id="section_home_categories">
 		<section class="mb-4">
@@ -599,7 +600,7 @@
 			</div>
 		</section>
 	</div>
-
+{% endif %}
 
 	{# fin categorie parent  #}
 	{# categorie parent  #}

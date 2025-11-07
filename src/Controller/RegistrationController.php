@@ -45,7 +45,12 @@ class RegistrationController extends AbstractController
                 'bienvenue',
                 $context
             );
-            
+             // 🔽 Ajout de la redirection selon le rôle
+    if ($selectedRole === 'ROLE_VENDEUR_NEUF') {
+        return $this->redirectToRoute('dashboard_vendeurNeuf');
+    } elseif ($selectedRole === 'ROLE_PROPRIETAIRE') {
+        return $this->redirectToRoute('app_proprietaire');
+    }
 
           // --- Authentification automatique ---
         return $userAuthenticator->authenticateUser(

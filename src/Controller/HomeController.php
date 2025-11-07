@@ -13,17 +13,40 @@ use Knp\Component\Pager\PaginatorInterface;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'Accueil')]
-    public function index(Request $request,DemandeRepository $demandeRepository): Response
-    {
-        $session =$request->getSession();
-        $session->set('PageMenu', 'Accueil');
-        $lastDemandes = $demandeRepository->findLastTen();
+   #[Route('/', name: 'Accueil')]
+public function index(Request $request, DemandeRepository $demandeRepository): Response
+{
+    $session = $request->getSession();
+    $session->set('PageMenu', 'Accueil');
 
-        return $this->render('home/index.html.twig', [
+    $user = $this->getUser();
+
+    // 🔹 Si vendeur neuf → filtrer par zone
+    if ($user && in_array('ROLE_VENDEUR_NEUF', $user->getRoles())) {
+        $zoneVendeur = $user->getAdresse();
+
+        $lastDemandes = $demandeRepository->createQueryBuilder('d')
+            ->where('d.zone = :zone OR d.zone = :toute')
+            ->setParameter('zone', $zoneVendeur)
+            ->setParameter('toute', 'Toute la Tunisie')
+            ->orderBy('d.datecreate', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    } else {
+        // 🔹 Si pas vendeur → afficher toutes les demandes
+        $lastDemandes = $demandeRepository->createQueryBuilder('d')
+            ->orderBy('d.datecreate', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
+    return $this->render('home/index.html.twig', [
         'lastDemandes' => $lastDemandes,
     ]);
-    }
+}
+
 
      #[Route(path: '/footer', name: 'app_footer')]
      public function footer(Request $request): Response
@@ -54,13 +77,28 @@ class HomeController extends AbstractController
         return $this->render('contact.html.twig');
     }
 
-   #[Route('/demande/tous', name: 'app_demande_all')]
-public function all_demande(Request $request, DemandeRepository $demandeRepository, PaginatorInterface $paginator): Response
-{
+ #[Route('/demande/tous', name: 'app_demande_all')]
+public function all_demande(
+    Request $request,
+    DemandeRepository $demandeRepository,
+    PaginatorInterface $paginator
+): Response {
     $session = $request->getSession();
     $session->set('PageMenu', 'demande_all');
 
-    $qb = $demandeRepository->findAllDemandesQB(); // retourne un QueryBuilder
+    $user = $this->getUser();
+    $qb = $demandeRepository->findAllDemandesQB();
+
+    // 🔹 Filtrage selon le rôle de l'utilisateur
+    if ($user && in_array('ROLE_VENDEUR_NEUF', $user->getRoles())) {
+        $zoneVendeur = $user->getAdresse();
+
+        $qb->andWhere('d.zone = :zone OR d.zone = :toute')
+           ->setParameter('zone', $zoneVendeur)
+           ->setParameter('toute', 'Toute la Tunisie');
+    }
+    // 🔹 Si le rôle est propriétaire ou visiteur → pas de filtre (voit tout)
+
     $dem = $paginator->paginate(
         $qb,
         $request->query->getInt('page', 1),
@@ -71,6 +109,7 @@ public function all_demande(Request $request, DemandeRepository $demandeReposito
         'lastDemandes' => $dem,
     ]);
 }
+
 
 
    #[Route('/recherche/demande', name: 'recherche_demande')]

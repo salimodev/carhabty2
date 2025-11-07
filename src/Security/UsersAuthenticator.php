@@ -13,6 +13,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Routing\RouterInterface;
 
 class UsersAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -20,7 +21,7 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator,private RouterInterface $router)
     {
     }
 
@@ -39,22 +40,31 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
-        // Redirection vers la dernière page visitée
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
-        }
 
-        // Redirection selon le rôle de l'utilisateur
-        $user = $token->getUser();
-        if (in_array('ROLE_PROPRIETAIRE', $user->getRoles(), true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_proprietaire'));
-        }
 
-        // Par défaut, redirection vers la page d'accueil
-        return new RedirectResponse($this->urlGenerator->generate('Accueil'));
+
+
+public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+{
+    $user = $token->getUser();
+
+    // Sécurité : si pas d’utilisateur, retour à la page d’accueil
+    if (!$user) {
+        return new RedirectResponse($this->router->generate('app_login'));
     }
+
+    // Vérifie le rôle de l’utilisateur et redirige selon son type
+    if (in_array('ROLE_VENDEUR_NEUF', $user->getRoles(), true)) {
+        return new RedirectResponse($this->router->generate('dashboard_vendeurNeuf'));
+    }
+
+    if (in_array('ROLE_PROPRIETAIRE', $user->getRoles(), true)) {
+        return new RedirectResponse($this->router->generate('app_proprietaire'));
+    }
+
+    // Sinon, redirige par défaut (page d’accueil)
+    return new RedirectResponse($this->router->generate('Accueil'));
+}
 
     protected function getLoginUrl(Request $request): string
     {

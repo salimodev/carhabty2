@@ -16,53 +16,63 @@ use App\Security\UsersAuthenticator;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
-    public function register(Request $request,UserAuthenticatorInterface $userAuthenticator,SendMailService $mail, UsersAuthenticator $authenticator,  UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
-    {
-        $user = new Users();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+ #[Route('/register', name: 'app_register')]
+public function register(
+    Request $request,
+    UserAuthenticatorInterface $userAuthenticator,
+    SendMailService $mail,
+    UsersAuthenticator $authenticator,
+    UserPasswordHasherInterface $userPasswordHasher,
+    EntityManagerInterface $entityManager
+): Response {
+    $user = new Users();
+    $form = $this->createForm(RegistrationFormType::class, $user);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
-            $plainPassword = $form->get('plainPassword')->getData();
+    if ($form->isSubmitted() && $form->isValid()) {
+        /** @var string $plainPassword */
+        $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
- 
-              // Gestion du rôle choisi dans la liste déroulante
-            $selectedRole = $form->get('roles')->getData(); // récupère la chaîne choisie
-            $user->setRoles([$selectedRole]);               // convertit en tableau pour la base
+        // 🔒 Hasher le mot de passe
+        $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $context = compact('user');
-              // Envoi du mail
-            $mail->sendBienvenue(
-                'salimabbessi.dev@gmail.com',
-                $user->getEmail(),
-                'Bienvenue',
-                'bienvenue',
-                $context
-            );
-             // 🔽 Ajout de la redirection selon le rôle
-    if ($selectedRole === 'ROLE_VENDEUR_NEUF') {
-        return $this->redirectToRoute('dashboard_vendeurNeuf');
-    } elseif ($selectedRole === 'ROLE_PROPRIETAIRE') {
-        return $this->redirectToRoute('app_proprietaire');
-    }
+        // 🎭 Gestion du rôle choisi
+        $selectedRole = $form->get('roles')->getData();
+        $user->setRoles([$selectedRole]);
 
-          // --- Authentification automatique ---
-        return $userAuthenticator->authenticateUser(
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        // 📧 Envoi du mail de bienvenue
+        $context = compact('user');
+        $mail->sendBienvenue(
+            'salimabbessi.dev@gmail.com',
+            $user->getEmail(),
+            'Bienvenue',
+            'bienvenue',
+            $context
+        );
+
+        // ✅ Authentifier l’utilisateur AVANT redirection
+        $response = $userAuthenticator->authenticateUser(
             $user,
             $authenticator,
-            $request,
-            
+            $request
         );
+
+        // 🚀 Redirection selon le rôle
+        if ($selectedRole === 'ROLE_VENDEUR_NEUF') {
+            return $this->redirectToRoute('dashboard_vendeurNeuf');
+        } elseif ($selectedRole === 'ROLE_PROPRIETAIRE') {
+            return $this->redirectToRoute('app_proprietaire');
+        }
+
+        return $response;
     }
 
     return $this->render('registration/register.html.twig', [
         'registrationForm' => $form->createView(),
     ]);
-    }
+}
+
 }

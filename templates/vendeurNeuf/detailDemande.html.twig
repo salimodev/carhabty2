@@ -4,8 +4,7 @@
 
 	{% block LinksCss %}
 		{{ parent() }}
-		<link rel="stylesheet" href="{{ asset ('css/carousel.css') }}">
-		<link rel="stylesheet" href="{{ asset ('css/carouselle.css') }}">
+		
 		<link rel="stylesheet" href="{{ asset ('css/fontawesome.css') }}">
 	{% endblock %}
 
@@ -122,7 +121,7 @@
 
 												<div class="row">
 													<div class="col-sm-12">
-														<table class="table table-striped" id="tab">
+														<table class="table table-striped" id="tabprod1">
 															<thead>
 																<tr>
 																	<th>#</th>
@@ -171,32 +170,19 @@
 		{% endif %}
 	{% endif %}
 {% endblock %}{% block footer %}{{ parent() }}{% endblock %}{% block javascript %}{{ parent() }}<script type="text/javascript" src="{{asset ('assets/js/carousel.js') }}"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script type="text/javascript"></script><script type="text/javascript">
-$(document).ready(function () {
-var table = $('#tabprod').DataTable({
-language: {
-processing: "Traitement en cours...",
-search: "Rechercher :",
-lengthMenu: "Afficher _MENU_ éléments",
-info: " _START_-_END_/_TOTAL_ éléments",
-infoEmpty: " 0 -  0 / 0 éléments",
-infoFiltered: "(filtré de _MAX_ éléments au total)",
-infoPostFix: "",
-loadingRecords: "Chargement en cours...",
-zeroRecords: "Aucun élément à afficher",
-emptyTable: "Aucun élément à afficher",
-paginate: {
-first: "Premier",
-previous: "Précédent",
-next: "Suivant",
-last: "Dernier"
-}
-},
+
+		$(document).ready(function () {
+var table = $('#tab').DataTable({
+ language: {
+        url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
+    },
 rowReorder: {
 selector: 'td:nth-child(2)'
 },
 responsive: true
 });
 });
+
 
 
 $(document).ready(function () {

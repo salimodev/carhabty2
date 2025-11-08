@@ -156,17 +156,32 @@ $page   = max(1, (int)$request->get('page', 1)); // page par défaut = 1
         return new JsonResponse($result);
     }
 
-    // Fonction compatible DateTimeImmutable et DateTime
-    private function timeAgo(\DateTimeInterface $datetime): string
-    {
-        $now  = new \DateTimeImmutable();
-        $diff = $now->diff($datetime);
+ private function timeAgo(\DateTimeInterface $datetime): string
+{
+    $now  = new \DateTimeImmutable();
+    $diff = $now->diff($datetime);
 
-        if ($diff->y > 0) return $diff->y . ' an(s) ago';
-        if ($diff->m > 0) return $diff->m . ' mois ago';
-        if ($diff->d > 0) return $diff->d . ' jour(s) ago';
-        if ($diff->h > 0) return $diff->h . ' heure(s) ago';
-        if ($diff->i > 0) return $diff->i . ' minute(s) ago';
-        return 'à l\'instant';
+    if ($diff->y > 0) {
+        return 'il y a ' . $diff->y . ' an' . ($diff->y > 1 ? 's' : '');
     }
+
+    if ($diff->m > 0) {
+        return 'il y a ' . $diff->m . ' mois';
+    }
+
+    if ($diff->d > 0) {
+        return 'il y a ' . $diff->d . ' jour' . ($diff->d > 1 ? 's' : '');
+    }
+
+    if ($diff->h > 0 && $diff->d === 0) {
+        return 'il y a ' . $diff->h . ' heure' . ($diff->h > 1 ? 's' : '');
+    }
+
+    if ($diff->i > 0 && $diff->h === 0 && $diff->d === 0) {
+        return 'il y a ' . $diff->i . ' minute' . ($diff->i > 1 ? 's' : '');
+    }
+
+    return 'à l’instant';
+}
+
 }

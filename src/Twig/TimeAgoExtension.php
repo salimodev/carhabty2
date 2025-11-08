@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Twig;
 
 use Twig\Extension\AbstractExtension;
@@ -14,30 +13,39 @@ class TimeAgoExtension extends AbstractExtension
         ];
     }
 
-    public function timeAgo(\DateTimeImmutable $date): string
+    public function timeAgo(?\DateTimeInterface $date): string
     {
-        $now = new \DateTimeImmutable();
+        if (!$date) {
+            return '';
+        }
+
+        $now  = new \DateTimeImmutable();
         $diff = $now->diff($date);
 
         if ($diff->y > 0) {
-            return 'il y a ' . $diff->y . ' an' . ($diff->y > 1 ? 's' : '');
+            $n = $diff->y;
+            return 'il y a ' . $n . ' an' . ($n > 1 ? 's' : '');
         }
 
         if ($diff->m > 0) {
-            return 'il y a ' . $diff->m . ' mois';
+            $n = $diff->m;
+            return 'il y a ' . $n . ' mois';
         }
 
-        if ($diff->d > 0) {
-            return 'il y a ' . $diff->d . ' jour' . ($diff->d > 1 ? 's' : '') .
-                ($diff->h > 0 ? ' ' . $diff->h . 'h' : '');
+        // ✅ ici on utilise ->days (le total des jours)
+        if ($diff->days > 0) {
+            $n = $diff->days;
+            return 'il y a ' . $n . ' jour' . ($n > 1 ? 's' : '');
         }
 
         if ($diff->h > 0) {
-            return 'il y a ' . $diff->h . ' heure' . ($diff->h > 1 ? 's' : '');
+            $n = $diff->h;
+            return 'il y a ' . $n . ' heure' . ($n > 1 ? 's' : '');
         }
 
         if ($diff->i > 0) {
-            return 'il y a ' . $diff->i . ' minute' . ($diff->i > 1 ? 's' : '');
+            $n = $diff->i;
+            return 'il y a ' . $n . ' minute' . ($n > 1 ? 's' : '');
         }
 
         return 'à l’instant';

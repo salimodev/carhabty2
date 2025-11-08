@@ -449,13 +449,15 @@
                     {% endif %}
                 </p>
 
-                <a href="{% if not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" 
-                   class="btn btn-register w-100"
-                   {% if dejaPropose %}
-                       onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;"
-                   {% endif %}>
-                    <i class="fas fa-envelope-open-text"></i> Proposer un prix
-                </a>
+            <a href="{% if app.user and not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" 
+   class="btn btn-register w-100"
+   {% if dejaPropose %}
+       onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;"
+   {% elseif not app.user %}
+       onclick="AIZ.plugins.notify('danger', 'Vous devez être connecté pour proposer une offre !'); return false;"
+   {% endif %}>
+    <i class="fas fa-envelope-open-text"></i> Proposer un prix
+</a>
 
             </div>
         </div>

@@ -1,0 +1,489 @@
+{% extends 'vendeurNeuf/layoutVN.html.twig' %}
+{% block Head %}
+	{{ parent() }}
+
+	{% block LinksCss %}
+		{{ parent() }}
+		<link rel="stylesheet" href="{{ asset ('css/carousel.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/carouselle.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/fontawesome.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
+		<style>
+
+
+			.btn:hover {
+				color: #ffffff !important;
+				text-decoration: none;
+			}
+			.btn-register:hover {
+				background: linear-gradient(45deg, #ff8c00, #ff6b35);
+				transform: translateY(-2px);
+			}
+			.request-card {
+				background: linear-gradient(135deg, #ffffff, #f7f8fc);
+				border-radius: 15px;
+				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+				padding: 15px;
+				transition: all 0.3s ease;
+			}
+
+			.request-card:hover {
+				transform: translateY(-4px);
+				box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+			}
+
+			.request-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 10px;
+			}
+
+			.request-title {
+				font-weight: 700;
+				font-size: 16px;
+				color: #222;
+				line-height: 1.3;
+				flex: 1;
+			}
+
+			.request-badge {
+				background: linear-gradient(135deg, #ff6b35 0%, #fca311 50%, #2ec4b6 100%);
+				color: #fff;
+				font-size: 12px;
+				border-radius: 12px;
+				padding: 5px 12px;
+				font-weight: 700;
+				letter-spacing: 0.5px;
+				text-transform: uppercase;
+				box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+				display: inline-block;
+				transition: all 0.3s ease;
+			}
+
+			.request-badge:hover {
+				transform: scale(1.05);
+				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+			}
+			.request-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 8px;
+			}
+
+
+			.request-meta {
+				font-size: 13px;
+				color: #666;
+				display: flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+				gap: 4px;
+				margin-bottom: 10px;
+			}
+
+			.request-image img {
+				width: 100%;
+				height: 220px;
+				object-fit: cover;
+				border-radius: 10px;
+				margin-bottom: 10px;
+			}
+
+			.request-description {
+				font-size: 14px;
+				color: #333;
+				line-height: 1.4;
+				min-height: 50px;
+				margin-bottom: 10px;
+			}
+
+			.request-meta {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 10px;
+				color: #555;
+				font-size: 14px;
+				align-items: center;
+				margin-bottom: 10px;
+			}
+
+			.request-meta i {
+				color: #ff6b35;
+				margin-right: 5px;
+				font-size: 15px;
+			}
+
+			.btn-register i {
+				margin-right: 8px;
+				font-size: 16px;
+				color: #fff;
+			}
+			.btn-register {
+				background: linear-gradient(45deg, #ff6b35, #ff8c00);
+				border: none;
+				color: white;
+				font-weight: 600;
+				transition: 0.3s ease;
+			}
+			.btn-register:hover {
+				background: linear-gradient(45deg, #ff8c00, #ff6b35);
+				transform: translateY(-2px);
+			}
+			/* Effet au survol */
+			.btn-register:hover {
+				background: linear-gradient(45deg, #ff8c00, #ff6b35);
+				transform: translateY(-2px);
+				box-shadow: 0 4px 10px rgba(255, 107, 53, 0.4);
+			}
+
+			/* Animation de l'enveloppe quand la carte est survolée */
+			.request-card:hover .btn-register i {
+				animation: vibrate 0.3s linear infinite;
+			}
+
+			@keyframes vibrate {
+				0% {
+					transform: rotate(0deg);
+				}
+				25% {
+					transform: rotate(10deg);
+				}
+				50% {
+					transform: rotate(-10deg);
+				}
+				75% {
+					transform: rotate(10deg);
+				}
+				100% {
+					transform: rotate(0deg);
+				}
+			}
+			/* 📱 Responsive fixes */
+			@media(max-width: 768px) {
+				.request-card {
+					padding: 12px;
+					min-height: auto;
+				}
+				.request-title {
+					font-size: 15px;
+				}
+				.request-meta {
+					font-size: 12px;
+				}
+				.request-image img {
+					height: 180px;
+				}
+			}
+
+
+			.btn-propdemande {
+				background: linear-gradient(45deg, #ff6b35, #ff9f1c);
+				background: linear-gradient(45deg, #2ec4b6, #ff9f1c);
+				color: white;
+				box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+			}
+
+
+			.btn-offer {
+				background-color: #ff4d00;
+				color: white;
+				border: none;
+				width: 100%;
+				padding: 10px;
+				border-radius: 10px;
+				font-weight: 600;
+				cursor: pointer;
+				transition: background 0.2s ease;
+			}
+			.btn-offer:hover {
+				background-color: #e64300;
+			}
+
+			.badge-custom {
+				display: inline-block;
+				padding: 3px;
+				font-size: 11px;
+				border-radius: 0 50em 50em 0;
+				color: #ffffff;
+				font-weight: 600;
+				line-height: 23px;
+				position: absolute;
+				background: linear-gradient(45deg, #ff6b35, #ff9f1c);
+				z-index: 1;
+				top: 20px;
+				box-shadow: 2px 1px 6px 2px rgb(0 0 0 / 10%), 0 4px 4px 0 rgb(0 0 0 / 15%) !important;
+			}
+			.badge-custom .box {
+				height: 26px;
+				width: 26px;
+				background: linear-gradient(45deg, #ff6b35, #ff9f1c);
+				color: #fff;
+				display: inline-block;
+				border-radius: 50%;
+				text-align: center;
+			}
+		</style>
+	{% endblock %}
+
+{% endblock %}
+
+{% block title %}Tableau de bord
+{% endblock %}
+{% block Header %}
+	{{ parent() }}
+{% endblock %}
+
+
+{% block page %}
+	{{ parent() }}
+	{% block loader %}
+		{{ parent() }}
+	{% endblock %}
+	{% if app.user %}
+		{% if is_granted('ROLE_VENDEUR_NEUF') %}
+		<section class="py-5" style="background-color: #f5f5f5;">
+				<div class="container">
+					<div class="d-flex align-items-start">
+						
+						<div class="aiz-user-panel">
+							<div class="aiz-titlebar mt-2 mb-4">
+								<div class="row align-items-center">
+									<div class="col-md-6">
+										<h4 class="h4">Configuration  Profile</h4>
+									</div>
+								</div>
+							</div>
+
+							<!-- Basic Info-->
+							<div class="card">
+								<div class="card-header">
+									<h5 class="mb-0 h6">Information</h5>
+								</div>
+								<div class="card-body">
+									<form enctype="multipart/form-data">
+										<input type="hidden" name="_token" id="id" value="{{profileuser.id}}">
+										<div class="form-group row">
+											<label class="col-md-2 col-form-label">Nom</label>
+											<div class="col-md-10">
+												<input type="text" id="nom" class="form-control" placeholder="Your name" name="name" value="{{profileuser.nom}}">
+											</div>
+										</div>
+
+										<div class="form-group row">
+											<label class="col-md-2 col-form-label">Téléphone</label>
+											<div class="col-md-10">
+												<input type="text" id="numero" class="form-control" placeholder="Téléphone" name="phone" value="{{profileuser.tel1}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-sm-2 col-from-label" for="name">Email</label>
+											<div class="col-sm-10">
+												<input type="email" id="eemail" class="form-control" placeholder="Email" name="email" value="{{profileuser.email}}">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-md-2 col-form-label" for="signinSrEmail">Photo de profile
+												<small>(90x90)</small>
+											</label>
+											<div class="col-md-10">
+												<div class="input-group" data-toggle="aizuploader" data-type="image">
+													<div class="input-group-prepend">
+														<div class="input-group-text bg-soft-secondary font-weight-medium" onclick="cloudDinaryPhotoprofile()">Browse</div>
+													</div>
+													<div class="form-control file-amount" onclick="cloudDinaryPhotoprofile()"></div>
+													<input type="hidden" id="srcLogo" name="avatar" class="selected-files" value="{{profileuser.photo}}">
+												</div>
+												<div class="file-preview box sm">
+													<div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="82" title="1626376579201 - Copie.jpg">
+														<div class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+															<img src="{{profileuser.photo}}" id="logoImg" class="img-fit">
+														</div>
+														<div class="col body">
+															<h6 class="d-flex">
+																<span class="text-truncate title">Photo de profile</span>
+																<span class="ext"></span>
+															</h6>
+															<p></p>
+														</div>
+
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-sm-2 col-from-label" for="new_password">Nouveau mot de passe</label>
+											<div class="col-sm-10">
+												<input type="password" id="password" class="form-control" placeholder="Nouveau mot de passe" name="new_password">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-sm-2 col-from-label" for="confirm_password">Confirmer mot de passe</label>
+											<div class="col-sm-10">
+												<input type="password" id="confirm_password" class="form-control" placeholder="Confirmer mot de passe" name="confirm_password">
+											</div>
+										</div>
+
+										<div class="form-group mb-0 text-right">
+											<button type="button" onclick="ModifierProfileCostumer()" class="btn btn-register btn-outline-light rounded-pill fs-14 fw-700 mb-5 mb-md-0">Modifier Profile</button>
+										</div>
+									</form>
+								</div>
+							</div>
+
+
+						</div>
+						<!-- /.aiz-user-panel -->
+					</div>
+					<!-- /.d-flex -->
+				</div>
+				<!-- /.container -->
+			</section>
+
+		{% endif %}
+	{% endif %}
+{% endblock %}
+{% block footer %}
+	{{ parent() }}
+{% endblock %}
+{% block javascript %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{asset ('assets/js/carousel.js') }}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script type="text/javascript">
+		function cloudDinaryPhotoprofile() {
+cloudinary.openUploadWidget({
+api_key: '539474279193439',
+api_secret: '7A1irSbuKcg2XIH1TLqB4pBUZfA',
+cloud_name: 'aladdineshoping',
+upload_preset: 'aladdineshop',
+folder: 'ml_default',
+
+theme: 'minimal',
+max_file_size: 300000000,
+
+image_metadata: true,
+client_allowed_formats: [
+"png", "jpeg"
+],
+resource_type: 'image',
+folder: 'folder',
+cropping: 'server',
+cropping_coordinates_mode: 'custom',
+cropping_aspect_ratio: 0.72,
+sources: [
+'local', 'url'
+],
+button_caption: 'Télécherger image'
+
+
+}, (error, result) => {
+if (!error && result && result.event === "success") {
+$type = "photo";
+$("#srcLogo").val(result.info.secure_url);
+
+
+$('#logoImg').attr('src', result.info.secure_url);
+$('#NewPhotos').css('display', 'block');
+$('#logoImg').css('display', 'block');
+
+console.log('Done! Here is the image info: ', result.info.secure_url);
+}
+});
+
+
+}
+
+function ModifierProfileCostumer() {
+$_data = {};
+var pathModifProfile = '{{ path('Modifier_profile_vendeurNeuf') }}';
+
+var id = $('#id').val();
+var nom = $('#nom').val();
+var email = $('#eemail').val();
+var numero = $('#numero').val();
+var password = $('#password').val();
+var confirm_password = $('#confirm_password').val();
+if ($('#logoImg').val() != "") {
+var logoImg = $('#logoImg').val();
+} else {
+var logoImg = $('#srcLogo').val();
+}
+
+
+$_data = {
+'id': id,
+'nom': nom,
+'email': email,
+'numero': numero,
+'password': password,
+'logoImg': logoImg
+};
+
+if ($('#nom').val() != "" && $('#eemail').val() != "" && $('#numero').val() != "" && $('#password').val() != "" && ($('#confirm_password').val() == "" || $('#confirm_password').val() != "") && password != confirm_password) {
+Swal.fire({title: "Attention", text: "Les deux champs de mot de passe ne sont pas identiques !", icon: "warning", dangerMode: true})
+
+} else if ($('#nom').val() != "" && $('#eemail').val() != "" && $('#numero').val() != "" && $('#password').val() != "" && $('#confirm_password').val() != "" && password == confirm_password) {
+$.ajax({
+type: "POST",
+url: pathModifProfile,
+data: $_data,
+success: function (response) {
+Swal.fire({title: "success!", text: "Votre profile à été modifier avec succés!", icon: "success"});
+
+
+location.reload();
+
+
+},
+beforeSend: function () {
+$('#loaderAcc1').show();
+},
+complete: function () {
+$('#loaderAcc1').hide();
+}
+})
+} else if ($('#nom').val() == "") {
+Swal.fire({title: "Attention", text: "merci de remplire le champ nom!", icon: "warning", dangerMode: true})
+} else if ($('#eemail').val() == "") {
+Swal.fire({title: "Attention", text: "merci de remplire le champ email!", icon: "warning", dangerMode: true})
+} else if ($('#password').val() != "" && $('#confirm_password').val() == "") {
+Swal.fire({title: "Attention", text: "merci de confirmer le mot de passe !", icon: "warning", dangerMode: true})
+}
+
+
+if ($('#nom').val() != "" && $('#eemail').val() != "" && $('#numero').val() != "" && $('#password').val() == "") {
+$.ajax({
+type: "POST",
+url: pathModifProfile,
+data: $_data,
+success: function (response) {
+Swal.fire({title: "success!", text: "Votre profile à été modifier avec succés!", icon: "success"});
+
+
+location.reload();
+
+
+},
+beforeSend: function () {
+$('#loaderAcc1').show();
+},
+complete: function () {
+$('#loaderAcc1').hide();
+}
+})
+} else if ($('#nom').val() == "") {
+Swal.fire({title: "Attention", text: "merci de remplire le champ nom!", icon: "warning", dangerMode: true})
+} else if ($('#eemail').val() == "") {
+Swal.fire({title: "Attention", text: "merci de remplire le champ email!", icon: "warning", dangerMode: true})
+} else if ($('#numero').val() == "") {
+Swal.fire({title: "Attention", text: "merci de remplire le champ telephone!", icon: "warning", dangerMode: true})
+}
+
+}
+
+    
+    </script>
+{% endblock %}
+

@@ -3,15 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Demande;
+use App\Entity\Users;
+use App\Service\UsersService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\DemandeRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class VendeurNeufController extends AbstractController
 {
@@ -121,5 +125,63 @@ public function rechercheDemandeVendeurNeuf(Request $request, EntityManagerInter
 
     return new JsonResponse($result);
 }
+
+#[Route(path: '/vendeur/profile/Modifier/{id}', name: 'app_vendeurneuf_profile', methods: ['GET'])]
+public function profile(
+    int $id,
+    Request $request,
+    ManagerRegistry $doctrine,
+    UsersService $UsersService
+): Response {
+    $session = $request->getSession();
+    $session->set('PageMenu', 'app_vendeurneuf_profile');
+
+    $user = $this->getUser();
+
+    // Vérifie si un utilisateur est connecté
+    if (!$user) {
+        throw $this->createAccessDeniedException('Utilisateur non connecté.');
+    }
+
+    // Récupère le profil à modifier
+    $profile = $doctrine->getRepository(Users::class)->find($id);
+
+    // Vérifie si le profil existe
+    if (!$profile) {
+        throw $this->createNotFoundException('Profil non trouvé.');
+    }
+
+    // Vérifie que l'utilisateur connecté correspond bien au profil
+    if ($profile->getId() !== $user->getId()) {
+        throw $this->createAccessDeniedException('Vous n’êtes pas autorisé à modifier ce profil.');
+    }
+
+    // Récupération des infos via le service (si besoin d’infos supplémentaires)
+    $profileuser = $UsersService->getProfile($id);
+
+    return $this->render('vendeurNeuf/profile.html.twig', [
+        'profileuser' => $profileuser,
+    ]);
+}
+
+   #[Route(path: '/vendeur/profile/Modifier', name: 'Modifier_profile_vendeurNeuf')]
+    public function Modifier_profile(Request $request,UserPasswordHasherInterface $userPasswordHasher,UsersService $UsersService){
+
+        $id = $request->get('id');
+        $nom = $request->get('nom');
+        $email = $request->get('email');
+        $telephone = $request->get('numero');
+        $password = $request->get('password');
+        $user = $this->getUser();
+        $logoImg = $request->get('logoImg');
+        if($password ==""){
+            $profileuser = $UsersService->ModifierProfileSansMDW($id,$nom,$email,$telephone,$logoImg);
+        }else{
+            $password = $userPasswordHasher->hashPassword($user,$request->request->get('password'));
+            $profileuser = $UsersService->ModifierProfileAvecMDW($id,$nom,$email,$telephone,$password,$logoImg);
+        }
+        
+        return new response('success');
+    }
 
 }

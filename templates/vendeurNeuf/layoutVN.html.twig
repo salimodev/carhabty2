@@ -373,8 +373,8 @@ width: 45px;
 		</a>
 	</li>
 
-	<li {% if PageMenu is defined and PageMenu == "vendeur_profile" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
-		<a href="" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'vendeur_profile' %}active{% endif %}">
+	<li {% if PageMenu is defined and PageMenu == "app_vendeurneuf_profile" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
+		<a href="{{path('app_vendeurneuf_profile',{'id':app.user.id})}}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'app_vendeurneuf_profile' %}active{% endif %}">
 			<i class="las la-user-cog aiz-side-nav-icon fs-24"></i>
 			<span class="aiz-side-nav-text">Modifier Profil</span>
 		</a>
@@ -499,7 +499,7 @@ width: 45px;
 
 		{% endblock %}
 		<div class="bg-white text-center py-3 px-15px px-lg-25px mt-auto border-sm-top">
-			<p class="mb-0">©  v1.0</p>
+			<p class="mb-0">©2025 Carhabty.com  Tous droits réservés.</p>
 		</div>
 	</div>
 	<!-- .aiz-main-content -->

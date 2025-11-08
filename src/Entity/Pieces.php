@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PiecesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PiecesRepository::class)]
@@ -31,6 +33,17 @@ class Pieces
     #[ORM\ManyToOne(inversedBy: 'Pieces')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Demande $demande = null;
+
+    /**
+     * @var Collection<int, OffrePiece>
+     */
+    #[ORM\OneToMany(targetEntity: OffrePiece::class, mappedBy: 'piece')]
+    private Collection $offrePieces;
+
+    public function __construct()
+    {
+        $this->offrePieces = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +118,36 @@ class Pieces
     public function setDemande(?Demande $demande): static
     {
         $this->demande = $demande;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OffrePiece>
+     */
+    public function getOffrePieces(): Collection
+    {
+        return $this->offrePieces;
+    }
+
+    public function addOffrePiece(OffrePiece $offrePiece): static
+    {
+        if (!$this->offrePieces->contains($offrePiece)) {
+            $this->offrePieces->add($offrePiece);
+            $offrePiece->setPiece($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffrePiece(OffrePiece $offrePiece): static
+    {
+        if ($this->offrePieces->removeElement($offrePiece)) {
+            // set the owning side to null (unless already changed)
+            if ($offrePiece->getPiece() === $this) {
+                $offrePiece->setPiece(null);
+            }
+        }
 
         return $this;
     }

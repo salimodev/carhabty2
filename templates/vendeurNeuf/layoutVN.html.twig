@@ -367,7 +367,7 @@ width: 45px;
 	</li>
 
 	<li {% if PageMenu is defined and PageMenu == "vendeur_offres" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
-		<a href="" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'vendeur_offres' %}active{% endif %}">
+		<a href="{{ path('vendeur_offres') }}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'vendeur_offres' %}active{% endif %}">
 			<i class="las la-hand-holding-usd aiz-side-nav-icon fs-24"></i>
 			<span class="aiz-side-nav-text">Offres</span>
 		</a>

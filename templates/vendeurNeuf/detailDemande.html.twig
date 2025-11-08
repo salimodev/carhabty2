@@ -1,42 +1,65 @@
 {% extends 'vendeurNeuf/layoutVN.html.twig' %}
+
 {% block Head %}
 	{{ parent() }}
 
 	{% block LinksCss %}
 		{{ parent() }}
-		
-		<link rel="stylesheet" href="{{ asset ('css/fontawesome.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
 	{% endblock %}
-
 {% endblock %}
 
-{% block title %}Tableau de bord
+{% block title %}détail demande
 {% endblock %}
+
 {% block Header %}
 	{{ parent() }}
 {% endblock %}
-
 
 {% block page %}
 	{{ parent() }}
 	{% block loader %}
 		{{ parent() }}
 	{% endblock %}
+
 	{% if app.user %}
 		{% if is_granted('ROLE_VENDEUR_NEUF') %}
 			<section class="py-5">
 				<div class="container">
 					<div class="d-flex align-items-start">
-						
 						<div class="aiz-user-panel">
+
 							<div class="aiz-titlebar mt-2 mb-4">
 								<div class="row align-items-center">
 									<div class="col-md-6">
 										<h1 class="h3">Demande Code :
 											{{ demande.code }}</h1>
 									</div>
+									<div class="col-md-6 text-end">
+    {% set dejaPropose = demande.offres|filter(o => o.user.id == app.user.id)|length > 0 %}
+    {% if dejaPropose %}
+        <button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm" 
+                 onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');"
+                 style="background: linear-gradient(90deg, #6a11cb, #2575fc); border:none; font-weight: 600;">
+            Proposer un prix
+        </button>
+    {% else %}
+        <form action="{{ path('propose_offre', {'id': demande.id}) }}">
+            <div class="d-grid p-3 mt-3">
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm" 
+                        style="background: linear-gradient(90deg, #6a11cb, #2575fc); border:none; font-weight: 600;">
+                    Proposer un prix
+                </button>
+            </div>
+        </form>
+    {% endif %}
+</div>
+
+
 								</div>
 							</div>
+
 
 							<div class="card">
 								<div class="card-header">
@@ -44,12 +67,11 @@
 								</div>
 								<div class="card-body">
 									<div class="row">
-
 										<div class="col-lg-6">
 											<table class="table-borderless table">
 												<tbody>
 													<tr>
-														<td class="w-50 fw-600">Code de demande::</td>
+														<td class="w-50 fw-600">Code de demande:</td>
 														<td>{{ demande.code }}</td>
 													</tr>
 													<tr>
@@ -76,7 +98,6 @@
 														<td class="w-50 fw-600">Zone:</td>
 														<td>{{ demande.zone }}</td>
 													</tr>
-
 												</tbody>
 											</table>
 										</div>
@@ -85,7 +106,7 @@
 												<tbody>
 													<tr>
 														<td class="w-50 fw-600">Date de demande:</td>
-														<td>{{demande.datecreate|date('d/m/Y H:i') }}</td>
+														<td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
 													</tr>
 													<tr>
 														<td class="w-50 fw-600">Statut:</td>
@@ -99,10 +120,10 @@
 													</tr>
 													<tr>
 														<td class="w-50 fw-600">Photo carte grise:</td>
-														<td><img src="{{ demande.photocartegrise }}" alt='carte grise' style='width:222px;height:135px;border-radius:6px;'></td>
+														<td>
+															<img src="{{ demande.photocartegrise }}" alt='carte grise' style='width:222px;height:135px;border-radius:6px;'>
+														</td>
 													</tr>
-
-
 												</tbody>
 											</table>
 										</div>
@@ -110,7 +131,8 @@
 								</div>
 							</div>
 
-							<div class="row">
+							{# ───── DÉTAILS DES PIÈCES ───── #}
+							<div class="row mt-4">
 								<div class="col-md-12">
 									<div class="card">
 										<div class="card-header">
@@ -118,7 +140,6 @@
 										</div>
 										<div class="card-body">
 											<div id="tab_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-
 												<div class="row">
 													<div class="col-sm-12">
 														<table class="table table-striped" id="tabprod1">
@@ -155,13 +176,13 @@
 														</table>
 													</div>
 												</div>
-												
 											</div>
 										</div>
 									</div>
 								</div>
-
 							</div>
+
+
 						</div>
 					</div>
 				</div>
@@ -169,23 +190,18 @@
 			</section>
 		{% endif %}
 	{% endif %}
-{% endblock %}{% block footer %}{{ parent() }}{% endblock %}{% block javascript %}{{ parent() }}<script type="text/javascript" src="{{asset ('assets/js/carousel.js') }}"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script type="text/javascript"></script><script type="text/javascript">
+{% endblock %}
 
+{% block footer %}
+	{{ parent() }}
+{% endblock %}
+
+{% block javascript %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{ asset('assets/js/carousel.js') }}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script type="text/javascript">
 		$(document).ready(function () {
-var table = $('#tab').DataTable({
- language: {
-        url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
-    },
-rowReorder: {
-selector: 'td:nth-child(2)'
-},
-responsive: true
-});
-});
-
-
-
-$(document).ready(function () {
 var table = $('#tabprod1').DataTable({
 language: {
 processing: "Traitement en cours...",
@@ -194,8 +210,6 @@ lengthMenu: "Afficher _MENU_ éléments",
 info: " _START_-_END_/_TOTAL_ éléments",
 infoEmpty: " 0 -  0 / 0 éléments",
 infoFiltered: "(filtré de _MAX_ éléments au total)",
-infoPostFix: "",
-loadingRecords: "Chargement en cours...",
 zeroRecords: "Aucun élément à afficher",
 emptyTable: "Aucun élément à afficher",
 paginate: {
@@ -211,15 +225,6 @@ selector: 'td:nth-child(2)'
 responsive: true
 });
 });
-
-function PasdeStore() {
-AIZ.plugins.notify('warning', "vous n'avez pas un store");
-}
-
-function dejaeffectue() {
-AIZ.plugins.notify('warning', "vous avez déja effectuer une vérification");
-}
-function verfier() {
-AIZ.plugins.notify('warning', "Il faut que votre store doit etre verfier!");
-}</script>{% endblock %}
+	</script>
+{% endblock %}
 

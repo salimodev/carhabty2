@@ -111,50 +111,55 @@ public function all_demande(
         'lastDemandes' => $dem,
     ]);
 }
+#[Route('/recherche/demande', name: 'recherche_demande')]
+public function rechercheDemande(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $marque = $request->get('marque');
+    $zone   = $request->get('zone');
+    $date   = $request->get('date');
+    $type   = $request->get('type');
+    $trier  = $request->get('trier');
+    $page   = max(1, (int)$request->get('page', 1));
+    $limit  = 12;
 
+    $user = $this->getUser(); // récupérer le vendeur courant
 
+    $demandes = $em->getRepository(Demande::class)
+                   ->filterDemandes($marque, $zone, $date, $type, $trier);
 
-   #[Route('/recherche/demande', name: 'recherche_demande')]
-    public function rechercheDemande(Request $request, EntityManagerInterface $em): JsonResponse
-    {
-        $marque = $request->get('marque');
-        $zone   = $request->get('zone');
-        $date   = $request->get('date');
-        $type   = $request->get('type');
-        $trier  = $request->get('trier');
-$page   = max(1, (int)$request->get('page', 1)); // page par défaut = 1
-    $limit  = 12; // 
-        $demandes = $em->getRepository(Demande::class)
-                        ->filterDemandes($marque, $zone, $date, $type, $trier);
+    $result = [];
 
-        $result = [];
-
-        foreach ($demandes as $d) {
-            // Récupérer les pièces
-            $pieces = [];
-            foreach ($d->getPieces() as $p) {
-                $pieces[] = [
-                    'designation' => $p->getDesignation(),
-                    'observation' => $p->getObservation(),
-                    'photo'       => $p->getPhoto() ?: '/assets/img/placeholder.png',
-                ];
-            }
-
-            $result[] = [
-                'id'         => $d->getId(),
-                'marque'     => $d->getMarque(),
-                'modele'     => $d->getModele(),
-                'zone'       => $d->getZone(),
-                'date'       => $d->getDatecreate()->format('Y-m-d H:i'),
-                'time_ago'   => $this->timeAgo($d->getDatecreate()),
-                'type'       => $d->getVendeuroccasion() == 1 ? 'occasion' : 'neuf',
-                'offrecompte'=> $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
-                'pieces'     => $pieces,
+    foreach ($demandes as $d) {
+        // Récupérer les pièces
+        $pieces = [];
+        foreach ($d->getPieces() as $p) {
+            $pieces[] = [
+                'designation' => $p->getDesignation(),
+                'observation' => $p->getObservation(),
+                'photo'       => $p->getPhoto() ?: '/assets/img/placeholder.png',
             ];
         }
 
-        return new JsonResponse($result);
+        // Vérifier si le vendeur a déjà proposé une offre
+        $dejaPropose = $d->getOffres()->filter(fn($o) => $o->getUser()->getId() === $user->getId())->count() > 0;
+
+        $result[] = [
+            'id'          => $d->getId(),
+            'marque'      => $d->getMarque(),
+            'modele'      => $d->getModele(),
+            'zone'        => $d->getZone(),
+            'date'        => $d->getDatecreate()->format('Y-m-d H:i'),
+            'time_ago'    => $this->timeAgo($d->getDatecreate()),
+            'type'        => $d->getVendeuroccasion() == 1 ? 'occasion' : 'neuf',
+            'offrecompte' => $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
+            'pieces'      => $pieces,
+            'dejaPropose' => $dejaPropose,
+        ];
     }
+
+    return new JsonResponse($result);
+}
+
 
  private function timeAgo(\DateTimeInterface $datetime): string
 {

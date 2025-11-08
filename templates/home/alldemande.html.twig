@@ -402,77 +402,65 @@
 					<input type="hidden" name="min_price" value="">
 					<input type="hidden" name="max_price" value="">
 					<div class="row gutters-5 row-cols-xxl-3 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1" id="filterrech">
-						{% for demande in lastDemandes %}
-							<div class="col mb-3">
-								<div class="carousel-box">
-									<div class="request-card">
+					{% for demande in lastDemandes %}
+    {% set dejaPropose = demande.offres|filter(o => o.user.id == app.user.id)|length > 0 %}
+    <div class="col mb-3">
+        <div class="carousel-box">
+            <div class="request-card">
 
-										<div class="request-header">
-											<div class="request-title">
-												{% if demande.pieces|length > 0 %}
-													{% for piece in demande.pieces %}
-														{{ demande.marque }}
-														{{ piece.designation }}
-														{% if not loop.last %},
-														{% endif %}
-													{% endfor %}
-												{% else %}
-													{{ demande.marque }}
-													{{ demande.modele }}
-												{% endif %}
-											</div>
-											<div class="request-badge">
-												{% if demande.vendeuroccasion == 1 %}
-													Occasion
-												{% else %}
-													Neuf
-												{% endif %}
-											</div>
-										</div>
+                <div class="request-header">
+                    <div class="request-title">
+                        {% if demande.pieces|length > 0 %}
+                            {% for piece in demande.pieces %}
+                                {{ demande.marque }} {{ piece.designation }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {{ demande.marque }} {{ demande.modele }}
+                        {% endif %}
+                    </div>
+                    <div class="request-badge">
+                        {% if demande.vendeuroccasion == 1 %}
+                            Occasion
+                        {% else %}
+                            Neuf
+                        {% endif %}
+                    </div>
+                </div>
 
-										<div class="request-meta">
-											<span>
-												<i class="fas fa-map-marker-alt"></i>
-												{{ demande.zone }}</span>
-											<span>
-												<i class="fas fa-user"></i>
-												{{ demande.offrecompte ? demande.offrecompte.nom : 'Anonyme' }}</span>
-											<span>
-												<i class="far fa-clock"></i>
-												{{ demande.datecreate|time_ago }}</span>
-										</div>
+                <div class="request-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> {{ demande.zone }}</span>
+                    <span><i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.nom : 'Anonyme' }}</span>
+                    <span><i class="far fa-clock"></i> {{ demande.datecreate|time_ago }}</span>
+                </div>
 
+                <div class="request-image">
+                    {% set photo = (demande.pieces|first).photo ?? '/assets/img/placeholder.png' %}
+                    <img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
+                </div>
 
-										<div class="request-image">
-											{% set photo = (demande.Pieces|first).photo ?? '/assets/img/placeholder.png' %}
-											<img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
-										</div>
+                <p class="request-description">
+                    {% if demande.pieces|length > 0 %}
+                        {% for piece in demande.pieces|slice(0,3) %}
+                            {{ piece.observation }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                        {% if demande.pieces|length > 3 %}...{% endif %}
+                    {% else %}
+                        Pas de description disponible.
+                    {% endif %}
+                </p>
 
-										<p class="request-description">
-											{% if demande.pieces|length > 0 %}
-												{% for piece in demande.pieces|slice(0,3) %}
-													{{ piece.observation }}
-													{% if not loop.last %},
-													{% endif %}
-												{% endfor %}
-												{% if demande.pieces|length > 3 %}...
-												{% endif %}
-											{% else %}
-												Pas de description disponible.
-											{% endif %}
-										</p>
+                <a href="{% if not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" 
+                   class="btn btn-register w-100"
+                   {% if dejaPropose %}
+                       onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;"
+                   {% endif %}>
+                    <i class="fas fa-envelope-open-text"></i> Proposer un prix
+                </a>
 
-										<button class="btn btn-register w-100">
-											<i class="fas fa-envelope-open-text"></i>
-											Proposer un prix
-										</button>
-
-									</div>
-								</div>
-
-							</div>
-
-						{% endfor %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
 
 					</div>
 				</div>
@@ -501,82 +489,98 @@
     if (diff < 2592000) return Math.floor(diff / 86400) + ' jour(s) ago';
     return past.toLocaleDateString(); // ou "d/m/Y" selon besoin
 }
- 
-		function filtrerDemandes() {
-var url = "{{ path('recherche_demande') }}";
+ function filtrerDemandes() {
+    var url = "{{ path('recherche_demande') }}";
 
-var marque = $('#marque').val();
-var zone = $('#zone').val();
-var date = $('#date').val();
-var type = $('#type').val();
-var trier = $('#trier').val();
+    var marque = $('#marque').val();
+    var zone = $('#zone').val();
+    var date = $('#date').val();
+    var type = $('#type').val();
+    var trier = $('#trier').val();
 
-var data = {
-marque: marque,
-zone: zone,
-date: date,
-type: type,
-trier: trier
-};
+    var data = {
+        marque: marque,
+        zone: zone,
+        date: date,
+        type: type,
+        trier: trier
+    };
 
-$.ajax({
-type: "POST",
-url: url,
-data: data,
-success: function(demandes) {
-    var html = "";
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        success: function(demandes) {
+            var html = "";
 
-    if (demandes.length === 0) {
-        html = `<div class="text-center p-3"style="margin: auto">
-                    <i class="las la-frown la-3x opacity-60 mb-3"></i>
-                    <h3 class="h6 fw-700">Aucune demande trouvée</h3>
-                </div>`;
-    } else {
-        demandes.forEach(function(d) {
-            // Construire les titres des pièces
-            var piecesTitle = "";
-            var piecesDesc  = "";
+            if (demandes.length === 0) {
+                html = `<div class="text-center p-3" style="margin: auto">
+                            <i class="las la-frown la-3x opacity-60 mb-3"></i>
+                            <h3 class="h6 fw-700">Aucune demande trouvée</h3>
+                        </div>`;
+            } else {
+                demandes.forEach(function(d) {
+                    var piecesTitle = "";
+                    var piecesDesc  = "";
+                    if (d.pieces && d.pieces.length > 0) {
+                        piecesTitle = d.pieces.map(p => p.designation).join(", ");
+                        piecesDesc  = d.pieces.slice(0,3).map(p => p.observation).join(", ");
+                        if (d.pieces.length > 3) piecesDesc += "...";
+                    }
 
-            if (d.pieces && d.pieces.length > 0) {
-                piecesTitle = d.pieces.map(p => p.designation).join(", ");
-                piecesDesc  = d.pieces.slice(0,3).map(p => p.observation).join(", ");
-                if (d.pieces.length > 3) piecesDesc += "...";
+                    var dejaPropose = d.dejaPropose || false;
+
+                    html += `
+<div class="col mb-3">
+    <div class="carousel-box">
+        <div class="request-card">
+            <div class="request-header">
+                <div class="request-title">${piecesTitle || (d.marque + " " + d.modele)}</div>
+                <div class="request-badge">${d.type === 'occasion' ? 'Occasion' : 'Neuf'}</div>
+            </div>
+            <div class="request-meta">
+                <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>
+                <span><i class="fas fa-user"></i> ${d.offrecompte}</span>
+                <span><i class="far fa-clock"></i> ${timeAgo(d.date)}</span>
+            </div>
+            <div class="request-image">
+                <img src="${(d.pieces[0] && d.pieces[0].photo) || '/assets/img/placeholder.png'}"
+                     alt="photo" class="img-fit mx-auto rounded">
+            </div>
+            <p class="request-description">${piecesDesc || 'Pas de description disponible.'}</p>
+            <button class="btn btn-register w-100 propose-btn" data-id="${d.id}" data-deja="${dejaPropose}">
+                <i class="fas fa-envelope-open-text"></i> Proposer un prix
+            </button>
+        </div>
+    </div>
+</div>`;
+                });
             }
 
-            html += `
-            <div class="col mb-3">
-                <div class="carousel-box">
-                    <div class="request-card">
-                        <div class="request-header">
-                            <div class="request-title">${piecesTitle || (d.marque + " " + d.modele)}</div>
-                            <div class="request-badge">${d.type === 'occasion' ? 'Occasion' : 'Neuf'}</div>
-                        </div>
-                        <div class="request-meta">
-                            <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>
-                            <span><i class="fas fa-user"></i> ${d.offrecompte}</span>
-                            <span><i class="far fa-clock"></i> ${timeAgo(d.date)}</span>
-                        </div>
-                        <div class="request-image">
-                            <img src="${(d.pieces[0] && d.pieces[0].photo) || '/assets/img/placeholder.png'}" alt="photo" class="img-fit mx-auto rounded">
-                        </div>
-                        <p class="request-description">${piecesDesc || 'Pas de description disponible.'}</p>
-                        <button class="btn btn-register w-100">
-                            <i class="fas fa-envelope-open-text"></i> Proposer un prix
-                        </button>
-                    </div>
-                </div>
-            </div>`;
-        });
-    }
+            $('#filterrech').html(html);
 
-    $('#filterrech').html(html);
+            // Intercepter clics sur tous les boutons
+            $('#filterrech').find('.propose-btn').each(function() {
+                $(this).on('click', function(e) {
+                    e.preventDefault();
+                    let deja = $(this).data('deja');
+                    let demandeId = $(this).data('id');
+
+                    if (deja) {
+                        AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');
+                    } else {
+                        let url = "{{ path('propose_offre', {'id': 'ID_DEMANDE'}) }}";
+                        url = url.replace('ID_DEMANDE', demandeId);
+                        window.location.href = url;
+                    }
+                });
+            });
+        },
+        beforeSend: function(){ $('#loaderAcc1').show(); },
+        complete: function(){ $('#loaderAcc1').hide(); }
+    });
 }
 
-,
-  beforeSend: function(){ $('#loaderAcc1').show();},
-complete: function()  { $('#loaderAcc1').hide(); }
-});
-}
 	</script>
 
 {% endblock %}

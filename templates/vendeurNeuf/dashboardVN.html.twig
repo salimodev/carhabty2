@@ -46,191 +46,201 @@
 	{% block loader %}
 		{{ parent() }}
 	{% endblock %}
-	<div class="px-15px px-lg-25px">
-		<div class="aiz-titlebar mt-2 mb-4">
-			<div class="row align-items-center">
-				<div class="col-md-6">
-					<h1 class="h3 text-primary">Tableau de bord</h1>
-				</div>
-			</div>
-		</div>
-
-		<div class="row g-4">
-	<div class="col-sm-6 col-md-6 col-xxl-3">
-		<div class="card card-gradient bg-gradient-primary py-4">
-			<div class="card-body d-flex justify-content-between align-items-center">
-				<div>
-					<p class=" mb-1"><i class="fas fa-clipboard-list me-1"></i> Demandes disponibles</p>
-					<h3 class="mb-0 fs-30">{{ countDemandes }}</h3>
-				</div>
-				<div class="text-end">
-					<i class="fas fa-search fa-3x"></i>
-				</div>
+<div class="px-15px px-lg-25px">
+	<div class="aiz-titlebar mt-2 mb-4">
+		<div class="row align-items-center">
+			<div class="col-md-6">
+				<h1 class="h3 text-primary">Tableau de bord</h1>
 			</div>
 		</div>
 	</div>
 
-	<div class="col-sm-6 col-md-6 col-xxl-3">
-		<div class="card card-gradient bg-gradient-success py-4">
-			<div class="card-body d-flex justify-content-between align-items-center">
-				<div>
-					<p class=" mb-1"><i class="fas fa-paper-plane me-1"></i> Offres envoyées</p>
-					<h3 class="mb-0 fs-30">3</h3>
-				</div>
-				<div class="text-end">
-					<i class="fas fa-envelope-open-text fa-3x"></i>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-6 col-md-6 col-xxl-3">
-		<div class="card card-gradient bg-gradient-info py-4">
-			<div class="card-body d-flex justify-content-between align-items-center">
-				<div>
-					<p class=" mb-1"><i class="fas fa-check-circle me-1"></i> Offres acceptées</p>
-					<h3 class="mb-0 fs-30">200</h3>
-				</div>
-				<div class="text-end">
-					<i class="fas fa-handshake fa-3x"></i>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-6 col-md-6 col-xxl-3">
-		<div class="card card-gradient bg-gradient-warning py-4">
-			<div class="card-body d-flex justify-content-between align-items-center">
-				<div>
-					<p class=" mb-1"><i class="fas fa-chart-line me-1"></i> Taux d’acceptation</p>
-					<h3 class="mb-0 fs-30">45%</h3>
-				</div>
-				<div class="text-end">
-					<i class="fas fa-percentage fa-3x"></i>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-		<br>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="card">
-					<div class="card-header">
-						<h5 class="mb-0 h6">Dernières demandes reçues</h5>
+	<div class="row g-4">
+		<div class="col-sm-6 col-md-6 col-xxl-3">
+			<div class="card card-gradient bg-gradient-primary py-4">
+				<div class="card-body d-flex justify-content-between align-items-center">
+					<div>
+						<p class=" mb-1">
+							<i class="fas fa-clipboard-list me-1"></i>
+							Demandes disponibles</p>
+						<h3 class="mb-0 fs-30">{{ countDemandes }}</h3>
 					</div>
-					<div class="card-body">
-						<table id="tabprod" style="width:100%">
-							<thead>
+					<div class="text-end">
+						<i class="fas fa-search fa-3x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-6 col-md-6 col-xxl-3">
+			<div class="card card-gradient bg-gradient-success py-4">
+				<div class="card-body d-flex justify-content-between align-items-center">
+					<div>
+						<p class=" mb-1">
+							<i class="fas fa-paper-plane me-1"></i>
+							Offres envoyées</p>
+						<h3 class="mb-0 fs-30">{{ nombreOffres }}</h3>
+					</div>
+					<div class="text-end">
+						<i class="fas fa-envelope-open-text fa-3x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-6 col-md-6 col-xxl-3">
+			<div class="card card-gradient bg-gradient-info py-4">
+				<div class="card-body d-flex justify-content-between align-items-center">
+					<div>
+						<p class=" mb-1">
+							<i class="fas fa-check-circle me-1"></i>
+							Offres acceptées</p>
+						<h3 class="mb-0 fs-30">200</h3>
+					</div>
+					<div class="text-end">
+						<i class="fas fa-handshake fa-3x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-6 col-md-6 col-xxl-3">
+			<div class="card card-gradient bg-gradient-warning py-4">
+				<div class="card-body d-flex justify-content-between align-items-center">
+					<div>
+						<p class=" mb-1">
+							<i class="fas fa-chart-line me-1"></i>
+							Taux d’acceptation</p>
+						<h3 class="mb-0 fs-30">45%</h3>
+					</div>
+					<div class="text-end">
+						<i class="fas fa-percentage fa-3x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<br>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="mb-0 h6">Dernières demandes reçues</h5>
+				</div>
+				<div class="card-body">
+					<table id="tabprod" style="width:100%">
+						<thead>
+							<tr>
+								<th>Code</th>
+								<th>Marque</th>
+								<th>Modèle</th>
+								<th>N° Châssis</th>
+								<th>Énergie</th>
+								<th>État moteur</th>
+								<th>Date</th>
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for demande in demandes %}
 								<tr>
-									<th>Code</th>
-									<th>Marque</th>
-									<th>Modèle</th>
-									<th>N° Châssis</th>
-									<th>Énergie</th>
-									<th>État moteur</th>
-									<th>Date</th>
-									<th>Status</th>
-									<th>Action</th>
+									<td>
+										<a href="{{path('detail_demande_vendeur',{'id':demande.id})}}">{{ demande.code }}</a>
+									</td>
+									<td>{{ demande.marque }}</td>
+									<td>{{ demande.modele }}</td>
+									<td>{{ demande.chassis }}</td>
+									<td>{{ demande.energie }}</td>
+									<td>{{ demande.etatmoteur }}</td>
+									<td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
+									<td>
+										{% if demande.statut == 'ouvert' %}
+											<span class="badge badge-inline badge-success">ouvert</span>
+										{% elseif demande.statut == 'fermé' %}
+											<span class="badge badge-inline badge-danger">fermé</span>
+										{% endif %}
+									</td>
+									<td class="text-right">
+										<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande_vendeur',{'id':demande.id})}}">
+											<i class="las la-eye"></i>
+										</a>
+
+
+									</td>
+
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="mb-0 h6">Dernières offres envoyées</h5>
+				</div>
+				<div class="card-body">
+					{% if dernieresOffres is not empty %}
+						<table class="table table-hover mb-0 align-middle" id="tabprod1">
+							<thead class="table-light">
+								<tr>
+									<th>#</th>
+									<th>Numéro</th>
+									<th>Demande</th>
+									<th>Observation</th>
+									<th>Date d’envoi</th>
+									<th>Validité</th>
 								</tr>
 							</thead>
 							<tbody>
-								{% for demande in demandes %}
+								{% for offre in dernieresOffres %}
 									<tr>
+										<td>{{ loop.index }}</td>
+										<td class="fw-semibold text-primary">{{ offre.numeroOffre }}</td>
 										<td>
-											<a href="{{path('detail_demande_vendeur',{'id':demande.id})}}">{{ demande.code }}</a>
+											<a href="{{ path('detail_demande_vendeur', {'id': offre.demande.id}) }}" class="text-decoration-none text-dark fw-semibold">
+												{{ offre.demande.code ?? '—' }}
+											</a>
 										</td>
-										<td>{{ demande.marque }}</td>
-										<td>{{ demande.modele }}</td>
-										<td>{{ demande.chassis }}</td>
-										<td>{{ demande.energie }}</td>
-										<td>{{ demande.etatmoteur }}</td>
-										<td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
 										<td>
-											{% if demande.statut == 'ouvert' %}
-												<span class="badge badge-inline badge-success">ouvert</span>
-											{% elseif demande.statut == 'fermé' %}
-												<span class="badge badge-inline badge-danger">fermé</span>
+											{{ offre.observation|length > 40 
+                                            ? offre.observation|slice(0, 40) ~ '...' 
+                                            : offre.observation }}
+										</td>
+										<td>{{ offre.createdAt|date('d/m/Y H:i') }}</td>
+										<td>
+											{% if offre.joursRestants > 0 %}
+												{{ offre.joursRestants }}
+												jour{{ offre.joursRestants > 1 ? 's' : '' }}
+											{% else %}
+												Expirée
 											{% endif %}
 										</td>
-										<td class="text-right">
-											<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande_vendeur',{'id':demande.id})}}">
-												<i class="las la-eye"></i>
-											</a>
-											
 
-										</td>
 
 									</tr>
 								{% endfor %}
 							</tbody>
 						</table>
-					</div>
+					{% else %}
+						<p class="text-center text-muted">Aucune offre envoyée récemment.</p>
+					{% endif %}
 				</div>
 			</div>
 		</div>
-
-		<div class="row">
-			<div class="col-md-12">
-				<div class="card">
-					<div class="card-header">
-						<h5 class="mb-0 h6">Dernières offres envoyées</h5>
-					</div>
-					<div class="card-body">
-						<table id="tabprod1" style="width:100%">
-							<thead>
-								<tr>
-									<th>Code</th>
-									<th>Marque</th>
-									<th>Modèle</th>
-									<th>N° Châssis</th>
-									<th>Énergie</th>
-									<th>État moteur</th>
-									<th>Date</th>
-									<th>Status</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-
-								<tr>
-									<td>
-										<a href=""></a>
-									</td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td>
-
-										<span class="badge badge-inline badge-success">ouvert</span>
-
-
-									</td>
-									<td class="text-right">
-										<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="">
-											<i class="las la-eye"></i>
-										</a>
-										<a onclick="" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Supprimer">
-											<i class="las la-trash"></i>
-										</a>
-
-									</td>
-								</tr>
-
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-
 	</div>
-</div></div>{% endblock %}{% block footer %}{{ parent() }}{% endblock %}{% block javascript %}{{ parent() }}<script type="text/javascript" src="{{asset ('assets/js/carousel.js') }}"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script type="text/javascript"></script><script type="text/javascript">
+
+
+</div></div></div>
+
+{% endblock %}{% block footer %}{{ parent() }}{% endblock %}{% block javascript %}{{ parent() }}<script type="text/javascript" src="{{asset ('assets/js/carousel.js') }}"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script type="text/javascript"></script><script type="text/javascript">
 $(document).ready(function () {
 var table = $('#tabprod').DataTable({
 language: {

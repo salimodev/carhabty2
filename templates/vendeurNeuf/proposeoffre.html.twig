@@ -103,5 +103,35 @@
                 autoUpdateInput: true
             });
         });
+
+
+
+document.querySelector('form').addEventListener('submit', function(e) {
+    let valid = false;
+
+    {% for piece in demande.pieces %}
+        // On récupère les 3 prix et 3 marques pour cette pièce
+        let prix1 = document.querySelector('input[name="pieces[{{ piece.id }}][prix1]"]').value.trim();
+        let marque1 = document.querySelector('input[name="pieces[{{ piece.id }}][marque1]"]').value.trim();
+        let prix2 = document.querySelector('input[name="pieces[{{ piece.id }}][prix2]"]').value.trim();
+        let marque2 = document.querySelector('input[name="pieces[{{ piece.id }}][marque2]"]').value.trim();
+        let prix3 = document.querySelector('input[name="pieces[{{ piece.id }}][prix3]"]').value.trim();
+        let marque3 = document.querySelector('input[name="pieces[{{ piece.id }}][marque3]"]').value.trim();
+
+        // Vérification : au moins une combinaison prixX + marqueX remplie
+        if ((prix1 && marque1) || (prix2 && marque2) || (prix3 && marque3)) {
+            valid = true;
+        }
+    {% endfor %}
+
+    if (!valid) {
+        e.preventDefault();
+        AIZ.plugins.notify('danger', 'Vous devez remplir au moins une combinaison prix + marque pour au moins une pièce.');
+    }
+});
+
+
+
+
     </script>
 {% endblock %}

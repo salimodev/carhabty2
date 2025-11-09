@@ -17,9 +17,11 @@
 
     {% if app.user and is_granted('ROLE_VENDEUR_NEUF') %}
         <div class="container my-5 px-4 px-md-5">
-            <h3 class="mb-5 text-center fw-bold text-primary">Proposer une offre pour la demande {{ demande.code }}</h3>
+            <h3 class="mb-5 text-center fw-bold text-primary">
+                Proposer une offre pour la demande {{ demande.code }}
+            </h3>
 
-            <form method="POST" action="{{ path('offre_create', {'id': demande.id}) }}">
+            <form id="formOffre" method="POST" action="{{ path('offre_create', {'id': demande.id}) }}">
                 {% for piece in demande.pieces %}
                     <div class="card mb-5 shadow-lg border-0 rounded-4 p-4" 
                          style="background: linear-gradient(135deg, #007bff, #00c6ff); color: #fff;">
@@ -30,8 +32,10 @@
                             {% for i in 1..3 %}
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">PRIX UNITAIRE TTC {{ i }}ère Qualité</label>
-                                    <input type="text" name="pieces[{{ piece.id }}][prix{{ i }}]" 
-                                           class="form-control rounded-3" placeholder="Prix {{ i }}">
+                                    <input type="text" 
+                                           name="pieces[{{ piece.id }}][prix{{ i }}]" 
+                                           class="form-control rounded-3" 
+                                           placeholder="Prix {{ i }}">
                                 </div>
                             {% endfor %}
                         </div>
@@ -41,8 +45,10 @@
                             {% for i in 1..3 %}
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">MARQUE {{ i }}ère Qualité</label>
-                                    <input type="text" name="pieces[{{ piece.id }}][marque{{ i }}]" 
-                                           class="form-control rounded-3" placeholder="Marque {{ i }}">
+                                    <input type="text" 
+                                           name="pieces[{{ piece.id }}][marque{{ i }}]" 
+                                           class="form-control rounded-3" 
+                                           placeholder="Marque {{ i }}">
                                 </div>
                             {% endfor %}
                         </div>
@@ -55,18 +61,19 @@
                         <label class="form-label fw-bold text-dark mb-2">Observation générale</label>
                         <textarea name="observation" placeholder="Saisissez vos remarques..." 
                                   class="form-control rounded-4 shadow-sm p-3" 
-                                  style="background-color: #f0f2f5; border: 1px solid #ddd; height:120px; transition: 0.3s;"></textarea>
+                                  style="background-color: #f0f2f5; border: 1px solid #ddd; height:120px;"></textarea>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label fw-bold text-dark mb-2">Validité de l'offre</label>
-                        <input type="text" name="validite" id="validite" class="form-control rounded-4 shadow-sm p-3" 
-                               style="background-color: #f0f2f5; border: 1px solid #ddd; transition: 0.3s;" 
+                        <input type="text" name="validite" id="validite" 
+                               class="form-control rounded-4 shadow-sm p-3" 
+                               style="background-color: #f0f2f5; border: 1px solid #ddd;" 
                                placeholder="Choisir la date de validité">
 
                         <div class="d-grid p-3 mt-3">
                             <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm" 
-                                    style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight: 600;">
+                                    style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600;">
                                 <i class="fas fa-paper-plane me-2"></i> Envoyer l'offre
                             </button>
                         </div>
@@ -83,55 +90,69 @@
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <script>
-        // Focus effect
-        document.querySelectorAll('.form-control').forEach(el => {
-            el.addEventListener('focus', () => {
-                el.style.borderColor = '#6a11cb';
-                el.style.boxShadow = '0 0 8px rgba(106,17,203,0.2)';
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Focus styling
+            document.querySelectorAll('.form-control').forEach(el => {
+                el.addEventListener('focus', () => {
+                    el.style.borderColor = '#6a11cb';
+                    el.style.boxShadow = '0 0 8px rgba(106,17,203,0.2)';
+                });
+                el.addEventListener('blur', () => {
+                    el.style.borderColor = '#ddd';
+                    el.style.boxShadow = 'none';
+                });
             });
-            el.addEventListener('blur', () => {
-                el.style.borderColor = '#ddd';
-                el.style.boxShadow = 'none';
-            });
-        });
 
-        // Date range picker
-        $(function() {
-            $('#validite').daterangepicker({
-                opens: 'right',
-                locale: { format: 'DD/MM/YYYY' },
-                autoUpdateInput: true
-            });
-        });
-
-
-
-document.querySelector('form').addEventListener('submit', function(e) {
-    let valid = false;
-
-    {% for piece in demande.pieces %}
-        // On récupère les 3 prix et 3 marques pour cette pièce
-        let prix1 = document.querySelector('input[name="pieces[{{ piece.id }}][prix1]"]').value.trim();
-        let marque1 = document.querySelector('input[name="pieces[{{ piece.id }}][marque1]"]').value.trim();
-        let prix2 = document.querySelector('input[name="pieces[{{ piece.id }}][prix2]"]').value.trim();
-        let marque2 = document.querySelector('input[name="pieces[{{ piece.id }}][marque2]"]').value.trim();
-        let prix3 = document.querySelector('input[name="pieces[{{ piece.id }}][prix3]"]').value.trim();
-        let marque3 = document.querySelector('input[name="pieces[{{ piece.id }}][marque3]"]').value.trim();
-
-        // Vérification : au moins une combinaison prixX + marqueX remplie
-        if ((prix1 && marque1) || (prix2 && marque2) || (prix3 && marque3)) {
-            valid = true;
-        }
-    {% endfor %}
-
-    if (!valid) {
-        e.preventDefault();
-        AIZ.plugins.notify('danger', 'Vous devez remplir au moins une combinaison prix + marque pour au moins une pièce.');
-    }
+            // Initialisation du daterangepicker
+          $('#validite').daterangepicker({
+    autoUpdateInput: true,
+    locale: {
+        format: 'DD/MM/YYYY',
+        applyLabel: 'Appliquer',
+        cancelLabel: 'Annuler',
+        daysOfWeek: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+        monthNames: [
+            'Janvier','Février','Mars','Avril','Mai','Juin',
+            'Juillet','Août','Septembre','Octobre','Novembre','Décembre'
+        ],
+        firstDay: 1
+    },
+    opens: 'right',
+    startDate: moment(),               // date de début par défaut
+    endDate: moment().add(7, 'days')   // date de fin par défaut
 });
 
+            // Validation du formulaire
+            const form = document.getElementById('formOffre');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    let valid = false;
+                    const inputSuffixes = ['1','2','3'];
 
+                    {% for piece in demande.pieces %}
+                        inputSuffixes.forEach(suffix => {
+                            if (!valid) {
+                                let prixInput = document.querySelector(`input[name="pieces[{{ piece.id }}][prix${suffix}]"]`);
+                                let marqueInput = document.querySelector(`input[name="pieces[{{ piece.id }}][marque${suffix}]"]`);
+                                if (prixInput && marqueInput && prixInput.value.trim() && marqueInput.value.trim()) {
+                                    valid = true;
+                                }
+                            }
+                        });
+                    {% endfor %}
 
+                    if (!valid) {
+                        e.preventDefault();
+                        if (window.AIZ && AIZ.plugins && AIZ.plugins.notify) {
+                            AIZ.plugins.notify('danger', 'Vous devez remplir au moins une combinaison prix + marque pour au moins une pièce.');
+                        } else {
+                            alert('Vous devez remplir au moins une combinaison prix + marque pour au moins une pièce.');
+                        }
+                    }
+                });
+            }
 
+        });
     </script>
 {% endblock %}

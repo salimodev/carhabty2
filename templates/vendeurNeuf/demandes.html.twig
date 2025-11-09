@@ -496,25 +496,32 @@ function filtrerDemandesNeuf() {
                         if (d.pieces.length > 3) piecesDesc += "...";
                     }
 
-                    // data-deja doit venir du backend si le vendeur a déjà proposé une offre
                     var dejaPropose = d.dejaPropose || false;
+
+                    // 🔗 lien vers la page de détail
+                    var lienDetail = "{{ path('detail_demande_vendeur', {'id': 'ID_DEMANDE'}) }}";
+                    lienDetail = lienDetail.replace('ID_DEMANDE', d.id);
 
                     html += `
 <div class="col mb-3">
     <div class="carousel-box">
         <div class="request-card">
             <div class="request-header">
-                <div class="request-title">${piecesTitle || (d.marque + " " + d.modele)}</div>
+                <a href="${lienDetail}" class="text-decoration-none text-dark">
+                    <div class="request-title">${piecesTitle || (d.marque + " " + d.modele)}</div>
+                </a>
                 <div class="request-badge">Neuf</div>
             </div>
             <div class="request-meta">
                 <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>
                 <span><i class="far fa-clock"></i> ${timeAgo(d.date)}</span>
             </div>
-            <div class="request-image">
-                <img src="${(d.pieces[0] && d.pieces[0].photo) || '/assets/img/placeholder.png'}"
-                     alt="photo" class="img-fit mx-auto rounded">
-            </div>
+            <a href="${lienDetail}" class="text-decoration-none">
+                <div class="request-image">
+                    <img src="${(d.pieces[0] && d.pieces[0].photo) || '/assets/img/placeholder.png'}"
+                         alt="photo" class="img-fit mx-auto rounded">
+                </div>
+            </a>
             <p class="request-description">${piecesDesc || 'Pas de description disponible.'}</p>
             <button class="btn btn-register w-100 propose-btn" data-id="${d.id}" data-deja="${dejaPropose}">
                 <i class="fas fa-envelope-open-text"></i> Proposer un prix
@@ -527,17 +534,16 @@ function filtrerDemandesNeuf() {
 
             $('#filterrech').html(html);
 
-            // gestion clic sur chaque bouton
+            // clic bouton proposer un prix
             $('#filterrech').find('.propose-btn').each(function() {
                 $(this).on('click', function(e) {
-                    e.preventDefault(); // empêche le refresh
+                    e.preventDefault(); 
                     let deja = $(this).data('deja');
                     let demandeId = $(this).data('id');
 
                     if (deja) {
                         AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');
                     } else {
-                        // Générer URL Symfony correctement
                         let url = "{{ path('propose_offre', {'id': 'ID_DEMANDE'}) }}";
                         url = url.replace('ID_DEMANDE', demandeId);
                         window.location.href = url;

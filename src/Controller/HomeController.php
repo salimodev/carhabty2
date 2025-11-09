@@ -122,7 +122,7 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
     $page   = max(1, (int)$request->get('page', 1));
     $limit  = 12;
 
-    $user = $this->getUser(); // récupérer le vendeur courant
+    $user = $this->getUser();
 
     $demandes = $em->getRepository(Demande::class)
                    ->filterDemandes($marque, $zone, $date, $type, $trier);
@@ -140,26 +140,33 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
             ];
         }
 
-        // Vérifier si le vendeur a déjà proposé une offre
-        $dejaPropose = $d->getOffres()->filter(fn($o) => $o->getUser()->getId() === $user->getId())->count() > 0;
+        // Vérifier connexion + rôle vendeur + offre déjà proposée
+        $estConnecte = $user !== null;
+        $estVendeur  = $estConnecte && in_array('ROLE_VENDEUR', $user->getRoles(), true);
+        $dejaPropose = false;
+
+        if ($estVendeur) {
+            $dejaPropose = $d->getOffres()->exists(fn($key, $offre) => $offre->getUser() === $user);
+        }
 
         $result[] = [
-            'id'          => $d->getId(),
-            'marque'      => $d->getMarque(),
-            'modele'      => $d->getModele(),
-            'zone'        => $d->getZone(),
-            'date'        => $d->getDatecreate()->format('Y-m-d H:i'),
-            'time_ago'    => $this->timeAgo($d->getDatecreate()),
-            'type'        => $d->getVendeuroccasion() == 1 ? 'occasion' : 'neuf',
-            'offrecompte' => $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
-            'pieces'      => $pieces,
-            'dejaPropose' => $dejaPropose,
+            'id'           => $d->getId(),
+            'marque'       => $d->getMarque(),
+            'modele'       => $d->getModele(),
+            'zone'         => $d->getZone(),
+            'date'         => $d->getDatecreate()->format('Y-m-d H:i'),
+            'time_ago'     => $this->timeAgo($d->getDatecreate()),
+            'type'         => $d->getVendeuroccasion() == 1 ? 'occasion' : 'neuf',
+            'offrecompte'  => $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
+            'pieces'       => $pieces,
+            'dejaPropose'  => $dejaPropose,
+            'estVendeur'   => $estVendeur,
+            'estConnecte'  => $estConnecte,
         ];
     }
 
     return new JsonResponse($result);
 }
-
 
  private function timeAgo(\DateTimeInterface $datetime): string
 {

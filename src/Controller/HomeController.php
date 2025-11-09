@@ -10,6 +10,7 @@ use App\Repository\DemandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Repository\OffreRepository;
 
 class HomeController extends AbstractController
 {
@@ -49,14 +50,33 @@ public function index(Request $request, DemandeRepository $demandeRepository): R
 }
 
 
-     #[Route(path: '/footer', name: 'app_footer')]
-     public function footer(Request $request,EntityManagerInterface $em): Response
-    {
-      $demandeCount = $em->getRepository(Demande::class)->countByUser($this->getUser());   
-        return $this->render('/footer.html.twig', [
-        'demandeCount' => $demandeCount,
-    ]);
+    #[Route(path: '/footer', name: 'app_footer')]
+public function footer(Request $request, EntityManagerInterface $em, OffreRepository $offreRepo): Response
+{
+    $user = $this->getUser();
+
+    // Si utilisateur non connecté, on initialise les compteurs à 0
+    if ($user) {
+        $demandeCount = $em->getRepository(Demande::class)->countByUser($user);  
+
+        $nbOffres = $offreRepo->createQueryBuilder('o')
+            ->join('o.demande', 'd')
+            ->where('d.offrecompte = :userId')
+            ->setParameter('userId', $user->getId())
+            ->select('COUNT(o.id)')
+            ->getQuery()
+            ->getSingleScalarResult(); 
+    } else {
+        $demandeCount = 0;
+        $nbOffres = 0;
     }
+
+    return $this->render('/footer.html.twig', [
+        'demandeCount' => $demandeCount,
+        'nbOffres' => $nbOffres,
+    ]);
+}
+
 
       #[Route(path: '/header', name: 'app_header')]
     public function header(Request $request): Response
@@ -66,14 +86,32 @@ public function index(Request $request, DemandeRepository $demandeRepository): R
      
     }
 
-      #[Route(path: '/sideheader', name: 'sideheader')]
-    public function sideheader(Request $request,EntityManagerInterface $em): Response
-    {
-           $demandeCount = $em->getRepository(Demande::class)->countByUser($this->getUser());     
-        return $this->render('/sideHeader.html.twig', [
-        'demandeCount' => $demandeCount,
-    ]);
+    #[Route(path: '/sideheader', name: 'sideheader')]
+public function sideheader(Request $request, EntityManagerInterface $em, OffreRepository $offreRepo): Response
+{
+    $user = $this->getUser();
+
+    if ($user) {
+        $demandeCount = $em->getRepository(Demande::class)->countByUser($user);
+
+        $nbOffres = $offreRepo->createQueryBuilder('o')
+            ->join('o.demande', 'd')
+            ->where('d.offrecompte = :userId')
+            ->setParameter('userId', $user->getId())
+            ->select('COUNT(o.id)')
+            ->getQuery()
+            ->getSingleScalarResult();  
+    } else {
+        $demandeCount = 0;
+        $nbOffres = 0;
     }
+
+    return $this->render('/sideHeader.html.twig', [
+        'demandeCount' => $demandeCount,
+        'nbOffres' => $nbOffres,
+    ]);
+}
+
 
     #[Route('/contact', name: 'app_contact')]
     public function contact(Request $request): Response

@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\OffreRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class VendeurNeufController extends AbstractController
@@ -31,7 +32,7 @@ class VendeurNeufController extends AbstractController
     }
 
   #[Route(path: '/vendeur/neuf/dashboard', name: 'dashboard_vendeurNeuf', methods: "GET")]
-public function dashboard_VN(DemandeRepository $demandeRepository, Request $request, EntityManagerInterface $em)
+public function dashboard_VN(DemandeRepository $demandeRepository, Request $request, EntityManagerInterface $em,OffreRepository $offreRepo)
 {
     $session = $request->getSession();
     $session->set('PageMenu', 'dashboard_vendeurNeuf');
@@ -59,6 +60,17 @@ public function dashboard_VN(DemandeRepository $demandeRepository, Request $requ
         ->getQuery()
         ->getResult();
 
+        // Nombre d'offres acceptées pour ce vendeur
+    $nbOffresAcceptees = $offreRepo->createQueryBuilder('o')
+    ->where('o.user = :user')
+    ->andWhere('o.status = :status')
+    ->setParameter('user', $user)
+    ->setParameter('status', 'acceptee')
+    ->select('COUNT(o.id)')
+    ->getQuery()
+    ->getSingleScalarResult();
+
+
  $now = new \DateTimeImmutable('today'); // ignore l’heure
 foreach ($dernieresOffres as $offre) {
     $validiteFin = $offre->getValiditeFin();
@@ -79,13 +91,16 @@ foreach ($dernieresOffres as $offre) {
 }
 
 
-
+  // Calcul du taux d'acceptation
+    $tauxAcceptation = $nombreOffres > 0 ? round(($nbOffresAcceptees / $nombreOffres) * 100, 2) : 0;
 
     return $this->render('vendeurNeuf/dashboardVN.html.twig', [
         'countDemandes' => $countDemandes,
         'demandes' => $dernieresDemandes,
         'nombreOffres' => $nombreOffres,
         'dernieresOffres' => $dernieresOffres,
+        'nbOffresAcceptees' => $nbOffresAcceptees,
+         'tauxAcceptation' => $tauxAcceptation
     ]);
 }
 

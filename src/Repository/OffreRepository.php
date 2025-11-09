@@ -40,4 +40,17 @@ class OffreRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    // src/Repository/OffreRepository.php
+public function countOffresByProprietaire($proprietaireId): int
+{
+    return $this->createQueryBuilder('o')
+        ->join('o.demande', 'd')
+        ->where('d.offrecompte = :userId')
+        ->setParameter('userId', $proprietaireId)
+        ->select('COUNT(o.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
 }

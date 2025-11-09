@@ -66,39 +66,46 @@
                 <td>{{ offre.demande.modele }}</td>
                 <td>{{ offre.user.nom ~ ' ' ~ offre.user.prenom }}</td>
                 <td>{{ offre.numeroOffre }}</td>
-               <td>
+              <td>
     {% if offre.validiteDebut and offre.validiteFin %}
-        {{ offre.validiteDebut|date('d/m/Y') }} - {{ offre.validiteFin|date('d/m/Y') }}
+        {% set diff = offre.validiteFin.timestamp - offre.validiteDebut.timestamp %}
+        {% set jours = (diff / 86400)|round(0, 'floor') %}
+        {{ jours }} jour{{ jours > 1 ? 's' : '' }}
     {% else %}
         <span class="text-muted">Non définie</span>
     {% endif %}
 </td>
 
+
                 <td>
-                    {% if offre.status == 'acceptée' %}
-                        <span class="badge badge-inline bg-success">Acceptée</span>
-                    {% elseif offre.status == 'refusée' %}
-                        <span class="badge badge-inline bg-danger">Refusée</span>
-                    {% else %}
-                        <span class="badge  badge-inline bg-warning text-dark">En attente</span>
-                    {% endif %}
+                    {% if offre.status == 'acceptee' %}
+    <span class="badge badge-inline bg-success">Acceptée</span>
+{% elseif offre.status == 'refusee' %}
+    <span class="badge badge-inline bg-danger">Refusée</span>
+{% else %}
+    <span class="badge badge-inline bg-warning text-dark">En attente</span>
+{% endif %}
+
                 </td>
                 <td class="text-right">
-                    <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
+                    <a class="btn btn-soft-warning btn-icon btn-circle btn-sm"
                        href="" title="Voir">
                         <i class="las la-eye"></i>
                     </a>
-                   <a href="#" class="btn btn-success btn-icon btn-circle btn-sm"
-       title="Accepter"
-       onclick="changerStatusOffre({{ offre.id }}, 'acceptee')">
-        <i class="las la-check"></i>
-    </a>
+                 {% if offre.status == 'en_attente' %}
+        <a href="#" class="btn btn-success btn-icon btn-circle btn-sm"
+           title="Accepter"
+           onclick="changerStatusOffre({{ offre.id }}, 'acceptee')">
+            <i class="las la-check"></i>
+        </a>
 
-    <a href="#" class="btn btn-danger btn-icon btn-circle btn-sm"
-       title="Refuser"
-       onclick="changerStatusOffre({{ offre.id }}, 'refusee')">
-        <i class="las la-times"></i>
-    </a>
+        <a href="#" class="btn btn-danger btn-icon btn-circle btn-sm"
+           title="Refuser"
+           onclick="changerStatusOffre({{ offre.id }}, 'refusee')">
+            <i class="las la-times"></i>
+        </a>
+   
+    {% endif %}
                 </td>
             </tr>
         {% endfor %}
@@ -146,28 +153,27 @@ url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
 
 
 function changerStatusOffre(id, status) {
+    let $_data = {id: id, status: status};
     Swal.fire({
-        title: 'Êtes-vous sûr ?',
-        text: `Vous allez ${status === 'acceptee' ? 'accepter' : 'refuser'} cette offre`,
-        type: 'warning',
+        title: `Êtes-vous sûr de ${status === 'acceptee' ? 'accepter' : 'refuser'} cette offre ?`,
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#25a89d',
         cancelButtonColor: '#ff6b35',
         confirmButtonText: 'Oui',
         cancelButtonText: 'Annuler'
     }).then((result) => {
-        if (result.isConfirmed) {
+        if (result.value) {
             $.ajax({
-                url: "{{ path('changer_status_offre') }}",
                 type: "POST",
-                data: { id: id, status: status },
+                url: "{{ path('changer_status_offre') }}",
+                data: $_data,
                 success: function(response) {
                     if(response.success){
-                        Swal.fire('Succès', response.message, 'success').then(() => {
-                            location.reload();
-                        });
+                        AIZ.plugins.notify('success', response.message);
+                        location.reload();
                     } else {
-                        Swal.fire('Erreur', response.message, 'error');
+                        AIZ.plugins.notify('danger', response.message);
                     }
                 }
             });
@@ -175,6 +181,6 @@ function changerStatusOffre(id, status) {
     });
 }
 
-				</script>
+		</script>
 			{% endblock %}
 

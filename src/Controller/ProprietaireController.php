@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 final class ProprietaireController extends AbstractController
 {
   #[Route('/proprietaire', name: 'app_proprietaire')]
-    public function index(Request $request,EntityManagerInterface $em): Response
+    public function index(Request $request,EntityManagerInterface $em,OffreRepository $offreRepo): Response
     {
         $session =$request->getSession();
        $session->set('PageMenu', 'proprietaire');
@@ -35,9 +35,29 @@ final class ProprietaireController extends AbstractController
     $demandes = $em->getRepository(\App\Entity\Demande::class)
         ->findBy(['offrecompte' => $user], ['datecreate' => 'DESC']);
      $demandeCount = $em->getRepository(Demande::class)->countByUser($this->getUser());
+     $user = $this->getUser();
+     $nbOffres = $offreRepo->createQueryBuilder('o')
+        ->join('o.demande', 'd')
+        ->where('d.offrecompte = :userId')
+        ->setParameter('userId', $user->getId())
+        ->select('COUNT(o.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+
+        // Nombre de devis acceptés
+        $nbOffresAcceptees = $offreRepo->createQueryBuilder('o')
+            ->join('o.demande', 'd')
+            ->where('d.offrecompte = :userId')
+            ->andWhere('o.status = :status')
+            ->setParameter('userId', $user->getId())
+            ->setParameter('status', 'acceptee')
+            ->select('COUNT(o.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
     return $this->render('proprietaire/proprietaire.html.twig', [
-        'demandeCount' => $demandeCount, 'demandes' => $demandes,
+        'demandeCount' => $demandeCount, 'demandes' => $demandes,'nbOffres' => $nbOffres,
+        'nbOffresAcceptees' => $nbOffresAcceptees,
     ]);
      
       
@@ -235,28 +255,36 @@ public function changerStatus(Request $request, EntityManagerInterface $em, Offr
     $id = $request->request->get('id');
     $status = $request->request->get('status'); // 'acceptee' ou 'refusee'
 
-    if(!$id || !$status) {
+    if (!$id || !$status) {
         return $this->json(['success' => false, 'message' => 'Paramètres manquants.']);
     }
 
     $offre = $offreRepo->find($id);
 
-    if(!$offre) {
+    if (!$offre) {
         return $this->json(['success' => false, 'message' => 'Offre non trouvée.']);
     }
 
     // Vérifier que l'utilisateur connecté est bien le propriétaire
     $user = $this->getUser();
-    if($offre->getDemande()->getOffrecompte()->getId() !== $user->getId()) {
+    if ($offre->getDemande()->getOffrecompte()->getId() !== $user->getId()) {
         return $this->json(['success' => false, 'message' => 'Action non autorisée.']);
     }
 
-    // Modifier le statut
-    if(!in_array($status, ['acceptee', 'refusee'])) {
+    // Modifier le statut de l'offre
+    if (!in_array($status, ['acceptee', 'refusee'])) {
         return $this->json(['success' => false, 'message' => 'Statut invalide.']);
     }
 
-    $offre->setStatus($status); // Assure-toi que ton entité Offre a un champ $status
+    $offre->setStatus($status);
+
+    // Si l'offre est acceptée, fermer la demande
+    if ($status === 'acceptee') {
+        $demande = $offre->getDemande();
+        $demande->setStatut('fermer'); // Assure-toi que le champ statut existe dans Demande
+        $em->persist($demande);
+    }
+
     $em->persist($offre);
     $em->flush();
 

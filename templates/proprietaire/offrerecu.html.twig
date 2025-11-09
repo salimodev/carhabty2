@@ -1,0 +1,180 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+	carhabty
+{% endblock %}
+
+{% block Head %}
+	{{ parent() }}
+	{% block LinksCss %}
+		{{ parent() }}
+		<link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
+	{% endblock %}
+{% endblock %}
+
+{% block Content %}
+	{% if app.user %}
+		{% if is_granted('ROLE_PROPRIETAIRE') %}
+			<section class="py-5" style="background-color: #f5f5f5;">
+				<div class="container">
+					<div class="d-flex align-items-start">
+						{% block sideHeader %}
+							{{ parent() }}
+						{% endblock %}
+						<div class="aiz-user-panel">
+							<div class="aiz-titlebar mt-2 mb-4">
+								<div class="row align-items-center">
+									<div class="col-md-6">
+										<b class="h4">Offres proposés</b>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<div class="card">
+										<div class="card-header">
+											<h5 class="mb-0 h6">Offres</h5>
+										</div>
+										<div class="card-body">
+											<table id="tabdemande" style="width:100%">
+												<thead>
+													<tr>
+														<th>N° de demande</th>
+														<th>Date de demande</th>
+														<th>Marque</th>
+														<th>Modèle</th>
+														<th>Offreur</th>
+														<th>Offre N°</th>
+														<th>Validité</th>
+														<th>Status</th>
+														<th>Action</th>
+													</tr>
+												</thead>
+												<tbody>
+    {% if offres is not empty %}
+        {% for offre in offres %}
+            <tr>
+                <td>
+                    <a href="{{ path('detail_demande', {'id': offre.demande.id}) }}">
+                        {{ offre.demande.code }}
+                    </a>
+                </td>
+                <td>{{ offre.demande.datecreate|date('d/m/Y') }}</td>
+                <td>{{ offre.demande.marque }}</td>
+                <td>{{ offre.demande.modele }}</td>
+                <td>{{ offre.user.nom ~ ' ' ~ offre.user.prenom }}</td>
+                <td>{{ offre.numeroOffre }}</td>
+               <td>
+    {% if offre.validiteDebut and offre.validiteFin %}
+        {{ offre.validiteDebut|date('d/m/Y') }} - {{ offre.validiteFin|date('d/m/Y') }}
+    {% else %}
+        <span class="text-muted">Non définie</span>
+    {% endif %}
+</td>
+
+                <td>
+                    {% if offre.status == 'acceptée' %}
+                        <span class="badge badge-inline bg-success">Acceptée</span>
+                    {% elseif offre.status == 'refusée' %}
+                        <span class="badge badge-inline bg-danger">Refusée</span>
+                    {% else %}
+                        <span class="badge  badge-inline bg-warning text-dark">En attente</span>
+                    {% endif %}
+                </td>
+                <td class="text-right">
+                    <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
+                       href="" title="Voir">
+                        <i class="las la-eye"></i>
+                    </a>
+                   <a href="#" class="btn btn-success btn-icon btn-circle btn-sm"
+       title="Accepter"
+       onclick="changerStatusOffre({{ offre.id }}, 'acceptee')">
+        <i class="las la-check"></i>
+    </a>
+
+    <a href="#" class="btn btn-danger btn-icon btn-circle btn-sm"
+       title="Refuser"
+       onclick="changerStatusOffre({{ offre.id }}, 'refusee')">
+        <i class="las la-times"></i>
+    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="9" class="text-center text-muted">Aucune offre reçue pour l’instant.</td>
+        </tr>
+    {% endif %}
+</tbody>
+
+											</table>
+										</div>
+									</div>
+									<!-- /.aiz-user-panel -->
+								</div>
+								<!-- /.d-flex -->
+							</div>
+							<!-- /.container -->
+						</section>
+					{% endif %}
+				{% endif %}
+			{% endblock %}
+
+			{% block javascript %}
+				{{ parent() }}
+				<script type="text/javascript">
+					$(document).ready(function () {
+$('#tabdemande').DataTable({
+responsive: true,
+autoWidth: false,
+columnDefs: [
+{
+targets: '_all',
+className: 'text-nowrap text-center align-middle'
+}, {
+targets: -1,
+orderable: false
+} // dernière colonne (Action)
+],
+language: {
+url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
+}
+});
+});
+
+
+function changerStatusOffre(id, status) {
+    Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: `Vous allez ${status === 'acceptee' ? 'accepter' : 'refuser'} cette offre`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#25a89d',
+        cancelButtonColor: '#ff6b35',
+        confirmButtonText: 'Oui',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "{{ path('changer_status_offre') }}",
+                type: "POST",
+                data: { id: id, status: status },
+                success: function(response) {
+                    if(response.success){
+                        Swal.fire('Succès', response.message, 'success').then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire('Erreur', response.message, 'error');
+                    }
+                }
+            });
+        }
+    });
+}
+
+				</script>
+			{% endblock %}
+

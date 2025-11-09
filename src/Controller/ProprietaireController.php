@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\DemandeRepository;
+use App\Repository\OffreRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class ProprietaireController extends AbstractController
@@ -206,7 +207,61 @@ public function supprimerDemande(Request $request, EntityManagerInterface $em): 
     return new JsonResponse('done');
 }
 
+#[Route('/proprietaire/mes-offres', name: 'proprietaire_offres')]
+public function mesOffres(DemandeRepository $demandeRepo, OffreRepository $offreRepo): Response
+{
+    $user = $this->getUser();
 
+    // Récupère toutes les demandes de ce propriétaire
+   $demandes = $demandeRepo->findBy(['offrecompte' => $user]);
+
+
+    // Récupère toutes les offres liées à ces demandes
+    $offres = [];
+    foreach ($demandes as $demande) {
+        foreach ($offreRepo->findBy(['demande' => $demande]) as $offre) {
+            $offres[] = $offre;
+        }
+    }
+
+    return $this->render('proprietaire/offrerecu.html.twig', [
+        'offres' => $offres,
+    ]);
+}
+
+#[Route('/offre/changer-status', name: 'changer_status_offre', methods: ['POST'])]
+public function changerStatus(Request $request, EntityManagerInterface $em, OffreRepository $offreRepo): JsonResponse
+{
+    $id = $request->request->get('id');
+    $status = $request->request->get('status'); // 'acceptee' ou 'refusee'
+
+    if(!$id || !$status) {
+        return $this->json(['success' => false, 'message' => 'Paramètres manquants.']);
+    }
+
+    $offre = $offreRepo->find($id);
+
+    if(!$offre) {
+        return $this->json(['success' => false, 'message' => 'Offre non trouvée.']);
+    }
+
+    // Vérifier que l'utilisateur connecté est bien le propriétaire
+    $user = $this->getUser();
+    if($offre->getDemande()->getOffrecompte()->getId() !== $user->getId()) {
+        return $this->json(['success' => false, 'message' => 'Action non autorisée.']);
+    }
+
+    // Modifier le statut
+    if(!in_array($status, ['acceptee', 'refusee'])) {
+        return $this->json(['success' => false, 'message' => 'Statut invalide.']);
+    }
+
+    $offre->setStatus($status); // Assure-toi que ton entité Offre a un champ $status
+    $em->persist($offre);
+    $em->flush();
+
+    return $this->json(['success' => true, 'message' => 'Le statut de l\'offre a été mis à jour.']);
+}
 
 
 

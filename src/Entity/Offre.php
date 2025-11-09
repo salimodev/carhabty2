@@ -43,6 +43,10 @@ private ?\DateTimeImmutable $validiteDebut = null;
 
 #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
 private ?\DateTimeImmutable $validiteFin = null;
+
+#[ORM\Column(length: 20)]
+private ?string $status = 'en_attente';
+
     public function __construct()
     {
         $this->offrePieces = new ArrayCollection();
@@ -168,4 +172,16 @@ private ?\DateTimeImmutable $validiteFin = null;
 
         return $this;
     }
+
+    public function getStatus(): ?string
+{
+    return $this->status;
+}
+
+public function setStatus(?string $status): static
+{
+    $this->status = $status;
+    return $this;
+}
+
 }

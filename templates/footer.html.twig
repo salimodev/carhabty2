@@ -269,7 +269,7 @@
 					<div class="aiz-user-sidenav rounded overflow-hidden  c-scrollbar-light">
 						<div class="px-4 text-center mb-4">
 							<span class="avatar avatar-md mb-3">
-								<img src="{{app.user.photo}}" class="image rounded-circle" onerror="this.onerror=null;this.src='image/avatar-place.png';">
+								<img src="{{app.user.photo}}" class="image rounded-circle" onerror="this.onerror=null;this.src='/image/avatar-place.png';">
 							</span>
 							<h4 class="h5 fw-600">{{app.user.nom}}</h4>
 						</div>
@@ -303,7 +303,7 @@
 											</g>
 										</svg>
 										<span class="aiz-side-nav-text ml-3">Mes demandes</span>
-										<span class="badge badge-inline badge-success">0</span>
+										<span class="badge badge-inline badge-success">{{demandeCount}}</span>
 									</a>
 								</li>
 								<li {% if PageMenu is defined and PageMenu == 'app_prop_offres'%} class="aiz-side-nav-item active" {% else %} class="aiz-side-nav-item" {% endif %}>
@@ -382,7 +382,7 @@
 					<div class="aiz-user-sidenav rounded overflow-hidden  c-scrollbar-light">
 						<div class="px-4 text-center mb-4">
 							<span class="avatar avatar-md mb-3">
-								<img src="{{app.user.photo}}" class="image rounded-circle" onerror="this.onerror=null;this.src='image/avatar-place.png';">
+								<img src="{{app.user.photo}}" class="image rounded-circle" onerror="this.onerror=null;this.src='/image/avatar-place.png';">
 							</span>
 							<h4 class="h5 fw-600">{{app.user.nom}}</h4>
 						</div>

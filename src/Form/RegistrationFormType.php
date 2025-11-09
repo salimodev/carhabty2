@@ -56,10 +56,7 @@ class RegistrationFormType extends AbstractType
            ->add('roles', ChoiceType::class, [
     'choices'  => [
         'Proprietaire'    => 'ROLE_PROPRIETAIRE',
-        'Mecanicien' => 'ROLE_MECANICIEN',
-        'Vendeur Neuf' => 'ROLE_VENDEUR_NEUF',
-        'Vendeur Occasion' => 'ROLE_VENDEUR_OCCASION',
-        'Particulier' => 'ROLE_PARTICULIER'
+        'Vendeur Neuf' => 'ROLE_VENDEUR_NEUF'
     ],
     'multiple' => false,
     'expanded' => false,

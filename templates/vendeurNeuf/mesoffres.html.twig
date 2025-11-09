@@ -260,6 +260,7 @@
 									<th>Observation</th>
 									<th>Date d’envoi</th>
 									<th>Validité</th>
+									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -286,7 +287,20 @@
 												Expirée
 											{% endif %}
 										</td>
+ <td class="text-right">
+     <a href="#" class="btn btn-soft-warning btn-icon btn-circle btn-sm"
+       title="Modifier"
+       onclick="modifierOffre({{ offre.id }})">
+        <i class="las la-edit"></i>
+    </a>
 
+   <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" 
+   title="Supprimer" 
+   onclick="supprimerOffre($(this), {{ offre.id }})">
+    <i class="las la-trash"></i>
+</a>
+
+</td>
 
 									</tr>
 								{% endfor %}
@@ -359,9 +373,53 @@ responsive: true
 });
 });
 
+function supprimerOffre(element, $id) {
+$_data = {
+'id': $id
+},
+Swal.fire({
+title: 'Êtes-vous sûr de vouloir supprimer cette demande ?',
+type: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#25a89d ',
+cancelButtonColor: '#ff6b35',
+confirmButtonText: 'Supprimer',
+cancelButtonText: 'Annuler'
+}).then((result) => {
+if (result.value) {
+$.ajax({
+type: "POST",
+url: "{{ path('retirer_offre') }}",
+data: $_data,
+success: function (response) {
+element.parent().remove();
+Swal.fire({title: "success!", text: "la  marque à été supprimer avec succés!", icon: "success"});
+
+
+location.reload();
+}
+});
+}
+})
+}
 
 
 
 
-</script>{% endblock %}
+</script>
+{% for message in app.flashes('success') %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.AIZ && AIZ.plugins && AIZ.plugins.notify) {
+            AIZ.plugins.notify('success', '{{ message }}');
+        } else {
+            Swal.fire('Succès', '{{ message }}', 'success');
+        }
+    });
+</script>
+{% endfor %}
+
+
+
+{% endblock %}
 

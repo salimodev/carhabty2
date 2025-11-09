@@ -47,12 +47,13 @@
 										<path id="Path_2960" data-name="Path 2960" d="M13.5,28.963h5a.5.5,0,0,1,0,1h-5a.5.5,0,0,1,0-1" transform="translate(20.966 525.5)" fill="#b5b5bf"></path>
 									</g>
 								</svg>
-								<span class="aiz-side-nav-text ml-3">Demande de prix</span>
+								<span class="aiz-side-nav-text ml-3">Mes Demande</span>
+								<span class="badge badge-inline badge-success">{{demandeCount}}</span>
 							</a>
 						</li>
 
 						<li {% if PageMenu is defined and PageMenu == 'app_prop_offres'%} class="aiz-side-nav-item " {% else %} class="aiz-side-nav-item" {% endif %}>
-							<a href="{{path('app_prop_offres')}}" {% if PageMenu is defined and PageMenu == "app_prop_offres"%} class="aiz-side-nav-link " {% else %} class="aiz-side-nav-link" {% endif %}>
+							<a href="{{path('proprietaire_offres')}}" {% if PageMenu is defined and PageMenu == "app_prop_offres"%} class="aiz-side-nav-link " {% else %} class="aiz-side-nav-link" {% endif %}>
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 16 16">
 									<g id="Group_8109" data-name="Group 8109" transform="translate(-27.466 -542.963)">
 										<path id="Path_2953" data-name="Path 2953" d="M14.5,5.963h-4a1.5,1.5,0,0,0,0,3h4a1.5,1.5,0,0,0,0-3m0,2h-4a.5.5,0,0,1,0-1h4a.5.5,0,0,1,0,1" transform="translate(22.966 537)" fill="#b5b5bf"></path>
@@ -65,7 +66,8 @@
 										<path id="Path_2960" data-name="Path 2960" d="M13.5,28.963h5a.5.5,0,0,1,0,1h-5a.5.5,0,0,1,0-1" transform="translate(20.966 525.5)" fill="#b5b5bf"></path>
 									</g>
 								</svg>
-								<span class="aiz-side-nav-text ml-3">Offres proposés </span><span class="badge badge-inline badge-success">0</span>
+								<span class="aiz-side-nav-text ml-3">Offres proposés </span>
+								<span class="badge badge-inline badge-success">0</span>
 							</a>
 						</li>
 						

@@ -50,24 +50,29 @@ public function index(Request $request, DemandeRepository $demandeRepository): R
 
 
      #[Route(path: '/footer', name: 'app_footer')]
-     public function footer(Request $request): Response
+     public function footer(Request $request,EntityManagerInterface $em): Response
     {
-    
-        return $this->render('/footer.html.twig');
+      $demandeCount = $em->getRepository(Demande::class)->countByUser($this->getUser());   
+        return $this->render('/footer.html.twig', [
+        'demandeCount' => $demandeCount,
+    ]);
     }
 
       #[Route(path: '/header', name: 'app_header')]
     public function header(Request $request): Response
     {
-            
+        
         return $this->render('/header.html.twig');
+     
     }
 
       #[Route(path: '/sideheader', name: 'sideheader')]
-    public function sideheader(Request $request): Response
+    public function sideheader(Request $request,EntityManagerInterface $em): Response
     {
-           
-        return $this->render('/sideHeader.html.twig');
+           $demandeCount = $em->getRepository(Demande::class)->countByUser($this->getUser());     
+        return $this->render('/sideHeader.html.twig', [
+        'demandeCount' => $demandeCount,
+    ]);
     }
 
     #[Route('/contact', name: 'app_contact')]

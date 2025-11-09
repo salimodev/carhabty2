@@ -314,7 +314,7 @@ if ($validite) {
 
     $this->addFlash('success', 'Offre proposée avec succès !');
 
-    return $this->redirectToRoute('detail_demande_vendeur', ['id' => $demande->getId()]);
+    return $this->redirectToRoute('vendeur_offres');
 }
 
 
@@ -362,5 +362,23 @@ foreach ($offres as $offre) {
             'offres' => $offres,
         ]);
     }
+
+  #[Route('/offre/retirer', name: 'retirer_offre', methods: ['POST'])]
+public function retirerOffre(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $id = $request->request->get('id');
+    $offre = $em->getRepository(Offre::class)->find($id);
+
+    if (!$offre) {
+        return new JsonResponse(['success' => false, 'message' => 'Offre introuvable !']);
+    }
+
+    $em->remove($offre);
+    $em->flush();
+
+    return new JsonResponse(['success' => true]);
+}
+
+
 
 }

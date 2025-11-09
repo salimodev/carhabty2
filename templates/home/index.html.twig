@@ -682,8 +682,9 @@
 				{% endif %}
 			</p>
 
+
 		{% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
-{% set estVendeur = app.user and 'ROLE_VENDEUR' in app.user.roles %}
+{% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
 
 <a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" 
    class="btn btn-register btn-circle w-100 text-center"

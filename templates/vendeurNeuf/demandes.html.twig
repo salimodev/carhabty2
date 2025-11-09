@@ -456,9 +456,9 @@ responsive: true
     var diff = Math.floor((now - past) / 1000); // en secondes
 
     if (diff < 60) return 'à l\'instant';
-    if (diff < 3600) return Math.floor(diff / 60) + ' minute(s) ago';
-    if (diff < 86400) return Math.floor(diff / 3600) + ' heure(s) ago';
-    if (diff < 2592000) return Math.floor(diff / 86400) + ' jour(s) ago';
+    if (diff < 3600) return Math.floor(diff / 60) + 'il y a minute(s) ';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'il y a heure(s) ';
+    if (diff < 2592000) return Math.floor(diff / 86400) + 'il y a jour(s) ';
     return past.toLocaleDateString(); // ou "d/m/Y" selon besoin
 } 
 

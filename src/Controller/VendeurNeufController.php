@@ -446,7 +446,7 @@ public function editOffre(
             }
         }
 
-        // Mise à jour des OffrePiece existantes
+        // Mise à jour des OffrePiece existantes ou création si nécessaire
         foreach ($pieces as $piece) {
             $data = $piecesData[$piece->getId()] ?? null;
             if (!$data) {
@@ -462,12 +462,19 @@ public function editOffre(
                 $offre->addOffrePiece($offrePiece);
             }
 
-            $offrePiece->setPrix1($data['prix1'] ?? null);
-            $offrePiece->setMarque1($data['marque1'] ?? null);
-            $offrePiece->setPrix2($data['prix2'] ?? null);
-            $offrePiece->setMarque2($data['marque2'] ?? null);
-            $offrePiece->setPrix3($data['prix3'] ?? null);
-            $offrePiece->setMarque3($data['marque3'] ?? null);
+            // Gestion des prix avec valeur par défaut 0
+            foreach (['prix1','prix2','prix3'] as $prix) {
+                $setter = 'set' . ucfirst($prix);
+                $value = isset($data[$prix]) && $data[$prix] !== '' ? $data[$prix] : 0;
+                $offrePiece->$setter($value);
+            }
+
+            // Gestion des marques
+            foreach (['marque1','marque2','marque3'] as $marque) {
+                $setter = 'set' . ucfirst($marque);
+                $value = $data[$marque] ?? null;
+                $offrePiece->$setter($value);
+            }
         }
 
         $em->flush();
@@ -481,6 +488,7 @@ public function editOffre(
         'demande' => $offre->getDemande(),
     ]);
 }
+
 
 #[Route('/vendeur/offre/{id}', name: 'offre_show')]
 public function show(Offre $offre): Response

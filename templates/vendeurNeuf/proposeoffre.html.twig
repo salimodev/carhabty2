@@ -123,36 +123,57 @@
     endDate: moment().add(7, 'days')   // date de fin par défaut
 });
 
-            // Validation du formulaire
-            const form = document.getElementById('formOffre');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    let valid = false;
-                    const inputSuffixes = ['1','2','3'];
+            // Validation du formulaire avant envoi
+    const form = document.getElementById('formOffre');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let formulaireValide = true; // global
+            const pieces = document.querySelectorAll('[name^="pieces["]');
 
-                    {% for piece in demande.pieces %}
-                        inputSuffixes.forEach(suffix => {
-                            if (!valid) {
-                                let prixInput = document.querySelector(`input[name="pieces[{{ piece.id }}][prix${suffix}]"]`);
-                                let marqueInput = document.querySelector(`input[name="pieces[{{ piece.id }}][marque${suffix}]"]`);
-                                if (prixInput && marqueInput && prixInput.value.trim() && marqueInput.value.trim()) {
-                                    valid = true;
-                                }
-                            }
-                        });
-                    {% endfor %}
+            // On récupère toutes les pièces par ID unique
+            let pieceIds = new Set();
+            pieces.forEach(input => {
+                const match = input.name.match(/pieces\[(\d+)\]/);
+                if (match) pieceIds.add(match[1]);
+            });
 
-                    if (!valid) {
-                        e.preventDefault();
-                        if (window.AIZ && AIZ.plugins && AIZ.plugins.notify) {
-                            AIZ.plugins.notify('danger', 'Vous devez remplir au moins une combinaison prix + marque pour au moins une pièce.');
-                        } else {
-                            alert('Vous devez remplir au moins une combinaison prix + marque pour au moins une pièce.');
-                        }
+            // Pour chaque pièce, on vérifie les 3 combinaisons
+            pieceIds.forEach(pieceId => {
+                let combinaisonValide = false;
+
+                for (let i = 1; i <= 3; i++) {
+                    let prix = document.querySelector(`input[name="pieces[${pieceId}][prix${i}]"]`);
+                    let marque = document.querySelector(`input[name="pieces[${pieceId}][marque${i}]"]`);
+
+                    if (prix && marque && prix.value.trim() !== '' && marque.value.trim() !== '') {
+                        combinaisonValide = true;
+                        break;
                     }
-                });
-            }
+                }
 
+                if (!combinaisonValide) {
+                    formulaireValide = false;
+
+                    // Ajoute un effet visuel sur la carte correspondante
+                    const card = document.querySelector(`input[name="pieces[${pieceId}][prix1]"]`)
+                        ?.closest('.card');
+                    if (card) {
+                        card.style.boxShadow = '0 0 10px 2px rgba(255,0,0,0.6)';
+                        setTimeout(() => card.style.boxShadow = '', 2000);
+                    }
+                }
+            });
+
+            if (!formulaireValide) {
+                e.preventDefault();
+                if (window.AIZ && AIZ.plugins && AIZ.plugins.notify) {
+                    AIZ.plugins.notify('danger', 'Chaque pièce doit avoir au moins une combinaison (prix + marque) remplie.');
+                } else {
+                    alert('Chaque pièce doit avoir au moins une combinaison (prix + marque) remplie.');
+                }
+            }
         });
+    }
+});
     </script>
 {% endblock %}

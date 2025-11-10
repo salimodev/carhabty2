@@ -271,36 +271,35 @@ public function createOffre(Request $request, Demande $demande, EntityManagerInt
     $offre = new Offre();
     $offre->setDemande($demande);
     $offre->setUser($user);
-    $offre->setNumeroOffre('OFF-'.$demande->getId().'-'.time());
+    $offre->setNumeroOffre('OFF-' . $demande->getId() . '-' . time());
     $offre->setObservation($request->request->get('observation'));
 
- // --- Gestion validité daterangepicker ---
-$validite = $request->request->get('validite'); // ex: "08/11/2025 - 15/11/2025"
-if ($validite) {
-    $dates = explode(' - ', $validite);
-    if (count($dates) === 2) {
-        try {
-            // On convertit correctement avec le format d/m/Y
-            $debut = \DateTimeImmutable::createFromFormat('d/m/Y H:i:s', trim($dates[0]) . ' 00:00:01');
-            $fin   = \DateTimeImmutable::createFromFormat('d/m/Y H:i:s', trim($dates[1]) . ' 23:59:59');
+    // --- Gestion validité ---
+    $validite = $request->request->get('validite');
+    if ($validite) {
+        $dates = explode(' - ', $validite);
+        if (count($dates) === 2) {
+            try {
+                $debut = \DateTimeImmutable::createFromFormat('d/m/Y H:i:s', trim($dates[0]) . ' 00:00:01');
+                $fin = \DateTimeImmutable::createFromFormat('d/m/Y H:i:s', trim($dates[1]) . ' 23:59:59');
 
-            if (!$debut || !$fin) {
-                throw new \Exception('Impossible de créer les dates');
+                if (!$debut || !$fin) {
+                    throw new \Exception('Erreur de format de date');
+                }
+
+                $offre->setValiditeDebut($debut);
+                $offre->setValiditeFin($fin);
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Format de date invalide pour la validité.');
             }
-
-            $offre->setValiditeDebut($debut);
-            $offre->setValiditeFin($fin);
-        } catch (\Exception $e) {
-            $this->addFlash('error', 'Format de date invalide pour la validité.');
         }
     }
-}
 
-
-
-    // --- Récupérer les pieces ---
+    // --- Récupération des pièces ---
     $postData = $request->request->all();
     $piecesData = $postData['pieces'] ?? [];
+
+    $offreValide = true; // contrôle global
 
     foreach ($demande->getPieces() as $piece) {
         if (!isset($piecesData[$piece->getId()])) {
@@ -308,27 +307,47 @@ if ($validite) {
         }
 
         $data = $piecesData[$piece->getId()];
-
         $offrePiece = new OffrePiece();
         $offrePiece->setPiece($piece);
         $offrePiece->setOffre($offre);
 
-        $offrePiece->setPrix1($data['prix1'] ?? null);
-        $offrePiece->setMarque1($data['marque1'] ?? null);
-        $offrePiece->setPrix2($data['prix2'] ?? null);
-        $offrePiece->setMarque2($data['marque2'] ?? null);
-        $offrePiece->setPrix3($data['prix3'] ?? null);
-        $offrePiece->setMarque3($data['marque3'] ?? null);
+        // --- Vérifie au moins une combinaison (prixX + marqueX) ---
+        $combinaisonValide = false;
+
+        for ($i = 1; $i <= 3; $i++) {
+            $prix = trim($data["prix$i"] ?? '');
+            $marque = trim($data["marque$i"] ?? '');
+
+            // S’il y a une paire complète (prix + marque)
+            if ($prix !== '' && $marque !== '') {
+                $combinaisonValide = true;
+            }
+
+            // On enregistre les valeurs, même si vides
+            $setPrix = 'setPrix' . $i;
+            $setMarque = 'setMarque' . $i;
+            $offrePiece->$setPrix($prix !== '' ? $prix : null);
+            $offrePiece->$setMarque($marque !== '' ? $marque : null);
+        }
+
+        if (!$combinaisonValide) {
+            $offreValide = false;
+        }
 
         $em->persist($offrePiece);
         $offre->addOffrePiece($offrePiece);
+    }
+
+    // 🔴 Si une pièce n’a aucune combinaison valide
+    if (!$offreValide) {
+        $this->addFlash('error', 'Chaque pièce doit avoir au moins une combinaison (prix + marque) remplie.');
+        return $this->redirectToRoute('offre_create', ['id' => $demande->getId()]);
     }
 
     $em->persist($offre);
     $em->flush();
 
     $this->addFlash('success', 'Offre proposée avec succès !');
-
     return $this->redirectToRoute('vendeur_offres');
 }
 

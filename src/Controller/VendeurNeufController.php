@@ -414,5 +414,80 @@ public function retirerOffre(Request $request, EntityManagerInterface $em): Json
 }
 
 
+// src/Controller/VendeurNeufController.php
+
+#[Route('/offre/{id}/modifier', name: 'offre_edit', methods: ['GET', 'POST'])]
+public function editOffre(
+    Offre $offre,
+    Request $request,
+    EntityManagerInterface $em
+): Response {
+    // Récupérer les pièces de la demande associée
+    $pieces = $offre->getDemande()->getPieces();
+
+    if ($request->isMethod('POST')) {
+        $postData = $request->request->all();
+        $piecesData = $postData['pieces'] ?? [];
+
+        // Mettre à jour l'observation
+        $offre->setObservation($postData['observation'] ?? '');
+
+        // Gestion de la validité
+        $validite = $postData['validite'] ?? null;
+        if ($validite) {
+            $dates = explode(' - ', $validite);
+            if (count($dates) === 2) {
+                $debut = \DateTimeImmutable::createFromFormat('d/m/Y H:i:s', trim($dates[0]) . ' 00:00:01');
+                $fin   = \DateTimeImmutable::createFromFormat('d/m/Y H:i:s', trim($dates[1]) . ' 23:59:59');
+                if ($debut && $fin) {
+                    $offre->setValiditeDebut($debut);
+                    $offre->setValiditeFin($fin);
+                }
+            }
+        }
+
+        // Mise à jour des OffrePiece existantes
+        foreach ($pieces as $piece) {
+            $data = $piecesData[$piece->getId()] ?? null;
+            if (!$data) {
+                continue;
+            }
+
+            $offrePiece = $offre->getOffrePieceByPiece($piece->getId());
+            if (!$offrePiece) {
+                $offrePiece = new OffrePiece();
+                $offrePiece->setPiece($piece);
+                $offrePiece->setOffre($offre);
+                $em->persist($offrePiece);
+                $offre->addOffrePiece($offrePiece);
+            }
+
+            $offrePiece->setPrix1($data['prix1'] ?? null);
+            $offrePiece->setMarque1($data['marque1'] ?? null);
+            $offrePiece->setPrix2($data['prix2'] ?? null);
+            $offrePiece->setMarque2($data['marque2'] ?? null);
+            $offrePiece->setPrix3($data['prix3'] ?? null);
+            $offrePiece->setMarque3($data['marque3'] ?? null);
+        }
+
+        $em->flush();
+        $this->addFlash('success', 'Offre mise à jour avec succès !');
+
+        return $this->redirectToRoute('vendeur_offres');
+    }
+
+    return $this->render('vendeurNeuf/modifoffre.html.twig', [
+        'offre' => $offre,
+        'demande' => $offre->getDemande(),
+    ]);
+}
+
+#[Route('/vendeur/offre/{id}', name: 'offre_show')]
+public function show(Offre $offre): Response
+{
+    return $this->render('vendeurNeuf/voiroffre.html.twig', [
+        'offre' => $offre,
+    ]);
+}
 
 }

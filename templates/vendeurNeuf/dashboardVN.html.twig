@@ -194,6 +194,7 @@
 									<th>#</th>
 									<th>Numéro</th>
 									<th>Demande</th>
+									<th>Demandeur</th>
 									<th>Observation</th>
 									<th>Date d’envoi</th>
 									<th>Validité</th>
@@ -211,6 +212,15 @@
 												{{ offre.demande.code ?? '—' }}
 											</a>
 										</td>
+										 {# ✅ Affichage du nom ou email du demandeur #}
+          <td>
+    {% if offre.demande.offrecompte %}
+        {{ offre.demande.offrecompte.nom ?? offre.demande.offrecompte.email }}
+    {% else %}
+        <span class="text-muted"> {{ offre.demande.offreemail }}</span>
+    {% endif %}
+</td>
+
 										<td>
 											{{ offre.observation|length > 40 
                                             ? offre.observation|slice(0, 40) ~ '...' 
@@ -234,11 +244,11 @@
         <span class="badge badge-inline badge-warning text-dark">En attente</span>
     {% endif %}
 </td>
-                                     <td class="text-right">
+                                    <td class="text-right">
     {% if offre.status == 'en_attente' %}
-        <a href="#" class="btn btn-soft-warning btn-icon btn-circle btn-sm"
-           title="Modifier"
-           onclick="modifierOffre({{ offre.id }})">
+        <a href="{{ path('offre_edit', {'id': offre.id}) }}" 
+           class="btn btn-soft-warning btn-icon btn-circle btn-sm" 
+           title="Modifier">
             <i class="las la-edit"></i>
         </a>
         <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm"
@@ -246,7 +256,16 @@
            onclick="supprimerOffre($(this), {{ offre.id }})">
             <i class="las la-trash"></i>
         </a>
-    {% elseif offre.status == 'acceptee' %}
+    {% endif %}
+
+    {# Nouveau bouton "Voir l'offre" disponible pour tous les statuts #}
+    <a href="{{ path('offre_show', {'id': offre.id}) }}" 
+       class="btn btn-soft-info btn-icon btn-circle btn-sm" 
+       title="Voir l'offre">
+        <i class="las la-eye"></i>
+    </a>
+
+    {% if offre.status == 'acceptee' %}
         <a href="#" class="btn btn-soft-success btn-icon btn-circle btn-sm"
            title="Offre acceptée" disabled>
             <i class="las la-check"></i>

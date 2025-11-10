@@ -184,4 +184,17 @@ public function setStatus(?string $status): static
     return $this;
 }
 
+// src/Entity/Offre.php
+
+public function getOffrePieceByPiece($piece): ?OffrePiece
+{
+    foreach ($this->offrePieces as $offrePiece) {
+        if ($offrePiece->getPiece() === $piece) {
+            return $offrePiece;
+        }
+    }
+    return null;
+}
+
+
 }

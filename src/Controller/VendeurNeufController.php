@@ -8,6 +8,7 @@ use App\Service\UsersService;
 use App\Entity\OffrePiece;
 use App\Entity\Pieces;
 use App\Entity\Offre;
+use App\Entity\Notification;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -191,6 +192,7 @@ public function rechercheDemandeVendeurNeuf(Request $request, EntityManagerInter
             'modele'     => $d->getModele(),
             'zone'       => $d->getZone(),
             'date'       => $d->getDatecreate()->format('Y-m-d H:i'),
+            'offrecompte' => $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
             'pieces'     => $pieces,
             'dejaPropose'=> $dejaPropose, // ajout de la propriété pour le JS
         ];
@@ -356,6 +358,17 @@ public function createOffre(
 
     $em->persist($offre);
     $em->flush();
+
+    $proprietaire = $demande->getOffrecompte() ?? null;
+   
+if ($proprietaire) {
+    $notif = new Notification();
+    $notif->setUser($proprietaire);
+    $notif->setMessage("Vous avez reçu une nouvelle offre N° {$offre->getNumeroOffre()} pour la demande N° {$demande->getId()}");
+    $notif->setCreatedAt(new \DateTimeImmutable()); 
+    $em->persist($notif);
+    $em->flush();
+}
 
    $proprietaireEmail = null;
 

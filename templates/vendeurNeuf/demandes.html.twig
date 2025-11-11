@@ -531,12 +531,9 @@ piecesTitle || (d.marque + " " + d.modele)
                 <div class="request-badge">Neuf</div>
             </div>
             <div class="request-meta">
-                <span><i class="fas fa-map-marker-alt"></i> ${
-d.zone
-}</span>
-                <span><i class="far fa-clock"></i> ${
-timeAgo(d.date)
-}</span>
+                <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>
+                <span><i class="fas fa-user"></i> ${d.offrecompte}</span>
+                <span><i class="far fa-clock"></i> ${timeAgo(d.date)}</span>
             </div>
             <a href="${lienDetail}" class="text-decoration-none">
                 <div class="request-image">

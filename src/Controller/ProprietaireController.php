@@ -7,6 +7,7 @@ use App\Entity\Demande;
 use App\Entity\Users;
 use App\Service\UsersService;
 use App\Entity\Offre;
+use App\Entity\Notification;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -289,8 +290,20 @@ public function changerStatus(Request $request, EntityManagerInterface $em, Offr
     $em->persist($offre);
     $em->flush();
 
-    return $this->json(['success' => true, 'message' => 'Le statut de l\'offre a été mis à jour.']);
+    // --- Création de la notification pour le vendeur ---
+    $vendeur = $offre->getUser(); // le vendeur qui a proposé l'offre
+    if ($vendeur) {
+        $notif = new Notification();
+        $notif->setUser($vendeur);
+        $notif->setMessage("Votre offre N° {$offre->getNumeroOffre()} a été " . ($status === 'acceptee' ? 'acceptée' : 'refusée') . " par le demandeur.");
+        $notif->setCreatedAt(new \DateTimeImmutable());
+        $em->persist($notif);
+        $em->flush();
+    }
+
+    return $this->json(['success' => true, 'message' => 'Le statut de l\'offre a été mis à jour et le vendeur notifié.']);
 }
+
 
 #[Route('/proprietaire/offre/{id}', name: 'offre_show_prop', methods: ['GET'])]
 public function showOffre(

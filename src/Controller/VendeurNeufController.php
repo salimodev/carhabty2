@@ -571,4 +571,10 @@ public function show(Offre $offre): Response
     ]);
 }
 
+#[Route('/inviter/vendeur/neuf', name: 'inviter_vendeurNeuf')]
+public function inviter(): Response
+{
+    return $this->render('vendeurNeuf/inviter.html.twig');
+}
+
 }

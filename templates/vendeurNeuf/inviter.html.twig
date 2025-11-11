@@ -1,0 +1,123 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Carhabty - Vendeur Neuf{% endblock %}
+
+{% block LinksCss %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
+    {# AOS CSS pour animations #}
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        .inviter-container {
+            padding: 3rem 1rem;
+            text-align: center;
+            background: #f0f8ff;
+            border-radius: 15px;
+            max-width: 900px;
+            margin: 2rem auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .inviter-container h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 2rem;
+        }
+
+        .inviter-video {
+            width: 100%;
+            max-width: 720px;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .inviter-text {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .inviter-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-registerveninvit {
+           padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            background: linear-gradient(90deg, #25a89d, #1c7c78);
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .btn-registerveninvit:hover {
+              background: linear-gradient(90deg, #1c7c78, #25a89d);
+            color: #fff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .inviter-container {
+                padding: 2rem 1rem;
+            }
+
+            .inviter-container h1 {
+                font-size: 1.8rem;
+            }
+
+            .inviter-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block Content %}
+    {% block loader %}
+        {{ parent() }}
+    {% endblock %}
+
+    <section class="inviter-container">
+        <h1 data-aos="fade-down" data-aos-duration="1000">Bienvenue, Vendeur Neuf !</h1>
+
+        <video class="inviter-video" controls data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+            <source src="{{ asset('videos/descriptif_vendeur_neuf.mp4') }}" type="video/mp4">
+            Votre navigateur ne supporte pas la lecture de vidéos.
+        </video>
+
+        <div class="inviter-text" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+            <p>
+                En tant que vendeur neuf, vous pouvez proposer vos offres sur les demandes des propriétaires
+                et améliorer vos chances de conclure des ventes.
+            </p>
+            <p>
+                Notre plateforme vous permet de suivre vos offres, recevoir des notifications instantanées,
+                et répondre rapidement aux demandes pour maximiser votre visibilité.
+            </p>
+            <p>
+                Cliquez sur le bouton ci-dessous pour créer un compte vendeur et commencer à publier vos offres !
+            </p>
+
+            <a href="{{path('app_register')}}" class="btn btn-registerveninvit">Créer un compte</a>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {# AOS JS #}
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 100
+        });
+    </script>
+{% endblock %}

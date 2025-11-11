@@ -346,5 +346,11 @@ public function refuser(Offre $offre, EntityManagerInterface $em): Response
     return new Response('Offre refusée avec succès !');
 }
 
+#[Route('/inviter/proprietaire', name: 'inviter_proprietaire')]
+public function inviter(): Response
+{
+    return $this->render('proprietaire/inviter.html.twig');
+}
+
 
 }

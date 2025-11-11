@@ -47,6 +47,10 @@ private ?\DateTimeImmutable $validiteFin = null;
 #[ORM\Column(length: 20)]
 private ?string $status = 'en_attente';
 
+ #[ORM\Column(type: "string", length: 64, nullable: true)]
+    private ?string $token = null;
+
+
     public function __construct()
     {
         $this->offrePieces = new ArrayCollection();
@@ -184,7 +188,6 @@ public function setStatus(?string $status): static
     return $this;
 }
 
-// src/Entity/Offre.php
 
 public function getOffrePieceByPiece($piece): ?OffrePiece
 {
@@ -195,6 +198,18 @@ public function getOffrePieceByPiece($piece): ?OffrePiece
     }
     return null;
 }
+
+public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+        return $this;
+    }
+
 
 
 }

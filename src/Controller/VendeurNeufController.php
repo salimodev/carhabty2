@@ -20,6 +20,9 @@ use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\OffreRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class VendeurNeufController extends AbstractController
 {
@@ -264,10 +267,17 @@ public function profile(
     }
 
 #[Route('/demande/{id}/proposer-offre', name: 'offre_create', methods: ['POST'])]
-public function createOffre(Request $request, Demande $demande, EntityManagerInterface $em): Response
+public function createOffre(
+    Request $request,
+    Demande $demande,
+    EntityManagerInterface $em,
+    MailerInterface $mailer,
+    UrlGeneratorInterface $urlGenerator
+): Response
 {
     $user = $this->getUser();
 
+    // --- Création de l'offre ---
     $offre = new Offre();
     $offre->setDemande($demande);
     $offre->setUser($user);
@@ -281,7 +291,7 @@ public function createOffre(Request $request, Demande $demande, EntityManagerInt
         if (count($dates) === 2) {
             try {
                 $debut = \DateTimeImmutable::createFromFormat('d/m/Y H:i:s', trim($dates[0]) . ' 00:00:01');
-                $fin = \DateTimeImmutable::createFromFormat('d/m/Y H:i:s', trim($dates[1]) . ' 23:59:59');
+                $fin   = \DateTimeImmutable::createFromFormat('d/m/Y H:i:s', trim($dates[1]) . ' 23:59:59');
 
                 if (!$debut || !$fin) {
                     throw new \Exception('Erreur de format de date');
@@ -299,32 +309,26 @@ public function createOffre(Request $request, Demande $demande, EntityManagerInt
     $postData = $request->request->all();
     $piecesData = $postData['pieces'] ?? [];
 
-    $offreValide = true; // contrôle global
+    $offreValide = true;
 
     foreach ($demande->getPieces() as $piece) {
-        if (!isset($piecesData[$piece->getId()])) {
-            continue;
-        }
+        if (!isset($piecesData[$piece->getId()])) continue;
 
         $data = $piecesData[$piece->getId()];
         $offrePiece = new OffrePiece();
         $offrePiece->setPiece($piece);
         $offrePiece->setOffre($offre);
 
-        // --- Vérifie au moins une combinaison (prixX + marqueX) ---
         $combinaisonValide = false;
-
         for ($i = 1; $i <= 3; $i++) {
-            $prix = trim($data["prix$i"] ?? '');
+            $prix   = trim($data["prix$i"] ?? '');
             $marque = trim($data["marque$i"] ?? '');
 
-            // S’il y a une paire complète (prix + marque)
             if ($prix !== '' && $marque !== '') {
                 $combinaisonValide = true;
             }
 
-            // On enregistre les valeurs, même si vides
-            $setPrix = 'setPrix' . $i;
+            $setPrix   = 'setPrix' . $i;
             $setMarque = 'setMarque' . $i;
             $offrePiece->$setPrix($prix !== '' ? $prix : null);
             $offrePiece->$setMarque($marque !== '' ? $marque : null);
@@ -338,16 +342,69 @@ public function createOffre(Request $request, Demande $demande, EntityManagerInt
         $offre->addOffrePiece($offrePiece);
     }
 
-    // 🔴 Si une pièce n’a aucune combinaison valide
     if (!$offreValide) {
         $this->addFlash('error', 'Chaque pièce doit avoir au moins une combinaison (prix + marque) remplie.');
         return $this->redirectToRoute('offre_create', ['id' => $demande->getId()]);
     }
 
+    // --- Génération d'un token sécurisé pour l'email ---
+    $token = bin2hex(random_bytes(16));
+    $offre->setToken($token);
+
     $em->persist($offre);
     $em->flush();
 
-    $this->addFlash('success', 'Offre proposée avec succès !');
+   $proprietaireEmail = null;
+
+if ($demande->getOffrecompte() && $demande->getOffrecompte()->getEmail()) {
+    $proprietaireEmail = $demande->getOffrecompte()->getEmail();
+} else {
+    $proprietaireEmail = $demande->getOffreEmail(); // fallback si pas de compte
+}
+    if ($proprietaireEmail) {
+       // Génération des liens Accepter / Refuser
+$urlAccepter = $this->generateUrl('offre_accepter', ['id' => $offre->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+$urlRefuser   = $this->generateUrl('offre_refuser', ['id' => $offre->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+
+// Construction du HTML pour l’email
+$htmlContent = "<h2>Vous avez reçu une nouvelle offre N° {$offre->getNumeroOffre()}</h2>
+<p><strong>Observation :</strong> {$offre->getObservation()}</p>
+<p><strong>Date de création :</strong> {$offre->getCreatedAt()->format('d/m/Y H:i')}</p>
+<p><strong>Validité :</strong> {$offre->getValiditeDebut()->format('d/m/Y')} - {$offre->getValiditeFin()->format('d/m/Y')}</p>
+<h3>Pièces incluses :</h3>
+<ul>";
+
+foreach ($offre->getOffrePieces() as $op) {
+    $htmlContent .= "<li>
+        <strong>{$op->getPiece()->getDesignation()}</strong><br>";
+    for ($i = 1; $i <= 3; $i++) {
+        $prix = $op->{'getPrix'.$i}();
+        $marque = $op->{'getMarque'.$i}();
+        if ($prix && $marque) {
+            $htmlContent .= "Qualité $i : Marque {$marque}, Prix {$prix} DT<br>";
+        }
+    }
+    $htmlContent .= "</li>";
+}
+
+$htmlContent .= "</ul>
+<p>
+    <a href='{$urlAccepter}' style='background-color:green;color:white;padding:10px 20px;border-radius:5px;text-decoration:none;'>Accepter</a>
+    <a href='{$urlRefuser}' style='background-color:red;color:white;padding:10px 20px;border-radius:5px;text-decoration:none;'>Refuser</a>
+</p>";
+
+// Envoi du mail
+$email = (new Email())
+    ->from('no-reply@tonsite.com')
+    ->to($proprietaireEmail)
+    ->subject('Nouvelle offre reçue')
+    ->html($htmlContent);
+
+$mailer->send($email);
+
+    }
+
+    $this->addFlash('success', 'Offre proposée et email envoyé au propriétaire !');
     return $this->redirectToRoute('vendeur_offres');
 }
 

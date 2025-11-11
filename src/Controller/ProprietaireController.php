@@ -306,5 +306,32 @@ public function showOffre(
     ]);
 }
 
+#[Route('/offre/{id}/accepter', name: 'offre_accepter')]
+public function accepter(Offre $offre, EntityManagerInterface $em): Response
+{
+    // Changer le statut de l'offre
+    $offre->setStatus('acceptee');
+
+    // Changer le statut de la demande associée
+    $demande = $offre->getDemande();
+    if ($demande) {
+        $demande->setStatut('fermer'); // Assure-toi que la propriété status existe dans Demande
+    }
+
+    $em->flush();
+
+    return new Response('Offre acceptée et demande fermée avec succès !');
+}
+
+
+#[Route('/offre/{id}/refuser', name: 'offre_refuser')]
+public function refuser(Offre $offre, EntityManagerInterface $em): Response
+{
+    $offre->setStatus('refusee');
+    $em->flush();
+
+    return new Response('Offre refusée avec succès !');
+}
+
 
 }

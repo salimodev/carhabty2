@@ -231,7 +231,7 @@ $_data = {
 'id': $id
 },
 Swal.fire({
-title: 'Êtes-vous sûr de vouloir supprimer cette demande ?',
+title: 'Êtes-vous sûr de vouloir supprimer cette offre ?',
 type: 'warning',
 showCancelButton: true,
 confirmButtonColor: '#25a89d ',
@@ -246,7 +246,7 @@ url: "{{ path('retirer_offre') }}",
 data: $_data,
 success: function (response) {
 element.parent().remove();
-Swal.fire({title: "success!", text: "la  marque à été supprimer avec succés!", icon: "success"});
+Swal.fire({title: "success!", text: "l'offre à été supprimer avec succés!", icon: "success"});
 
 
 location.reload();

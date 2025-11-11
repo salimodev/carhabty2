@@ -1,18 +1,54 @@
 {% extends 'vendeurNeuf/layoutVN.html.twig' %}
 {% block Head %}
-	{{ parent() }}
-
-	{% block LinksCss %}
-		{{ parent() }}
-		<link rel="stylesheet" href="{{ asset ('css/carousel.css') }}">
-		<link rel="stylesheet" href="{{ asset ('css/carouselle.css') }}">
-		<link rel="stylesheet" href="{{ asset ('css/fontawesome.css') }}">
+    {{ parent() }}
+    {% block LinksCss %}
+        {{ parent() }}
+        <link rel="stylesheet" href="{{ asset ('css/carousel.css') }}">
+        <link rel="stylesheet" href="{{ asset ('css/carouselle.css') }}">
+        <link rel="stylesheet" href="{{ asset ('css/fontawesome.css') }}">
         <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
-       
 
-	{% endblock %}
+        <style>
+            /* Mobile responsive */
+            @media (max-width: 768px) {
+                body, html {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    overflow-x: hidden !important;
+                }
 
+                .container-fluid,
+                .card,
+                .card-body,
+                .row {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                    margin-left: 0 !important;
+                    margin-right: 0 !important;
+                }
+
+                .table-responsive {
+                    overflow-x: auto !important; /* scroll horizontal si trop large */
+                }
+
+                table th, table td {
+                    font-size: 0.85rem !important; /* réduire taille texte */
+                    white-space: nowrap; /* éviter le wrapping des colonnes */
+                }
+
+                .btn-icon {
+                    margin: 2px 2px !important;
+                }
+
+                .col-12 {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }
+            }
+        </style>
+    {% endblock %}
 {% endblock %}
+
 
 {% block title %}mes offres
 {% endblock %}

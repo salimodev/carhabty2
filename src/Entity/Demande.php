@@ -30,8 +30,9 @@ class Demande
     #[ORM\Column(length: 255)]
     private ?string $etatmoteur = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $photocartegrise = null;
+   #[ORM\Column(length: 255, nullable: true)]
+private ?string $photocartegrise = null;
+
 
     /**
      * @var Collection<int, Pieces>

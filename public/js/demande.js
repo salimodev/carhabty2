@@ -66,9 +66,6 @@ if ($('#Origine').is(':checked')){
  }else if (chassis === "" ){
 	AIZ.plugins.notify('danger', "Merci de remplire tous le champ n° chassis");
 	return;
-   }else if (NewPhotos2 === ""){
-	AIZ.plugins.notify('danger', "Merci d'importer une photo pour la catre grise");
-	return;
    }else if (carbu === ""){
 		AIZ.plugins.notify('danger', "Merci de choisi type du carburant");
 		return;
@@ -96,6 +93,7 @@ if ($('#Origine').is(':checked')){
     // --- Remonter la page ---
     $('html, body').animate({ scrollTop: 0 }, 'slow');
 }
+
   
 
 	$(".switch1:not([checked])").on('change', function () {
@@ -401,7 +399,11 @@ html += "<tbody>";
 html += "<tr><td class='fw-600'>N° Châssis :</td><td>" + response.chassis + "</td></tr>";
 html += "<tr><td class='fw-600'>Énergie / Carburant :</td><td>" + response.energie + "</td></tr>";
 html += "<tr><td class='fw-600'>État du moteur :</td><td>" + response.etatmoteur + "</td></tr>";
-html += "<tr><td class='fw-600'>Photo carte grise :</td><td><img src='" + response.grise + "' alt='carte grise' style='width:222px;height:135px;border-radius:6px;'></td></tr>";
+if (response.grise) {
+    html += "<tr><td class='fw-600'>Photo carte grise :</td><td><img src='" + response.grise + "' alt='carte grise' style='width:222px;height:135px;border-radius:6px;object-fit:cover;'></td></tr>";
+} else {
+    html += "<tr><td class='fw-600'>Photo carte grise :</td><td>-</td></tr>";
+}
 html += "</tbody>";
 html += "</table>";
 html += "</div>";

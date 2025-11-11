@@ -265,44 +265,50 @@
 
 												<br>
 
-												<div class="row">
-													<div class="col-md-2">
-														<h6>
-															Photo de la carte grise (1ʳᵉ face)<span class="text-danger">*</span>
-														</h6>
-													</div>
-													<div class="col-md-10">
-														<div class="input-group">
-															<div class="input-group-prepend">
-																<div class="input-group-text bg-soft-secondary font-weight-medium" style="cursor:pointer;" onclick="cloudDinaryimageProd()">Browse</div>
-															</div>
-															<div class="form-control file-amount" style="cursor:pointer;" onclick="cloudDinaryimageCINrecto()">Sélèctionez</div>
-															<input type="hidden" id="srcLogo2" value="">
+												<div class="row mb-3">
+    <div class="col-md-2">
+        <h6>Photo de la carte grise (1ʳᵉ face)</h6>
+    </div>
+    <div class="col-md-10">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text bg-soft-secondary font-weight-medium" style="cursor:pointer;" onclick="cloudDinaryimageProd()">Browse</div>
+            </div>
+            <div class="form-control file-amount" style="cursor:pointer;" onclick="cloudDinaryimageCINrecto()">Séléctionnez</div>
+            <input type="hidden" id="srcLogo2" value="">
+            <input type="hidden" name="logo" value="99" class="selected-files">
+        </div>
 
-															<input type="hidden" name="logo" value="99" class="selected-files">
-														</div>
-														<div class="file-preview box sm" id="NewPhotos2" style="display:none">
-															<div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="99" title="1626638583730.jpg">
-																<div class="align-items-center align-self-stretch d-flex justify-content-center thumb">
-																	<img src="" id="logoImg2" class="img-fit"></div>
-																<div class="col body">
-																	<h6 class="d-flex">
-																		<span class="text-truncate title">1626638583730</span>
-																		<span class="ext">.jpg</span>
-																	</h6>
-																	<p>2 KB</p>
-																</div>
-																<div class="remove">
-																	<button class="btn btn-sm btn-link remove-attachment" type="button">
-																		<i class="la la-close"></i>
-																	</button>
+        <div class="file-preview box sm d-none" id="NewPhotos2">
+            <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="99" title="1626638583730.jpg">
+                <div class="thumb d-flex justify-content-center align-items-center" style="width:100px; height:70px; overflow:hidden; border:1px solid #ddd; border-radius:4px;">
+                    <img src="" id="logoImg2" class="img-fluid" style="object-fit:cover; width:100%; height:100%;">
+                </div>
+                <div class="col body ms-2">
+                    <h6 class="d-flex mb-0">
+                        <span class="text-truncate title">1626638583730</span>
+                        <span class="ext">.jpg</span>
+                    </h6>
+                    <p class="mb-0 small">2 KB</p>
+                </div>
+                <div class="remove ms-2">
+                    <button class="btn btn-sm btn-link remove-attachment" type="button">
+                        <i class="la la-close"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-																</div>
-															</div>
-														</div>
-														<small class="text-danger" style="color:ff4d00 !important;">Insertion de Photo de carte Grise 1er Face pour mieux vérifier le numéro de châssis</small>
-													</div>
-												</div>
+        <img src="https://res.cloudinary.com/aladdineshoping/image/upload/v1762878934/original_p0ltcr.jpg" 
+             id="ilggri" class="img-fluid mt-2" 
+             style="max-width:250px; max-height:150px; object-fit:cover; border:1px solid #ccc; border-radius:4px;">
+
+        <small class="text-danger d-block mt-1" style="color:#ff4d00 !important;">
+            Insertion de Photo de carte Grise 1er Face pour mieux vérifier le numéro de châssis
+        </small>
+    </div>
+</div>
+
 												<br>
 
 												<h6>Type de carburant <span class="text-danger">*</span></h6>

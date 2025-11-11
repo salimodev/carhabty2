@@ -665,11 +665,13 @@
 			</div>
 
 			<div class="request-image">
-				<a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}">
-					{% set photo = (demande.Pieces|first).photo ?? '/assets/img/placeholder.png' %}
-					<img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
-				</a>
-			</div>
+    <a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}">
+        {% set firstPiece = demande.Pieces|first %}
+        {% set photo = firstPiece and firstPiece.photo ? firstPiece.photo : '/image/placeholder.png' %}
+        <img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
+    </a>
+</div>
+
 
 			<p class="request-description">
 				{% if demande.pieces|length > 0 %}

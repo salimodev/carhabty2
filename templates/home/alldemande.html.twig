@@ -438,12 +438,13 @@
                     <span><i class="far fa-clock"></i> {{ demande.datecreate|time_ago }}</span>
                 </div>
 
-                <a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}" class="text-decoration-none">
-                    <div class="request-image">
-                        {% set photo = (demande.pieces|first).photo ?? '/assets/img/placeholder.png' %}
-                        <img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
-                    </div>
-                </a>
+               <div class="request-image">
+    <a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}">
+        {% set firstPiece = demande.Pieces|first %}
+        {% set photo = firstPiece and firstPiece.photo ? firstPiece.photo : '/image/placeholder.png' %}
+        <img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
+    </a>
+</div>
 
                 <p class="request-description">
                     {% if demande.pieces|length > 0 %}
@@ -552,7 +553,7 @@ function filtrerDemandes() {
                 <span><i class="far fa-clock"></i> ${timeAgo(d.date)}</span>
             </div>
             <div class="request-image">
-                <img src="${(d.pieces[0] && d.pieces[0].photo) || '/assets/img/placeholder.png'}" alt="photo" class="img-fit mx-auto rounded">
+                <img src="${(d.pieces[0] && d.pieces[0].photo) || '/image/placeholder.png'}" alt="photo" class="img-fit mx-auto rounded">
             </div>
             <p class="request-description">${piecesDesc || 'Pas de description disponible.'}</p>
            <button class="btn btn-register w-100 propose-btn" 

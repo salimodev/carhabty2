@@ -296,6 +296,7 @@
 								<input type="hidden" name="max_price" value="">
 								<div class="row gutters-5 row-cols-xxl-3 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1" id="filterrech">
 									{% for demande in demandes %}
+									 {% if demande.statut != 'fermer' %}
 										<div class="col mb-3">
 											<div class="carousel-box">
 												<div
@@ -374,6 +375,7 @@
 												</div>
 											</div>
 										</div>
+										{% endif %}
 									{% endfor %}
 
 								</div>

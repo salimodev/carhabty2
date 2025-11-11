@@ -175,8 +175,11 @@ $estVendeur  = $user ? in_array('ROLE_VENDEUR_NEUF', $user->getRoles()) : false;
 
     $result = [];
 
+   
     foreach ($demandes as $d) {
-        // Récupérer les pièces
+         if ($d->getStatut() === 'fermer') {
+        continue; // ← ignore cette demande
+          } // Récupérer les pièces
         $pieces = [];
         foreach ($d->getPieces() as $p) {
             $pieces[] = [

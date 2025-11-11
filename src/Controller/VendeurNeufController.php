@@ -170,6 +170,9 @@ public function rechercheDemandeVendeurNeuf(Request $request, EntityManagerInter
 
     $result = [];
     foreach ($demandes as $d) {
+          if ($d->getStatut() === 'fermer') {
+        continue; // ← ignore cette demande
+          }
         $pieces = [];
         foreach ($d->getPieces() as $p) {
             $pieces[] = [
@@ -395,7 +398,7 @@ $htmlContent .= "</ul>
 
 // Envoi du mail
 $email = (new Email())
-    ->from('no-reply@tonsite.com')
+    ->from('salimabbessi.dev@gmail.com')
     ->to($proprietaireEmail)
     ->subject('Nouvelle offre reçue')
     ->html($htmlContent);

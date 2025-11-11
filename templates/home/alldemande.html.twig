@@ -403,6 +403,7 @@
 					<input type="hidden" name="max_price" value="">
 					<div class="row gutters-5 row-cols-xxl-3 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1" id="filterrech">
 			{% for demande in lastDemandes %}
+			 {% if demande.statut != 'fermer' %}
     {% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
     {% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
 
@@ -470,7 +471,9 @@
 
             </div>
         </div>
+		 
     </div>
+	 {% endif %}
 {% endfor %}
 
 					</div>

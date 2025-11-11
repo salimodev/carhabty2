@@ -205,4 +205,34 @@
 
 {% block javascript %}
     {{ parent() }}
+    	<script type="text/javascript">
+    function changerStatusOffre(id, status) {
+    let $_data = {id: id, status: status};
+    Swal.fire({
+        title: `Êtes-vous sûr de ${status === 'acceptee' ? 'accepter' : 'refuser'} cette offre ?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#25a89d',
+        cancelButtonColor: '#ff6b35',
+        confirmButtonText: 'Oui',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: "POST",
+                url: "{{ path('changer_status_offre') }}",
+                data: $_data,
+                success: function(response) {
+                    if(response.success){
+                        AIZ.plugins.notify('success', response.message);
+                        location.reload();
+                    } else {
+                        AIZ.plugins.notify('danger', response.message);
+                    }
+                }
+            });
+        }
+    });
+}
+</script>
 {% endblock %}

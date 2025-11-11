@@ -1,0 +1,208 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Détail de l'offre{% endblock %}
+
+{% block Head %}
+    {{ parent() }}
+    {% block LinksCss %}
+        {{ parent() }}
+        <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
+<style>
+            /* Pièces */
+            .offre-pieces .piece-card {
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+                padding: 15px;
+                transition: transform 0.3s, box-shadow 0.3s;
+                min-height: 140px;
+                width: 100%;
+                margin-bottom: 15px;
+            }
+
+            /* Mobile responsive : suppression des marges et padding */
+            @media (max-width: 768px) {
+                body, html {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    overflow-x: hidden !important;
+                }
+
+                .container,
+                .card-body,
+                .row.justify-content-center,
+                .row {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                    margin-left: 0 !important;
+                    margin-right: 0 !important;
+                }
+
+                .offre-pieces .col-lg-4,
+                .offre-pieces .col-md-6,
+                .offre-pieces .col-12,
+                .col-lg-6,
+                .col-md-6,
+                .col-12 {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                    margin-left: 0 !important;
+                    margin-right: 0 !important;
+                    flex: 0 0 100% !important;
+                    max-width: 100% !important;
+                }
+
+                .offre-pieces .piece-card {
+                    width: 100% !important;
+                    margin: 0 0 15px 0 !important;
+                    border-radius: 12px;
+                }
+
+                .btn-action {
+                    margin: 5px 0 !important;
+                    width: 48% !important;
+                }
+
+                .text-center {
+                    text-align: center !important;
+                }
+            }
+        </style>
+ 
+    {% endblock %}
+{% endblock %}
+
+{% block Content %}
+    {% if app.user and is_granted('ROLE_PROPRIETAIRE') %}
+        <section class="py-5" style="background-color: #f5f5f5;padding-left:15px;padding-right:15px;">
+            <div class="container">
+                <div class="d-flex align-items-start">
+                    {% block sideHeader %}
+                        {{ parent() }}
+                    {% endblock %}
+
+                    <div class="aiz-user-panel">
+                        <div class="aiz-titlebar mt-2 mb-4">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h1 class="h3">Offre N° : {{ offre.numeroOffre }}</h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Détails Offre -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="h6 mb-0">Informations de l'offre</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <table class="table-borderless table">
+                                            <tbody>
+                                                <tr><td class="w-50 fw-600">Numéro de l'offre:</td><td>{{ offre.numeroOffre }}</td></tr>
+                                                <tr><td class="w-50 fw-600">Date de création:</td><td>{{ offre.createdAt|date('d/m/Y H:i') }}</td></tr>
+                                                <tr><td class="w-50 fw-600">Observation:</td><td>{{ offre.observation ?: 'Aucune observation.' }}</td></tr>
+                                                <tr>
+                                                    <td class="w-50 fw-600">Validité:</td>
+                                                    <td>
+                                                        {% if offre.validiteDebut and offre.validiteFin %}
+                                                            {{ offre.validiteDebut|date('d/m/Y') }} - {{ offre.validiteFin|date('d/m/Y') }}<br>
+                                                            {% set joursRestants = (offre.validiteFin|date('U') - "now"|date('U')) / 86400 %}
+                                                            {% if joursRestants > 0 %}
+                                                                <span class="text-primary fw-bold">{{ joursRestants|round(0, 'floor') }} jours restants</span>
+                                                            {% else %}
+                                                                <span class="text-danger fw-bold">Offre expirée</span>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            Non définie
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="w-50 fw-600">Statut:</td>
+                                                    <td>
+                                                        {% if offre.status == 'en_attente' %}
+                                                            <span class="badge badge-inline badge-warning">En attente</span>
+                                                        {% elseif offre.status == 'acceptee' %}
+                                                            <span class="badge badge-inline badge-success">Acceptée</span>
+                                                        {% elseif offre.status == 'refusee' %}
+                                                            <span class="badge badge-inline badge-danger">Refusée</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <table class="table-borderless table">
+                                            <tbody>
+                                                <tr><td class="w-50 fw-600">Demande associée:</td><td>{{ offre.demande.code }}</td></tr>
+                                                <tr><td class="w-50 fw-600">Propriétaire:</td><td>{{ offre.demande.offrecompte.nom ~ ' ' ~ offre.demande.offrecompte.prenom }}</td></tr>
+                                                <tr><td class="w-50 fw-600">Zone de livraison:</td><td>{{ offre.demande.zone }}</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                {% if offre.status == 'en_attente' %}
+                                    <div class="text-center mt-4">
+                                        <a href="#" class="btn btn-success btn-circle btn-sm" onclick="changerStatusOffre({{ offre.id }}, 'acceptee')">
+                                            Accepter <i class="las la-check"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-circle btn-sm" onclick="changerStatusOffre({{ offre.id }}, 'refusee')">
+                                            Refuser <i class="las la-times"></i>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Pièces de l'offre -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="h6 mb-0">Pièces incluses dans cette offre</h5>
+                            </div>
+                            <div class="card-body offre-pieces">
+                                <div class="row justify-content-center">
+                                    {% for piece in offre.demande.pieces %}
+                                        {% set op = offre.offrePieces|filter(item => item.piece.id == piece.id)|last %}
+                                        <div class="col-lg-4 col-md-6 col-12 mb-4">
+                                            <div class="piece-card p-3 border rounded shadow-sm bg-white">
+                                                <div class="piece-title fw-600 text-dark mb-2 text-center">{{ piece.designation }}</div>
+
+                                                {% if op %}
+                                                    {% set qualites = {1: '1ère qualité', 2: '2ème qualité', 3: '3ème qualité'} %}
+                                                    {% for i in 1..3 %}
+                                                        {% set prix = attribute(op, 'prix' ~ i) %}
+                                                        {% set marque = attribute(op, 'marque' ~ i) %}
+                                                        {% if prix is not empty and marque is not empty %}
+                                                            <div class="piece-quality text-center mb-2">
+                                                                <h6 class="fw-600 text-primary mb-1">Prix unitaire {{ qualites[i] }}</h6>
+                                                                <p class="mb-0"><strong>Marque :</strong> {{ marque }}</p>
+                                                                <p class="mb-0"><strong>Prix :</strong> {{ prix }} DT</p>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <div class="text-center text-muted">Aucune donnée pour cette pièce</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+{% endblock %}

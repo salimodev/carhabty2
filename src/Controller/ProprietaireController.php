@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Demande;
 use App\Entity\Users;
 use App\Service\UsersService;
+use App\Entity\Offre;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -291,6 +292,19 @@ public function changerStatus(Request $request, EntityManagerInterface $em, Offr
     return $this->json(['success' => true, 'message' => 'Le statut de l\'offre a été mis à jour.']);
 }
 
+#[Route('/proprietaire/offre/{id}', name: 'offre_show_prop', methods: ['GET'])]
+public function showOffre(
+    Offre $offre
+): Response {
+    // Récupérer les pièces associées à l'offre
+    $offrePieces = $offre->getOffrePieces();
+
+    return $this->render('proprietaire/offre_detail.html.twig', [
+        'offre' => $offre,
+        'offrePieces' => $offrePieces,
+        'demande' => $offre->getDemande()
+    ]);
+}
 
 
 }

@@ -87,12 +87,14 @@
 {% endif %}
 
                 </td>
-                <td class="text-right">
-                    <a class="btn btn-soft-warning btn-icon btn-circle btn-sm"
-                       href="" title="Voir">
-                        <i class="las la-eye"></i>
-                    </a>
-                 {% if offre.status == 'en_attente' %}
+               <td class="text-right">
+    <a class="btn btn-soft-info btn-icon btn-circle btn-sm"
+       href="{{ path('offre_show_prop', {'id': offre.id}) }}" 
+       title="Voir">
+        <i class="las la-eye"></i>
+    </a>
+
+    {% if offre.status == 'en_attente' %}
         <a href="#" class="btn btn-success btn-icon btn-circle btn-sm"
            title="Accepter"
            onclick="changerStatusOffre({{ offre.id }}, 'acceptee')">
@@ -104,9 +106,9 @@
            onclick="changerStatusOffre({{ offre.id }}, 'refusee')">
             <i class="las la-times"></i>
         </a>
-   
     {% endif %}
-                </td>
+</td>
+
             </tr>
         {% endfor %}
     {% else %}

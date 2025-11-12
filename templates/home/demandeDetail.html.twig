@@ -19,32 +19,53 @@
 					<div class="d-flex align-items-start">
 						
 						<div class="aiz-user-panel">
-							<div class="aiz-titlebar mt-2 mb-4">
+							<div class="aiz-titlebar mt-2 mb-4" style="margin-right: 1rem;">
     <div class="row align-items-center justify-content-between">
         <div class="col-md-6">
-            <h1 class="h3 mb-0">
+            <h1 class="h3 mb-2">
                 Demande Code : {{ demande.code }}
             </h1>
         </div>
 
         <div class="col-md-6 text-end">
-            {% set dejaPropose = demande.offres|filter(o => o.user.id == app.user.id)|length > 0 %}
-            {% if dejaPropose %}
-                <button type="button"
+        {% set dejaPropose = demande.offres|filter(o => o.user.id == app.user.id)|length > 0 %}
+{% set estVendeurNeuf = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
+
+{% if app.user %}
+    {% if estVendeurNeuf %}
+        {% if dejaPropose %}
+            <button type="button"
+                    class="btn btn-primary btn-lg rounded-pill shadow-sm"
+                    onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');"
+                    style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600; width:200px;">
+                Proposer un prix
+            </button>
+        {% else %}
+            <form action="{{ path('propose_offre', {'id': demande.id}) }}" class="d-inline">
+                <button type="submit"
                         class="btn btn-primary btn-lg rounded-pill shadow-sm"
-                        onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');"
                         style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600; width:200px;">
                     Proposer un prix
                 </button>
-            {% else %}
-                <form action="{{ path('propose_offre', {'id': demande.id}) }}" class="d-inline">
-                    <button type="submit"
-                            class="btn btn-primary btn-lg rounded-pill shadow-sm"
-                            style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600; width:200px;">
-                        Proposer un prix
-                    </button>
-                </form>
-            {% endif %}
+            </form>
+        {% endif %}
+    {% else %}
+        <button type="button"
+                class="btn btn-primary btn-lg rounded-pill shadow-sm"
+                onclick="AIZ.plugins.notify('warning', 'Seuls les vendeurs de pièces neuves peuvent proposer une offre.');"
+                style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600; width:200px;">
+                 Proposer un prix
+        </button>
+    {% endif %}
+{% else %}
+    <button type="button"
+           class="btn btn-primary btn-lg rounded-pill shadow-sm"
+            onclick="AIZ.plugins.notify('info', 'Veuillez vous connecter pour proposer une offre.');"
+             style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600; width:200px;">
+                 Proposer un prix
+    </button>
+{% endif %}
+
         </div>
     </div>
 </div>

@@ -154,6 +154,8 @@ public function all_demande(
         'lastDemandes' => $dem,
     ]);
 }
+
+
 #[Route('/recherche/demande', name: 'recherche_demande')]
 public function rechercheDemande(Request $request, EntityManagerInterface $em): JsonResponse
 {
@@ -165,48 +167,60 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
     $page   = max(1, (int)$request->get('page', 1));
     $limit  = 12;
 
-  $user = $this->getUser();
-  $userZone = $user ? $user->getAdresse() : null;
-$estConnecte = $user ? true : false;
-$estVendeur  = $user ? in_array('ROLE_VENDEUR_NEUF', $user->getRoles()) : false;
+    // Vérification de l'utilisateur connecté
+    $user = $this->getUser();
+    $userZone = $user ? $user->getAdresse() : null;
+    $estConnecte = $user !== null;
+    $estVendeur = $user && in_array('ROLE_VENDEUR_NEUF', $user->getRoles());
 
+    // Récupération des demandes selon les filtres
     $demandes = $em->getRepository(Demande::class)
                    ->filterDemandes($marque, $zone, $date, $type, $trier);
 
     $result = [];
 
-   
     foreach ($demandes as $d) {
-         if ($d->getStatut() === 'fermer') {
-        continue; // ← ignore cette demande
-          } // Récupérer les pièces
+        // Ignorer les demandes fermées
+        if ($d->getStatut() === 'fermer') {
+            continue;
+        }
+
+        // Préparer les pièces
         $pieces = [];
         foreach ($d->getPieces() as $p) {
             $pieces[] = [
                 'designation' => $p->getDesignation(),
                 'observation' => $p->getObservation(),
-                'photo'       => $p->getPhoto() ?: '/assets/img/placeholder.png',
+                'photo'       => $p->getPhoto() ?: '/image/placeholder.png',
             ];
         }
 
-        // Vérifier si le vendeur a déjà proposé une offre
-        $dejaPropose = $d->getOffres()->filter(fn($o) => $o->getUser()->getId() === $user->getId())->count() > 0;
+        // Vérifier si un vendeur connecté a déjà proposé une offre
+        if ($user && $estVendeur) {
+            $dejaPropose = count(array_filter(
+                $d->getOffres()->toArray(),
+                fn($o) => $o->getUser() && $o->getUser()->getId() === $user->getId()
+            )) > 0;
+        } else {
+            $dejaPropose = false;
+        }
 
+        // Construction du tableau de résultat
         $result[] = [
-            'id'          => $d->getId(),
-            'marque'      => $d->getMarque(),
-            'modele'      => $d->getModele(),
-            'zone'        => $d->getZone(),
-            'date'        => $d->getDatecreate()->format('Y-m-d H:i'),
-            'time_ago'    => $this->timeAgo($d->getDatecreate()),
-            'vendeurType' => $user ? (in_array('ROLE_VENDEUR_NEUF', $user->getRoles()) ? 'neuf' : 'occasion') : null,
-            'type'        => $d->getVendeuroccasion() == 1 ? 'occasion' : 'neuf',
-            'offrecompte' => $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
-            'pieces'      => $pieces,
-             'dejaPropose' => $dejaPropose,
-        'estConnecte' => $estConnecte,
-        'estVendeur'  => $estVendeur,
-        'userZone'    => $userZone,
+            'id'           => $d->getId(),
+            'marque'       => $d->getMarque(),
+            'modele'       => $d->getModele(),
+            'zone'         => $d->getZone(),
+            'date'         => $d->getDatecreate()->format('Y-m-d H:i'),
+            'time_ago'     => $this->timeAgo($d->getDatecreate()),
+            'vendeurType'  => $user ? (in_array('ROLE_VENDEUR_NEUF', $user->getRoles()) ? 'neuf' : 'occasion') : null,
+            'type'         => $d->getVendeuroccasion() == 1 ? 'occasion' : 'neuf',
+            'offrecompte'  => $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
+            'pieces'       => $pieces,
+            'dejaPropose'  => $dejaPropose,
+            'estConnecte'  => $estConnecte,
+            'estVendeur'   => $estVendeur,
+            'userZone'     => $userZone,
         ];
     }
 

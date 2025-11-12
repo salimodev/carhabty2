@@ -179,23 +179,33 @@ public function rechercheDemandeVendeurNeuf(Request $request, EntityManagerInter
             $pieces[] = [
                 'designation' => $p->getDesignation(),
                 'observation' => $p->getObservation(),
-                'photo'       => $p->getPhoto() ?: '/assets/img/placeholder.png',
+                'photo'       => $p->getPhoto() ?: '/image/placeholder.png',
             ];
         }
 
-        // Vérifie si l’utilisateur a déjà proposé une offre pour cette demande
-        $dejaPropose = count(array_filter($d->getOffres()->toArray(), fn($o) => $o->getUser()->getId() === $vendeur->getId())) > 0;
+       // Vérifier si un vendeur est connecté
+if ($vendeur) {
+    // Vérifier si ce vendeur a déjà proposé une offre pour cette demande
+    $dejaPropose = count(array_filter(
+        $d->getOffres()->toArray(),
+        fn($o) => $o->getUser() && $o->getUser()->getId() === $vendeur->getId()
+    )) > 0;
+} else {
+    // Aucun utilisateur connecté → ne pas bloquer
+    $dejaPropose = false;
+}
 
-        $result[] = [
-            'id'         => $d->getId(),
-            'marque'     => $d->getMarque(),
-            'modele'     => $d->getModele(),
-            'zone'       => $d->getZone(),
-            'date'       => $d->getDatecreate()->format('Y-m-d H:i'),
-            'offrecompte' => $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
-            'pieces'     => $pieces,
-            'dejaPropose'=> $dejaPropose, // ajout de la propriété pour le JS
-        ];
+// Ajouter les données au tableau résultat
+$result[] = [
+    'id'           => $d->getId(),
+    'marque'       => $d->getMarque(),
+    'modele'       => $d->getModele(),
+    'zone'         => $d->getZone(),
+    'date'         => $d->getDatecreate()->format('Y-m-d H:i'),
+    'offrecompte'  => $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
+    'pieces'       => $pieces,
+    'dejaPropose'  => $dejaPropose, // ajout pour le JS
+];
     }
 
     return new JsonResponse($result);

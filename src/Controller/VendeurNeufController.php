@@ -657,22 +657,36 @@ public function editOffre(
 
 
 #[Route('/vendeur/offre/{id}', name: 'offre_show')]
-public function show(Offre $offre,EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
+public function show(Offre $offre, EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
 {
-       $user = $security->getUser();
-    $query = $em->getRepository(Notification::class)
+    $user = $security->getUser();
+
+    // Récupérer les notifications du vendeur
+    $notificationsQuery = $em->getRepository(Notification::class)
         ->createQueryBuilder('n')
         ->where('n.User = :user')
+        ->andWhere('n.message LIKE :offre') // filtrer celles liées à cette offre
         ->setParameter('user', $user)
+        ->setParameter('offre', '%'.$offre->getNumeroOffre().'%')
         ->orderBy('n.createdAt', 'DESC')
         ->getQuery();
 
-    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
+    $notifications = $paginator->paginate($notificationsQuery, $request->query->getInt('page', 1), 10);
+
+    // Marquer ces notifications comme lues
+    foreach ($notifications as $notif) {
+        if (!$notif->isRead()) {
+            $notif->setIsRead(true);
+        }
+    }
+    $em->flush();
 
     return $this->render('vendeurNeuf/voiroffre.html.twig', [
-        'offre' => $offre,'notifications' => $notifications,
+        'offre' => $offre,
+        'notifications' => $notifications,
     ]);
 }
+
 
 #[Route('/inviter/vendeur/neuf', name: 'inviter_vendeurNeuf')]
 public function inviter(): Response

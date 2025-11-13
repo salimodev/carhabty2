@@ -23,63 +23,63 @@
 
 
 			<style>
-.user-img-wrap {
-  background: linear-gradient(135deg, #007bff, #007bff);
-  border-radius: 50%;
-  width: 55px;
-  height: 55px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.15);
-  transition: all 0.3s ease-in-out;
-  margin-top: 5px;
-}
+				.user-img-wrap {
+					background: linear-gradient(135deg, #007bff, #007bff);
+					border-radius: 50%;
+					width: 55px;
+					height: 55px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					box-shadow: 0 2px 6px rgba(0, 123, 255, 0.15);
+					transition: all 0.3s ease-in-out;
+					margin-top: 5px;
+				}
 
-.user-img-wrap:hover {
-  transform: scale(1.08);
-  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
-}
+				.user-img-wrap:hover {
+					transform: scale(1.08);
+					box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
+				}
 
-.user-icon {
-  color: #ffffff;
-  font-size: 0.7rem;
-}
+				.user-icon {
+					color: #ffffff;
+					font-size: 0.7rem;
+				}
 
-.user-icon i {
-  transition: transform 0.3s ease;
-}
+				.user-icon i {
+					transition: transform 0.3s ease;
+				}
 
-.user-img-wrap:hover i {
-  transform: scale(1.15);
-}
+				.user-img-wrap:hover i {
+					transform: scale(1.15);
+				}
 
 				body {
 					font-size: 12px;
 				}
 				.logout-link {
-	gap: 8px;
+					gap: 8px;
 					background: linear-gradient(135deg, #007bff, #00c6ff);
-	color: #fff !important;
-	font-weight: 600;
-		border: none;
-	margin: 10px 15px;
-	padding: 10px 18px;
-	display: flex;
-    border-radius: 50px;
-	align-items: center;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+					color: #fff !important;
+					font-weight: 600;
+					border: none;
+					margin: 10px 15px;
+					padding: 10px 18px;
+					display: flex;
+					border-radius: 50px;
+					align-items: center;
+					box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 					transition: all 0.3s ease;
 					text-decoration: none;
-	transition: all 0.3s ease;
-}
+					transition: all 0.3s ease;
+				}
 
-.logout-link:hover {
-	background: linear-gradient(135deg, #007bff, #00c6ff);
-	transform: translateY(-2px);
-	box-shadow: 0 5px 12px rgba(255, 65, 108, 0.4);
-	color: #fff;
-}
+				.logout-link:hover {
+					background: linear-gradient(135deg, #007bff, #00c6ff);
+					transform: translateY(-2px);
+					box-shadow: 0 5px 12px rgba(255, 65, 108, 0.4);
+					color: #fff;
+				}
 
 				.btn-home {
 					display: inline-flex;
@@ -148,24 +148,24 @@ complete: 'Complete',
 file: 'File',
 files: 'Files'
 }</script><style>
-@media (max-width: 991px) {
-  .user-icon i {
-    font-size: 1.5rem !important;
-  }
-  .user-img-wrap{
-width: 45px;
-    height: 45px;
-  }
+@media(max-width: 991px) {
+	.user-icon i {
+		font-size: 1.5rem !important;
+	}
+	.user-img-wrap {
+		width: 45px;
+		height: 45px;
+	}
 }
 
-@media (max-width: 576px) {
-  .user-icon i {
-    font-size: 1.4rem !important;
-  }
-   .user-img-wrap{
-width: 45px;
-    height: 45px;
-  }
+@media(max-width: 576px) {
+	.user-icon i {
+		font-size: 1.4rem !important;
+	}
+	.user-img-wrap {
+		width: 45px;
+		height: 45px;
+	}
 }
 
 
@@ -209,131 +209,129 @@ width: 45px;
 	left: 0;
 	top: 0
 }
-    div.dataTables_wrapper div.dataTables_filter input {
-					margin-left: 0.5em !important;
-					display: inline-block;
-					width: 170px;
-				}
-            /***************************************/
-            /* Style Loader */
-            /***************************************/
-          
-            .fadet {
-                opacity: 0;
-                visibility: hidden;
-            }
-   
+div.dataTables_wrapper div.dataTables_filter input {
+	margin-left: 0.5em !important;
+	display: inline-block;
+	width: 170px;
+}
+/***************************************/
+/* Style Loader */
+/***************************************/
+
+.fadet {
+	opacity: 0;
+	visibility: hidden;
+}
 
 
-            .loaderAcc {
-                position: fixed;
-                inset: 0;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: 9999;
-                background-color: #fff;
-                display: grid;
-                place-items: center;
-                align-items: center;
-                justify-content: center;
-                transition: opacity .25s, visibility 1s;
-            }
-            .loaderAcc > .spinner-border.text-info {
-               margin-top: 15%;
-               width: 5rem;
-               height: 5rem;
-               border-left-color: red !important;
-               border-right-color: red !important;
-               border-bottom-color: red !important;
-            }
-           /*--------------------------------------*/
+.loaderAcc {
+	position: fixed;
+	inset: 0;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background-color: #fff;
+	display: grid;
+	place-items: center;
+	align-items: center;
+	justify-content: center;
+	transition: opacity 0.25s, visibility 1s;
+}
+.loaderAcc > .spinner-border.text-info {
+	margin-top: 15%;
+	width: 5rem;
+	height: 5rem;
+	border-left-color: red !important;
+	border-right-color: red !important;
+	border-bottom-color: red !important;
+}
+/*--------------------------------------*/
 /* 🌐 Responsive Modern Loader          */
 /*--------------------------------------*/
 .loaderAcc1 {
-  position: fixed;
-  inset: 0; /* ersetzt top/left/right/bottom */
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
-  z-index: 9999;
-  display: none;
-  animation: fadeIn 0.3s ease-in-out;
+	position: fixed;
+	inset: 0; /* ersetzt top/left/right/bottom */
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(255, 255, 255, 0.8);
+	z-index: 9999;
+	display: none;
+	animation: fadeIn 0.3s ease-in-out;
 }
 
 .loaderAcc1 > .spinner-border.text-info {
-  width: 5rem;
-  height: 5rem;
-  border-left-color: #ff6600 !important; /* orange Markenfarbe */
-  border-right-color: #ff6600 !important;
-  border-bottom-color: #ff6600 !important;
-  margin-top: 24%;
-    margin-left: 47%;
+	width: 5rem;
+	height: 5rem;
+	border-left-color: #ff6600 !important; /* orange Markenfarbe */
+	border-right-color: #ff6600 !important;
+	border-bottom-color: #ff6600 !important;
+	margin-top: 24%;
+	margin-left: 47%;
 }
 
 /* 🔄 Animations-Effekt */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
-@media (max-width: 1024px) {
-      .loaderAcc1 > .spinner-border.text-info {
-        width: 3.5rem;
-        height: 3.5rem;
-        margin-top: 47%;
-        margin-left: 47%;
-    }
+@media(max-width: 1024px) {
+	.loaderAcc1 > .spinner-border.text-info {
+		width: 3.5rem;
+		height: 3.5rem;
+		margin-top: 47%;
+		margin-left: 47%;
+	}
 }
 /* 📱 Responsivität */
-@media (max-width: 768px) {
-      .loaderAcc1 > .spinner-border.text-info {
-        width: 3.5rem;
-        height: 3.5rem;
-        margin-top: 100%;
-        margin-left: 42%;
-    }
+@media(max-width: 768px) {
+	.loaderAcc1 > .spinner-border.text-info {
+		width: 3.5rem;
+		height: 3.5rem;
+		margin-top: 100%;
+		margin-left: 42%;
+	}
 }
 
-@media (max-width: 480px) {
-  .loaderAcc1 > .spinner-border.text-info {
-    width: 2.8rem;
-    height: 2.8rem;
-  }
+@media(max-width: 480px) {
+	.loaderAcc1 > .spinner-border.text-info {
+		width: 2.8rem;
+		height: 2.8rem;
+	}
 }
 
-      .list-inline-item.mr-0.active{
-               color: #ee2e14;
-            }
-                    @media (max-width: 992px) {
-  .d-flex.align-items-start {
-    flex-direction: column !important;
-  }
-
-  .aiz-user-panel {
-    width: 100% !important;
-  }
-
-  .side-header {
-    width: 100% !important;
-    margin-bottom: 1rem;
-  }
-
-  table {
-    width: 100% !important;
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
+.list-inline-item.mr-0.active {
+	color: #ee2e14;
 }
-</style></head><body><!-- .aiz-main-wrapper --><div class="aiz-main-wrapper">
+@media(max-width: 992px) {
+	.d-flex.align-items-start {
+		flex-direction: column !important;
+	}
+
+	.aiz-user-panel {
+		width: 100% !important;
+	}
+
+	.side-header {
+		width: 100% !important;
+		margin-bottom: 1rem;
+	}
+
+	table {
+		width: 100% !important;
+		display: block;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+}</style></head><body><!-- .aiz-main-wrapper --><div class="aiz-main-wrapper">
 
 <div class="aiz-sidebar-wrap">
 	<div class="aiz-sidebar left c-scrollbar">
@@ -352,42 +350,42 @@ width: 45px;
 			<ul class="aiz-side-nav-list" id="search-menu"></ul>
 			<ul class="aiz-side-nav-list metismenu" id="main-menu" data-toggle="aiz-side-menu">
 
-	<li {% if PageMenu is defined and PageMenu == "dashboard_vendeurNeuf" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
-		<a href="{{ path('dashboard_vendeurNeuf') }}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'dashboard_vendeurNeuf' %}active{% endif %}">
-			<i class="las la-tachometer-alt aiz-side-nav-icon fs-24"></i>
-			<span class="aiz-side-nav-text">Tableau de bord</span>
-		</a>
-	</li>
+				<li {% if PageMenu is defined and PageMenu == "dashboard_vendeurNeuf" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
+					<a href="{{ path('dashboard_vendeurNeuf') }}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'dashboard_vendeurNeuf' %}active{% endif %}">
+						<i class="las la-tachometer-alt aiz-side-nav-icon fs-24"></i>
+						<span class="aiz-side-nav-text">Tableau de bord</span>
+					</a>
+				</li>
 
-	<li {% if PageMenu is defined and PageMenu == "seller_commande" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
-		<a href="{{ path('vendeur_demandes') }}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'seller_commande' %}active{% endif %}">
-			<i class="las la-clipboard-list aiz-side-nav-icon fs-24"></i>
-			<span class="aiz-side-nav-text">Demandes</span>
-		</a>
-	</li>
+				<li {% if PageMenu is defined and PageMenu == "seller_commande" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
+					<a href="{{ path('vendeur_demandes') }}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'seller_commande' %}active{% endif %}">
+						<i class="las la-clipboard-list aiz-side-nav-icon fs-24"></i>
+						<span class="aiz-side-nav-text">Demandes</span>
+					</a>
+				</li>
 
-	<li {% if PageMenu is defined and PageMenu == "vendeur_offres" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
-		<a href="{{ path('vendeur_offres') }}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'vendeur_offres' %}active{% endif %}">
-			<i class="las la-hand-holding-usd aiz-side-nav-icon fs-24"></i>
-			<span class="aiz-side-nav-text">Offres</span>
-		</a>
-	</li>
+				<li {% if PageMenu is defined and PageMenu == "vendeur_offres" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
+					<a href="{{ path('vendeur_offres') }}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'vendeur_offres' %}active{% endif %}">
+						<i class="las la-hand-holding-usd aiz-side-nav-icon fs-24"></i>
+						<span class="aiz-side-nav-text">Offres</span>
+					</a>
+				</li>
 
-	<li {% if PageMenu is defined and PageMenu == "app_vendeurneuf_profile" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
-		<a href="{{path('app_vendeurneuf_profile',{'id':app.user.id})}}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'app_vendeurneuf_profile' %}active{% endif %}">
-			<i class="las la-user-cog aiz-side-nav-icon fs-24"></i>
-			<span class="aiz-side-nav-text">Modifier Profil</span>
-		</a>
-	</li>
+				<li {% if PageMenu is defined and PageMenu == "app_vendeurneuf_profile" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
+					<a href="{{path('app_vendeurneuf_profile',{'id':app.user.id})}}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'app_vendeurneuf_profile' %}active{% endif %}">
+						<i class="las la-user-cog aiz-side-nav-icon fs-24"></i>
+						<span class="aiz-side-nav-text">Modifier Profil</span>
+					</a>
+				</li>
 
-	<li class="aiz-side-nav-item mt-4">
-		<a href="{{ path('app_logout') }}" class="logout-link">
-			<i class="fas fa-sign-out-alt fs-24"></i>
-			Déconnexion
-		</a>
-	</li>
+				<li class="aiz-side-nav-item mt-4">
+					<a href="{{ path('app_logout') }}" class="logout-link">
+						<i class="fas fa-sign-out-alt fs-24"></i>
+						Déconnexion
+					</a>
+				</li>
 
-</ul>
+			</ul>
 
 			<!-- .aiz-side-nav -->
 		</div>
@@ -425,51 +423,55 @@ width: 45px;
 				<div class="aiz-topbar-item ml-2">
 					<div class="align-items-stretch d-flex dropdown">
 						<a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
-							<span class="btn-iconn p-0 d-flex justify-content-center align-items-center" style="color:#000000">
-								<span class="d-flex align-items-center position-relative">
-									<i class="las la-bell fs-24"></i>
+    <span class="btn-iconn p-0 d-flex justify-content-center align-items-center" style="color:#000000">
+        <span class="d-flex align-items-center position-relative">
+            <i class="las la-bell fs-24"></i>
 
-									<span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right"></span>
+            {% set unreadCount = app.user.notifications|filter(n => not n.isRead)|length %}
+            {% if unreadCount > 0 %}
+                <span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right"></span>
+            {% endif %}
 
-								</span>
-							</span>
-						</a>
+        </span>
+    </span>
+</a>
+
 						<div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-lg py-0">
 							<div class="p-3 bg-light border-bottom">
 								<h6 class="mb-0">Notifications</h6>
 							</div>
 
 							<div class="px-3 c-scrollbar-light overflow-auto" style="max-height:300px;">
-    <ul class="list-group list-group-flush">
-        {% if notifications|length > 0 %}
-            {% for notif in notifications %}
-                <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                    <div class="media text-inherit">
-                        <div class="media-body">
-                            <p class="mb-1 text-truncate-2">
-                                <a href="{{ path('offre_show', {'id': notif.offre.id}) }}">
-                                    {{ notif.message }}
-                                </a>
-                            </p>
-                            <small class="text-muted">
-                                {{ notif.createdAt|date('d/m/Y H:i') }}
-                            </small>
-                        </div>
-                    </div>
-                    {% if not notif.isRead %}
-                        <span class="badge badge-inline bg-primary" style="color:#fff">Nouveau</span>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        {% else %}
-            <li class="list-group-item">
-                <div class="py-4 text-center fs-16">
-                    Aucune notification trouvée
-                </div>
-            </li>
-        {% endif %}
-    </ul>
-</div>
+								<ul class="list-group list-group-flush">
+									{% if notifications|length > 0 %}
+										{% for notif in notifications %}
+											<li class="list-group-item d-flex justify-content-between align-items-center py-3">
+												<div class="media text-inherit">
+													<div class="media-body">
+														<p class="mb-1 text-truncate-2">
+															<a href="{{ path('offre_show', {'id': notif.offre.id}) }}">
+																{{ notif.message }}
+															</a>
+														</p>
+														<small class="text-muted">
+															{{ notif.createdAt|date('d/m/Y H:i') }}
+														</small>
+													</div>
+												</div>
+												{% if not notif.isRead %}
+													<span class="badge badge-inline bg-primary" style="color:#fff">Nouveau</span>
+												{% endif %}
+											</li>
+										{% endfor %}
+									{% else %}
+										<li class="list-group-item">
+											<div class="py-4 text-center fs-16">
+												Aucune notification trouvée
+											</div>
+										</li>
+									{% endif %}
+								</ul>
+							</div>
 
 							<div class="text-center border-top">
 								<a href="{{path('vendeur_notifications')}}" class="text-reset d-block py-2">
@@ -484,10 +486,10 @@ width: 45px;
 				<div class="aiz-topbar-item ml-2">
 					<div class="align-items-stretch d-flex dropdown">
 						<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-									<div class="user-icon">
-										<i class="fas fa-store fa-3x"></i>
-									</div>
-								</div>
+							<div class="user-icon">
+								<i class="fas fa-store fa-3x"></i>
+							</div>
+						</div>
 					</div>
 				</div>
 				<!-- .aiz-topbar-item -->

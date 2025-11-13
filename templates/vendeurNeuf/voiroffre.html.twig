@@ -113,8 +113,7 @@
                                                     <td class="w-50 fw-600">Validité:</td>
                                                     <td>
                                                         {% if offre.validiteDebut and offre.validiteFin %}
-                                                            {{ offre.validiteDebut|date('d/m/Y') }} - {{ offre.validiteFin|date('d/m/Y') }}<br>
-                                                            {% set joursRestants = (offre.validiteFin|date('U') - "now"|date('U')) / 86400 %}
+                                                                                                                       {% set joursRestants = (offre.validiteFin|date('U') - "now"|date('U')) / 86400 %}
                                                             {% if joursRestants > 0 %}
                                                                 <span class="text-primary fw-bold">{{ joursRestants|round(0, 'floor') }} jours restants</span>
                                                             {% else %}

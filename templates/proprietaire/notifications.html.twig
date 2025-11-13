@@ -1,0 +1,88 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block Head %}
+    {{ parent() }}
+    {% block LinksCss %}
+        {{ parent() }}
+        <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
+    {% endblock %}
+{% endblock %}
+
+{% block Content %}
+<section class="py-5" style="background-color: #f5f5f5;">
+    <div class="container">
+        <div class="d-flex align-items-start">
+            {% block sideHeader %}
+                {{ parent() }}
+            {% endblock %}
+            <div class="aiz-user-panel w-100">
+                <div class="card">
+                    <div class="card-header row gutters-5">
+                        <div class="col">
+                            <h5 class="mb-0 h6">Notifications</h5>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% if notifications|length > 0 %}
+                                {% for notif in notifications %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <div class="flex-grow-1">
+                                            <p class="mb-1">{{ notif.message }}</p>
+                                            <small class="text-muted time-ago" data-date="{{ notif.createdAt|date('Y-m-d H:i:s') }}"></small>
+                                        </div>
+
+                                        <div class="d-flex align-items-center gap-2">
+                                            {% if notif.offre is defined and notif.offre is not null %}
+                                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                                   href="{{ path('offre_show_prop', {'id': notif.offre.id}) }}"
+                                                   title="Voir détails de l’offre">
+                                                    <i class="las la-eye"></i>
+                                                </a>
+                                            {% endif %}
+
+                                            {% if not notif.isRead %}
+                                                <span class="badge badge-inline bg-primary">Nouveau</span>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="list-group-item text-center py-4">
+                                    Aucune notification trouvée
+                                </li>
+                            {% endif %}
+                        </ul>
+
+                        <div class="aiz-pagination aiz-pagination-center mt-4">
+                            {{ knp_pagination_render(notifications) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.querySelectorAll('.time-ago').forEach(el => {
+    const dateStr = el.dataset.date;
+    el.textContent = timeAgo(dateStr);
+});
+
+function timeAgo(dateString) {
+    const now = new Date();
+    const past = new Date(dateString);
+    const diff = Math.floor((now - past) / 1000);
+
+    if (diff < 60) return "à l'instant";
+    if (diff < 3600) return "il y a " + Math.floor(diff / 60) + " minute(s)";
+    if (diff < 86400) return "il y a " + Math.floor(diff / 3600) + " heure(s)";
+    if (diff < 2592000) return "il y a " + Math.floor(diff / 86400) + " jour(s)";
+    return past.toLocaleDateString();
+}
+</script>
+{% endblock %}

@@ -218,17 +218,33 @@
 			</a>
 		</div>
 
-		<div class="col" {% if PageMenu is defined and PageMenu == "notifcations"%} style="color:#ef1c00 !important" {% endif %}>
-			<a {% if app.user and is_granted('ROLE_PROPRIETAIRE') %} href="" {% else %} href="{{path('app_login')}}" {% endif %} class="text-reset d-block text-center pb-2 pt-3">
-				<span class="d-inline-block position-relative px-2">
-					<i class="las la-bell fs-20 opacity-60 "></i>
+		<div class='col' {% if PageMenu is defined and PageMenu == "notifications_prop"%} style="color:#ef1c00 !important" {% endif %}  {% if PageMenu is defined and PageMenu == "vendeur_notifications"%} style="color:#ef1c00 !important" {% endif %}>
+    <a 
+        {% if app.user and is_granted('ROLE_PROPRIETAIRE') %}
+            href="{{ path('proprietaire_notifications') }}"
+        {% elseif app.user and is_granted('ROLE_VENDEUR_NEUF') %}
+            href="{{ path('vendeur_notifications') }}"
+		{% else %}
+		href="{{ path('app_login') }}"
+        {% endif %}
+        class="text-reset d-block text-center pb-2 pt-3"
+        {% if PageMenu is defined and PageMenu == 'notifications' %}
+            style="color:#ef1c00 !important;"
+        {% endif %}
+    >
+        <span class="d-inline-block position-relative px-2">
+            <i class="las la-bell fs-20 opacity-60"></i>
 
-					<span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right" style="right: 10px;top: 0px;"></span>
+            {# Badge visible si tu veux signaler des notifications non lues #}
+            {% if app.user and app.user.notifications is defined and app.user.notifications|filter(n => not n.isRead)|length > 0 %}
+                <span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right"
+                      style="right: 10px; top: 0px;"></span>
+            {% endif %}
+        </span>
+        <span class="d-block fs-10 fw-600 opacity-60">Notifications</span>
+    </a>
+</div>
 
-				</span>
-				<span class="d-block fs-10 fw-600 opacity-60 ">Notifications</span>
-			</a>
-		</div>
 		<div class="col">
 			{% if app.user %}
 				<a href="javascript:void(0);" onclick="opensidebar();" class="text-reset d-block text-center pb-2 pt-3 ">
@@ -426,19 +442,6 @@
 								</li>
 
 
-								<li {% if PageMenu is defined and PageMenu == "app_prop_vendeursOccasion"%} class="aiz-side-nav-item active" {% else %} class="aiz-side-nav-item" {% endif %}>
-									<a href="{{path('app_prop_vendeursOccasion')}}" {% if PageMenu is defined and PageMenu == "app_prop_vendeursOccasion"%} class="aiz-side-nav-link active" {% else %} class="aiz-side-nav-link" {% endif %}>
-										<svg id="Group_22071" data-name="Group 22071" xmlns="http://www.w3.org/2000/svg" width="14.6" height="16" viewbox="0 0 14.6 16">
-											<g id="LWPOLYLINE" transform="translate(0.158)">
-												<path id="Path_25677" data-name="Path 25677" d="M304.755,426.408v-2.032a.5.5,0,1,1,.993,0v3.239a.5.5,0,0,1-.5.5h-3.216a.5.5,0,0,1,0-1h2.006a6.924,6.924,0,0,0-11.8,1,.5.5,0,0,1-.666.221.5.5,0,0,1-.219-.672,7.913,7.913,0,0,1,13.4-1.256Z" transform="translate(-291.306 -423.268)" fill="#b5b5bf"></path>
-											</g>
-											<g id="LWPOLYLINE-2" data-name="LWPOLYLINE" transform="translate(0 10.879)">
-												<path id="Path_25678" data-name="Path 25678" d="M292.141,414.371V416.4a.5.5,0,1,1-.993,0v-3.238a.5.5,0,0,1,.5-.5h3.216a.5.5,0,0,1,0,1h-2.006a6.924,6.924,0,0,0,11.8-1,.493.493,0,0,1,.666-.221.5.5,0,0,1,.219.671,7.913,7.913,0,0,1-13.4,1.256Z" transform="translate(-291.148 -412.39)" fill="#b5b5bf"></path>
-											</g>
-										</svg>
-										<span class="aiz-side-nav-text ml-3">pièces occasion</span>
-									</a>
-								</li>
 
 
 								<li {% if PageMenu is defined and PageMenu == "app_prop_profile"%} class="aiz-side-nav-item active" {% else %} class="aiz-side-nav-item" {% endif %}>

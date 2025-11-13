@@ -24,19 +24,31 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class VendeurNeufController extends AbstractController
 {
     #[Route(path: '/vendeur/neuf/LayoutSeller', name: 'layout_seller', methods: "GET")]
-    public function layout_seller()
+    public function layout_seller(EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
     {
 
+         $user = $security->getUser();
+    $query = $em->getRepository(Notification::class)
+        ->createQueryBuilder('n')
+        ->where('n.User = :user')
+        ->setParameter('user', $user)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery();
 
-        return $this->render('vendeurNeuf/layoutVN.html.twig');
+    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
+
+        return $this->render('vendeurNeuf/layoutVN.html.twig', [
+        'notifications' => $notifications,
+    ]);
     }
 
   #[Route(path: '/vendeur/neuf/dashboard', name: 'dashboard_vendeurNeuf', methods: "GET")]
-public function dashboard_VN(DemandeRepository $demandeRepository, Request $request, EntityManagerInterface $em,OffreRepository $offreRepo)
+public function dashboard_VN(DemandeRepository $demandeRepository, Request $request,Security $security,PaginatorInterface $paginator, EntityManagerInterface $em,OffreRepository $offreRepo)
 {
     $session = $request->getSession();
     $session->set('PageMenu', 'dashboard_vendeurNeuf');
@@ -94,7 +106,15 @@ foreach ($dernieresOffres as $offre) {
     }
 }
 
+  $user = $security->getUser();
+    $query = $em->getRepository(Notification::class)
+        ->createQueryBuilder('n')
+        ->where('n.User = :user')
+        ->setParameter('user', $user)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery();
 
+    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
   // Calcul du taux d'acceptation
     $tauxAcceptation = $nombreOffres > 0 ? round(($nbOffresAcceptees / $nombreOffres) * 100, 2) : 0;
 
@@ -104,7 +124,8 @@ foreach ($dernieresOffres as $offre) {
         'nombreOffres' => $nombreOffres,
         'dernieresOffres' => $dernieresOffres,
         'nbOffresAcceptees' => $nbOffresAcceptees,
-         'tauxAcceptation' => $tauxAcceptation
+         'tauxAcceptation' => $tauxAcceptation,
+          'notifications' => $notifications,
     ]);
 }
 
@@ -112,7 +133,7 @@ foreach ($dernieresOffres as $offre) {
     #[Route('/vendeur/demande/detail/{id}', name: 'detail_demande_vendeur')]
     public function detailDemande(
         int $id,
-        Request $request,
+        Request $request,EntityManagerInterface $em,Security $security,PaginatorInterface $paginator,
         SessionInterface $session,
         DemandeRepository $demandeRepository
     ): Response {
@@ -131,16 +152,27 @@ foreach ($dernieresOffres as $offre) {
 
         // 🔹 Récupérer le client
         $client = $demande->getOffrecompte();
+         $user = $security->getUser();
+    $query = $em->getRepository(Notification::class)
+        ->createQueryBuilder('n')
+        ->where('n.User = :user')
+        ->setParameter('user', $user)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery();
+
+    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
+
 
         return $this->render('vendeurNeuf/detailDemande.html.twig', [
             'demande' => $demande,
             'pieces' => $pieces,
             'client' => $client,
+            'notifications' => $notifications,
         ]);
     }
 
     #[Route('/vendeur/demandes', name: 'vendeur_demandes')]
-public function demandesDisponibles(Request $request,DemandeRepository $demandeRepository, PaginatorInterface $paginator): Response
+public function demandesDisponibles(EntityManagerInterface $em,Request $request,DemandeRepository $demandeRepository,Security $security, PaginatorInterface $paginator): Response
 {
     $session = $request->getSession();
         $session->set('PageMenu', 'vendeur_demandes');
@@ -153,8 +185,20 @@ $dem = $paginator->paginate(
         $request->query->getInt('page', 1),
         12
     );
+
+         $user = $security->getUser();
+    $query = $em->getRepository(Notification::class)
+        ->createQueryBuilder('n')
+        ->where('n.User = :user')
+        ->setParameter('user', $user)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery();
+
+    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
+
     return $this->render('vendeurNeuf/demandes.html.twig', [
         'demandes' => $dem,
+        'notifications' => $notifications,
     ]);
 }
 
@@ -214,7 +258,7 @@ $result[] = [
 #[Route(path: '/vendeur/profile/Modifier/{id}', name: 'app_vendeurneuf_profile', methods: ['GET'])]
 public function profile(
     int $id,
-    Request $request,
+    Request $request,EntityManagerInterface $em, Security $security, PaginatorInterface $paginator,
     ManagerRegistry $doctrine,
     UsersService $UsersService
 ): Response {
@@ -243,9 +287,17 @@ public function profile(
 
     // Récupération des infos via le service (si besoin d’infos supplémentaires)
     $profileuser = $UsersService->getProfile($id);
+  $user = $security->getUser();
+    $query = $em->getRepository(Notification::class)
+        ->createQueryBuilder('n')
+        ->where('n.User = :user')
+        ->setParameter('user', $user)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery();
 
+    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
     return $this->render('vendeurNeuf/profile.html.twig', [
-        'profileuser' => $profileuser,
+        'profileuser' => $profileuser, 'notifications' => $notifications,
     ]);
 }
 
@@ -269,15 +321,25 @@ public function profile(
         return new response('success');
     }
   #[Route('/demande/{id}/proposer-offre', name: 'propose_offre', methods: ['GET'])]
-    public function showForm(Demande $demande): Response
+    public function showForm(Demande $demande,EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
     {
         // Vérifier que l'utilisateur est vendeur
         if (!$this->isGranted('ROLE_VENDEUR_NEUF')) {
             throw $this->createAccessDeniedException('Accès refusé');
         }
+         $user = $security->getUser();
+    $query = $em->getRepository(Notification::class)
+        ->createQueryBuilder('n')
+        ->where('n.User = :user')
+        ->setParameter('user', $user)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery();
+
+    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
+
 
         return $this->render('vendeurNeuf/proposeoffre.html.twig', [
-            'demande' => $demande,
+            'demande' => $demande,'notifications' => $notifications,
         ]);
     }
 
@@ -369,16 +431,20 @@ public function createOffre(
     $em->persist($offre);
     $em->flush();
 
-    $proprietaire = $demande->getOffrecompte() ?? null;
-   
+$proprietaire = $demande->getOffrecompte() ?? null;
+
 if ($proprietaire) {
     $notif = new Notification();
     $notif->setUser($proprietaire);
-    $notif->setMessage("Vous avez reçu une nouvelle offre N° {$offre->getNumeroOffre()} pour la demande N° {$demande->getId()}");
-    $notif->setCreatedAt(new \DateTimeImmutable()); 
+    $notif->setMessage("Vous avez reçu une nouvelle offre N° {$offre->getNumeroOffre()} pour la demande N° {$demande->getCode()}");
+    $notif->setOffre($offre); // 🔗 On lie la notification à l’offre correspondante
+    $notif->setCreatedAt(new \DateTimeImmutable());
+    $notif->setIsRead(false); // 🟡 Par défaut, non lue
+
     $em->persist($notif);
     $em->flush();
 }
+
 
    $proprietaireEmail = null;
 
@@ -436,7 +502,7 @@ $mailer->send($email);
 
 
     #[Route('/vendeur/neuf/offres', name: 'vendeur_offres')]
-    public function toutesOffres(Request $request,EntityManagerInterface $em): Response
+    public function toutesOffres(Request $request,EntityManagerInterface $em, Security $security, PaginatorInterface $paginator,): Response
     {
           $session = $request->getSession();
         $session->set('PageMenu', 'vendeur_offres');
@@ -447,7 +513,15 @@ $mailer->send($email);
             $this->addFlash('error', 'Vous devez être connecté pour voir vos offres.');
             return $this->redirectToRoute('app_login'); // adapter selon ton login route
         }
-        
+        $user = $security->getUser();
+    $query = $em->getRepository(Notification::class)
+        ->createQueryBuilder('n')
+        ->where('n.User = :user')
+        ->setParameter('user', $user)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery();
+
+    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
 
         // Récupérer toutes les offres du vendeur
         $offres = $em->getRepository(Offre::class)
@@ -476,7 +550,7 @@ foreach ($offres as $offre) {
     }
 }
         return $this->render('vendeurNeuf/mesoffres.html.twig', [
-            'offres' => $offres,
+            'offres' => $offres,'notifications' => $notifications,
         ]);
     }
 
@@ -501,9 +575,8 @@ public function retirerOffre(Request $request, EntityManagerInterface $em): Json
 
 #[Route('/offre/{id}/modifier', name: 'offre_edit', methods: ['GET', 'POST'])]
 public function editOffre(
-    Offre $offre,
+    Offre $offre,EntityManagerInterface $em, Security $security, PaginatorInterface $paginator,
     Request $request,
-    EntityManagerInterface $em
 ): Response {
     // Récupérer les pièces de la demande associée
     $pieces = $offre->getDemande()->getPieces();
@@ -565,19 +638,39 @@ public function editOffre(
 
         return $this->redirectToRoute('vendeur_offres');
     }
+   $user = $security->getUser();
+    $query = $em->getRepository(Notification::class)
+        ->createQueryBuilder('n')
+        ->where('n.User = :user')
+        ->setParameter('user', $user)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery();
+
+    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
+
 
     return $this->render('vendeurNeuf/modifoffre.html.twig', [
         'offre' => $offre,
-        'demande' => $offre->getDemande(),
+        'demande' => $offre->getDemande(),'notifications' => $notifications,
     ]);
 }
 
 
 #[Route('/vendeur/offre/{id}', name: 'offre_show')]
-public function show(Offre $offre): Response
+public function show(Offre $offre,EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
 {
+       $user = $security->getUser();
+    $query = $em->getRepository(Notification::class)
+        ->createQueryBuilder('n')
+        ->where('n.User = :user')
+        ->setParameter('user', $user)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery();
+
+    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
+
     return $this->render('vendeurNeuf/voiroffre.html.twig', [
-        'offre' => $offre,
+        'offre' => $offre,'notifications' => $notifications,
     ]);
 }
 
@@ -586,5 +679,28 @@ public function inviter(): Response
 {
     return $this->render('vendeurNeuf/inviter.html.twig');
 }
+
+#[Route('/vendeur/neuf/notifications', name: 'vendeur_notifications')]
+public function vendeurNotifications(EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
+{
+
+      $session = $request->getSession();
+        $session->set('PageMenu', 'vendeur_notifications');
+    $user = $security->getUser();
+
+    $query = $em->getRepository(Notification::class)
+        ->createQueryBuilder('n')
+        ->where('n.User = :user')
+        ->setParameter('user', $user)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery();
+
+    $notifications = $paginator->paginate($query, $request->query->getInt('page', 1), 10);
+
+    return $this->render('vendeurNeuf/notification.html.twig', [
+        'notifications' => $notifications,
+    ]);
+}
+
 
 }

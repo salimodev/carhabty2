@@ -25,6 +25,20 @@ class Notification
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne(targetEntity: Offre::class)]
+private ?Offre $offre = null;
+
+public function getOffre(): ?Offre
+{
+    return $this->offre;
+}
+
+public function setOffre(?Offre $offre): static
+{
+    $this->offre = $offre;
+    return $this;
+}
+
     public function getId(): ?int
     {
         return $this->id;

@@ -18,7 +18,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\DemandeRepository;
 use App\Repository\OffreRepository;
+use App\Repository\NotificationRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+
 
 final class ProprietaireController extends AbstractController
 {
@@ -34,8 +38,12 @@ final class ProprietaireController extends AbstractController
     }
 
     // ✅ Récupérer toutes les demandes liées à ce user
-    $demandes = $em->getRepository(\App\Entity\Demande::class)
-        ->findBy(['offrecompte' => $user], ['datecreate' => 'DESC']);
+   $demandes = $em->getRepository(\App\Entity\Demande::class)
+    ->findBy(
+        ['offrecompte' => $user], // critère
+        ['datecreate' => 'DESC'], // ordre
+        5 // limite
+    );
      $demandeCount = $em->getRepository(Demande::class)->countByUser($this->getUser());
      $user = $this->getUser();
      $nbOffres = $offreRepo->createQueryBuilder('o')
@@ -297,6 +305,9 @@ public function changerStatus(Request $request, EntityManagerInterface $em, Offr
         $notif->setUser($vendeur);
         $notif->setMessage("Votre offre N° {$offre->getNumeroOffre()} a été " . ($status === 'acceptee' ? 'acceptée' : 'refusée') . " par le demandeur.");
         $notif->setCreatedAt(new \DateTimeImmutable());
+         // 🆕 On lie la notification à l’offre concernée
+        $notif->setOffre($offre);
+
         $em->persist($notif);
         $em->flush();
     }
@@ -306,12 +317,29 @@ public function changerStatus(Request $request, EntityManagerInterface $em, Offr
 
 
 #[Route('/proprietaire/offre/{id}', name: 'offre_show_prop', methods: ['GET'])]
-public function showOffre(
+public function showOffre( EntityManagerInterface $em,
+    NotificationRepository $notificationRepository,
+    Security $security,
     Offre $offre
 ): Response {
-    // Récupérer les pièces associées à l'offre
+    $user = $security->getUser();
+
     $offrePieces = $offre->getOffrePieces();
 
+    if ($user) {
+        // Chercher la notification liée à cette offre et à cet utilisateur
+        $notification = $notificationRepository->findOneBy([
+            'User'  => $user,
+            'offre' => $offre,
+            'isRead' => false
+        ]);
+
+        // Si elle existe, on la marque comme lue
+        if ($notification) {
+            $notification->setIsRead(true);
+            $em->flush();
+        }
+    }
     return $this->render('proprietaire/offre_detail.html.twig', [
         'offre' => $offre,
         'offrePieces' => $offrePieces,
@@ -322,13 +350,27 @@ public function showOffre(
 #[Route('/offre/{id}/accepter', name: 'offre_accepter')]
 public function accepter(Offre $offre, EntityManagerInterface $em): Response
 {
-    // Changer le statut de l'offre
+    // --- Changer le statut de l'offre ---
     $offre->setStatus('acceptee');
 
-    // Changer le statut de la demande associée
+    // --- Changer le statut de la demande associée ---
     $demande = $offre->getDemande();
     if ($demande) {
-        $demande->setStatut('fermer'); // Assure-toi que la propriété status existe dans Demande
+        $demande->setStatut('fermer'); // Assure-toi que la propriété statut existe dans Demande
+    }
+
+    // --- Création de la notification pour le vendeur ---
+    $vendeur = $offre->getUser(); // le vendeur qui a proposé l'offre
+    if ($vendeur) {
+        $notif = new Notification();
+        $notif->setUser($vendeur);
+        $notif->setMessage("Votre offre N° {$offre->getNumeroOffre()} pour la demande N° {$demande->getId()} a été acceptée par le demandeur.");
+        $notif->setCreatedAt(new \DateTimeImmutable());
+
+        // Si tu as ajouté la relation Notification -> Offre
+        $notif->setOffre($offre);
+
+        $em->persist($notif);
     }
 
     $em->flush();
@@ -337,20 +379,71 @@ public function accepter(Offre $offre, EntityManagerInterface $em): Response
 }
 
 
+
 #[Route('/offre/{id}/refuser', name: 'offre_refuser')]
 public function refuser(Offre $offre, EntityManagerInterface $em): Response
 {
+    // --- Changer le statut de l'offre ---
     $offre->setStatus('refusee');
+
+    // --- Création de la notification pour le vendeur ---
+    $vendeur = $offre->getUser(); // le vendeur qui a proposé l'offre
+    $demande = $offre->getDemande();
+    if ($vendeur && $demande) {
+        $notif = new Notification();
+        $notif->setUser($vendeur);
+        $notif->setMessage("Votre offre N° {$offre->getNumeroOffre()} pour la demande N° {$demande->getId()} a été refusée par le demandeur.");
+        $notif->setCreatedAt(new \DateTimeImmutable());
+
+        // Si tu as ajouté la relation Notification -> Offre
+        $notif->setOffre($offre);
+
+        $em->persist($notif);
+    }
+
     $em->flush();
 
-    return new Response('Offre refusée avec succès !');
+    return new Response('Offre refusée et notification envoyée au vendeur !');
 }
+
 
 #[Route('/inviter/proprietaire', name: 'inviter_proprietaire')]
 public function inviter(): Response
 {
     return $this->render('proprietaire/inviter.html.twig');
 }
+
+#[Route('/proprietaire/notifications', name: 'proprietaire_notifications')]
+    public function notification(EntityManagerInterface $em, Request $request, PaginatorInterface $paginator): Response
+    {
+
+          $session = $request->getSession();
+          $session->set('PageMenu', 'notifications_prop');
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Récupérer toutes les notifications du propriétaire connecté
+        $query = $em->getRepository(Notification::class)
+            ->createQueryBuilder('n')
+            ->where('n.User = :user')
+            ->setParameter('user', $user)
+            ->orderBy('n.createdAt', 'DESC')
+            ->getQuery();
+
+        // Pagination
+        $notifications = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+
+        return $this->render('proprietaire/notifications.html.twig', [
+            'notifications' => $notifications,
+        ]);
+    }
 
 
 }

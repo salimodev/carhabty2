@@ -1,0 +1,90 @@
+{% extends 'vendeurNeuf/layoutVN.html.twig' %}
+{% block Head %}
+	{{ parent() }}
+
+	{% block LinksCss %}
+		{{ parent() }}
+		<link rel="stylesheet" href="{{ asset ('css/carousel.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/carouselle.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/fontawesome.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
+		
+	{% endblock %}
+
+{% endblock %}
+
+{% block title %}Tableau de bord
+{% endblock %}
+{% block Header %}
+	{{ parent() }}
+{% endblock %}
+
+
+{% block page %}
+	{{ parent() }}
+	{% block loader %}
+		{{ parent() }}
+	{% endblock %}
+	{% if app.user %}
+		{% if is_granted('ROLE_VENDEUR_NEUF') %}
+		<section class="py-5" style="background-color: #ffffff;">
+    <div class="container">
+        <div class="d-flex align-items-start">
+           
+            <div class="aiz-user-panel w-100">
+                <div class="card">
+                    <div class="card-header row gutters-5">
+                        <div class="col">
+                            <h5 class="mb-0 h6">Notifications</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% if notifications|length > 0 %}
+                                {% for notif in notifications %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <div>
+                                            <p class="mb-1">{{ notif.message }}</p>
+                                            <small class="text-muted">{{ notif.createdAt|date('d/m/Y H:i') }}</small>
+                                            <a href="{{ path('offre_show', {'id': notif.offre.id}) }}" class="btn btn-info btn-icon btn-circle btn-sm">
+                                            <i class="las la-eye"></i>
+                                        </a>
+                                        </div>
+                                        
+                                        {% if not notif.isRead %}
+                                            <span class="badge badge-inline bg-danger" style="color:#fff">Nouveau</span>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="list-group-item text-center py-4">
+                                    Aucune notification trouvée
+                                </li>
+                            {% endif %}
+                        </ul>
+
+                        <div class="aiz-pagination aiz-pagination-center mt-4">
+                            {{ knp_pagination_render(notifications) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+		 </div>	
+
+		{% endif %}
+	{% endif %}
+{% endblock %}
+{% block footer %}
+	{{ parent() }}
+{% endblock %}
+{% block javascript %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{asset ('assets/js/carousel.js') }}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script type="text/javascript">
+	
+    </script>
+{% endblock %}
+

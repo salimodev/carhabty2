@@ -106,16 +106,17 @@ class OffrePiece
     }
 
     public function getMarque3(): ?string
-    {
-        return $this->marque2;
-    }
+{
+    return $this->marque3;   // ✔ correct
+}
 
-    public function setMarque3(?string $marque2): static
-    {
-        $this->marque2 = $marque2;
+public function setMarque3(?string $marque3): static
+{
+    $this->marque3 = $marque3;  // ✔ correct
 
-        return $this;
-    }
+    return $this;
+}
+
 
     public function getOffre(): ?offre
     {

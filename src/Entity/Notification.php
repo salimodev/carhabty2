@@ -25,8 +25,10 @@ class Notification
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne(targetEntity: Offre::class)]
+  #[ORM\ManyToOne(targetEntity: Offre::class)]
+#[ORM\JoinColumn(onDelete: "CASCADE", nullable: true)]
 private ?Offre $offre = null;
+
 
 public function getOffre(): ?Offre
 {

@@ -62,6 +62,10 @@ public function onAuthenticationSuccess(Request $request, TokenInterface $token,
         return new RedirectResponse($this->router->generate('app_proprietaire'));
     }
 
+     if (in_array('ROLE_MECANICIEN', $user->getRoles(), true)) {
+        return new RedirectResponse($this->router->generate('app_mecancien'));
+    }
+
     // Sinon, redirige par défaut (page d’accueil)
     return new RedirectResponse($this->router->generate('Accueil'));
 }

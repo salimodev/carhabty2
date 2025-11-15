@@ -11,8 +11,8 @@
 {% endblock %}
 
 {% block Content %}
- {% if app.user %}
-        {% if is_granted('ROLE_PROPRIETAIRE') %}
+   {% if app.user %}
+        {% if is_granted('ROLE_MECANICIEN') %}
 <section class="py-5" style="background-color: #f5f5f5;">
     <div class="container">
         <div class="d-flex align-items-start">
@@ -40,7 +40,7 @@
                                         <div class="d-flex align-items-center gap-2">
                                             {% if notif.offre is defined and notif.offre is not null %}
                                                 <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
-                                                   href="{{ path('offre_show_prop', {'id': notif.offre.id}) }}"
+                                                   href="{{ path('offre_show_mecano', {'id': notif.offre.id}) }}"
                                                    title="Voir détails de l’offre">
                                                     <i class="las la-eye"></i>
                                                 </a>
@@ -68,7 +68,7 @@
         </div>
     </div>
 </section>
- {% endif %}
+    {% endif %}
     {% endif %}
 {% endblock %}
 

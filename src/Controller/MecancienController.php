@@ -24,13 +24,13 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
 
-final class ProprietaireController extends AbstractController
+final class MecancienController extends AbstractController
 {
-    #[Route('/proprietaire', name: 'app_proprietaire')]
-    public function index(Request $request, EntityManagerInterface $em, OffreRepository $offreRepo): Response
+    #[Route('/mecanicien', name: 'app_mecancien')]
+    public function dashboard_mecano(Request $request, EntityManagerInterface $em, OffreRepository $offreRepo): Response
     {
         $session = $request->getSession();
-        $session->set('PageMenu', 'proprietaire');
+        $session->set('PageMenu', 'mecanicien');
         $user = $this->getUser();
 
         if (!$user) {
@@ -65,7 +65,7 @@ final class ProprietaireController extends AbstractController
             ->getQuery()
             ->getSingleScalarResult();
 
-        return $this->render('proprietaire/proprietaire.html.twig', [
+        return $this->render('mecancien/mecancien.html.twig', [
             'demandeCount' => $demandeCount,
             'demandes' => $demandes,
             'nbOffres' => $nbOffres,
@@ -73,11 +73,7 @@ final class ProprietaireController extends AbstractController
         ]);
     }
 
-
-
-
-
-    #[Route(path: '/proprietaire/profile/Modifier/{id}', name: 'app_proprietaire_profile', methods: ['GET'])]
+    #[Route(path: '/mecanicien/profile/Modifier/{id}', name: 'app_mecancien_profile', methods: ['GET'])]
     public function profile(
         int $id,
         Request $request,
@@ -85,7 +81,7 @@ final class ProprietaireController extends AbstractController
         UsersService $UsersService
     ): Response {
         $session = $request->getSession();
-        $session->set('PageMenu', 'app_proprietaire_profile');
+        $session->set('PageMenu', 'app_mecancien_profile');
 
         $user = $this->getUser();
 
@@ -110,12 +106,12 @@ final class ProprietaireController extends AbstractController
         // Récupération des infos via le service (si besoin d’infos supplémentaires)
         $profileuser = $UsersService->getProfile($id);
 
-        return $this->render('proprietaire/profile.html.twig', [
+        return $this->render('mecancien/profile.html.twig', [
             'profileuser' => $profileuser,
         ]);
     }
 
-    #[Route(path: '/proprietaire/profile/Modifier', name: 'Modifier_profile_proprietaire')]
+    #[Route(path: '/mecanicien/profile/Modifier', name: 'Modifier_profile_mecancien')]
     public function Modifier_profile(Request $request, UserPasswordHasherInterface $userPasswordHasher, UsersService $UsersService)
     {
 
@@ -136,11 +132,12 @@ final class ProprietaireController extends AbstractController
         return new response('success');
     }
 
-    #[Route(path: '/proprietaire/demandes', name: 'app_prop_demandes')]
+
+    #[Route(path: '/mecanicien/demandes', name: 'app_mecanicien_demandes')]
     public function demandedeprix_prop(Request $request, EntityManagerInterface $em): Response
     {
         $session = $request->getSession();
-        $session->set('PageMenu', 'proprietaire_demande');
+        $session->set('PageMenu', 'mecanicien_demande');
         $user = $this->getUser();
 
         if (!$user) {
@@ -148,45 +145,12 @@ final class ProprietaireController extends AbstractController
         }
         $demandes = $em->getRepository(\App\Entity\Demande::class)
             ->findBy(['offrecompte' => $user], ['datecreate' => 'DESC']);
-        return $this->render('/proprietaire/demande.html.twig', [
+        return $this->render('mecancien/demandes.html.twig', [
             'demandes' => $demandes
         ]);
     }
 
-    #[Route('/proprietaire/offres', name: 'app_prop_offres')]
-    public function offres_prop(Request $request): Response
-    {
-        $session = $request->getSession();
-        $session->set('PageMenu', 'app_prop_offres');
-        return $this->render('contact.html.twig');
-    }
-
-
-    #[Route('/proprietaire/vendeursNeuf', name: 'app_prop_vendeurs')]
-    public function vendeur_neuf(Request $request): Response
-    {
-        $session = $request->getSession();
-        $session->set('PageMenu', 'app_prop_vendeurs');
-        return $this->render('contact.html.twig');
-    }
-
-    #[Route('/proprietaire/vendeursOccasion', name: 'app_prop_vendeursOccasion')]
-    public function vendeur_occasion(Request $request): Response
-    {
-        $session = $request->getSession();
-        $session->set('PageMenu', 'app_prop_vendeursOccasion');
-        return $this->render('contact.html.twig');
-    }
-
-    #[Route('/proprietaire/mecancien', name: 'app_prop_mecancien')]
-    public function mecancien(Request $request): Response
-    {
-        $session = $request->getSession();
-        $session->set('PageMenu', 'app_prop_mecancien');
-        return $this->render('contact.html.twig');
-    }
-
-    #[Route('/proprietaire/demande/detail/{id}', name: 'detail_demande')]
+    #[Route('/mecanicien/demande/detail/{id}', name: 'detail_demande_mecan')]
     public function detailDemande(
         int $id,
         Request $request,
@@ -194,7 +158,7 @@ final class ProprietaireController extends AbstractController
         DemandeRepository $demandeRepository
     ): Response {
         $session = $request->getSession();
-        $session->set('PageMenu', 'detail_demande');
+        $session->set('PageMenu', 'detail_demande_mecan');
 
         // 🔹 Récupérer la demande
         $demande = $demandeRepository->find($id);
@@ -209,12 +173,13 @@ final class ProprietaireController extends AbstractController
         // 🔹 Récupérer le client
         $client = $demande->getOffrecompte();
 
-        return $this->render('proprietaire/detailDemande.html.twig', [
+        return $this->render('mecancien/detailDemandeMec.html.twig', [
             'demande' => $demande,
             'pieces' => $pieces,
             'client' => $client,
         ]);
     }
+
 
     #[Route(path: '/demande/supprimer', name: 'supprimer_demande')]
     public function supprimerDemande(Request $request, EntityManagerInterface $em): JsonResponse
@@ -238,11 +203,12 @@ final class ProprietaireController extends AbstractController
         return new JsonResponse('done');
     }
 
-    #[Route('/proprietaire/mes-offres', name: 'proprietaire_offres')]
+    #[Route('/mecanicien/mes-offres', name: 'mecan_offres')]
     public function mesOffres(Request $request, DemandeRepository $demandeRepo, OffreRepository $offreRepo): Response
     {
+
         $session = $request->getSession();
-        $session->set('PageMenu', 'proprietaire_offres');
+        $session->set('PageMenu', 'mecan_offres');
         $user = $this->getUser();
 
         // Récupère toutes les demandes de ce propriétaire
@@ -257,7 +223,7 @@ final class ProprietaireController extends AbstractController
             }
         }
 
-        return $this->render('proprietaire/offrerecu.html.twig', [
+        return $this->render('mecancien/offres.html.twig', [
             'offres' => $offres,
         ]);
     }
@@ -319,7 +285,8 @@ final class ProprietaireController extends AbstractController
     }
 
 
-    #[Route('/proprietaire/offre/{id}', name: 'offre_show_prop', methods: ['GET'])]
+
+    #[Route('/mecanicien/offre/{id}', name: 'offre_show_mecano', methods: ['GET'])]
     public function showOffre(
         EntityManagerInterface $em,
         NotificationRepository $notificationRepository,
@@ -344,7 +311,7 @@ final class ProprietaireController extends AbstractController
                 $em->flush();
             }
         }
-        return $this->render('proprietaire/offre_detail.html.twig', [
+        return $this->render('mecancien/offreDetail.html.twig', [
             'offre' => $offre,
             'offrePieces' => $offrePieces,
             'demande' => $offre->getDemande()
@@ -411,18 +378,18 @@ final class ProprietaireController extends AbstractController
     }
 
 
-    #[Route('/inviter/proprietaire', name: 'inviter_proprietaire')]
+    #[Route('/inviter/mecanicien', name: 'inviter_mecanicien')]
     public function inviter(): Response
     {
-        return $this->render('proprietaire/inviter.html.twig');
+        return $this->render('mecancien/inviter.html.twig');
     }
 
-    #[Route('/proprietaire/notifications', name: 'proprietaire_notifications')]
+       #[Route('/mecanicien/notifications', name: 'mecanicien_notifications')]
     public function notification(EntityManagerInterface $em, Request $request, PaginatorInterface $paginator): Response
     {
 
         $session = $request->getSession();
-        $session->set('PageMenu', 'notifications_prop');
+        $session->set('PageMenu', 'mecanicien_notifications');
         $user = $this->getUser();
 
         if (!$user) {
@@ -444,7 +411,7 @@ final class ProprietaireController extends AbstractController
             10
         );
 
-        return $this->render('proprietaire/notifications.html.twig', [
+        return $this->render('mecancien/notification.html.twig', [
             'notifications' => $notifications,
         ]);
     }

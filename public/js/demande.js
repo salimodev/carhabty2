@@ -454,6 +454,7 @@ html += "<td>" + photoPiece + "</td>";
 }
 
 function cloudDinaryimageCINrecto() {
+        $('#cloudinaryPreloader').show();
   cloudinary.openUploadWidget({
     cloudName: 'b-ja',
     uploadPreset: 'aladdineshop',
@@ -466,6 +467,7 @@ function cloudDinaryimageCINrecto() {
     buttonCaption: 'Télécharger image'
   }, 
   (error, result) => {
+       $('#cloudinaryPreloader').hide();
     if (!error && result && result.event === "success") {
       console.log('Upload réussi : ', result.info.secure_url);
       document.getElementById("srcLogo2").value = result.info.secure_url;
@@ -512,6 +514,7 @@ document.getElementById('click_to_convert').addEventListener('click', function(e
 
 
 function cloudDinaryCreationLogomarque() {
+      $('#cloudinaryPreloader').show();
   cloudinary.openUploadWidget({
     cloudName: 'b-ja',
     uploadPreset: 'aladdineshop',
@@ -524,6 +527,7 @@ function cloudDinaryCreationLogomarque() {
     buttonCaption: 'Télécharger image'
   }, 
   (error, result) => {
+      $('#cloudinaryPreloader').hide();
     if (!error && result && result.event === "success") {
       console.log('Upload réussi : ', result.info.secure_url);
       document.getElementById("srcLogo").value = result.info.secure_url;

@@ -343,11 +343,15 @@
 
 													{# Image cliquable #}
 													<a href="{{ path('detail_demande_vendeur', {'id': demande.id}) }}">
-														<div class="request-image">
-															{% set photo = (demande.pieces|first).photo ?? '/assets/img/placeholder.png' %}
-															<img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
-														</div>
-													</a>
+    <div class="request-image">
+        {% if demande.pieces|length > 0 and (demande.pieces|first).photo %}
+            <img src="{{ (demande.pieces|first).photo }}" alt="photo" class="img-fit mx-auto rounded">
+        {% else %}
+            <img src="{{ asset('image/placeholder.png') }}" alt="placeholder" class="img-fit mx-auto rounded">
+        {% endif %}
+    </div>
+</a>
+
 
 													{# Description #}
 													<p class="request-description">

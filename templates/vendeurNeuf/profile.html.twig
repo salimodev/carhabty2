@@ -353,6 +353,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script type="text/javascript">
 		function cloudDinaryPhotoprofile() {
+			  $('#cloudinaryPreloader').show();
 cloudinary.openUploadWidget({
 api_key: '539474279193439',
 api_secret: '7A1irSbuKcg2XIH1TLqB4pBUZfA',
@@ -379,6 +380,7 @@ button_caption: 'Télécherger image'
 
 
 }, (error, result) => {
+	  $('#cloudinaryPreloader').hide();
 if (!error && result && result.event === "success") {
 $type = "photo";
 $("#srcLogo").val(result.info.secure_url);

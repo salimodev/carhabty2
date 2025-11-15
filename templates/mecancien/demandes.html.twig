@@ -1,0 +1,150 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+    carhabty
+{% endblock %}
+
+{% block Head %}
+    {{ parent() }}
+    {% block LinksCss %}
+        {{ parent() }}
+        <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
+    {% endblock %}
+{% endblock %}
+
+{% block Content %}
+    {% if app.user %}
+        {% if is_granted('ROLE_MECANICIEN') %}
+<section class="py-5" style="background-color: #f5f5f5;">
+	<div class="container">
+		<div class="d-flex align-items-start">
+			{% block sideHeader %}
+				{{ parent() }}
+			{% endblock %}
+			<div class="aiz-user-panel">
+				<div class="aiz-titlebar mt-2 mb-4">
+					<div class="row align-items-center">
+						<div class="col-md-6">
+							<b class="h4">Mes demandes</b>
+						</div>
+					</div>
+					<div class="col text-right">
+						<a href="{{path('app_demande')}}" class="btn btn-register btn-outline-light">
+							<span>Nouveau demande</span>
+						</a>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h5 class="mb-0 h6">Demandes</h5>
+							</div>
+							<div class="card-body">
+								<table id="tabdemande" style="width:100%">
+									<thead>
+										<tr>
+											<th>Code</th>
+											<th>Marque</th>
+											<th>Modèle</th>
+											<th>N° Châssis</th>
+											<th>Énergie</th>
+											<th>État moteur</th>
+											<th>Date</th>
+											<th>Status</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for demande in demandes %}
+											<tr>
+												<td>
+													<a href="{{path('detail_demande_mecan',{'id':demande.id})}}">{{ demande.code }}</a>
+												</td>
+												<td>{{ demande.marque }}</td>
+												<td>{{ demande.modele }}</td>
+												<td>{{ demande.chassis }}</td>
+												<td>{{ demande.energie }}</td>
+												<td>{{ demande.etatmoteur }}</td>
+												<td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
+												<td>
+													{% if demande.statut == 'ouvert' %}
+														<span class="badge badge-inline badge-success">ouvert</span>
+													{% elseif demande.statut == 'fermer' %}
+														<span class="badge badge-inline badge-danger">fermé</span>
+													{% endif %}
+												</td>
+												<td class="text-right">
+													<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande_mecan',{'id':demande.id})}}" title="Voir">
+														<i class="las la-eye"></i>
+													</a>
+													<a onclick="supprimerdemande($(this),'{{ demande.id }}');" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Supprimer">
+														<i class="las la-trash"></i>
+													</a>
+												</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- /.aiz-user-panel -->
+					</div>
+					<!-- /.d-flex -->
+				</div>
+				<!-- /.container -->
+			</section>
+
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+<script type="text/javascript">
+	$(document).ready(function () {
+$('#tabdemande').DataTable({
+  responsive: true,
+    autoWidth: false,
+    columnDefs: [
+        { targets: '_all', className: 'text-nowrap text-center align-middle' },
+        { targets: -1, orderable: false } // dernière colonne (Action)
+    ],
+    language: {
+        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
+    }
+});
+});
+
+function supprimerdemande(element, $id) {
+$_data = {
+'id': $id
+},
+Swal.fire({
+title: 'Êtes-vous sûr de vouloir supprimer cette demande ?',
+type: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#25a89d ',
+cancelButtonColor: '#ff6b35',
+confirmButtonText: 'Supprimer',
+cancelButtonText: 'Annuler'
+}).then((result) => {
+if (result.value) {
+$.ajax({
+type: "POST",
+url: "{{ path('supprimer_demande') }}",
+data: $_data,
+success: function (response) {
+element.parent().remove();
+Swal.fire({title: "success!", text: "la  marque à été supprimer avec succés!", icon: "success"});
+
+
+location.reload();
+}
+});
+}
+})
+}
+</script>{% endblock %}
+

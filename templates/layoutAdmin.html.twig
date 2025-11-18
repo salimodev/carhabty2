@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		{%block Head %}
+
+			<meta name="csrf-token" content="VpA81Ra2oe5qHpO2Y4iorD3lU7RV4e6ZqcWsl5od">
+			<meta name="app-url" content="http://127.0.0.1:8000">
+			<meta name="file-base-url" content="http://127.0.0.1:8000">
+
+			<!-- Required meta tags -->
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+			<!-- Favicon -->
+			
+		   
+			<link rel="icon"  href="{{ asset ('image/logo2.png')}}" >
+		  
+			<title>Admin</title>
+
+			<!-- google font -->
+			<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">
+			<link
+			rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.3/r-2.2.9/datatables.min.css"/>
+			<!-- aiz core css -->
+
+			<style>
+				body {
+					font-size: 12px;
+				}
+				div.dataTables_wrapper div.dataTables_filter input {
+					margin-left: 0.5em !important;
+					display: inline-block;
+					width: 170px;
+				}
+				/***************************************/
+				/* Style Loader */
+				/***************************************/
+				.loaderAcc {
+					position: fixed;
+					width: 100%;
+					height: 100%;
+					text-align: center;
+					background-color: rgb(58 54 54 / 72%);
+					z-index: 999;
+					display: none;
+				}
+				.loaderAcc > .spinner-border.text-info {
+					margin-top: 15%;
+					width: 5rem;
+					height: 5rem;
+					border-left-color: red !important;
+					border-right-color: red !important;
+					border-bottom-color: red !important;
+				}
+				/***************************************/
+			</style>
+			<script>
+				var AIZ = AIZ || {};
+AIZ.local = {
+nothing_found: 'Nothing found',
+choose_file: 'Choose file',
+file_selected: 'File selected',
+files_selected: 'Files selected',
+add_more_files: 'Add more files',
+adding_more_files: 'Adding more files',
+drop_files_here_paste_or: 'Drop files here, paste or',
+browse: 'Browse',
+upload_complete: 'Upload complete',
+upload_paused: 'Upload paused',
+resume_upload: 'Resume upload',
+pause_upload: 'Pause upload',
+retry_upload: 'Retry upload',
+cancel_upload: 'Cancel upload',
+uploading: 'Uploading',
+processing: 'Processing',
+complete: 'Complete',
+file: 'File',
+files: 'Files'
+}
+			</script>
+
+			<style>
+				type="text/css"
+				/* Chart.js */
+				@keyframes chartjs-render-animation {
+					from {
+						opacity: .99
+					}
+					to {
+						opacity: 1
+					}
+				}
+				.chartjs-render-monitor {
+					animation: chartjs-render-animation 1ms
+				}
+				.chartjs-size-monitor,
+				.chartjs-size-monitor-expand,
+				.chartjs-size-monitor-shrink {
+					position: absolute;
+					direction: ltr;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					overflow: hidden;
+					pointer-events: none;
+					visibility: hidden;
+					z-index: -1
+				}
+				.chartjs-size-monitor-expand > div {
+					position: absolute;
+					width: 1000000px;
+					height: 1000000px;
+					left: 0;
+					top: 0
+				}
+				.chartjs-size-monitor-shrink > div {
+					position: absolute;
+					width: 200%;
+					height: 200%;
+					left: 0;
+					top: 0
+				}
+				.loader {
+					display: none;
+					width: 100%;
+					z-index: 100;
+					top: 30%;
+					position: fixed;
+				}
+			</style>
+			{%block LinksCss %}
+
+				<!-- CSS here -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">
+				<link type="text/css" rel="stylesheet" href="{{ asset ('css/responsive.bootstrap4.min.css')}}">
+				<link rel="stylesheet" href="{{ asset ('css/vendors.css') }}">
+				<link rel="stylesheet" href="{{ asset ('css/aiz-core.css') }}">
+				<link rel="stylesheet" href="{{ asset ('css/dropzone.css') }}">
+				<link rel="stylesheet" href="{{ asset ('css/uppy.css') }}">
+				<link rel="stylesheet" href="{{ asset ('css/uppy.css') }}">
+                <link rel="stylesheet" href="{{ asset ('css/daterangepicker.min.css') }}">
+				<link rel="stylesheet" href="{{ asset ('footable/css/footable.bootstrap.css') }}">
+				<link rel="stylesheet" href="{{ asset ('footable/css/footable.bootstrap.min.css') }}">
+
+				<link type="text/css" rel="stylesheet" href="{{ asset ('css/dataTables.bootstrap4.min.css')}}">
+				<link type="text/css" rel="stylesheet" href="{{ asset ('css/summernote.min.css')}}">
+
+			{% endblock %}
+		{% endblock %}
+
+
+	</head>
+
+	<body>
+	{% block loader %}
+						<div class="loaderAcc" id="loaderAcc">
+							<div class="spinner-border text-info" role="status">
+								<span class="sr-only">Loading...</span>
+							</div>
+					</div>
+	{% endblock %}
+		<div class="aiz-main-wrapper">
+
+			{% block sidebar %}
+
+
+				<div class="aiz-sidebar-wrap">
+					<div class="aiz-sidebar left c-scrollbar">
+						<div class="aiz-side-nav-logo-wrap">
+							<a href="  " class="d-block text-left">
+								<img class="mw-100"  src=""  src="{{ asset ('assets/img/black.png')}}"  onerror="this.onerror=null;this.src='assets/img/black.png';" alt="">
+							</a>
+						</div>
+						<div class="aiz-side-nav-wrap">
+							<div class="px-20px mb-3">
+								<input class="form-control bg-soft-secondary border-0 form-control-sm text-white" type="text" name="" placeholder="Rechercher dans le menu" id="menu-search" onkeyup="menuSearch()">
+							</div>
+							<ul class="aiz-side-nav-list" id="search-menu"></ul>
+							<ul class="aiz-side-nav-list metismenu" id="main-menu" data-toggle="aiz-side-menu">
+								<li class="aiz-side-nav-item">
+									<a href="" class="aiz-side-nav-link" aria-expanded="true">
+										<i class="las la-home aiz-side-nav-icon"></i>
+										<span class="aiz-side-nav-text">Tableau de bord</span>
+									</a>
+								</li>
+
+								<!-- POS Addon-->
+
+								<!-- Product -->
+								<li class="aiz-side-nav-item">
+									<a href="#" class="aiz-side-nav-link">
+										<i class="las la-shopping-cart aiz-side-nav-icon"></i>
+										<span class="aiz-side-nav-text">Produits</span>
+										
+												<span class="badge badge-inline badge-warning">new</span>
+												
+										<span class="aiz-side-nav-arrow"></span>
+									</a>
+									<!--Submenu-->
+									<ul class="aiz-side-nav-list level-2 mm-collapse">
+										<li class="aiz-side-nav-item">
+											<a class="aiz-side-nav-link" href=" ">
+												<span class="aiz-side-nav-text">Ajouter Produit</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Tous Produits</span>
+												
+											</a>
+										</li>
+
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Vendeurs Produits</span>
+												
+												<span class="badge badge-inline badge-warning"></span>
+												
+											</a>
+										</li>
+
+
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Categorie</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Sous Categorie
+												</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Categorie parent</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href=" " class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Marques</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href=" " class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Attribute</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Couleurs</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Produits Reviews</span>
+											</a>
+										</li>
+									</ul>
+								</li>
+
+								<!-- Sale -->
+								<li class="aiz-side-nav-item">
+									<a href="#" class="aiz-side-nav-link">
+										<i class="las la-money-bill aiz-side-nav-icon"></i>
+										<span class="aiz-side-nav-text">Ventes</span>
+										
+										<span class="badge badge-inline badge-warning">new</span>
+										
+										<span class="aiz-side-nav-arrow"></span>
+									</a>
+									<!--Submenu-->
+									<ul class="aiz-side-nav-list level-2 mm-collapse">
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Commandes</span>
+												
+												<span class="badge badge-inline badge-warning"></span>
+												
+											</a>
+										</li>
+
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Commandes en interne</span>
+											</a>
+										</li>
+
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Commandes payé en ligne</span>
+											</a>
+										</li>
+										
+									</ul>
+								</li>
+
+								<!-- Refund addon -->
+
+
+								<!-- Customers -->
+								<li class="aiz-side-nav-item">
+									<a href="#" class="aiz-side-nav-link">
+										<i class="las la-user-friends aiz-side-nav-icon"></i>
+										<span class="aiz-side-nav-text">Clients</span>
+										<span class="aiz-side-nav-arrow"></span>
+									</a>
+									<ul class="aiz-side-nav-list level-2 mm-collapse">
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Liste de clients</span>
+											</a>
+										</li>
+									</ul>
+								</li>
+
+								<!-- Sellers -->
+								<li class="aiz-side-nav-item">
+									<a href="#" class="aiz-side-nav-link">
+										<i class="las la-user aiz-side-nav-icon"></i>
+										<span class="aiz-side-nav-text">Vendeurs</span>
+										
+										<span class="badge badge-inline badge-warning">new</span>
+										
+										<span class="aiz-side-nav-arrow"></span>
+									</a>
+									<ul class="aiz-side-nav-list level-2 mm-collapse">
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Tous Vendeurs</span>
+											
+												<span class="badge badge-inline badge-warning"></span>
+											
+											</a>
+										</li>
+										
+
+									</ul>
+								</li>
+
+
+								<!-- Reports -->
+								<li class="aiz-side-nav-item">
+									<a href="#" class="aiz-side-nav-link">
+										<i class="las la-file-alt aiz-side-nav-icon"></i>
+										<span class="aiz-side-nav-text">Rapports</span>
+									
+										<span class="badge badge-inline badge-danger">faibleQte</span>
+									
+										<span class="aiz-side-nav-arrow"></span>
+									</a>
+									<ul class="aiz-side-nav-list level-2 mm-collapse">
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Vente de produits admin</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Vente de shops</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Stock de produits admin</span>
+											  
+												<span class="badge badge-inline badge-danger"></span>
+											
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Stock de produits Vendeur</span>
+												
+												<span class="badge badge-inline badge-danger"></span>
+												
+											</a>
+										</li>
+										
+									</ul>
+								</li>
+
+								<!--Blog System-->
+								<li class="aiz-side-nav-item">
+									<a href="#" class="aiz-side-nav-link">
+										<i class="las la-bullhorn aiz-side-nav-icon"></i>
+										<span class="aiz-side-nav-text">Blog Système</span>
+										<span class="aiz-side-nav-arrow"></span>
+									</a>
+									<ul class="aiz-side-nav-list level-2 mm-collapse">
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Tous les Postes</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Catégories</span>
+											</a>
+										</li>
+									</ul>
+								</li>
+
+								<!-- marketing -->
+								<li class="aiz-side-nav-item">
+									<a href="#" class="aiz-side-nav-link">
+										<i class="las la-bullhorn aiz-side-nav-icon"></i>
+										<span class="aiz-side-nav-text">Marketing</span>
+										<span class="aiz-side-nav-arrow"></span>
+									</a>
+									<ul class="aiz-side-nav-list level-2 mm-collapse">
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link ">
+												<span class="aiz-side-nav-text">Flash deals</span>
+											</a>
+										</li>
+										
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Les abonnés</span>
+											</a>
+										</li>
+
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Newsletter</span>
+											</a>
+										</li>
+									</ul>
+								</li>
+
+								<!-- Support -->
+								
+
+								<!-- Affiliate Addon -->
+
+								<!-- Offline Payment Addon-->
+
+								<!-- Paytm Addon -->
+
+								<!-- Club Point Addon-->
+
+								<!--OTP addon -->
+
+
+								<!-- Setup & Configurations -->
+									<li class="aiz-side-nav-item"> <a href="#" class="aiz-side-nav-link">
+										<i class="las la-dharmachakra aiz-side-nav-icon"></i>
+										<span class="aiz-side-nav-text">Configurations Livraison</span>
+										<span class="aiz-side-nav-arrow"></span>
+									</a>
+									<ul class="aiz-side-nav-list level-2 mm-collapse">
+
+
+										<li class="aiz-side-nav-item">
+											<a href="javascript:void(0);" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Livraison</span>
+												<span class="aiz-side-nav-arrow"></span>
+											</a>
+											<ul class="aiz-side-nav-list level-3 mm-collapse">
+												<li class="aiz-side-nav-item">
+													<a href="" class="aiz-side-nav-link ">
+														<span class="aiz-side-nav-text">Livraison Pays</span>
+													</a>
+												</li>
+												<li class="aiz-side-nav-item">
+													<a href="" class="aiz-side-nav-link ">
+														<span class="aiz-side-nav-text">Livraison Villes </span>
+													</a>
+												</li>
+											</ul>
+										</li>
+
+									</ul>
+								</li>
+
+
+								<!-- Staffs -->
+								
+								<!-- Website Setup -->
+								<li class="aiz-side-nav-item">
+									<a href="#" class="aiz-side-nav-link ">
+										<i class="las la-desktop aiz-side-nav-icon"></i>
+										<span class="aiz-side-nav-text">Configurations Acceuil</span>
+										<span class="aiz-side-nav-arrow"></span>
+									</a>
+									<ul class="aiz-side-nav-list level-2 mm-collapse">
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Header</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Footer</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Banner menu</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Banner falshDeal</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Banner falshDeal 2</span>
+											</a>
+										</li>
+										<li class="aiz-side-nav-item">
+											<a href="" class="aiz-side-nav-link">
+												<span class="aiz-side-nav-text">Banner blog</span>
+											</a>
+										</li>
+										
+										
+									</ul>
+								</li>
+
+								<!-- Addon Manager -->
+
+							</ul>
+							<!-- .aiz-side-nav -->
+						</div>
+						<!-- .aiz-side-nav-wrap -->
+					</div>
+					<!-- .aiz-sidebar -->
+					<div class="aiz-sidebar-overlay"></div>
+				</div>
+			{% endblock %}
+
+
+			<div class="aiz-content-wrapper">
+				{% block page %}
+					<!-- .aiz-sidebar -->
+					
+					<div class="aiz-topbar px-15px px-lg-25px d-flex align-items-stretch justify-content-between">
+						<div class="d-xl-none d-flex">
+							<div class="aiz-topbar-nav-toggler d-flex align-items-center justify-content-start mr-2 mr-md-3" data-toggle="aiz-mobile-nav">
+								<button class="aiz-mobile-toggler">
+									<span></span>
+								</button>
+							</div>
+							<div class="aiz-topbar-logo-wrap d-flex align-items-center justify-content-start">
+								<a href="#" class="d-block">
+									<img src="" src="{{ asset ('assets/img/logo10.png')}}"   class="brand-icon" alt="logo">
+								</a>
+							</div>
+						</div>
+						<div class="d-flex justify-content-between align-items-stretch flex-grow-xl-1">
+							<div class="d-none d-md-flex justify-content-around align-items-center align-items-stretch">
+								<div class="d-none d-md-flex justify-content-around align-items-center align-items-stretch">
+									<div class="aiz-topbar-item">
+										<div class="d-flex align-items-center">
+											<a class="btn btn-icon btn-circle btn-light" href="" target="_blank" title="Browse Website">
+												<i class="las la-globe"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="d-flex justify-content-around align-items-center align-items-stretch">
+
+								<div class="aiz-topbar-item ml-2">
+									<div class="align-items-stretch d-flex dropdown">
+										<a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
+											<span class="btn btn-icon p-1">
+												<span class=" position-relative d-inline-block">
+													<i class="las la-bell la-2x"></i>
+												</span>
+												<span class="badge badge-primary badge-inline badge-pill" style="position: relative;top: -15px;margin-left: -21px"></span>
+											</span>
+										</a>
+										
+										<div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-lg py-0">
+											<div class="p-3 bg-light border-bottom">
+												<h6 class="mb-0">Notifications</h6>
+											</div>
+											<div class="px-3 c-scrollbar-light overflow-auto " style="max-height:300px;">
+											<ul class="list-group list-group-flush">
+											
+											<li class="list-group-item d-flex justify-content-between align-items- py-3">
+	                                            <div class="media text-inherit">
+		                                            <div class="media-body">
+			                                            <p class="mb-1 text-truncate-2">
+				                                         
+			                                            </p>
+														<a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="" title="Voir">
+                                                <i class="las la-eye"></i>
+                                            </a>
+			                                            <small class="text-muted">
+				                                          
+			                                            </small>
+		                                            </div>
+	                                            </div>
+                                            </li>
+											
+											<li class="list-group-item">
+                                        <div class="py-4 text-center fs-16">
+                                            Aucune notification trouvé
+                                        </div>
+                                    </li>
+											
+                                            
+											</ul>
+											</div>
+											<div class="text-center border-top">
+                                                <a href="" class="text-reset d-block py-2">
+                                                    Voir toutes les notifications
+                                                </a>
+                                            </div>
+										</div>
+									</div>
+								</div>
+
+
+								{% if app.user %}
+									{% if is_granted('ROLE_ADMIN') %}
+										<div class="aiz-topbar-item ml-2">
+											<div class="align-items-stretch d-flex dropdown">
+												<a class="dropdown-toggle no-arrow text-dark" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
+													<span class="d-flex align-items-center">
+														<span class="avatar avatar-sm mr-md-2">
+															<img src="{{app.user.photo}}" class="image rounded-circle" onerror="this.onerror=null;this.src='/image/avatar-place.png';">
+														</span>
+														<span class="d-none d-md-block">
+															<span class="d-block fw-500">
+																
+															</span>
+															<span class="d-block small opacity-60">
+																Admin
+															</span>
+														</span>
+													</span>
+												</a>
+
+												<div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-md">
+													<a href="  " class="dropdown-item">
+														<i class="las la-user-circle"></i>
+														<span>Profile</span>
+													</a>
+
+													<a href="{{path('app_logout')}}" class="dropdown-item">
+														<i class="las la-sign-out-alt"></i>
+														<span>Déconnexion</span>
+													</a>
+												</div>
+											{% endif %}
+										{% endif %}
+									</div>
+								</div>
+								<!-- .aiz-topbar-item -->
+							</div>
+
+						</div>
+
+					</div>
+				{% endblock %}
+				<!-- .aiz-topbar -->
+				<!-- .aiz-main-content -->
+				<div class="bg-white text-center py-3 px-15px px-lg-25px mt-auto">
+					<p class="mb-0">© Site web 2023</p>
+				</div>
+			</div>
+			<!-- .aiz-content-wrapper -->
+
+
+		</div>
+
+
+		{% block javascript %}
+			<!-- JS here -->
+			{#<script type="text/javascript" src="{{asset ('assets/js/jquery-3.4.1.js')  }}"></script>#}
+			<script type="text/javascript" src="{{asset ('js/jquery-3.4.1.min.js') }}"> </script>
+			<script type="text/javascript" src="{{ asset ('js/bootstrap.min.js') }}"></script>
+
+            
+			<script src="{{ asset ('js/vendors.js') }}"></script>
+			<script src="{{ asset ('js/aiz-core.js') }}"></script>
+			<script src="{{ asset ('js/dropzone.js') }}"></script>
+			<script src="{{ asset ('js/dropzone.min.js') }}"></script>
+			<script src="{{ asset ('js/uppy.js') }}"></script>
+            <script src="{{ asset ('js/jquery.daterangepicker.min.js') }}"></script>
+			<script src="{{ asset ('footable/js/footable.min.js') }}"></script>
+			<script src="{{ asset ('footable/js/footable.js') }}"></script>
+
+			<script type="text/javascript" src="{{ asset ('js/jquery.dataTables.min.js') }}"></script>
+			{#<script type="text/javascript" src="{{ asset ('assets/js/Data.Select.min.js') }}"></script>#}
+			{#<script type="text/javascript" src="{{ asset ('assets/js/dataTables.buttons.min.js') }}"></script>#}
+			<script type="text/javascript" src="{{ asset ('js/jquery.dataTables.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset ('js/dataTables.bootstrap4.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset ('js/dataTables.responsive.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset ('js/responsive.bootstrap4.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset ('js/summernote.min.js') }}"></script>
+
+			{#<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>#}
+			<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+			{#<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>#}
+			<script type="text/javascript" src="{{ asset ('js/alert.js') }}"></script>
+			<!--contact js-->
+
+ {#<script src="https://js.pusher.com/4.2/pusher.min.js"></script>
+        <script>
+    
+        let pusher = new Pusher("{{ pusherKey }}", {
+            cluster: "{{ pusherCluster }}",
+        });
+        let channelName = Date.now() + Math.random().toString(36).replace(/\W+/g, '');
+        pusher.subscribe(channelName);
+        pusher.subscribe("visitor-updates")
+            .bind('update', function (data) {
+                console.log(data)
+                let newCount = data.newCount;
+                document.getElementById('visitorCount').textContent = newCount;
+            });
+        </script>#}
+		
+			<script type="text/javascript">
+
+
+				function menuSearch() {
+var filter,
+item;
+filter = $("#menu-search").val().toUpperCase();
+items = $("#main-menu").find("a");
+items = items.filter(function (i, item) {
+if ($(item).find(".aiz-side-nav-text")[0].innerText.toUpperCase().indexOf(filter) > -1 && $(item).attr('href') !== '#') {
+return item;
+}
+});
+
+if (filter !== '') {
+$("#main-menu").addClass('d-none');
+$("#search-menu").html('')
+if (items.length > 0) {
+for (i = 0; i < items.length; i ++) {
+const text = $(items[i]).find(".aiz-side-nav-text")[0].innerText;
+const link = $(items[i]).attr('href');
+$("#search-menu").append(`<li class="aiz-side-nav-item"><a href="${link}" class="aiz-side-nav-link"><i class="las la-ellipsis-h aiz-side-nav-icon"></i><span>${text}</span></a></li`);
+}
+} else {
+$("#search-menu").html(`<li class="aiz-side-nav-item"><span	class="text-center text-muted d-block">Nothing found</span></li>`);
+}
+} else {
+$("#main-menu").removeClass('d-none');
+$("#search-menu").html('')
+}
+}
+
+
+
+			</script>
+
+		</body>
+
+
+	{% endblock %}
+</html>

@@ -1,0 +1,160 @@
+<html lang="en">
+	<head>
+		<meta name="csrf-token" content="VpA81Ra2oe5qHpO2Y4iorD3lU7RV4e6ZqcWsl5od">
+		<meta name="app-url" content="http://127.0.0.1:8000">
+		<meta
+		name="file-base-url" content="http://127.0.0.1:8000">
+
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta
+		name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Favicon -->
+		<link rel="icon" href="{{ asset ('image/logo2.png')}}">
+		<title>
+			Admin</title>
+
+
+		<!-- google font -->
+		<link
+		rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">
+
+		<!-- aiz core css -->
+		<link type="text/css" rel="stylesheet" href="{{ asset ('css/responsive.bootstrap4.min.css')}}">
+		<link rel="stylesheet" href="{{ asset ('css/vendors.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/aiz-core.css') }}">
+		<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
+		<style>
+			body {
+				font-size: 12px;
+			}
+		</style>
+		<script>
+			var AIZ = AIZ || {};
+AIZ.local = {
+nothing_selected: 'Nothing selected',
+nothing_found: 'Nothing found',
+choose_file: 'Choose file',
+file_selected: 'File selected',
+files_selected: 'Files selected',
+add_more_files: 'Add more files',
+adding_more_files: 'Adding more files',
+drop_files_here_paste_or: 'Drop files here, paste or',
+browse: 'Browse',
+upload_complete: 'Upload complete',
+upload_paused: 'Upload paused',
+resume_upload: 'Resume upload',
+pause_upload: 'Pause upload',
+retry_upload: 'Retry upload',
+cancel_upload: 'Cancel upload',
+uploading: 'Uploading',
+processing: 'Processing',
+complete: 'Complete',
+file: 'File',
+files: 'Files'
+}
+		</script>
+
+	</head>
+	<body class="">
+
+		<div class="aiz-main-wrapper d-flex">
+			<div class="flex-grow-1">
+
+				<div class="h-100 bg-cover bg-center py-5 d-flex align-items-center" {#style="background-image: url(https://demo.activeitzone.com/ecommerce/public/uploads/all/SWK5EJL9UNbPEJzz04ClYpFj8rpZq33napoqLSM4.png)"#}>
+					<div class="container">
+						<div class="row">
+							<div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 mx-auto">
+								<div class="card">
+									<div class="text-center pt-4">
+										<h1 class="h4 fw-600">
+											Connexion
+										</h1>
+									</div>
+
+									<div class="px-4 py-3 py-lg-4">
+										<div class="">
+											{% for message in app.flashes('message') %}
+												<div class="alert alert-success" role="alert">
+													{{ message }}
+												</div>
+											{% endfor %}
+											{% for message in app.flashes('warning') %}
+												<div class="alert alert-warning" role="alert">
+													{{ message }}
+												</div>
+											{% endfor %}
+											{% for message in app.flashes('danger') %}
+												<div class="alert alert-danger" role="alert">
+													{{ message }}
+												</div>
+											{% endfor %}
+										<form class="form-default" role="form" method="POST">
+												{% if error %}
+													<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+												{% endif %}
+
+												{% if app.user %}
+													<div class="mb-3">
+														You are logged in as
+														{{ app.user.nom }},
+														<a href="{{ path('app_logout_admin') }}">Déconnexion</a>
+													</div>
+												{% endif %}
+
+												<input type="hidden" name="_token" value="iERnFhy1xhueR40D0AhNEVKjoxkPSR8Wh00fNIF6">
+												<div class="form-group">
+													<input type="text" class="form-control " value="{{ last_username }}" placeholder="Email" name="email" id="inputEmail" required>
+
+												</div>
+
+												<div class="form-group">
+													<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" placeholder="Mot de passe" required>
+
+													<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+												</div>
+
+												<div class="row mb-2">
+													<div class="col-4"></div>
+													<div class="col-8 text-right">
+														<a href="{{path ('forgotten_password')}}" class="text-reset opacity-60 fs-14">Mot de passe oublié?</a>
+													</div>
+												</div>
+
+												<div class="mb-5">
+													<button type="submit" class="btn btn-primary btn-block fw-600">Connexion</button>
+												</div>
+											</form>
+
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+		<!-- .aiz-main-wrapper -->
+
+
+		<script src="{{ asset ('js/vendors.js') }}"></script>
+		<script src="{{ asset ('js/aiz-core.js') }}"></script>
+
+		<script type="text/javascript">
+			function autoFill() {
+$('#email').val('admin@example.com');
+$('#password').val('123456');
+}
+		</script>
+
+		<script type="text/javascript"></script>
+
+
+	</body>
+</html>

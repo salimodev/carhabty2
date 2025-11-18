@@ -48,7 +48,7 @@ public function onAuthenticationSuccess(Request $request, TokenInterface $token,
 {
     $user = $token->getUser();
 
-    // Sécurité : si pas d’utilisateur, retour à la page d’accueil
+    // Sécurité : si pas d’utilisateur, retour à la page login
     if (!$user) {
         return new RedirectResponse($this->router->generate('app_login'));
     }
@@ -64,6 +64,10 @@ public function onAuthenticationSuccess(Request $request, TokenInterface $token,
 
      if (in_array('ROLE_MECANICIEN', $user->getRoles(), true)) {
         return new RedirectResponse($this->router->generate('app_mecancien'));
+    }
+
+     if (in_array('ROLE_VENDEUR_OCCASION', $user->getRoles(), true)) {
+        return new RedirectResponse($this->router->generate('dashboard_vendeurOccasion'));
     }
 
     // Sinon, redirige par défaut (page d’accueil)

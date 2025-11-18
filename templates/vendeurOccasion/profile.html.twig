@@ -1,4 +1,4 @@
-{% extends 'vendeurNeuf/layoutVN.html.twig' %}
+{% extends 'vendeurOccasion/layoutVO.html.twig' %}
 {% block Head %}
 	{{ parent() }}
 
@@ -242,7 +242,7 @@
 		{{ parent() }}
 	{% endblock %}
 	{% if app.user %}
-		{% if is_granted('ROLE_VENDEUR_NEUF') %}
+		{% if is_granted('ROLE_VENDEUR_OCCASION') %}
 		<section class="py-5" style="background-color: #fff;">
 				<div class="container">
 					<div class="d-flex align-items-start">

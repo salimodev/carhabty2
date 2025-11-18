@@ -57,7 +57,8 @@ class RegistrationFormType extends AbstractType
     'choices'  => [
         'Proprietaire'    => 'ROLE_PROPRIETAIRE',
         'Vendeur Neuf' => 'ROLE_VENDEUR_NEUF',
-        'Mecanicien' => 'ROLE_MECANICIEN'
+        'Mecanicien' => 'ROLE_MECANICIEN',
+        'Vendeur Occasion' => 'ROLE_VENDEUR_OCCASION'
     ],
     'multiple' => false,
     'expanded' => false,

@@ -1,4 +1,4 @@
-{% extends 'vendeurNeuf/layoutVN.html.twig' %}
+{% extends 'vendeurOccasion/layoutVO.html.twig' %}
 {% block Head %}
 	{{ parent() }}
 
@@ -242,7 +242,7 @@
 		{{ parent() }}
 	{% endblock %}
 	{% if app.user %}
-		{% if is_granted('ROLE_VENDEUR_NEUF') %}
+		{% if is_granted('ROLE_VENDEUR_OCCASION') %}
 			<section class="mb-4 pt-3">
 				<div class="container sm-px-0">
 					<form class="" id="search-form" action="" method="GET">
@@ -303,7 +303,7 @@
 													class="request-card">
 
 													{# Titre cliquable #}
-													<a href="{{ path('detail_demande_vendeur', {'id': demande.id}) }}" class="text-decoration-none text-dark">
+													<a href="{{ path('detail_demande_vendeur_occa', {'id': demande.id}) }}" class="text-decoration-none text-dark">
 														<div class="request-header">
 															<div class="request-title">
 																{% if demande.pieces|length > 0 %}
@@ -342,7 +342,7 @@
 													</div>
 
 													{# Image cliquable #}
-													<a href="{{ path('detail_demande_vendeur', {'id': demande.id}) }}">
+													<a href="{{ path('detail_demande_vendeur_occa', {'id': demande.id}) }}">
     <div class="request-image">
         {% if demande.pieces|length > 0 and (demande.pieces|first).photo %}
             <img src="{{ (demande.pieces|first).photo }}" alt="photo" class="img-fit mx-auto rounded">
@@ -482,7 +482,7 @@ function timeAgo(dateString) {
 
 
 function filtrerDemandesNeuf() {
-var url = "{{ path('recherche_demande_vendeur_neuf') }}"; // route AJAX
+var url = "{{ path('recherche_demande_vendeur_occasion') }}"; // route AJAX
 
 var marque = $('#marque').val();
 var date = $('#date').val();
@@ -490,7 +490,7 @@ var date = $('#date').val();
 var data = {
 marque: marque,
 date: date,
-type: 'neuf'
+type: 'occasion'
 };
 
 $.ajax({
@@ -520,7 +520,7 @@ piecesDesc += "...";
 var dejaPropose = d.dejaPropose || false;
 
 // 🔗 lien vers la page de détail
-var lienDetail = "{{ path('detail_demande_vendeur', {'id': 'ID_DEMANDE'}) }}";
+var lienDetail = "{{ path('detail_demande_vendeur_occa', {'id': 'ID_DEMANDE'}) }}";
 lienDetail = lienDetail.replace('ID_DEMANDE', d.id);
 
 html += `
@@ -533,7 +533,7 @@ html += `
 piecesTitle || (d.marque + " " + d.modele)
 }</div>
                 </a>
-                <div class="request-badge">Neuf</div>
+                <div class="request-badge">Occasion</div>
             </div>
             <div class="request-meta">
                 <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>

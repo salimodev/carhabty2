@@ -130,7 +130,7 @@ foreach ($dernieresOffres as $offre) {
 }
 
 
-    #[Route('/vendeur/demande/detail/{id}', name: 'detail_demande_vendeur')]
+    #[Route('/vendeur/Neuf/demande/detail/{id}', name: 'detail_demande_vendeur')]
     public function detailDemande(
         int $id,
         Request $request,EntityManagerInterface $em,Security $security,PaginatorInterface $paginator,
@@ -255,7 +255,7 @@ $result[] = [
     return new JsonResponse($result);
 }
 
-#[Route(path: '/vendeur/profile/Modifier/{id}', name: 'app_vendeurneuf_profile', methods: ['GET'])]
+#[Route(path: '/vendeur/neuf/profile/Modifier/{id}', name: 'app_vendeurneuf_profile', methods: ['GET'])]
 public function profile(
     int $id,
     Request $request,EntityManagerInterface $em, Security $security, PaginatorInterface $paginator,

@@ -1,4 +1,4 @@
-{% extends 'vendeurNeuf/layoutVN.html.twig' %}
+{% extends 'vendeurOccasion/layoutVO.html.twig' %}
 {% block Head %}
 	{{ parent() }}
 
@@ -148,7 +148,7 @@
 							{% for demande in demandes %}
 								<tr>
 									<td>
-										<a href="{{path('detail_demande_vendeur',{'id':demande.id})}}">{{ demande.code }}</a>
+										<a href="{{path('detail_demande_vendeur_occa',{'id':demande.id})}}">{{ demande.code }}</a>
 									</td>
 									<td>{{ demande.marque }}</td>
 									<td>{{ demande.modele }}</td>
@@ -164,7 +164,7 @@
 										{% endif %}
 									</td>
 									<td class="text-right">
-										<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande_vendeur',{'id':demande.id})}}">
+										<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande_vendeur_occa',{'id':demande.id})}}">
 											<i class="las la-eye"></i>
 										</a>
 

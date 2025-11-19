@@ -682,7 +682,7 @@ class VendeurOccasionController extends AbstractController
         ]);
     }
 
-    #[Route('/offre/retirer', name: 'retirer_offre_occ', methods: ['POST'])]
+    #[Route('/offre/vendeur/occasion/retirer', name: 'retirer_offre_occ', methods: ['POST'])]
     public function retirerOffre(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $id = $request->request->get('id');

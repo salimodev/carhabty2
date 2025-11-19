@@ -46,7 +46,7 @@
                                         <div>
                                             <p class="mb-1">{{ notif.message }}</p>
                                             <small class="text-muted">{{ notif.createdAt|date('d/m/Y H:i') }}</small>
-                                            <a href="{{ path('offre_show', {'id': notif.offre.id}) }}" class="btn btn-info btn-icon btn-circle btn-sm">
+                                            <a href="{{ path('offre_show_occ', {'id': notif.offre.id}) }}" class="btn btn-info btn-icon btn-circle btn-sm">
                                             <i class="las la-eye"></i>
                                         </a>
                                         </div>

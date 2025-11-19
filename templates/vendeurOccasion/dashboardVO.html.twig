@@ -246,7 +246,7 @@
 </td>
                                     <td class="text-right">
     {% if offre.status == 'en_attente' %}
-        <a href="{{ path('offre_edit', {'id': offre.id}) }}" 
+        <a href="{{ path('offre_edit_occ', {'id': offre.id}) }}" 
            class="btn btn-soft-warning btn-icon btn-circle btn-sm" 
            title="Modifier">
             <i class="las la-edit"></i>
@@ -259,7 +259,7 @@
     {% endif %}
 
     {# Nouveau bouton "Voir l'offre" disponible pour tous les statuts #}
-    <a href="{{ path('offre_show', {'id': offre.id}) }}" 
+    <a href="{{ path('offre_show_occ', {'id': offre.id}) }}" 
        class="btn btn-soft-info btn-icon btn-circle btn-sm" 
        title="Voir l'offre">
         <i class="las la-eye"></i>
@@ -378,11 +378,11 @@ cancelButtonText: 'Annuler'
 if (result.value) {
 $.ajax({
 type: "POST",
-url: "{{ path('retirer_offre') }}",
+url: "{{ path('retirer_offre_occ') }}",
 data: $_data,
 success: function (response) {
 element.parent().remove();
-Swal.fire({title: "success!", text: "la demande à été supprimer avec succés!", icon: "success"});
+Swal.fire({title: "success!", text: "l'offre à été supprimer avec succés!", icon: "success"});
 
 
 location.reload();

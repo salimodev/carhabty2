@@ -70,6 +70,10 @@
 						<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
 							<a href="{{path('app_mecancien')}}" class="btn btn-Dashboard">Dashboard</a>
 						</li>
+						{% elseif is_granted('ROLE_VENDEUR_OCCASION')  %}
+						<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
+							<a href="{{path('dashboard_vendeurOccasion')}}" class="btn btn-Dashboard">Dashboard</a>
+						</li>
 					{% endif %}
 
 
@@ -108,6 +112,10 @@
 				<li class="list-inline-item mr-0">
 					{% if app.user %}
 						{% if is_granted('ROLE_VENDEUR_NEUF') %}
+							<button type="button" class="btn btn-register" onclick="AIZ.plugins.notify('danger', 'Seul le propriétaire et le mécanicien peut faire une demande !');">
+								Faire une demande
+							</button>
+							{% elseif is_granted('ROLE_VENDEUR_OCCASION') %}
 							<button type="button" class="btn btn-register" onclick="AIZ.plugins.notify('danger', 'Seul le propriétaire et le mécanicien peut faire une demande !');">
 								Faire une demande
 							</button>

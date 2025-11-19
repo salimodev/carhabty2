@@ -320,7 +320,7 @@ public function profile(
         
         return new response('success');
     }
-  #[Route('/demande/{id}/proposer-offre', name: 'propose_offre', methods: ['GET'])]
+  #[Route('/demande/{id}/vendeur/neuf/proposer-offre', name: 'propose_offre', methods: ['GET'])]
     public function showForm(Demande $demande,EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
     {
         // Vérifier que l'utilisateur est vendeur
@@ -343,7 +343,7 @@ public function profile(
         ]);
     }
 
-#[Route('/demande/{id}/proposer-offre', name: 'offre_create', methods: ['POST'])]
+#[Route('/demande/{id}/vendeur/neuf/proposer-offre', name: 'offre_create', methods: ['POST'])]
 public function createOffre(
     Request $request,
     Demande $demande,

@@ -1,0 +1,212 @@
+{% extends 'vendeurOccasion/layoutVO.html.twig' %}
+
+{% block Head %}
+    {{ parent() }}
+    {% block LinksCss %}
+        {{ parent() }}
+        <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
+        <style>
+            /* --- Styles modernes pour la page Voir Offre --- */
+            .offre-container { padding: 2rem 0; text-align: center; }
+            .offre-header h3 { font-weight: 700; color: #007bff; margin-bottom: 0.5rem; }
+
+            .piece-card {
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+                padding: 25px;
+                transition: transform 0.3s, box-shadow 0.3s;
+                min-height: 180px;
+                width: 100%;
+            }
+
+            .piece-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            }
+
+            .piece-title { font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; color: #000; }
+
+            .piece-badges {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+            }
+
+            .badge-prix {
+                background: linear-gradient(135deg,#ff6b35,#ff8c00);
+                color: #fff;
+                padding: 6px 12px;
+                border-radius: 12px;
+                font-weight: 600;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+                transition: transform 0.2s;
+            }
+
+            .badge-marque {
+                background: linear-gradient(135deg,#2ec4b6,#007bff);
+                color: #fff;
+                padding: 6px 12px;
+                border-radius: 12px;
+                font-weight: 600;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+                transition: transform 0.2s;
+            }
+
+            .badge-prix:hover, .badge-marque:hover { transform: scale(1.05); }
+
+            /* Responsive fix */
+            @media (max-width: 768px) {
+                .col-md-6, .col-lg-4 {
+                    flex: 0 0 100% !important;
+                    max-width: 100% !important;
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                    margin-bottom: 15px;
+                }
+                .piece-card {
+                    padding: 20px;
+                    width: 95%;
+                    margin: 0 auto;
+                }
+                .piece-title { font-size: 1.2rem; }
+            }
+        </style>
+    {% endblock %}
+{% endblock %}
+
+{% block title %}Voir l'offre{% endblock %}
+
+{% block page %}
+    {{ parent() }}
+    {% if app.user and is_granted('ROLE_VENDEUR_OCCASION') %}
+       <section class="py-5" style="background-color: #fff;padding-left:15px;padding-right:15px;">
+            <div class="container">
+                <div class="d-flex align-items-start">
+
+                    <div class="aiz-user-panel">
+                        <div class="aiz-titlebar mt-2 mb-4">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h1 class="h3">Offre N° : {{ offre.numeroOffre }}</h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Détails Offre -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="h6 mb-0">Informations de l'offre</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <table class="table-borderless table">
+                                            <tbody>
+                                                <tr><td class="w-50 fw-600">Numéro de l'offre:</td><td>{{ offre.numeroOffre }}</td></tr>
+                                                <tr><td class="w-50 fw-600">Date de création:</td><td>{{ offre.createdAt|date('d/m/Y H:i') }}</td></tr>
+                                                <tr><td class="w-50 fw-600">Observation:</td><td>{{ offre.observation ?: 'Aucune observation.' }}</td></tr>
+                                                <tr>
+                                                    <td class="w-50 fw-600">Validité:</td>
+                                                    <td>
+                                                        {% if offre.validiteDebut and offre.validiteFin %}
+                                                                                                                       {% set joursRestants = (offre.validiteFin|date('U') - "now"|date('U')) / 86400 %}
+                                                            {% if joursRestants > 0 %}
+                                                                <span class="text-primary fw-bold">{{ joursRestants|round(0, 'floor') }} jours restants</span>
+                                                            {% else %}
+                                                                <span class="text-danger fw-bold">Offre expirée</span>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            Non définie
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="w-50 fw-600">Statut:</td>
+                                                    <td>
+                                                        {% if offre.status == 'en_attente' %}
+                                                            <span class="badge badge-inline badge-warning">En attente</span>
+                                                        {% elseif offre.status == 'acceptee' %}
+                                                            <span class="badge badge-inline badge-success">Acceptée</span>
+                                                        {% elseif offre.status == 'refusee' %}
+                                                            <span class="badge badge-inline badge-danger">Refusée</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <table class="table-borderless table">
+                                            <tbody>
+                                                <tr><td class="w-50 fw-600">Demande associée:</td><td>{{ offre.demande.code }}</td></tr>
+                                                <tr>
+    <td class="w-50 fw-600">Propriétaire:</td>
+    <td>
+        {% if offre.demande.offrecompte and (offre.demande.offrecompte.nom or offre.demande.offrecompte.prenom) %}
+            {{ offre.demande.offrecompte.nom ~ ' ' ~ offre.demande.offrecompte.prenom }}
+        {% else %}
+            {{ offre.demande.offreemail }}
+        {% endif %}
+    </td>
+</tr>
+<tr><td class="w-50 fw-600">Zone de livraison:</td><td>{{ offre.demande.zone }}</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                               
+                            </div>
+                        </div>
+
+                        <!-- Pièces de l'offre -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="h6 mb-0">Pièces incluses dans cette offre</h5>
+                            </div>
+                            <div class="card-body offre-pieces">
+                                <div class="row justify-content-center">
+                                    {% for piece in offre.demande.pieces %}
+                                        {% set op = offre.offrePieces|filter(item => item.piece.id == piece.id)|last %}
+                                        <div class="col-lg-4 col-md-6 col-12 mb-4">
+                                            <div class="piece-card p-3 border rounded shadow-sm bg-white">
+                                                <div class="piece-title fw-600 text-dark mb-2 text-center">{{ piece.designation }}</div>
+
+                                                {% if op %}
+                                                    {% set qualites = {1: '1ère qualité', 2: '2ème qualité', 3: '3ème qualité'} %}
+                                                    {% for i in 1..3 %}
+                                                        {% set prix = attribute(op, 'prix' ~ i) %}
+                                                        {% set marque = attribute(op, 'marque' ~ i) %}
+                                                        {% if prix is not empty and marque is not empty %}
+                                                            <div class="piece-quality text-center mb-2">
+                                                                <h6 class="fw-600 text-primary mb-1">Prix unitaire {{ qualites[i] }}</h6>
+                                                                <p class="mb-0"><strong>Marque :</strong> {{ marque }}</p>
+                                                                <p class="mb-0"><strong>Prix :</strong> {{ prix }} DT</p>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <div class="text-center text-muted">Aucune donnée pour cette pièce</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+{% endblock %}

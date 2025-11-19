@@ -48,7 +48,7 @@
                     Proposer un prix
                 </button>
             {% else %}
-                <form action="{{ path('propose_offre', {'id': demande.id}) }}" class="d-inline">
+                <form action="{{ path('propose_offre_vo', {'id': demande.id}) }}" class="d-inline">
                     <button type="submit"
                             class="btn btn-primary btn-lg rounded-pill shadow-sm"
                             style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600; width:200px;">

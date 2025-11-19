@@ -344,8 +344,8 @@ div.dataTables_wrapper div.dataTables_filter input {
 <div class="aiz-main-wrapper">
 
 <div class="aiz-sidebar-wrap">
-	<div class="aiz-sidebar left c-scrollbar" style="background-color:#f3fef0;">
-		<div class="aiz-side-nav-logo-wrap" style="background-color:#f3fef0;">
+	<div class="aiz-sidebar left c-scrollbar" style="background-color:#e7f9e2;">
+		<div class="aiz-side-nav-logo-wrap" style="background-color:#e7f9e2;">
 			<div class="d-block text-center my-3">
 				<img height="100" width="100" class="rounded-circle size-100px" src="" src="{{ asset ('image/placeholder.png') }}" class="image rounded-circle" onerror="this.onerror=null;this.src='/image/avatar-place.png';" alt="">
 				<h3 class="fs-16  m-0 text-primary"></h3>
@@ -374,8 +374,8 @@ div.dataTables_wrapper div.dataTables_filter input {
 					</a>
 				</li>
 
-				<li {% if PageMenu is defined and PageMenu == "vendeur_offres" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
-					<a href="{{ path('vendeur_offres') }}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'vendeur_offres' %}active{% endif %}">
+				<li {% if PageMenu is defined and PageMenu == "vendeur_occ_offres" %} class="aiz-side-nav-item mm-active" {% else %} class="aiz-side-nav-item" {% endif %}>
+					<a href="{{ path('vendeur_occ_offres') }}" class="aiz-side-nav-link {% if PageMenu is defined and PageMenu == 'vendeur_occ_offres' %}active{% endif %}">
 						<i class="las la-hand-holding-usd aiz-side-nav-icon fs-24"></i>
 						<span class="aiz-side-nav-text">Offres</span>
 					</a>
@@ -459,7 +459,7 @@ div.dataTables_wrapper div.dataTables_filter input {
 												<div class="media text-inherit">
 													<div class="media-body">
 														<p class="mb-1 text-truncate-2">
-															<a href="{{ path('offre_show', {'id': notif.offre.id}) }}">
+															<a href="{{ path('offre_show_occ', {'id': notif.offre.id}) }}">
 																{{ notif.message }}
 															</a>
 														</p>
@@ -484,7 +484,7 @@ div.dataTables_wrapper div.dataTables_filter input {
 							</div>
 
 							<div class="text-center border-top">
-								<a href="{{path('vendeur_notifications')}}" class="text-reset d-block py-2">
+								<a href="{{path('vendeur_occa_notifications')}}" class="text-reset d-block py-2">
 									Voir toutes les Notifications
 								</a>
 							</div>

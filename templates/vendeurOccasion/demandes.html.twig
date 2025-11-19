@@ -370,7 +370,7 @@
 
 													{% set dejaPropose = demande.offres|filter(o => o.user.id == app.user.id)|length > 0 %}
 
-													<a href="{% if not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" {% if dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
+													<a href="{% if not dejaPropose %}{{ path('propose_offre_vo', {'id': demande.id}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" {% if dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
 														<i class="fas fa-envelope-open-text me-2"></i>
 														Proposer un prix
 													</a>
@@ -574,7 +574,7 @@ let demandeId = $(this).data('id');
 if (deja) {
 AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');
 } else {
-let url = "{{ path('propose_offre', {'id': 'ID_DEMANDE'}) }}";
+let url = "{{ path('propose_offre_vo', {'id': 'ID_DEMANDE'}) }}";
 url = url.replace('ID_DEMANDE', demandeId);
 window.location.href = url;
 }

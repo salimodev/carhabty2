@@ -318,64 +318,10 @@ final class MecancienController extends AbstractController
         ]);
     }
 
-    #[Route('/offre/{id}/accepter', name: 'offre_accepter')]
-    public function accepter(Offre $offre, EntityManagerInterface $em): Response
-    {
-        // --- Changer le statut de l'offre ---
-        $offre->setStatus('acceptee');
-
-        // --- Changer le statut de la demande associée ---
-        $demande = $offre->getDemande();
-        if ($demande) {
-            $demande->setStatut('fermer'); // Assure-toi que la propriété statut existe dans Demande
-        }
-
-        // --- Création de la notification pour le vendeur ---
-        $vendeur = $offre->getUser(); // le vendeur qui a proposé l'offre
-        if ($vendeur) {
-            $notif = new Notification();
-            $notif->setUser($vendeur);
-            $notif->setMessage("Votre offre N° {$offre->getNumeroOffre()} pour la demande N° {$demande->getId()} a été acceptée par le demandeur.");
-            $notif->setCreatedAt(new \DateTimeImmutable());
-
-            // Si tu as ajouté la relation Notification -> Offre
-            $notif->setOffre($offre);
-
-            $em->persist($notif);
-        }
-
-        $em->flush();
-
-        return new Response('Offre acceptée et demande fermée avec succès !');
-    }
+  
 
 
-
-    #[Route('/offre/{id}/refuser', name: 'offre_refuser')]
-    public function refuser(Offre $offre, EntityManagerInterface $em): Response
-    {
-        // --- Changer le statut de l'offre ---
-        $offre->setStatus('refusee');
-
-        // --- Création de la notification pour le vendeur ---
-        $vendeur = $offre->getUser(); // le vendeur qui a proposé l'offre
-        $demande = $offre->getDemande();
-        if ($vendeur && $demande) {
-            $notif = new Notification();
-            $notif->setUser($vendeur);
-            $notif->setMessage("Votre offre N° {$offre->getNumeroOffre()} pour la demande N° {$demande->getId()} a été refusée par le demandeur.");
-            $notif->setCreatedAt(new \DateTimeImmutable());
-
-            // Si tu as ajouté la relation Notification -> Offre
-            $notif->setOffre($offre);
-
-            $em->persist($notif);
-        }
-
-        $em->flush();
-
-        return new Response('Offre refusée et notification envoyée au vendeur !');
-    }
+  
 
 
     #[Route('/inviter/mecanicien', name: 'inviter_mecanicien')]

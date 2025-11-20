@@ -318,11 +318,6 @@ final class MecancienController extends AbstractController
         ]);
     }
 
-  
-
-
-  
-
 
     #[Route('/inviter/mecanicien', name: 'inviter_mecanicien')]
     public function inviter(): Response

@@ -16,6 +16,11 @@ services:
     environment:
       APP_ENV: prod
       APP_DEBUG: 1
+    command: >
+      bash -c "a2enmod ssl rewrite headers &&
+               a2ensite default-ssl.conf &&
+               a2ensite 000-default.conf &&
+               apache2-foreground"
     depends_on:
       - db
     restart: always

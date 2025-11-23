@@ -10,8 +10,8 @@ services:
       - "8080:80"
       - "443:443"
     volumes:
-      - ./apache/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro
-      - ./apache/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
+      - ./000-default.conf:/etc/apache2/sites-available/000-default.conf:ro
+      - ./default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
       - ./certbot/conf/live/essayara.com/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
       - ./certbot/conf/live/essayara.com/privkey.pem:/etc/ssl/private/privkey.pem:ro
       - ./certbot/www:/var/www/certbot

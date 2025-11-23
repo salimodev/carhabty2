@@ -10,8 +10,9 @@ services:
       - "8080:80"
       - "443:443"
     volumes:
-      - ./certs/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
-      - ./certs/privkey.pem:/etc/ssl/private/privkey.pem:ro
+      - ~/certs_flat/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
+      - ~/certs_flat/privkey.pem:/etc/ssl/private/privkey.pem:ro
+      - ./certbot/www:/var/www/certbot
     environment:
       APP_ENV: prod
       APP_DEBUG: 1

@@ -7,6 +7,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - ./public:/var/www/html/public
       - /etc/letsencrypt/live/essayara.com/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
       - /etc/letsencrypt/live/essayara.com/privkey.pem:/etc/ssl/private/privkey.pem:ro
     environment:

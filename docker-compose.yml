@@ -7,7 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: carhabty-app
     ports:
-      - "8080:80"
+      - "80:80"     # <-- changer ici, pour que le port 80 du serveur pointe sur le container
+      - "443:443"
     volumes:
       - ./certbot/www:/var/www/certbot
     environment:

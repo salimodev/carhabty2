@@ -8,10 +8,7 @@ services:
     container_name: carhabty-app
     ports:
       - "8080:80"
-      - "443:443"
     volumes:
-      - ./certbot/conf/live/essayara.com/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
-      - ./certbot/conf/live/essayara.com/privkey.pem:/etc/ssl/private/privkey.pem:ro
       - ./certbot/www:/var/www/certbot
     environment:
       APP_ENV: prod
@@ -45,16 +42,6 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
-
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt
-    entrypoint: /bin/sh
-    command: -c "sleep infinity"
-    restart: unless-stopped
 
 volumes:
   db_data:

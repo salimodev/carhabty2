@@ -14,11 +14,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && a2enmod rewrite ssl headers \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# ⚙️ Copier fichiers de configuration Apache
+# ⚙️ Copier fichiers de configuration Apache si présents
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 
-RUN a2ensite 000-default.conf default-ssl.conf
+RUN if [ -f /etc/apache2/sites-available/000-default.conf ]; then a2ensite 000-default.conf; fi \
+    && if [ -f /etc/apache2/sites-available/default-ssl.conf ]; then a2ensite default-ssl.conf; fi
 
 # 🚀 OPCache
 RUN echo "opcache.enable=1\n\
@@ -42,7 +43,7 @@ RUN mkdir -p var/cache var/log var/sessions /var/www/certbot/.well-known/acme-ch
     && chown -R www-data:www-data var /var/www/certbot
 
 # ⚠️ Vérifier que public/.htaccess existe
-RUN test -f public/.htaccess || echo "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteRule ^(.*)$ index.php [QSA,L]" > public/.htaccess
+RUN test -f public/.htaccess || echo -e "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteRule ^(.*)$ index.php [QSA,L]" > public/.htaccess
 
 # 🧰 Installer dépendances Symfony
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction

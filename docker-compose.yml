@@ -2,21 +2,18 @@ version: "3.9"
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: php:8.2-apache
     container_name: carhabty-app
     ports:
       - "80:80"
       - "443:443"
     volumes:
+      - ./html:/var/www/html
       - /etc/letsencrypt/live/essayara.com/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
       - /etc/letsencrypt/live/essayara.com/privkey.pem:/etc/ssl/private/privkey.pem:ro
-    environment:
-      APP_ENV: prod
-      APP_DEBUG: 1
-    depends_on:
-      - db
+      - ./html/apache/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
+    command: >
+      bash -c "a2enmod ssl rewrite headers && a2ensite default-ssl.conf && apache2-foreground"
     restart: always
 
   db:

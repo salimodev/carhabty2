@@ -10,8 +10,7 @@ services:
       - "8080:80"
       - "443:443"
     volumes:
-      - ./certbot/conf/fullchain_flat.pem:/etc/ssl/certs/fullchain.pem:ro
-      - ./certbot/conf/privkey_flat.pem:/etc/ssl/private/privkey.pem:ro
+      - ./apache/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
     environment:
       APP_ENV: prod
       APP_DEBUG: 1

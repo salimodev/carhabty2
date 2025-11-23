@@ -10,8 +10,8 @@ services:
       - "8080:80"
       - "443:443"
     volumes:
-      - /etc/letsencrypt/archive/essayara.com/fullchain2.pem:/etc/ssl/certs/fullchain.pem:ro
-      - /etc/letsencrypt/archive/essayara.com/privkey2.pem:/etc/ssl/private/privkey.pem:ro
+      - ./certs_flat/fullchain.pem:/etc/apache2/ssl/fullchain.pem:ro
+      - ./certs_flat/privkey.pem:/etc/apache2/ssl/privkey.pem:ro
       - ./certbot/www:/var/www/certbot
     environment:
       APP_ENV: prod

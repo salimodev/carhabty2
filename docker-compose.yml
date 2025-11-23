@@ -13,7 +13,11 @@ services:
       - /etc/letsencrypt/live/essayara.com/privkey.pem:/etc/ssl/private/privkey.pem:ro
       - ./html/apache/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
     command: >
-      bash -c "a2enmod ssl rewrite headers && a2ensite default-ssl.conf && apache2-foreground"
+      bash -c "\
+        a2enmod ssl rewrite headers && \
+        a2ensite default-ssl.conf && \
+        a2dissite 000-default.conf && \
+        apache2-foreground"
     restart: always
 
   db:
@@ -53,4 +57,3 @@ services:
     restart: unless-stopped
 
 volumes:
-  db_data:

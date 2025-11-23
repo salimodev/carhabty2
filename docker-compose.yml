@@ -12,7 +12,6 @@ services:
     volumes:
       - /etc/letsencrypt/live/essayara.com/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
       - /etc/letsencrypt/live/essayara.com/privkey.pem:/etc/ssl/private/privkey.pem:ro
-      - ./certbot/www:/var/www/certbot
     environment:
       APP_ENV: prod
       APP_DEBUG: 1

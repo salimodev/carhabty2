@@ -10,20 +10,12 @@ services:
       - "8080:80"
       - "443:443"
     volumes:
-      # Monter les certificats locaux dans le container
-      - ./certs/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
-      - ./certs/privkey.pem:/etc/ssl/private/privkey.pem:ro
-      # Monter le code et le dossier certbot challenge
-      - ./html:/var/www/html
+      - ./certbot/conf/live/essayara.com/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
+      - ./certbot/conf/live/essayara.com/privkey.pem:/etc/ssl/private/privkey.pem:ro
       - ./certbot/www:/var/www/certbot
     environment:
       APP_ENV: prod
       APP_DEBUG: 1
-    command: >
-      bash -c "a2enmod ssl rewrite headers &&
-               a2ensite default-ssl.conf &&
-               a2ensite 000-default.conf &&
-               apache2-foreground"
     depends_on:
       - db
     restart: always

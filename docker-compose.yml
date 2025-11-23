@@ -10,6 +10,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - ./certbot/www:/var/www/certbot/.well-known/acme-challenge
       - /etc/letsencrypt/live/essayara.com/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro
       - /etc/letsencrypt/live/essayara.com/privkey.pem:/etc/ssl/private/privkey.pem:ro
 

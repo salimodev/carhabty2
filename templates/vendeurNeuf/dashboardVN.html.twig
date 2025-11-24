@@ -139,6 +139,7 @@
 								<th>N° Châssis</th>
 								<th>Énergie</th>
 								<th>État moteur</th>
+								<th>Lieu</th>
 								<th>Date</th>
 								<th>Status</th>
 								<th>Action</th>
@@ -155,6 +156,11 @@
 									<td>{{ demande.chassis }}</td>
 									<td>{{ demande.energie }}</td>
 									<td>{{ demande.etatmoteur }}</td>
+									<td>{% if demande.offrecompte %}
+        {{demande.offrecompte.adresse }}
+    {% else %}
+       {{ demande.zone }}
+    {% endif %} </td>
 									<td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
 									<td>
 										{% if demande.statut == 'ouvert' %}

@@ -1,12 +1,13 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Carhabty
+{% block title %}Essayara
 {% endblock %}
 
 {% block LinksCss %}
 	{{ parent() }}
 	<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
 	<style>
+			/***** users ****/
 		.request-card {
 			background: linear-gradient(135deg, #ffffff, #f7f8fc);
 			border-radius: 15px;
@@ -17,7 +18,7 @@
 
 		.request-card:hover {
 			transform: translateY(-4px);
-			box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+			box-shadow: 0 8px 20px rgba(29, 14, 9, 0.3);
 		}
 
 		.request-header {
@@ -36,7 +37,7 @@
 		}
 
 		.request-badge {
-			background: linear-gradient(135deg, #ff6b35 0%, #fca311 50%, #2ec4b6 100%);
+			background: linear-gradient(135deg, #ff6b35 0%, #fca311 100%);
 			color: #fff;
 			font-size: 12px;
 			border-radius: 12px;
@@ -98,7 +99,7 @@
 		}
 
 		.request-meta i {
-			color: #ff6b35;
+			color: #3C4C5C;
 			margin-right: 5px;
 			font-size: 15px;
 		}
@@ -109,21 +110,21 @@
 			color: #fff;
 		}
 		.btn-register {
-			background: linear-gradient(45deg, #ff6b35, #ff8c00);
+			background: linear-gradient(45deg, #00B7B7, #008F8F);
 			border: none;
 			color: white;
 			font-weight: 600;
 			transition: 0.3s ease;
 		}
 		.btn-register:hover {
-			background: linear-gradient(45deg, #ff8c00, #ff6b35);
+			background: linear-gradient(45deg, #00B7B7, #008F8F);
 			transform: translateY(-2px);
 		}
 		/* Effet au survol */
 		.btn-register:hover {
-			background: linear-gradient(45deg, #ff8c00, #ff6b35);
+			background: linear-gradient(45deg, #008F8F, #00B7B7);
 			transform: translateY(-2px);
-			box-shadow: 0 4px 10px rgba(255, 107, 53, 0.4);
+			box-shadow: 0 8px 20px rgba(29, 14, 9, 0.3);
 		}
 
 		/* Animation de l'enveloppe quand la carte est survolée */
@@ -212,7 +213,9 @@
 			border-radius: 50%;
 			text-align: center;
 		}
-
+		.border-primary {
+    border-color: #00B7B7  !important;
+}
         /* Container centré */
 .aiz-pagination {
   display: flex;

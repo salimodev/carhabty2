@@ -1,5 +1,5 @@
 <!-- Top Bar -->
-<div class="top-navbar bg-white border-bottom border-soft-secondary z-1035" style="background-color: #ff6600 !important;">
+<div class="top-navbar bg-white border-bottom border-soft-secondary z-1035" style="background-color: #3C4C5C !important;">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-7 col"></div>
@@ -16,12 +16,12 @@
 						<ul class="list-inline my-3 my-md-0 social colored text-center">
 							<li class="list-inline-item">
 								<a href="#" target="_blank">
-									<img src="{{ asset ('image/facebook.png')}}" style="height: 25px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/facebook.png';style='height: 50px;max-width:100% !important'" alt="carhabty" height="50">
+									<img src="{{ asset ('image/facebook.png')}}" style="height: 25px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/facebook.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50">
 								</a>
 							</li>
 							<li class="list-inline-item">
 								<a href="#" target="_blank">
-									<img src="{{ asset ('image/instagram.png')}}" style="height: 25px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/instagram.png';style='height: 50px;max-width:100% !important'" alt="carhabty" height="50">
+									<img src="{{ asset ('image/instagram.png')}}" style="height: 25px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/instagram.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50">
 								</a>
 							</li>
 
@@ -39,7 +39,7 @@
 		<div class="container">
 			<div class="d-flex align-items-center">
 				<div class="col-auto col-xl-3 pl-0 pr-3 d-flex align-items-center" style="height: 100px;">
-					<a class="d-block py-10px mr-3 ml-0" href="/"><img src="{{ asset ('image/logo1.png')}}" style="height: 197px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/logo10.png';style='height: 50px;max-width:100% !important'" alt="carhabty" height="50"></a>
+					<a class="d-block py-10px mr-3 ml-0" href="/"><img src="{{ asset ('image/blanclogo.png')}}" style="height: 283px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='/image/blanclogo.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50"></a>
 				</div>
 				<div class="d-lg-none ml-auto mr-0">
 					<a class="p-2 d-block text-reset" href="javascript:void(0);" data-toggle="class-toggle" data-target=".front-header-search">
@@ -60,19 +60,19 @@
 
 
 						<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-							<a href="{{path('app_proprietaire')}}" class="btn btn-Dashboard">Dashboard</a>
+							<a href="{{path('app_proprietaire')}}" class="btn btn-Dashboard">Mon espace</a>
 						</li>
 					{% elseif is_granted('ROLE_VENDEUR_NEUF')  %}
 						<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-							<a href="{{path('dashboard_vendeurNeuf')}}" class="btn btn-Dashboard">Dashboard</a>
+							<a href="{{path('dashboard_vendeurNeuf')}}" class="btn btn-Dashboard">Mon espace</a>
 						</li>
 						{% elseif is_granted('ROLE_MECANICIEN')  %}
 						<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-							<a href="{{path('app_mecancien')}}" class="btn btn-Dashboard">Dashboard</a>
+							<a href="{{path('app_mecancien')}}" class="btn btn-Dashboard">Mon espace</a>
 						</li>
 						{% elseif is_granted('ROLE_VENDEUR_OCCASION')  %}
 						<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
-							<a href="{{path('dashboard_vendeurOccasion')}}" class="btn btn-Dashboard">Dashboard</a>
+							<a href="{{path('dashboard_vendeurOccasion')}}" class="btn btn-Dashboard">Mon espace</a>
 						</li>
 					{% endif %}
 

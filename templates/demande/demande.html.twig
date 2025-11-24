@@ -508,9 +508,8 @@
 																										      color: #000000;
 																										    ">
 														<option>Toute la Tunisie</option>
-														<option>Ariana</option>
-														<option>Beja</option>
-														<option>Ben Arous</option>
+														<option>Grand Tunis</option>
+														<option>Béja</option>
 														<option>Bizerte</option>
 														<option>Gabès</option>
 														<option>Gafsa</option>
@@ -518,7 +517,6 @@
 														<option>Kairouan</option>
 														<option>Kasserine</option>
 														<option>Kebili</option>
-														<option>La Manouba</option>
 														<option>Le Kef</option>
 														<option>Mahdia</option>
 														<option>Médenine</option>
@@ -530,7 +528,6 @@
 														<option>Sousse</option>
 														<option>Tataouine</option>
 														<option>Tozeur</option>
-														<option>Tunis</option>
 														<option>Zaghouan</option>
 													</select>
 												</div>
@@ -635,26 +632,21 @@
 		var pathaddpiece = '{{ path('add_piece') }}';
 		var pathenvoyerdemande = "{{ path('envoyer_demande') }}";
 
-		document.addEventListener('DOMContentLoaded', function() {
+	document.addEventListener('DOMContentLoaded', function() {
     const vendeurneuf = document.getElementById('vendNeuf');
     const vendeuroccasion = document.getElementById('vendOcc');
-   
 
-    // Quand on coche "email"
+    // Plus besoin de changer l'état de l'autre checkbox
+    // On peut juste écouter si elles sont cochées pour d'autres actions si besoin
     vendeurneuf.addEventListener('change', function() {
-        if (this.checked) {
-            vendeuroccasion.checked = false;
-            
-        } 
+        console.log('Vendeur neuf :', this.checked);
     });
 
-    // Quand on coche "compte"
     vendeuroccasion.addEventListener('change', function() {
-        if (this.checked) {
-            vendeurneuf.checked = false;
-           
-        }
+        console.log('Vendeur occasion :', this.checked);
     });
+
+
 
     // Désactive le champ email par défaut
     emailInput.disabled = true;

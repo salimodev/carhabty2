@@ -19,14 +19,11 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', null, array('label'=>false))
+            ->add('nom ou raison sociale', null, array('label'=>false))
             ->add('prenom', null, array('label'=>false))
            ->add('adresse', ChoiceType::class, [
         'choices' => [
-            'Tunis'          => 'Tunis',
-            'Ariana'         => 'Ariana',
-            'Ben Arous'      => 'Ben Arous',
-            'Manouba'        => 'Manouba',
+            'Grand Tunis'          => 'Grand Tunis',
             'Sousse'         => 'Sousse',
             'Monastir'       => 'Monastir',
             'Mahdia'         => 'Mahdia',
@@ -48,18 +45,19 @@ class RegistrationFormType extends AbstractType
             'Zaghouan'       => 'Zaghouan',
             'Siliana'        => 'Siliana',
         ],
-        'placeholder' => 'Sélectionnez votre ville',
+        'placeholder' => 'Sélectionnez votre zone de couverture',
         'label' => false,
         'expanded' => false,  // liste déroulante
         'multiple' => false,  // un seul choix
     ])
            ->add('roles', ChoiceType::class, [
     'choices'  => [
-        'Proprietaire'    => 'ROLE_PROPRIETAIRE',
-        'Vendeur Neuf' => 'ROLE_VENDEUR_NEUF',
-        'Mecanicien' => 'ROLE_MECANICIEN',
-        'Vendeur Occasion' => 'ROLE_VENDEUR_OCCASION'
+        'Propriétaire'    => 'ROLE_PROPRIETAIRE',
+        'Vendeur des piéces neuves' => 'ROLE_VENDEUR_NEUF',
+        'Mécanicien' => 'ROLE_MECANICIEN',
+        'Vendeur des piéces occasion' => 'ROLE_VENDEUR_OCCASION'
     ],
+     'placeholder' => 'Choisissez votre rôle',
     'multiple' => false,
     'expanded' => false,
     'label'    => false,

@@ -15,13 +15,13 @@
         }
 
         .btn-register {
-            background: linear-gradient(45deg, #ff6b35, #ff9f1c);
+           background: linear-gradient(45deg, #00B7B7, #008F8F);
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 8px 20px rgba(29, 14, 9, 0.3);
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+            box-shadow: 0 8px 20px rgba(29, 14, 9, 0.3);
             color: white;
         }

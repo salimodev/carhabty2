@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Carhabty
+{% block title %}Essayara
 {% endblock %}
 
 {% block LinksCss %}
@@ -64,17 +64,17 @@
 
 		.user:hover .user-icon {
 			transform: scale(1.08);
-			box-shadow: 0 6px 16px rgba(255, 102, 0, 0.3);
+			box-shadow: 0 8px 20px rgba(29, 14, 9, 0.3);
 		}
 
 		.user-icon i {
 			font-size: 2.8rem;
-			color: #ff6600;
+			color: #3C4C5C;
 			transition: color 0.3s ease;
 		}
 
 		.user:hover .user-icon i {
-			color: #e65c00;
+			color: #3C4C5C;
 		}
 
 		/* === Texte === */
@@ -89,7 +89,7 @@
 		}
 
 		.user-location {
-			font-size: 0.9rem;
+			font-size: 1.5rem;
 			color: #666;
 			margin-bottom: 15px;
 			line-height: 1.4;
@@ -125,50 +125,46 @@
 			display: block;
 			margin: 8px auto;
 			transition: all 0.3s ease;
-			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 			cursor: pointer;
 		}
 
 		/* Bouton principal */
 		.btn-register {
-			background: linear-gradient(45deg, #ff6b35, #ff8c00);
+			background: linear-gradient(45deg, #00B7B7, #3C4C5C);
 			color: #fff;
 			border: none;
 		}
 		.btn-register:hover {
 			transform: translateY(-2px);
-			box-shadow: 0 6px 15px rgba(255, 107, 53, 0.5);
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 		}
 		.user-buttons {
 			cursor: pointer;
 		}
 		/* Bouton contour orange */
 		.btn-outline-primary {
-			border: 2px solid #ff6600;
-			color: #ff6600;
+			color: #00B7B7;
 			background: #fff;
 		}
 		.btn-outline-primary:hover {
-			background-color: #ff6600;
+			background-color: #00B7B7;
 			color: #fff;
 			transform: translateY(-2px);
 		}
 
 		/* --- Bouton secondaire : Inviter --- */
 		.btn-secondary {
-			background: linear-gradient(135deg, #2ec4b6 0%, #25a89d 100%);
+			background: linear-gradient(45deg, #3C4C5C, #2E3A45);
 			border: none;
 			color: #fff;
 			font-weight: 600;
 			letter-spacing: 0.4px;
-			box-shadow: 0 4px 12px rgba(46, 196, 182, 0.4);
 			transition: all 0.3s ease;
 		}
 
 		.btn-secondary:hover {
-			background: linear-gradient(135deg, #25a89d 0%, #1f8f86 100%);
-			box-shadow: 0 6px 18px rgba(31, 143, 134, 0.5);
-			transform: translateY(-3px);
+			background: linear-gradient(45deg, #3C4C5C, #2E3A45);
+			
 		}
 
 
@@ -178,7 +174,7 @@
 		}
 		.user:hover {
 			transform: translateY(-8px);
-			box-shadow: 0 10px 25px rgba(255, 102, 0, 0.25);
+			box-shadow: 0 8px 20px rgba(29, 14, 9, 0.3);
 		}
 		/* === Assure le curseur pointer sur tous les boutons === */
 		/* Empêche les éléments décoratifs de bloquer les clics */
@@ -256,7 +252,7 @@
 
 		.request-card:hover {
 			transform: translateY(-4px);
-			box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+			box-shadow: 0 8px 20px rgba(29, 14, 9, 0.3);
 		}
 
 		.request-header {
@@ -275,7 +271,7 @@
 		}
 
 		.request-badge {
-			background: linear-gradient(135deg, #ff6b35 0%, #fca311 50%, #2ec4b6 100%);
+			background: linear-gradient(135deg, #ff6b35 0%, #fca311 100%);
 			color: #fff;
 			font-size: 12px;
 			border-radius: 12px;
@@ -337,7 +333,7 @@
 		}
 
 		.request-meta i {
-			color: #ff6b35;
+			color: #3C4C5C;
 			margin-right: 5px;
 			font-size: 15px;
 		}
@@ -348,21 +344,21 @@
 			color: #fff;
 		}
 		.btn-register {
-			background: linear-gradient(45deg, #ff6b35, #ff8c00);
+			background: linear-gradient(45deg, #00B7B7, #008F8F);
 			border: none;
 			color: white;
 			font-weight: 600;
 			transition: 0.3s ease;
 		}
 		.btn-register:hover {
-			background: linear-gradient(45deg, #ff8c00, #ff6b35);
+			background: linear-gradient(45deg, #00B7B7, #008F8F);
 			transform: translateY(-2px);
 		}
 		/* Effet au survol */
 		.btn-register:hover {
-			background: linear-gradient(45deg, #ff8c00, #ff6b35);
+			background: linear-gradient(45deg, #008F8F, #00B7B7);
 			transform: translateY(-2px);
-			box-shadow: 0 4px 10px rgba(255, 107, 53, 0.4);
+			box-shadow: 0 8px 20px rgba(29, 14, 9, 0.3);
 		}
 
 		/* Animation de l'enveloppe quand la carte est survolée */
@@ -451,6 +447,9 @@
 			border-radius: 50%;
 			text-align: center;
 		}
+		.border-primary {
+    border-color: #00B7B7  !important;
+}
 	</style>
 {% endblock %}
 
@@ -508,7 +507,7 @@
 								</div>
 								<div class="user-meta mb-3">
 									<div class="user-name fw-bold">Propriétaire</div>
-									<div class="user-location text-muted">نلوّج في قطعة لكرهبتي </div>
+									<div class="user-location text-muted" style="color: #000000 !important;">نلوّج في قطعة لكرهبتي </div>
 								</div>
 								<div class="user-buttons mt-3">
 									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
@@ -528,7 +527,7 @@
 								</div>
 								<div class="user-meta mb-3">
 									<div class="user-name fw-bold">Mécanicien</div>
-									<div class="user-location text-muted">  نلوج على قطعة للي يصلح عندي </div>
+									<div class="user-location text-muted" style="color: #000000 !important;">  نلوج على قطعة للي يصلح عندي </div>
 								</div>
 								<div class="user-buttons mt-3">
 									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
@@ -547,8 +546,8 @@
 									</div>
 								</div>
 								<div class="user-meta mb-3">
-									<div class="user-name fw-bold">Vendeur Neuf</div>
-									<div class="user-location text-muted"> نبيع قطايع جدد و نجاوب كل واحد يلوج في قطعة </div>
+									<div class="user-name fw-bold">Vendeur des piéces Neuves</div>
+									<div class="user-location text-muted" style="color: #000000 !important;"> نبيع قطايع جدد و نجاوب كل واحد يلوج في قطعة </div>
 								</div>
 								<div class="user-buttons mt-3">
 									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
@@ -563,12 +562,12 @@
 							<div class="user text-center p-4 shadow-sm rounded bg-white">
 								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
 									<div class="user-icon text-warning">
-										<i class="fas fa-car-side fa-3x"></i>
+										<i class="fas fa-cogs fa-3x"></i>
 									</div>
 								</div>
 								<div class="user-meta mb-3">
-									<div class="user-name fw-bold">Vendeur Occasion</div>
-									<div class="user-location text-muted">نبيع قطايع قدم (كاس) و نجاوب  كل واحد يلوج  قطعة في الحين</div>
+									<div class="user-name fw-bold">Vendeur des piéces Occasion</div>
+									<div class="user-location text-muted" style="color: #000000 !important;">نبيع قطايع قدم (كاس) و نجاوب  كل واحد يلوج  قطعة في الحين</div>
 								</div>
 								<div class="user-buttons mt-3">
 									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
@@ -588,7 +587,7 @@
 								</div>
 								<div class="user-meta mb-3">
 									<div class="user-name fw-bold">Particulier</div>
-									<div class="user-location text-muted">عندك قطعة مفقودة تلوج عليها   أو عندك قطعة زايدة للي يحب يشري     </div>
+									<div class="user-location text-muted" style="color: #000000 !important;">عندك قطعة مفقودة تلوج عليها   أو عندك قطعة زايدة للي يحب يشري     </div>
 								</div>
 								<div class="user-buttons mt-3">
 									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
@@ -619,7 +618,7 @@
 								Demandes récentes
 							</span>
 						</h3>
-						<a href="{{path('app_demande_all')}}" class="ml-auto btn btn-register btn-sm shadow-md">Voir plus</a>
+						<a href="{{path('app_demande_all')}}" class="ml-auto btn btn-register btn-sm shadow-md" >Voir plus</a>
 					</div>
 
 					<!-- ✅ AIZ Carousel -->
@@ -644,10 +643,13 @@
 					</a>
 				</div>
 				<div class="request-badge">
-					{% if demande.vendeuroccasion == 1 %}
+					{% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
+					Neuf /
 						Occasion
-					{% else %}
+					{% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
 						Neuf
+					{% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}	
+					Occasion
 					{% endif %}
 				</div>
 			</div>
@@ -657,7 +659,7 @@
 					<i class="fas fa-map-marker-alt"></i> {{ demande.zone }}
 				</span>
 				<span>
-					<i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.nom : 'Anonyme' }}
+					<i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.prenom : 'Anonyme' }}
 				</span>
 				<span>
 					<i class="far fa-clock"></i> {{ demande.datecreate|time_ago }}

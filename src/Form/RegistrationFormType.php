@@ -19,7 +19,7 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom ou raison sociale', null, array('label'=>false))
+            ->add('nom', null, array('label'=>false))
             ->add('prenom', null, array('label'=>false))
            ->add('adresse', ChoiceType::class, [
         'choices' => [

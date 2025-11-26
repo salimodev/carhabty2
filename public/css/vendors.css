@@ -16482,7 +16482,8 @@ a.text-dark:hover {
 .la,
 .las {
     font-family: 'Line Awesome Free';
-    font-weight: 900
+    font-weight: 900;
+    font-size: 21px;
 }
 
 .la.la-glass:before {
@@ -16498,6 +16499,7 @@ a.text-dark:hover {
     font-family: 'Line Awesome Free';
     font-weight: 400
 }
+
 
 .la.la-star-o:before {
     content: "\f005"

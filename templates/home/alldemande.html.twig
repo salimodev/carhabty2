@@ -392,7 +392,7 @@
 									<label class="mb-0 opacity-50 small">Type</label>
 									<select class="form-control form-control-sm" onchange="filtrerDemandes()" id="type">
 										<option value="">Tous</option>
-										<option value="neuf">Neuf</option>
+										<option value="neuf">Neuve</option>
 										<option value="occasion">Occasion</option>
 									</select>
 								</div>
@@ -437,7 +437,7 @@
 
                 <div class="request-meta">
                     <span><i class="fas fa-map-marker-alt"></i> {{ demande.zone }}</span>
-                    <span><i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.nom : 'Anonyme' }}</span>
+                    <span><i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.prenom : 'Anonyme' }}</span>
                     <span><i class="far fa-clock"></i> {{ demande.datecreate|time_ago }}</span>
                 </div>
 
@@ -558,7 +558,7 @@ function filtrerDemandes() {
         <div class="request-card">
             <div class="request-header">
                 <div class="request-title">${piecesTitle || (d.marque + " " + d.modele)}</div>
-                <div class="request-badge">${d.type === 'occasion' ? 'Occasion' : 'Neuf'}</div>
+                <div class="request-badge">${d.type === 'occasion' ? 'Occasion' : 'Neuve'}</div>
             </div>
             <div class="request-meta">
                 <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>

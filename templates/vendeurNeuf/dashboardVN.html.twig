@@ -156,11 +156,13 @@
 									<td>{{ demande.chassis }}</td>
 									<td>{{ demande.energie }}</td>
 									<td>{{ demande.etatmoteur }}</td>
-									<td>{% if demande.offrecompte %}
-        {{demande.offrecompte.adresse }}
-    {% else %}
-       {{ demande.zone }}
-    {% endif %} </td>
+									<td>
+										{% if demande.offrecompte %}
+											{{demande.offrecompte.adresse }}
+										{% else %}
+											{{ demande.zone }}
+										{% endif %}
+									</td>
 									<td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
 									<td>
 										{% if demande.statut == 'ouvert' %}
@@ -170,7 +172,7 @@
 										{% endif %}
 									</td>
 									<td class="text-right">
-										<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande_vendeur',{'id':demande.id})}}">
+										<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande_vendeur',{'id':demande.id})}}" title="Voir détail">
 											<i class="las la-eye"></i>
 										</a>
 
@@ -218,14 +220,15 @@
 												{{ offre.demande.code ?? '—' }}
 											</a>
 										</td>
-										 {# ✅ Affichage du nom ou email du demandeur #}
-          <td>
-    {% if offre.demande.offrecompte %}
-        {{ offre.demande.offrecompte.nom ?? offre.demande.offrecompte.email }}
-    {% else %}
-        <span class="text-muted"> {{ offre.demande.offreemail }}</span>
-    {% endif %}
-</td>
+										{# ✅ Affichage du nom ou email du demandeur #}
+										<td>
+											{% if offre.demande.offrecompte %}
+												{{ offre.demande.offrecompte.nom ?? offre.demande.offrecompte.email }}
+											{% else %}
+												<span class="text-muted">
+													{{ offre.demande.offreemail }}</span>
+											{% endif %}
+										</td>
 
 										<td>
 											{{ offre.observation|length > 40 
@@ -242,47 +245,39 @@
 											{% endif %}
 										</td>
 										<td>
-    {% if offre.status == 'acceptee' %}
-        <span class="badge badge-inline badge-success">Acceptée</span>
-    {% elseif offre.status == 'refusee' %}
-        <span class="badge badge-inline badge-danger">Refusée</span>
-    {% else %}
-        <span class="badge badge-inline badge-warning text-dark">En attente</span>
-    {% endif %}
-</td>
-                                    <td class="text-right">
-    {% if offre.status == 'en_attente' %}
-        <a href="{{ path('offre_edit', {'id': offre.id}) }}" 
-           class="btn btn-soft-warning btn-icon btn-circle btn-sm" 
-           title="Modifier">
-            <i class="las la-edit"></i>
-        </a>
-        <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm"
-           title="Supprimer"
-           onclick="supprimerOffre($(this), {{ offre.id }})">
-            <i class="las la-trash"></i>
-        </a>
-    {% endif %}
+											{% if offre.status == 'acceptee' %}
+												<span class="badge badge-inline badge-success">Acceptée</span>
+											{% elseif offre.status == 'refusee' %}
+												<span class="badge badge-inline badge-danger">Refusée</span>
+											{% else %}
+												<span class="badge badge-inline badge-warning text-dark">En attente</span>
+											{% endif %}
+										</td>
+										<td class="text-right">
+											{% if offre.status == 'en_attente' %}
+												<a href="{{ path('offre_edit', {'id': offre.id}) }}" class="btn btn-soft-warning btn-icon btn-circle btn-sm" title="Modifier">
+													<i class="las la-edit"></i>
+												</a>
+												<a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Supprimer" onclick="supprimerOffre($(this), {{ offre.id }})">
+													<i class="las la-trash"></i>
+												</a>
+											{% endif %}
 
-    {# Nouveau bouton "Voir l'offre" disponible pour tous les statuts #}
-    <a href="{{ path('offre_show', {'id': offre.id}) }}" 
-       class="btn btn-soft-info btn-icon btn-circle btn-sm" 
-       title="Voir l'offre">
-        <i class="las la-eye"></i>
-    </a>
+											{# Nouveau bouton "Voir l'offre" disponible pour tous les statuts #}
+											<a href="{{ path('offre_show', {'id': offre.id}) }}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="Voir l'offre">
+												<i class="las la-eye"></i>
+											</a>
 
-    {% if offre.status == 'acceptee' %}
-        <a href="#" class="btn btn-soft-success btn-icon btn-circle btn-sm"
-           title="Offre acceptée" disabled>
-            <i class="las la-check"></i>
-        </a>
-    {% elseif offre.status == 'refusee' %}
-        <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm"
-           title="Offre refusée" disabled>
-            <i class="las la-times"></i>
-        </a>
-    {% endif %}
-</td>
+											{% if offre.status == 'acceptee' %}
+												<a href="#" class="btn btn-soft-success btn-icon btn-circle btn-sm" title="Offre acceptée" disabled>
+													<i class="las la-check"></i>
+												</a>
+											{% elseif offre.status == 'refusee' %}
+												<a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Offre refusée" disabled>
+													<i class="las la-times"></i>
+												</a>
+											{% endif %}
+										</td>
 
 
 									</tr>
@@ -299,6 +294,7 @@
 
 
 </div></div></div>
+
 
 {% endblock %}{% block footer %}{{ parent() }}{% endblock %}{% block javascript %}{{ parent() }}<script type="text/javascript" src="{{asset ('assets/js/carousel.js') }}"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script type="text/javascript"></script><script type="text/javascript">
 $(document).ready(function () {

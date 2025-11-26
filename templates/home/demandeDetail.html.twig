@@ -18,43 +18,18 @@
 		<div class="d-flex align-items-start">
 
 			<div class="aiz-user-panel">
+
 				<div class="aiz-titlebar mt-2 mb-4" style="margin-right: 1rem;">
 					<div class="row align-items-center justify-content-between">
-						<div class="col-md-6"></div>
+						<div class="col-md-12">
+							<h2 class="mb-4 text-center" style="font-weight:600; color:#333;">
+								Détail de la demande – N°{{ demande.code }}
+							</h2>
 
-						<div class="col-md-6 text-end">
-							{% set dejaPropose = demande.offres |filter(o => o.user and app.user and o.user.id == app.user.id) |length > 0 %}
-
-							{% set estVendeurNeuf = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
-
-							{% if app.user %}
-								{% if estVendeurNeuf %}
-									{% if dejaPropose %}
-										<button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm" onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');" style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600; width:200px;">
-											Proposer un prix
-										</button>
-									{% else %}
-										<form action="{{ path('propose_offre', {'id': demande.id}) }}" class="d-inline">
-											<button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm" style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600; width:200px;">
-												Proposer un prix
-											</button>
-										</form>
-									{% endif %}
-								{% else %}
-									<button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm" onclick="AIZ.plugins.notify('warning', 'Seuls les vendeurs de pièces neuves peuvent proposer une offre.');" style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600; width:200px;">
-										Proposer un prix
-									</button>
-								{% endif %}
-							{% else %}
-								<button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm" onclick="AIZ.plugins.notify('info', 'Veuillez vous connecter pour proposer une offre.');" style="background: linear-gradient(90deg, #007bff, #00c6ff); border:none; font-weight:600; width:200px;">
-									Proposer un prix
-								</button>
-							{% endif %}
 
 						</div>
 					</div>
 				</div>
-
 
 				<div class="card">
 					<div class="card-header">
@@ -67,7 +42,7 @@
 								<table class="table-borderless table">
 									<tbody>
 										<tr>
-											<td class="w-50 fw-600">Code de demande::</td>
+											<td class="w-50 fw-600">Code de demande:</td>
 											<td>{{ demande.code }}</td>
 										</tr>
 										<tr>
@@ -83,7 +58,7 @@
 											<td>{{ demande.chassis }}</td>
 										</tr>
 										<tr>
-											<td class="w-50 fw-600">Énergie / Carburant:</td>
+											<td class="w-50 fw-600">Énergie:</td>
 											<td>{{ demande.energie }}</td>
 										</tr>
 										<tr>
@@ -94,16 +69,16 @@
 											<td class="w-50 fw-600">Zone:</td>
 											<td>{{ demande.zone }}</td>
 										</tr>
-
 									</tbody>
 								</table>
 							</div>
+
 							<div class="col-lg-6">
 								<table class="table-borderless table">
 									<tbody>
 										<tr>
 											<td class="w-50 fw-600">Date de demande:</td>
-											<td>{{demande.datecreate|date('d/m/Y H:i') }}</td>
+											<td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
 										</tr>
 										<tr>
 											<td class="w-50 fw-600">Statut:</td>
@@ -117,18 +92,17 @@
 										</tr>
 										<tr>
 											<td class="w-50 fw-600">Photo carte grise:</td>
-											<td><img src="{{ demande.photocartegrise }}" alt='carte grise' style='width:222px;height:135px;border-radius:6px;'></td>
+											<td><img src="{{ demande.photocartegrise }}" alt="carte grise" style="width:222px;height:135px;border-radius:6px;"></td>
 										</tr>
-
-
 									</tbody>
 								</table>
 							</div>
+
 						</div>
 					</div>
 				</div>
 
-				<div class="row">
+				<div class="row mt-4">
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
@@ -136,7 +110,6 @@
 							</div>
 							<div class="card-body">
 								<div id="tab_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-
 									<div class="row">
 										<div class="col-sm-12">
 											<table class="table table-striped" id="tab">
@@ -173,18 +146,46 @@
 											</table>
 										</div>
 									</div>
-
 								</div>
 							</div>
 						</div>
 					</div>
-
 				</div>
+
+				<!-- BOUTON AJOUTÉ EN BAS -->
+				<div class="text-end mt-auto mb-4">
+        {% set dejaPropose = demande.offres |filter(o => o.user and app.user and o.user.id == app.user.id) |length > 0 %}
+        {% if app.user %}
+            {% if dejaPropose %}
+                <button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm"
+                        onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');"
+                        style="background: linear-gradient(90deg, #007bff,#00c6ff); border:none; font-weight:600; width:200px;">
+                    Proposer un prix
+                </button>
+            {% else %}
+                <form action="{{ path('propose_offre', {'id': demande.id}) }}" class="d-inline">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm"
+                            style="background: linear-gradient(45deg,#00B7B7,#3C4C5C); border:none; font-weight:600; width:200px;">
+                        Proposer un prix
+                    </button>
+                </form>
+            {% endif %}
+        {% else %}
+            <button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm"
+                    onclick="AIZ.plugins.notify('info', 'Veuillez vous connecter pour proposer une offre.');"
+                    style="background: linear-gradient(45deg,#00B7B7,#3C4C5C); border:none; font-weight:600; width:200px;">
+                Proposer un prix
+            </button>
+        {% endif %}
+    </div>
+				<!-- FIN BOUTON -->
+
 			</div>
 		</div>
 	</div>
-	<!-- /.container -->
 </section>
+
+
 
 	
 {% endblock %}

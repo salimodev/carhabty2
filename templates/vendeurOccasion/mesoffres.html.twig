@@ -63,104 +63,113 @@
     {% endblock %}
 
     {% if app.user and is_granted('ROLE_VENDEUR_OCCASION') %}
-        <div class="container-fluid px-md-4 px-2"> {# padding normal sur desktop, réduit sur mobile #}
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0 h6">Dernières offres envoyées</h5>
-                        </div>
-                       <div class="card-body p-0">
-    {% if offres is not empty %}
-        <div class="table-responsive" style="overflow-x: hidden;"> {# empêche le scroll #}
-            <table class="table table-hover mb-0 align-middle" id="tabprod1">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Numéro</th>
-                        <th>Demande</th>
-                        <th>Demandeur</th>
-                        <th>Observation</th>
-                        <th>Date d’envoi</th>
-                        <th>Validité</th>
-                        <th>Statut</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for offre in offres %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td class="fw-semibold text-primary">{{ offre.numeroOffre }}</td>
-                            <td>
-                                <a href="{{ path('detail_demande_accuill', {'id': offre.demande.id}) }}" class="text-decoration-none text-dark fw-semibold">
-                                    {{ offre.demande.code ?? '—' }}
-                                </a>
-                            </td>
-                            <td>
-                                {% if offre.demande.offrecompte %}
-                                    {{ offre.demande.offrecompte.nom ?? offre.demande.offrecompte.email }}
-                                {% else %}
-                                    <span class="text-muted">{{ offre.demande.offreemail }}</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ offre.observation|length > 40 ? offre.observation|slice(0, 40) ~ '...' : offre.observation }}</td>
-                            <td>{{ offre.createdAt|date('d/m/Y H:i') }}</td>
-                            <td>
-                                {% if offre.joursRestants > 0 %}
-                                    {{ offre.joursRestants }} jour{{ offre.joursRestants > 1 ? 's' : '' }}
-                                {% else %}
-                                    Expirée
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if offre.status == 'acceptee' %}
-                                    <span class="badge badge-inline badge-success">Acceptée</span>
-                                {% elseif offre.status == 'refusee' %}
-                                    <span class="badge badge-inline badge-danger">Refusée</span>
-                                {% else %}
-                                    <span class="badge badge-inline badge-warning text-dark">En attente</span>
-                                {% endif %}
-                            </td>
-                           <td class="text-right">
-												{% if offre.status == 'en_attente' %}
-													<a href="{{ path('offre_edit_occ', {'id': offre.id}) }}" class="btn btn-soft-warning btn-icon btn-circle btn-sm" title="Modifier">
-														<i class="las la-edit"></i>
-													</a>
-													<a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Supprimer" onclick="supprimerOffre($(this), {{ offre.id }})">
-														<i class="las la-trash"></i>
-													</a>
-												{% endif %}
+       <div class="container-fluid px-md-4 px-2">
+	{# padding normal sur desktop, réduit sur mobile #}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="mb-0 h6">Dernières offres envoyées</h5>
+				</div>
+				<div class="card-body">
+					{% if offres is not empty %}
+						<table class="table table-hover mb-0 align-middle" id="tabprod1">
+							<thead class="table-light">
+								<tr>
+									<th>#</th>
+									<th>Numéro</th>
+									<th>Demande</th>
+									<th>Demandeur</th>
+									<th>Observation</th>
+									<th>Date d’envoi</th>
+									<th>Validité</th>
+									<th>Statut</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for offre in offres %}
+									<tr>
+										<td>{{ loop.index }}</td>
+										<td class="fw-semibold text-primary">{{ offre.numeroOffre }}</td>
+										<td>
+											<a href="{{ path('detail_demande_vendeur', {'id': offre.demande.id}) }}" class="text-decoration-none text-dark fw-semibold">
+												{{ offre.demande.code ?? '—' }}
+											</a>
+										</td>
+										{# ✅ Affichage du nom ou email du demandeur #}
+										<td>
+											{% if offre.demande.offrecompte %}
+												{{ offre.demande.offrecompte.nom ?? offre.demande.offrecompte.email }}
+											{% else %}
+												<span class="text-muted">
+													{{ offre.demande.offreemail }}</span>
+											{% endif %}
+										</td>
 
-												{# Nouveau bouton "Voir l'offre" disponible pour tous les statuts #}
-												<a href="{{ path('offre_show_occ', {'id': offre.id}) }}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="Voir l'offre">
-													<i class="las la-eye"></i>
+										<td>
+											{{ offre.observation|length > 40 
+                                            ? offre.observation|slice(0, 40) ~ '...' 
+                                            : offre.observation }}
+										</td>
+										<td>{{ offre.createdAt|date('d/m/Y H:i') }}</td>
+										<td>
+											{% if offre.joursRestants > 0 %}
+												{{ offre.joursRestants }}
+												jour{{ offre.joursRestants > 1 ? 's' : '' }}
+											{% else %}
+												Expirée
+											{% endif %}
+										</td>
+										<td>
+											{% if offre.status == 'acceptee' %}
+												<span class="badge badge-inline badge-success">Acceptée</span>
+											{% elseif offre.status == 'refusee' %}
+												<span class="badge badge-inline badge-danger">Refusée</span>
+											{% else %}
+												<span class="badge badge-inline badge-warning text-dark">En attente</span>
+											{% endif %}
+										</td>
+										<td class="text-right">
+											{% if offre.status == 'en_attente' %}
+												<a href="{{ path('offre_edit_occ', {'id': offre.id}) }}" class="btn btn-soft-warning btn-icon btn-circle btn-sm" title="Modifier">
+													<i class="las la-edit"></i>
 												</a>
+												<a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Supprimer" onclick="supprimerOffre($(this), {{ offre.id }})">
+													<i class="las la-trash"></i>
+												</a>
+											{% endif %}
 
-												{% if offre.status == 'acceptee' %}
-													<a href="#" class="btn btn-soft-success btn-icon btn-circle btn-sm" title="Offre acceptée" disabled>
-														<i class="las la-check"></i>
-													</a>
-												{% elseif offre.status == 'refusee' %}
-													<a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Offre refusée" disabled>
-														<i class="las la-times"></i>
-													</a>
-												{% endif %}
-											</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <p class="text-center text-muted m-3">Aucune offre envoyée récemment.</p>
-    {% endif %}
+											{# Nouveau bouton "Voir l'offre" disponible pour tous les statuts #}
+											<a href="{{ path('offre_show_occ', {'id': offre.id}) }}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="Voir l'offre">
+												<i class="las la-eye"></i>
+											</a>
+
+											{% if offre.status == 'acceptee' %}
+												<a href="#" class="btn btn-soft-success btn-icon btn-circle btn-sm" title="Offre acceptée" disabled>
+													<i class="las la-check"></i>
+												</a>
+											{% elseif offre.status == 'refusee' %}
+												<a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Offre refusée" disabled>
+													<i class="las la-times"></i>
+												</a>
+											{% endif %}
+										</td>
+
+
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					{% else %}
+						<p class="text-center text-muted">Aucune offre envoyée récemment.</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
     {% endif %}
 {% endblock %}
 

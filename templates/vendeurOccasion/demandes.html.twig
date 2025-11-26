@@ -219,6 +219,20 @@
 		.border-primary {
     border-color: #00B7B7  !important;
 }
+
+
+.custom-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ff6600; /* Akzentfarbe */
+    display: inline-block;
+}
+
 		</style>
 	{% endblock %}
 
@@ -249,9 +263,8 @@
 								<div class="text-left">
 									<div class="row gutters-5 flex-wrap align-items-center">
 										<div class="col col-10">
-											<h1 class="h6 fw-600 text-body">
-												Demandes
-											</h1>
+											<h1 class="custom-title text-center">Demandes</h1>
+
 										</div>
 										<div
 											class="row justify-content-end align-items-end g-2 mb-4 filtre-demandes">

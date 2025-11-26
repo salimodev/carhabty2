@@ -272,7 +272,7 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
             'time_ago'     => $this->timeAgo($d->getDatecreate()),
             'type'         => $d->getVendeuroccasion() == 1 ? 'occasion' : 'neuf',
             'vendeurType'  => $isVendeurNeuf ? 'neuf' : ($isVendeurOccasion ? 'occasion' : null),
-            'offrecompte'  => $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
+            'offrecompte'  => $d->getOffrecompte() ? $d->getOffrecompte()->getPrenom() : 'Anonyme',
             'pieces'       => $pieces,
             'dejaPropose'  => $dejaPropose,
             'estConnecte'  => $estConnecte,

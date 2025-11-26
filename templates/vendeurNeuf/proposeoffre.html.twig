@@ -18,7 +18,7 @@
     {% if app.user and is_granted('ROLE_VENDEUR_NEUF') %}
         <div class="container my-5 px-4 px-md-5">
             <h3 class="mb-5 text-center fw-bold text-primary">
-                Proposer une offre pour la demande {{ demande.code }}
+                Proposer une offre pour la demande N° {{ demande.code }}
             </h3>
 
             <form id="formOffre" method="POST" action="{{ path('offre_create', {'id': demande.id}) }}">
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label fw-bold text-dark mb-2">Validité de l'offre</label>
+                        <label class="form-label fw-bold text-dark mb-2">Validité de l'offre (une semaine ouvrable)</label>
                         <input type="text" name="validite" id="validite" 
                                class="form-control rounded-4 shadow-sm p-3" 
                                style="background-color: #f0f2f5; border: 1px solid #ddd;" 

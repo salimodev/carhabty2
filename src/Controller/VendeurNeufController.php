@@ -246,7 +246,7 @@ $result[] = [
     'modele'       => $d->getModele(),
     'zone'         => $d->getZone(),
     'date'         => $d->getDatecreate()->format('Y-m-d H:i'),
-    'offrecompte'  => $d->getOffrecompte() ? $d->getOffrecompte()->getNom() : 'Anonyme',
+    'offrecompte'  => $d->getOffrecompte() ? $d->getOffrecompte()->getPrenom() : 'Anonyme',
     'pieces'       => $pieces,
     'dejaPropose'  => $dejaPropose, // ajout pour le JS
 ];

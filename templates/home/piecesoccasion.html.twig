@@ -33,12 +33,12 @@
                 position: absolute;
                 top: 14px;
                 left: 0;
-                background: #ffffff;
                 padding: 4px 10px;
                 border-radius: 0 20px 20px 0;
                 font-size: 11px;
                 font-weight: 700;
-                color: #00B7B7;
+               background: linear-gradient(135deg, #ff6b35 0%, #fca311 100%);
+			   color: #fff;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.12);
                 z-index: 10;
             }
@@ -49,7 +49,7 @@
                 flex-direction: column;
                 justify-content: space-between;
             }
-            .price { font-size: 16px; font-weight: 700; color: #3a57e8; }
+            .price { font-size: 16px; font-weight: 700; color: #2ec4b6; }
             .title { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 4px; }
             .info { font-size: 12px; color: #777; display: flex; align-items: center; }
             .info i { font-size: 14px; margin-right: 4px; opacity: 0.7; }
@@ -142,7 +142,7 @@
             <form id="filter-form" class="filter-inline">
                 <div class="filter-group">
                     <label>Marque</label>
-                   <select class="form-control form-control-sm" onchange="filtrerDemandes()" id="marque" data-live-search="true">
+                   <select class="form-control form-control-sm" onchange="filtrerAnnonces()" id="marque" data-live-search="true">
                         <option value="">Toutes</option>
                         <option value="Audi">Audi</option>
                         <option value="BMW">BMW</option>
@@ -152,7 +152,7 @@
                 </div>
                 <div class="filter-group">
                     <label>Zone</label>
-                    <select class="form-control form-control-sm" name="zone">
+                    <select class="form-control form-control-sm" name="zone" onchange="filtrerAnnonces()">
                         <option value="">Toute la Tunisie</option>
                         <option value="Tunis">Tunis</option>
                         <option value="Ariana">Ariana</option>
@@ -162,17 +162,19 @@
                 </div>
                 <div class="filter-group">
                     <label>Date</label>
-                    <select class="form-control form-control-sm" name="date">
+                    <select class="form-control form-control-sm" name="date" onchange="filtrerAnnonces()">
                         <option value="recent">Le plus récent</option>
                         <option value="ancien">Le plus ancien</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Prix max</label>
-                   <select class="form-control form-control-sm" name="date">
-                        <option value="recent">Le plus récent</option>
-                        <option value="ancien">Le plus ancien</option>
-                    </select>
+                    <label>Prix</label>
+                  <select class="form-control form-control-sm" name="prix" onchange="filtrerAnnonces()">
+    <option value="">Tous les prix</option>
+    <option value="asc">Prix croissant</option>
+    <option value="desc">Prix décroissant</option>
+</select>
+
                 </div>
             </form>
         </div>
@@ -181,7 +183,7 @@
             <div class="row g-3">
                 {% for annonce in annonces %}
                     <div class="col-custom">
-                        <a href="" class="text-reset text-decoration-none">
+                        <a href="{{ path('detail_annonce_accueil', {'id': annonce.id}) }}" class="text-reset text-decoration-none">
                             <div class="aiz-card-box">
                                 <img class="card-img" src="{{ annonce.imagePrincipale }}" alt="{{ annonce.nom }}" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
                                 <span class="badge-custom">Occasion</span>
@@ -227,5 +229,75 @@
             let ts = el.dataset.timestamp
             el.textContent = dayjs.unix(ts).fromNow()
         })
+
+
+        
     </script>
+    <script>
+function filtrerAnnonces() {
+    var url = "{{ path('recherche_annonces') }}"; // route côté Symfony pour filtrer les annonces
+
+    var data = {
+        marque: $('#marque').val(),
+        zone: $('select[name="zone"]').val(),
+        date: $('select[name="date"]').val(),
+        prix: $('select[name="prix"]').val() // si tu ajoutes un filtre prix
+    };
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        beforeSend: function(){ $('#loaderAcc1').show(); },
+        complete: function(){ $('#loaderAcc1').hide(); },
+        success: function(annonces) {
+            var html = "";
+
+            if (annonces.length === 0) {
+                html = `<div class="text-center p-3" style="margin: auto">
+                            <i class="las la-frown la-3x opacity-60 mb-3"></i>
+                            <h3 class="h6 fw-700">Aucune annonce trouvée</h3>
+                        </div>`;
+            } else {
+                annonces.forEach(function(a) {
+ let annonceUrl = "{{ path('detail_annonce_accueil', {'id': 'ID_ANNONCE'}) }}".replace('ID_ANNONCE', a.id);
+                    html += `
+<div class="col-custom">
+    <a href="${annonceUrl}" class="text-reset text-decoration-none">
+        <div class="aiz-card-box">
+            <img class="card-img" src="${a.imagePrincipale || '/images/placeholder.png'}" alt="${a.nom}">
+            <span class="badge-custom">Occasion</span>
+            <div class="p-3">
+                <div class="price">${a.prix} TND</div>
+                <div class="title text-truncate-2">${a.nom}</div>
+                <p class="info mb-1">
+                    <i class="bi bi-geo-alt" style="color: #00B7B7;"></i> ${a.user.adresse || 'Adresse non renseignée'}
+                </p>
+                <p class="info mb-0">
+                    <i class="bi bi-clock" style="color: #00B7B7;"></i>
+                    <span class="time-ago" data-timestamp="${a.dateCreation}"></span>
+                </p>
+            </div>
+        </div>
+    </a>
+</div>`;
+                });
+            }
+
+            $('.row.g-3').html(html);
+
+            // Mettre à jour les dates relatives
+            dayjs.locale('fr');
+            document.querySelectorAll('.time-ago').forEach(el => {
+                let ts = el.dataset.timestamp;
+                el.textContent = dayjs.unix(ts).fromNow();
+            });
+        }
+    });
+}
+
+// Ajouter l'événement onchange sur tous les filtres
+$('#filter-form select').on('change', filtrerAnnonces);
+</script>
+
 {% endblock %}

@@ -154,29 +154,55 @@
 
 				<!-- BOUTON AJOUTÉ EN BAS -->
 				<div class="text-end mt-auto mb-4">
-        {% set dejaPropose = demande.offres |filter(o => o.user and app.user and o.user.id == app.user.id) |length > 0 %}
-        {% if app.user %}
-            {% if dejaPropose %}
-                <button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm"
-                        onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');"
-                        style="background: linear-gradient(90deg, #007bff,#00c6ff); border:none; font-weight:600; width:200px;">
-                    Proposer un prix
-                </button>
-            {% else %}
-                <form action="{{ path('propose_offre', {'id': demande.id}) }}" class="d-inline">
-                    <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm"
-                            style="background: linear-gradient(45deg,#00B7B7,#3C4C5C); border:none; font-weight:600; width:200px;">
-                        Proposer un prix
-                    </button>
-                </form>
-            {% endif %}
-        {% else %}
-            <button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm"
-                    onclick="AIZ.plugins.notify('info', 'Veuillez vous connecter pour proposer une offre.');"
+       {% set dejaPropose = demande.offres
+    |filter(o => o.user and app.user and o.user.id == app.user.id)
+    |length > 0
+%}
+
+{% set isVendeurNeuf = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
+{% set isVendeurOcc = app.user and 'ROLE_VENDEUR_OCCASION' in app.user.roles %}
+
+{% if isVendeurNeuf %}
+    {% set lienProposer = path('propose_offre', {'id': demande.id}) %}
+{% elseif isVendeurOcc %}
+    {% set lienProposer = path('propose_offre_vo', {'id': demande.id}) %}
+{% else %}
+    {% set lienProposer = null %}
+{% endif %}
+
+       {% if app.user %}
+
+    {% if not lienProposer %}
+        <button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm"
+                onclick="AIZ.plugins.notify('danger', 'Vous n’êtes pas autorisé à proposer un prix.');"
+                style="background: linear-gradient(45deg,#00B7B7,#3C4C5C); border:none; font-weight:600; width:200px;">
+            Proposer un prix
+        </button>
+
+    {% elseif dejaPropose %}
+        <button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm"
+                onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre !');"
+                style="background: linear-gradient(90deg,#007bff,#00c6ff); border:none; font-weight:600; width:200px;">
+            Proposer un prix
+        </button>
+
+    {% else %}
+        <form action="{{ lienProposer }}" class="d-inline">
+            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm"
                     style="background: linear-gradient(45deg,#00B7B7,#3C4C5C); border:none; font-weight:600; width:200px;">
                 Proposer un prix
             </button>
-        {% endif %}
+        </form>
+    {% endif %}
+
+{% else %}
+    <button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm"
+            onclick="AIZ.plugins.notify('info', 'Veuillez vous connecter pour proposer une offre.');"
+            style="background: linear-gradient(45deg,#00B7B7,#3C4C5C); border:none; font-weight:600; width:200px;">
+        Proposer un prix
+    </button>
+{% endif %}
+
     </div>
 				<!-- FIN BOUTON -->
 

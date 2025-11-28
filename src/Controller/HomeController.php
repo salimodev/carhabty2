@@ -13,11 +13,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\OffreRepository;
+use App\Repository\AnnonceRepository;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'Accueil')]
-    public function index(Request $request, DemandeRepository $demandeRepository): Response
+    public function index(Request $request, DemandeRepository $demandeRepository, EntityManagerInterface $em,): Response
     {
         $session = $request->getSession();
         $session->set('PageMenu', 'Accueil');
@@ -71,9 +73,20 @@ class HomeController extends AbstractController
             ->getResult();
     }
 
-    return $this->render('home/index.html.twig', [
-        'lastDemandes' => $lastDemandes,
-    ]);
+    $annonces = $em->getRepository(Annonce::class)->createQueryBuilder('a')
+    ->join('a.user', 'u')
+    ->where('u.roles LIKE :role')
+    ->setParameter('role', '%ROLE_PARTICULIER%')
+    ->orderBy('a.dateCreation', 'DESC')
+    ->setMaxResults(10)
+    ->getQuery()
+    ->getResult(); // <-- important pour récupérer les annonces
+
+return $this->render('home/index.html.twig', [
+    'lastDemandes' => $lastDemandes,
+    'annonces' => $annonces
+]);
+
     }
 
 
@@ -289,6 +302,59 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
 }
 
 
+ #[Route('/recherche-annonces', name: 'recherche_annonces', methods: ['POST'])]
+public function filtrer(Request $request, AnnonceRepository $annonceRepository): JsonResponse
+{
+     $marque = $request->request->get('marque');
+    $zone   = $request->request->get('zone');
+    $date   = $request->request->get('date');
+    $prix   = $request->request->get('prix');
+
+    $qb = $annonceRepository->createQueryBuilder('a');
+
+    // Filtres
+    if ($marque) {
+        $qb->andWhere('a.marque = :marque')
+           ->setParameter('marque', $marque);
+    }
+
+    if ($zone) {
+        $qb->join('a.user', 'u')
+           ->andWhere('u.adresse = :zone')
+           ->setParameter('zone', $zone);
+    }
+
+    // Trier selon le filtre choisi
+    if ($prix === 'asc') {
+        $qb->orderBy('a.prix', 'ASC');
+    } elseif ($prix === 'desc') {
+        $qb->orderBy('a.prix', 'DESC');
+    } elseif ($date === 'recent') {
+        $qb->orderBy('a.dateCreation', 'DESC');
+    } elseif ($date === 'ancien') {
+        $qb->orderBy('a.dateCreation', 'ASC');
+    }
+
+    $annonces = $qb->getQuery()->getResult();
+
+    // Préparer le JSON pour AJAX
+    $data = [];
+    foreach ($annonces as $annonce) {
+        $data[] = [
+            'id' => $annonce->getId(),
+            'nom' => $annonce->getNom(),
+            'prix' => $annonce->getPrix(),
+            'imagePrincipale' => $annonce->getImagePrincipale(),
+            'dateCreation' => $annonce->getDateCreation()->getTimestamp(),
+            'user' => [
+                'adresse' => $annonce->getUser()?->getAdresse()
+            ]
+        ];
+    }
+
+    return new JsonResponse($data);
+}
+
     private function timeAgo(\DateTimeInterface $datetime): string
     {
         $now  = new \DateTimeImmutable();
@@ -341,5 +407,38 @@ public function home_annonces(Request $request, EntityManagerInterface $em, Pagi
         'annonces' => $annonces
     ]);
 }
+
+
+#[Route('/annonce/detail/{id}', name: 'detail_annonce_accueil')]
+public function detailAnnonce(
+    int $id,
+    Request $request,
+    SessionInterface $session,
+    AnnonceRepository $annonceRepository
+): Response {
+
+    // Session setzen
+    $session->set('PageMenu', 'detail_annonce_accueil');
+
+    // 🔹 Annonce holen
+    $annonce = $annonceRepository->find($id);
+
+    if (!$annonce) {
+        throw $this->createNotFoundException('Annonce introuvable.');
+    }
+
+  // Produits de la même marque (exclut l'annonce actuelle)
+    $produitsMemeMarque = $annonceRepository->findBy(
+        ['marque' => $annonce->getMarque()],
+        ['dateCreation' => 'DESC'],
+        4
+    );
+
+    return $this->render('home/detailannonce.html.twig', [
+        'annonce' => $annonce,'annoncesMemeMarque' => $produitsMemeMarque,
+    ]);
+}
+
+
 
 }

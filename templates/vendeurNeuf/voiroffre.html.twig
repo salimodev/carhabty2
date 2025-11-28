@@ -7,6 +7,50 @@
         <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}">
         <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
         <style>
+           .custom-offre-card {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.custom-header {
+    background: linear-gradient(135deg, #007bff 0%, #00c6ff 100%);
+    color: white;
+    padding: 15px 0;
+    font-weight: 700;
+}
+
+.piece-card-box {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    transition: all 0.25s ease;
+}
+
+.piece-card-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+}
+
+.piece-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.quality-box {
+    background: #f7faff;
+    border: 1px solid #dbe8ff;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.quality-title {
+    font-weight: 700;
+    color: #007bff;
+    margin-bottom: 5px;
+}
             /* --- Styles modernes pour la page Voir Offre --- */
             .offre-container { padding: 2rem 0; text-align: center; }
             .offre-header h3 { font-weight: 700; color: #007bff; margin-bottom: 0.5rem; }
@@ -83,7 +127,7 @@
 {% block page %}
     {{ parent() }}
     {% if app.user and is_granted('ROLE_VENDEUR_NEUF') %}
-       <section class="py-5" style="background-color: #f5f5f5;padding-left:15px;padding-right:15px;">
+       <section class="py-5" style="background-color: #FFF;padding-left:15px;padding-right:15px;">
             <div class="container">
                 <div class="d-flex align-items-start">
 
@@ -164,42 +208,48 @@
                             </div>
                         </div>
 
-                        <!-- Pièces de l'offre -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="h6 mb-0">Pièces incluses dans cette offre</h5>
-                            </div>
-                            <div class="card-body offre-pieces">
-                                <div class="row justify-content-center">
-                                    {% for piece in offre.demande.pieces %}
-                                        {% set op = offre.offrePieces|filter(item => item.piece.id == piece.id)|last %}
-                                        <div class="col-lg-4 col-md-6 col-12 mb-4">
-                                            <div class="piece-card p-3 border rounded shadow-sm bg-white">
-                                                <div class="piece-title fw-600 text-dark mb-2 text-center">{{ piece.designation }}</div>
+                          <!-- Pièces de l'offre -->
+                        <div class="card custom-offre-card">
+    <div class="card-header custom-header">
+        <h5 class="h5 mb-0 text-center">Pièces incluses dans cette offre</h5>
+    </div>
 
-                                                {% if op %}
-                                                    {% set qualites = {1: '1ère qualité', 2: '2ème qualité', 3: '3ème qualité'} %}
-                                                    {% for i in 1..3 %}
-                                                        {% set prix = attribute(op, 'prix' ~ i) %}
-                                                        {% set marque = attribute(op, 'marque' ~ i) %}
-                                                        {% if prix is not empty and marque is not empty %}
-                                                            <div class="piece-quality text-center mb-2">
-                                                                <h6 class="fw-600 text-primary mb-1">Prix unitaire {{ qualites[i] }}</h6>
-                                                                <p class="mb-0"><strong>Marque :</strong> {{ marque }}</p>
-                                                                <p class="mb-0"><strong>Prix :</strong> {{ prix }} DT</p>
-                                                            </div>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% else %}
-                                                    <div class="text-center text-muted">Aucune donnée pour cette pièce</div>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
+    <div class="card-body offre-pieces">
+        <div class="row justify-content-center">
+            {% for piece in offre.demande.pieces %}
+                {% set op = offre.offrePieces|filter(item => item.piece.id == piece.id)|last %}
+
+                <div class="col-lg-4 col-md-6 col-12 mb-4">
+                    <div class="piece-card-box p-3">
+                        <div class="piece-title text-center mb-3">
+                            {{ piece.designation }}
                         </div>
 
+                        {% if op %}
+                            {% set qualites = {1: '1ère qualité', 2: '2ème qualité', 3: '3ème qualité'} %}
+
+                            {% for i in 1..3 %}
+                                {% set prix = attribute(op, 'prix' ~ i) %}
+                                {% set marque = attribute(op, 'marque' ~ i) %}
+
+                                {% if prix and marque %}
+                                    <div class="quality-box mb-3">
+                                        <div class="quality-title">{{ qualites[i] }}</div>
+                                        <div><strong>Marque :</strong> {{ marque }}</div>
+                                        <div><strong>Prix :</strong> {{ prix }} DT</div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-center text-muted">Aucune donnée pour cette pièce</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>

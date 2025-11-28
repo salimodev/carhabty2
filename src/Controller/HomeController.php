@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Demande;
+use App\Entity\Annonce;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -118,7 +119,7 @@ class HomeController extends AbstractController
 
         if ($user) {
             $demandeCount = $em->getRepository(Demande::class)->countByUser($user);
-
+           
             $nbOffres = $offreRepo->createQueryBuilder('o')
                 ->join('o.demande', 'd')
                 ->where('d.offrecompte = :userId')
@@ -131,9 +132,12 @@ class HomeController extends AbstractController
             $nbOffres = 0;
         }
 
+         $nbPieces =$em->getRepository(Annonce::class)->count(['user' => $user]);
+
         return $this->render('/sideHeader.html.twig', [
             'demandeCount' => $demandeCount,
             'nbOffres' => $nbOffres,
+            'nbPieces' => $nbPieces
         ]);
     }
 

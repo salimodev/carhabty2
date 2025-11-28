@@ -1,0 +1,397 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+	Essayara
+{% endblock %}
+
+{% block Head %}
+	{{ parent() }}
+	{% block LinksCss %}
+		{{ parent() }}
+		<link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
+
+	{% endblock %}
+{% endblock %}
+
+{% block Content %}
+{% block loader %}
+		{{ parent() }}
+	{% endblock %}
+	{% if app.user %}
+		{% if is_granted('ROLE_PARTICULIER') %}
+<section class="py-5" style="background-color: #f5f5f5;">
+	<div class="container">
+		<div
+			class="d-flex align-items-start">
+			<!-- SideHeader reste fixe -->
+			{% block sideHeader %}
+				{{ parent() }}
+			{% endblock %}
+
+			<!-- Contenu principal -->
+			<div class="col-lg-9 px-3">
+				<div class="aiz-titlebar text-left mt-2 mb-3">
+					<h5 class="mb-0 h6">Publier une nouvelle annonce</h5>
+				</div>
+
+				<form class="form-horizontal" enctype="multipart/form-data" id="product_form" method="POST" action="">
+					<div
+						class="row g-3">
+						<!-- Card 1 -->
+						<div class="col-12 col-md-6">
+							<div class="card h-100">
+								<div class="card-header">
+									<h5 class="mb-0 h6">Informations sur la pièce</h5>
+								</div>
+								<div class="card-body">
+									<div class="form-group">
+										<label>Nom
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" id="nom" class="form-control" name="name" placeholder="Nom de la pièce" required>
+									</div>
+									<div class="form-group">
+										<label>Référence
+											
+										</label>
+										<input type="text" id="reference" class="form-control" name="reference" placeholder="Référence" required>
+									</div>
+									<div class="form-group">
+										<label>Marque
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" id="marque" class="form-control" name="brand" placeholder="Marque" required>
+									</div>
+									<div class="form-group">
+										<label>Modèle
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" id="modele" class="form-control" name="model" placeholder="Modèle" required>
+									</div>
+									<div class="form-group">
+										<label>Prix
+											<span class="text-danger">*</span>
+										</label>
+										<input type="number" id="prix" class="form-control" name="price" min="0" value="0" required>
+									</div>
+									<div class="form-group">
+										<label>Description</label>
+										<textarea class="form-control" id="description" name="description" rows="4" placeholder="Description de la pièce"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<!-- Card 2 -->
+						<div class="col-12 col-md-6">
+							<div class="card h-100">
+								<div class="card-header">
+									<h5 class="mb-0 h6">Images du Produit</h5>
+								</div>
+								<div class="card-body">
+
+									<div class="form-group row">
+										<label class="col-md-3 col-form-label" for="signinSrEmail">
+											Image principale
+											<small>(120x80)</small>
+										</label>
+										<div class="col-md-8">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-text bg-soft-secondary font-weight-medium" style="cursor:pointer;" onclick="cloudDinaryimageProd()">Parcourir</div>
+												</div>
+												<div class="form-control file-amount" style="cursor:pointer;" onclick="cloudDinaryimageProd()">1 fichier sélectionné</div>
+												<input type="hidden" id="srcLogo2" value="">
+												<input type="hidden" name="logo" value="99" class="selected-files">
+											</div>
+											<div class="file-preview box sm" id="NewPhotos2" style="display:none">
+												<div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="99" title="1626638583730.jpg">
+													<div class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+														<img src="" id="logoImg2" class="img-fit">
+													</div>
+
+												</div>
+											</div>
+											<small class="text-muted">Cette image est visible dans toutes les boîtes du produit. Utilisez des images de 300x300. Laissez un espace vide autour de l'objet principal car certains bords peuvent être recadrés sur différents appareils.</small>
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-md-3 col-form-label" for="signinSrEmail">
+											Images de la Galerie
+											<small>(600x600)</small>
+										</label>
+										<div class="col-md-8">
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-text bg-soft-secondary font-weight-medium" style="cursor:pointer;" onclick="cloudDinaryBanner()">Parcourir</div>
+												</div>
+												<div class="form-control file-amount" style="cursor:pointer;" onclick="cloudDinaryBanner()">maximum 5 images</div>
+												<input type="hidden" id="srcLogo" class="selected-files" value="">
+												<input type="hidden" name="logo" value="99" class="selected-files">
+											</div>
+                                            <br>
+											<div class="file-preview box sm" id="NewPhotos" style="display:none"></div>
+											<small class="text-muted">Ces images apparaissent dans la galerie de la page du produit. Utilisez des images de 600x600.</small>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+
+						<div class="text-end mt-3">
+							<button type="button" name="button" onclick="addNewAnnoces()" class="btn btn-register">Publier l'annonce</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+
+			{% endif %}
+		{% endif %}
+	{% endblock %}
+
+	{% block javascript %}
+		{{ parent() }}
+
+		<script type="text/javascript">
+			$(document).ready(function () {
+var table = $('#tab').DataTable({
+language: {
+url: "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+},
+rowReorder: {
+selector: 'td:nth-child(2)'
+},
+responsive: true
+});
+
+});
+
+
+
+
+cloudinary.setCloudName('b-ja');
+function cloudDinaryimageProd() {
+     $('#cloudinaryPreloader').show();
+    cloudinary.openUploadWidget({
+        api_key: '539474279193439',
+        api_secret: '7A1irSbuKcg2XIH1TLqB4pBUZfA',
+        cloud_name: 'aladdineshoping',
+        upload_preset: 'aladdineshop',
+        folder: 'ml_default',
+
+        theme: 'minimal',
+        max_file_size: 300000000,
+
+        image_metadata: true,
+        client_allowed_formats: ["png", "jpeg"],
+        resource_type: 'image',
+        folder: 'folder',
+        cropping: 'server',
+        cropping_coordinates_mode: 'custom',
+        cropping_aspect_ratio: 0.72,
+        sources: ['local', 'url'],
+        button_caption: 'Télécherger image',
+       
+       
+    },
+           
+
+
+              (error, result) => { 
+                 $('#cloudinaryPreloader').hide();
+    if (!error && result && result.event === "success") { 
+                $type = "photo";
+                $("#srcLogo2").val(result.info.secure_url);
+
+
+
+                $('#logoImg2').attr('src', result.info.secure_url);
+				$('#NewPhotos2').css('display', 'block');
+                $('#logoImg2').css('display', 'block');
+
+      console.log('Done! Here is the image info: ', result.info.secure_url); 
+    }
+  }
+            );
+
+
+
+}
+
+$cloudImages = [];
+cloudinary.setCloudName('b-ja');
+
+function cloudDinaryBanner() {
+     $('#cloudinaryPreloader').show();
+   cloudinary.openUploadWidget({
+        api_key: '539474279193439',
+        api_secret: '7A1irSbuKcg2XIH1TLqB4pBUZfA',
+        cloud_name: 'b-ja',
+        upload_preset: 'aladdineshop',
+        folder: 'aladsine',
+
+        html: { multiple: 5 },
+        theme: 'minimal',
+          // max_file_size: 300000000,
+
+          // image_metadata:true,
+        client_allowed_formats: ["png", "jpeg"],
+        resource_type: 'image',
+          // folder: 'icones',
+          // cropping: 'server',
+          // cropping_coordinates_mode: 'custom',
+        cropping_aspect_ratio: 0.72,
+        sources: ['local', 'url'],
+        button_caption: 'Télécherger image',
+        
+                                        },
+                                                function (error, result){
+                                                     $('#cloudinaryPreloader').hide();
+                                                if (!error && result && result.event === "queues-end") { 
+                                                   console.log(error,result.info.files[0].uploadInfo.secure_url);
+                                                   $('#pathPhoto').val(result.info.files[0].uploadInfo.secure_url);
+                                                   for (i=0;i<result.info.files.length;i++){
+                                                        var img =document.createElement("img");
+
+                                                       img.id="img"+i;
+
+                                                       img.src=result.info.files[i].uploadInfo.secure_url;
+                                                       img.style.width="85px";
+                                                       img.style.height="85px";
+                                                       img.style.marginRight="4px";
+                                                       img.style.marginBottom="19px";
+                                                      // img.style.marginBottom="15px";
+
+                                                        $('#NewPhotos').append(img);
+                                                      //  $('#NewPhotos').append(' <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="99" title="1626638583730.jpg"><div class="align-items-center align-self-stretch d-flex justify-content-center thumb"><img src="" id="logoImg1" class="img-fit"></div><div class="col body"><h6 class="d-flex"><span class="text-truncate title">1626638583730</span><span class="ext">.jpg</span></h6><p>2 KB</p></div><div class="remove"><button class="btn btn-sm btn-link remove-attachment" type="button"><i class="la la-close"></i></button></div></div>')
+                                                     //   $('#NewPhotos').append(' <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="99" title="1626638583730.jpg"><div class="align-items-center align-self-stretch d-flex justify-content-center thumb"><img src="" id="logoImg2" class="img-fit"></div><div class="col body"><h6 class="d-flex"><span class="text-truncate title">1626638583730</span><span class="ext">.jpg</span></h6><p>2 KB</p></div><div class="remove"><button class="btn btn-sm btn-link remove-attachment" type="button"><i class="la la-close"></i></button></div></div>')
+                                                     
+                                                       $cloudImages.push({'path': result.info.files[i].uploadInfo.secure_url});
+
+                                                       $type = "photo";
+             //   $("#srcLogo").val(result[0].secure_url);
+
+
+
+             //   $('#logoImg').attr('src', result[0].secure_url);
+            //    $('#logoImg1').attr('src', result[1].secure_url);
+              //  $('#logoImg2').attr('src', result[2].secure_url);
+				$('#NewPhotos').css('display', 'block');
+               // $('#logoImg').css('display', 'block');
+
+
+
+
+
+              //  console.log(error, result.info.files[0].uploadInfo.secure_url);
+                                                     //   console.log($cloudImages);
+                                                   }
+                                                }
+                                                });
+
+
+
+                                        }
+
+
+
+function addNewAnnoces(){
+     $_data= {};
+     var $pathajouterPro = '{{path('Ajouter_annonces_particulier')}}';
+     var $nom = $('#nom').val();
+     var $marque = $('#marque').val();
+     var $modele = $('#modele').val();
+     var $reference = $('#reference').val();
+     var $prix = $('#prix').val();
+     var $banner = $('#srcLogo2').val();
+     var $description = $('#description').val();
+
+
+     $_data = {
+         'nom': $nom,
+         'marque': $marque,
+         'modele': $modele,
+         'reference': $reference,
+         'prix': $prix,
+         'cloudImages': $cloudImages,
+         'banner': $banner,
+         'description': $description
+        
+         
+        
+     }
+     if ($('#nom').val()!= "" && $('#marque').val()!= "" && $('#modele').val()!= "" && $('#prix').val()!= ""
+      && $('#banner').val()!= "" ){
+         $.ajax({
+                type: "POST",
+                url: $pathajouterPro,
+                data: $_data,
+                success: function (response) {
+                   Swal.fire({
+                       title: "success!",
+                       text: "la nouvelle annonces à été publiée avec succés!",
+                       icon: "success",
+                       
+                      }); 
+                    
+                       
+                       location.reload();
+                    
+    
+    
+                },
+                beforeSend: function(){ $('#loaderAcc1').show();},
+                complete: function()  { $('#loaderAcc1').hide(); }
+            })
+         }else if($('#nom').val()== ""){
+            Swal.fire({
+                           title: "warning",
+                           text: "merci de remplire le champ nom!",
+                           icon: "warning",
+                           dangerMode: true,
+                        })
+        }else if ($('#marque').val()== ""){
+            Swal.fire({
+                          title: "warning",
+                           text: "merci de remplire le champ marque!",
+                           icon: "warning",
+                           dangerMode: true,
+                        })
+        }else if($('#modele').val() == ""){
+            Swal.fire({
+                           title: "warning",
+                           text: "merci de remplire le champ modele!",
+                           icon: "warning",
+                           dangerMode: true,
+                        })
+        }else if($('#prix').val()== ""){
+            Swal.fire({
+                           title: "warning",
+                           text: "merci de remplir le champ prix!",
+                           icon: "warning",
+                           dangerMode: true,
+                        })
+        
+        }else{
+            Swal.fire({
+                           title: "warning",
+                           text: "merci de télécharger une image pour le piéces!",
+                           icon: "warning",
+                           dangerMode: true,
+                        })
+        }
+    }
+
+
+		</script>
+
+	{% endblock %}
+

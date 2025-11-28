@@ -70,6 +70,10 @@ public function onAuthenticationSuccess(Request $request, TokenInterface $token,
         return new RedirectResponse($this->router->generate('dashboard_vendeurOccasion'));
     }
 
+     if (in_array('ROLE_PARTICULIER', $user->getRoles(), true)) {
+        return new RedirectResponse($this->router->generate('app_particulier'));
+    }
+
     // Sinon, redirige par défaut (page d’accueil)
     return new RedirectResponse($this->router->generate('Accueil'));
 }

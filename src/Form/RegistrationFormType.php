@@ -55,7 +55,8 @@ class RegistrationFormType extends AbstractType
         'Propriétaire'    => 'ROLE_PROPRIETAIRE',
         'Vendeur des piéces neuves' => 'ROLE_VENDEUR_NEUF',
         'Mécanicien' => 'ROLE_MECANICIEN',
-        'Vendeur des piéces occasion' => 'ROLE_VENDEUR_OCCASION'
+        'Vendeur des piéces occasion' => 'ROLE_VENDEUR_OCCASION',
+        'Particulier' => 'ROLE_PARTICULIER'
     ],
      'placeholder' => 'Choisissez votre rôle',
     'multiple' => false,

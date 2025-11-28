@@ -65,6 +65,8 @@ public function register(
             return $this->redirectToRoute('dashboard_vendeurNeuf');
         } elseif ($selectedRole === 'ROLE_PROPRIETAIRE') {
             return $this->redirectToRoute('app_proprietaire');
+          }  elseif ($selectedRole === 'ROLE_PARTICULIER') {
+            return $this->redirectToRoute('app_particulier');
         }elseif ($selectedRole === 'ROLE_MECANICIEN') {
     return $this->redirectToRoute('app_mecancien');
 }

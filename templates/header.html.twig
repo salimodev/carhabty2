@@ -74,8 +74,12 @@
 						<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
 							<a href="{{path('dashboard_vendeurOccasion')}}" class="btn btn-Dashboard">Mon espace</a>
 						</li>
-					{% endif %}
 
+						{% elseif is_granted('ROLE_PARTICULIER')  %}
+						<li class="list-inline-item mr-3 border-right border-left-0 pr-3 pl-0">
+							<a href="{{path('app_particulier')}}" class="btn btn-Dashboard">Mon espace</a>
+						</li>
+					{% endif %}
 
 					<li class="list-inline-item">
 						<a href="{{path('app_logout')}}" class="btn btn-loginto">Déconnexion</a>
@@ -121,6 +125,8 @@
 							</button>
 						{% elseif is_granted('ROLE_PROPRIETAIRE') or is_granted('ROLE_MECANICIEN') %}
 							<a href="{{ path('app_demande') }}" class="btn btn-register">Faire une demande</a>
+							{% elseif is_granted('ROLE_PARTICULIER') or is_granted('ROLE_PARTICULIER') %}
+							<a href="{{ path('add_annonces') }}" class="btn btn-register">Publier une annonce</a>
 						{% endif %}
 					{% else %}
 						<a href="{{ path('app_demande') }}" class="btn btn-register">Faire une demande</a>

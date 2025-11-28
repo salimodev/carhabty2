@@ -1,0 +1,180 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Essayara{% endblock %}
+
+{% block Head %}
+    {{ parent() }}
+    {% block LinksCss %}
+        {{ parent() }}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
+        <style>
+            .aiz-card-box {
+                border-radius: 14px;
+                overflow: hidden;
+                transition: transform 0.25s ease, box-shadow 0.25s ease;
+                background: #ffffff;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+                position: relative;
+                min-height: 350px;
+                display: flex;
+                flex-direction: column;
+            }
+            .aiz-card-box:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 12px 26px rgba(0,0,0,0.12);
+            }
+            .aiz-card-box img {
+                width: 100%;
+                height: 190px;
+                object-fit: cover;
+            }
+            .badge-custom {
+                position: absolute;
+                top: 14px;
+                left: 0;
+                background: #ffffff;
+                padding: 4px 10px;
+                border-radius: 0 20px 20px 0;
+                font-size: 11px;
+                font-weight: 700;
+                color: #ff4b4b;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+                z-index: 10;
+            }
+            .aiz-card-box .p-3 {
+                padding: 14px !important;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            .price { font-size: 16px; font-weight: 700; color: #3a57e8; }
+            .title { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 4px; }
+            .info { font-size: 12px; color: #777; display: flex; align-items: center; }
+            .info i { font-size: 14px; margin-right: 4px; opacity: 0.7; }
+
+            /* Afficher 5 cartes par ligne */
+            @media (min-width: 1200px) { 
+                .col-custom { flex: 0 0 20%; max-width: 20%; }
+            }
+            @media (max-width: 1199px) { .col-custom { flex: 0 0 25%; max-width: 25%; } }
+            @media (max-width: 991px) { .col-custom { flex: 0 0 33.3333%; max-width: 33.3333%; } }
+            @media (max-width: 767px) { .col-custom { flex: 0 0 50%; max-width: 50%; } }
+            @media (max-width: 575px) { .col-custom { flex: 0 0 100%; max-width: 100%; } }
+
+            /* Filtres inline et compacts */
+            .filter-inline {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            .filter-inline label { font-size: 12px; margin-bottom: 0; }
+            .filter-inline select,
+            .filter-inline input {
+                height: 30px;
+                padding: 0 6px;
+                font-size: 12px;
+            }
+            .filter-inline .filter-group { display: flex; flex-direction: column; }
+        </style>
+    {% endblock %}
+{% endblock %}
+
+{% block Content %}
+<section class="py-5" style="background-color: #f5f5f5;">
+    <div class="container">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+            <h4 class="h4 fw-bold mb-2 mb-md-0">Toutes les annonces</h4>
+            <form id="filter-form" class="filter-inline">
+                <div class="filter-group">
+                    <label>Marque</label>
+                   <select class="form-control form-control-sm" onchange="filtrerDemandes()" id="marque" data-live-search="true">
+                        <option value="">Toutes</option>
+                        <option value="Audi">Audi</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Mercedes">Mercedes</option>
+                        <option value="Toyota">Toyota</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Zone</label>
+                    <select class="form-control form-control-sm" name="zone">
+                        <option value="">Toute la Tunisie</option>
+                        <option value="Tunis">Tunis</option>
+                        <option value="Ariana">Ariana</option>
+                        <option value="Sfax">Sfax</option>
+                        <!-- autres zones -->
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Date</label>
+                    <select class="form-control form-control-sm" name="date">
+                        <option value="recent">Le plus récent</option>
+                        <option value="ancien">Le plus ancien</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Prix max</label>
+                   <select class="form-control form-control-sm" name="date">
+                        <option value="recent">Le plus récent</option>
+                        <option value="ancien">Le plus ancien</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+
+        {% if annonces|length > 0 %}
+            <div class="row g-3">
+                {% for annonce in annonces %}
+                    <div class="col-custom">
+                        <a href="" class="text-reset text-decoration-none">
+                            <div class="aiz-card-box">
+                                <img class="card-img" src="{{ annonce.imagePrincipale }}" alt="{{ annonce.nom }}" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
+                                <span class="badge-custom">Occasion</span>
+                                <div class="p-3">
+                                    <div class="price">{{ annonce.prix }} TND</div>
+                                    <div class="title text-truncate-2">{{ annonce.nom }}</div>
+                                    <p class="info mb-1">
+                                        <i class="bi bi-geo-alt"></i>
+                                        {{ annonce.user.adresse ?: 'Adresse non renseignée' }}
+                                    </p>
+                                    <p class="info mb-0">
+                                        <i class="bi bi-clock"></i>
+                                        <span class="time-ago" data-timestamp="{{ annonce.dateCreation|date('U') }}"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(annonces) }}
+            </div>
+        {% else %}
+            <div class="alert alert-info">Aucune annonce disponible pour le moment.</div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/fr.js"></script>
+    <script>
+        dayjs.extend(dayjs_plugin_relativeTime)
+        dayjs.locale('fr')
+        document.querySelectorAll('.time-ago').forEach(el => {
+            let ts = el.dataset.timestamp
+            el.textContent = dayjs.unix(ts).fromNow()
+        })
+    </script>
+{% endblock %}

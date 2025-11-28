@@ -25,38 +25,75 @@
 
 
 <style>
-.badge-custom {
-display: inline-block;
-padding: 3px;
-font-size: 11px;
-border-radius: 0 50em 50em 0;
-color: #ff0000;
-font-weight: 600;
-line-height: 26px;
-position: absolute;
-background: #fff;
-z-index: 1;
-top: 20px;
-box-shadow: 2px 1px 6px 2px rgb(0 0 0 / 10%), 0 4px 4px 0px rgb(0 0 0 / 6%) !important;
-}
+
+/* Card globale Verbesserungen */
 .aiz-card-box {
-transition: transform 0.3s ease, box-shadow 0.3s ease;
-height: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    position: relative;
+	  min-height: 350px; /* gleiche Höhe für alle Cards */
 }
+
 .aiz-card-box:hover {
-transform: translateY(-5px);
-box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.12);
 }
+
+/* Bild */
 .card-img {
-width: 100%;
-height: 180px;
-object-fit: cover;
-border-top-left-radius: .25rem;
-border-top-right-radius: .25rem;
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
 }
-.icon-stat svg {
-opacity: 0.7;
-} </style>
+
+/* Badge (Occasion) */
+.badge-custom {
+    position: absolute;
+    top: 14px;
+    left: 0;
+    background: #ffffff;
+    padding: 4px 10px;
+    border-radius: 0 20px 20px 0;
+    font-size: 11px;
+    font-weight: 700;
+    color: #ff4b4b;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Titel, Preis, Texte */
+.aiz-card-box .p-3 {
+    padding: 14px !important;
+}
+
+.aiz-card-box .price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #3a57e8;
+}
+
+.aiz-card-box .title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.aiz-card-box .info {
+    font-size: 12px;
+    color: #777;
+    display: flex;
+    align-items: center;
+}
+
+.aiz-card-box .info i {
+    font-size: 14px;
+    margin-right: 4px;
+    opacity: 0.7;
+}
+</style>
 {% endblock %}
 {% endblock %}
 
@@ -135,22 +172,37 @@ opacity: 0.7;
             {% if annonces|length > 0 %}
             <div class="row g-3">
                 {% for annonce in annonces %}
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <a href="" class="text-reset text-decoration-none">
-                            <div class="aiz-card-box border border-light rounded shadow-sm hov-shadow-lg position-relative bg-white" style="min-height: 380px;">
-                                <img class="card-img" src="{{ annonce.imagePrincipale }}" alt="{{ annonce.nom }}" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
+                   <div class="col-lg-3 col-md-6 col-sm-6">
+    <a href="" class="text-reset text-decoration-none">
+        <div class="aiz-card-box">
 
-                                <div class="p-3">
-                                    <div class="fs-15 mb-1"><span class="fw-700 text-primary">{{ annonce.prix }} TND</span></div>
-                                    <h3 class="fw-600 fs-14 text-truncate-2 mb-1">{{ annonce.nom }}</h3>
-                                    <p class="mb-1 fs-12 text-muted d-flex align-items-center"><i class="las la-map-marker-alt me-1" style="font-size:14px; color:#555;"></i>{{ annonce.user.adresse ?: 'Adresse non renseignée' }}</p>
-                                    <p class="mb-0 fs-12 text-muted d-flex align-items-center"><i class="las la-clock me-1" style="font-size:14px; color:#555;"></i><span class="time-ago" data-timestamp="{{ annonce.dateCreation|date('U') }}"></span></p>
-                                </div>
+            <img class="card-img"
+                 src="{{ annonce.imagePrincipale }}"
+                 alt="{{ annonce.nom }}"
+                 onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
 
-                                <span class="badge-custom">Occasion</span>
-                            </div>
-                        </a>
-                    </div>
+            <span class="badge-custom">Occasion</span>
+
+            <div class="p-3">
+                <div class="price">{{ annonce.prix }} TND</div>
+
+                <div class="title text-truncate-2">{{ annonce.nom }}</div>
+
+                <p class="info mb-1">
+                    <i class="las la-map-marker-alt"></i>
+                    {{ annonce.user.adresse ?: 'Adresse non renseignée' }}
+                </p>
+
+                <p class="info mb-0">
+                    <i class="las la-clock"></i>
+                    <span class="time-ago" data-timestamp="{{ annonce.dateCreation|date('U') }}"></span>
+                </p>
+            </div>
+
+        </div>
+    </a>
+</div>
+
                 {% endfor %}
             </div>
             {% else %}

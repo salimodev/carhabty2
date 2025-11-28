@@ -105,10 +105,16 @@
 					</a>
 				</li>
 
+				<li {% if PageMenu == "demande_all" %} class="list-inline-item mr-0 active" style="border-bottom: solid;" {% else %} class="list-inline-item mr-0" {% endif %}>
+					<a href="{{path('app_demande_all')}}" class="fs-14 px-3 py-2 d-inline-block fw-600 text-reset {% if PageMenu != 'demande_all' %}opacity-60{% endif %}">
+						Demandes
+					</a>
+				</li>
 
-				<li {% if PageMenu is defined and PageMenu == "test"%} class="list-inline-item mr-0 active" style="border-bottom: solid;" {% else %} class="list-inline-item mr-0" {% endif %}>
-					<a href="" {% if PageMenu is defined and PageMenu == "test"%} class="fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% else %} class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% endif %}>
-						Pièces auto d’occasion
+
+				<li {% if PageMenu is defined and PageMenu == "app_home_annonces"%} class="list-inline-item mr-0 active" style="border-bottom: solid;" {% else %} class="list-inline-item mr-0" {% endif %}>
+					<a href="{{ path('app_home_annonces')}}" {% if PageMenu is defined and PageMenu == "app_home_annonces"%} class="fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% else %} class="opacity-60 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-100 text-reset" {% endif %}>
+						Pièces occasion
 					</a>
 
 				</li>

@@ -316,4 +316,30 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
 
         return 'à l’instant';
     }
+
+
+    #[Route('/annonces', name: 'app_home_annonces')]
+public function home_annonces(Request $request, EntityManagerInterface $em, PaginatorInterface $paginator): Response
+{
+     $session = $request->getSession();
+    $session->set('PageMenu', 'app_home_annonces');
+
+     $query = $em->getRepository(Annonce::class)->createQueryBuilder('a')
+        ->join('a.user', 'u')
+        ->where('u.roles LIKE :role')
+        ->setParameter('role', '%ROLE_PARTICULIER%')
+        ->orderBy('a.dateCreation', 'DESC')
+        ->getQuery();
+
+    $annonces = $paginator->paginate(
+        $query,
+        $request->query->getInt('page', 1),
+        12
+    );
+
+    return $this->render('home/piecesoccasion.html.twig', [
+        'annonces' => $annonces
+    ]);
+}
+
 }

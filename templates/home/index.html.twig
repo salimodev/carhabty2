@@ -456,29 +456,29 @@
 {% block Content %}
 <br>
 
-	<div class=" col-lg-12">
+<div class=" col-lg-12">
 
-		<div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true" data-dots="true" data-autoplay="true" data-infinite="true">
+	<div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true" data-dots="true" data-autoplay="true" data-infinite="true">
 
-			<div class="carousel-box">
-				<a href="">
-					<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1762608293/1600w-n13TkX-2HZo_oyan3h.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
-				</a>
-			</div>
-			<div class="carousel-box">
-				<a href="">
-					<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1762608738/1600w-3CEVdzRUSFU_y3zxbz.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
-				</a>
-			</div>
-<div class="carousel-box">
-				<a href="">
-					<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1762608806/1600w-Rgpn1PVgFmA_ddm1ib.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
-				</a>
-			</div>
-
+		<div class="carousel-box">
+			<a href="">
+				<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1762608293/1600w-n13TkX-2HZo_oyan3h.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
+			</a>
 		</div>
+		<div class="carousel-box">
+			<a href="">
+				<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1762608738/1600w-3CEVdzRUSFU_y3zxbz.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
+			</a>
+		</div>
+		<div class="carousel-box">
+			<a href="">
+				<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1762608806/1600w-Rgpn1PVgFmA_ddm1ib.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
+			</a>
+		</div>
+
 	</div>
-	{% if not app.user %}
+</div>
+{% if not app.user %}
 	{# categorie parent  #}
 	<div id="section_home_categories">
 		<section class="mb-4">
@@ -507,7 +507,8 @@
 								</div>
 								<div class="user-meta mb-3">
 									<div class="user-name fw-bold">Propriétaire</div>
-									<div class="user-location text-muted" style="color: #000000 !important;">نلوّج في قطعة لكرهبتي </div>
+									<div class="user-location text-muted" style="color: #000000 !important;">نلوّج في قطعة لكرهبتي
+									</div>
 								</div>
 								<div class="user-buttons mt-3">
 									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
@@ -527,7 +528,9 @@
 								</div>
 								<div class="user-meta mb-3">
 									<div class="user-name fw-bold">Mécanicien</div>
-									<div class="user-location text-muted" style="color: #000000 !important;">  نلوج على قطعة للي يصلح عندي </div>
+									<div class="user-location text-muted" style="color: #000000 !important;">
+										نلوج على قطعة للي يصلح عندي
+									</div>
 								</div>
 								<div class="user-buttons mt-3">
 									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
@@ -547,7 +550,9 @@
 								</div>
 								<div class="user-meta mb-3">
 									<div class="user-name fw-bold">Vendeur des piéces Neuves</div>
-									<div class="user-location text-muted" style="color: #000000 !important;"> نبيع قطايع جدد و نجاوب كل واحد يلوج في قطعة </div>
+									<div class="user-location text-muted" style="color: #000000 !important;">
+										نبيع قطايع جدد و نجاوب كل واحد يلوج في قطعة
+									</div>
 								</div>
 								<div class="user-buttons mt-3">
 									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
@@ -587,7 +592,8 @@
 								</div>
 								<div class="user-meta mb-3">
 									<div class="user-name fw-bold">Particulier</div>
-									<div class="user-location text-muted" style="color: #000000 !important;">عندك قطعة مفقودة تلوج عليها   أو عندك قطعة زايدة للي يحب يشري     </div>
+									<div class="user-location text-muted" style="color: #000000 !important;">عندك قطعة مفقودة تلوج عليها   أو عندك قطعة زايدة للي يحب يشري
+									</div>
 								</div>
 								<div class="user-buttons mt-3">
 									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
@@ -605,117 +611,102 @@
 	</div>
 {% endif %}
 
-	{# fin categorie parent  #}
-	{# categorie parent  #}
-	<div id="section_home_categories">
-		<section class="mb-4">
-			<div class="container">
-				<div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">
+{# fin categorie parent  #}
+{# categorie parent  #}
+<div id="section_home_categories">
+	<section class="mb-4">
+		<div class="container">
+			<div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">
 
-					<div class="d-flex mb-3 align-items-baseline border-bottom">
-						<h3 class="h5 fw-700 mb-0">
-							<span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
-								Demandes récentes
-							</span>
-						</h3>
-						<a href="{{path('app_demande_all')}}" class="ml-auto btn btn-register btn-sm shadow-md" >Voir plus</a>
-					</div>
+				<div class="d-flex mb-3 align-items-baseline border-bottom">
+					<h3 class="h5 fw-700 mb-0">
+						<span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
+							Demandes récentes
+						</span>
+					</h3>
+					<a href="{{path('app_demande_all')}}" class="ml-auto btn btn-register btn-sm shadow-md">Voir plus</a>
+				</div>
 
-					<!-- ✅ AIZ Carousel -->
-					<div class="aiz-carousel half-outside-arrow gutters-10" data-items="3" data-xl-items="3" data-lg-items="2" data-md-items="2" data-sm-items="1" data-xs-items="1" data-arrows="true" data-infinite="true">
+				<!-- ✅ AIZ Carousel -->
+				<div class="aiz-carousel half-outside-arrow gutters-10" data-items="3" data-xl-items="3" data-lg-items="2" data-md-items="2" data-sm-items="1" data-xs-items="1" data-arrows="true" data-infinite="true">
 
 					{% for demande in lastDemandes %}
-					 {% if demande.statut != 'fermer' %}
-	<div class="carousel-box">
-		<div class="request-card">
+						{% if demande.statut != 'fermer' %}
+							<div class="carousel-box">
+								<a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}" class="text-decoration-none text-dark">
+    <div class="request-card">
 
-			<div class="request-header">
-				<div class="request-title">
-					<a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}" class="text-decoration-none text-dark">
-						{% if demande.pieces|length > 0 %}
-							{% for piece in demande.pieces %}
-								{{ piece.designation }}
-								{% if not loop.last %}, {% endif %}
-							{% endfor %}
-						{% else %}
-							{{ demande.marque }} {{ demande.modele }}
-						{% endif %}
-					</a>
-				</div>
-				<div class="request-badge">
-					{% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
-					Neuve /
-						Occasion
-					{% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
-						Neuve
-					{% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}	
-					Occasion
-					{% endif %}
-				</div>
-			</div>
+        <div class="request-header">
+            <div class="request-title">
+                {% if demande.pieces|length > 0 %}
+                    {% for piece in demande.pieces %}
+                        {{ piece.designation }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {{ demande.marque }} {{ demande.modele }}
+                {% endif %}
+            </div>
+            <div class="request-badge">
+                {% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
+                    Neuve / Occasion
+                {% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
+                    Neuve
+                {% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}
+                    Occasion
+                {% endif %}
+            </div>
+        </div>
 
-			<div class="request-meta">
-				<span>
-					<i class="fas fa-map-marker-alt"></i> {{ demande.zone }}
-				</span>
-				<span>
-					<i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.prenom : 'Anonyme' }}
-				</span>
-				<span>
-					<i class="far fa-clock"></i> {{ demande.datecreate|time_ago }}
-				</span>
-			</div>
+        <div class="request-meta">
+            <span><i class="fas fa-map-marker-alt"></i> {{ demande.zone }}</span>
+            <span><i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.prenom : 'Anonyme' }}</span>
+            <span><i class="far fa-clock"></i> {{ demande.datecreate|time_ago }}</span>
+        </div>
 
-			<div class="request-image">
-    <a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}">
-        {% set firstPiece = demande.Pieces|first %}
-        {% set photo = firstPiece and firstPiece.photo ? firstPiece.photo : '/image/placeholder.png' %}
-        <img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
-    </a>
-</div>
+        <div class="request-image">
+            {% set firstPiece = demande.Pieces|first %}
+            {% set photo = firstPiece and firstPiece.photo ? firstPiece.photo : '/image/placeholder.png' %}
+            <img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
+        </div>
 
+        <p class="request-description">
+            {% if demande.pieces|length > 0 %}
+                {% for piece in demande.pieces|slice(0,3) %}
+                    {{ piece.observation }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+                {% if demande.pieces|length > 3 %}...{% endif %}
+            {% else %}
+                Pas de description disponible.
+            {% endif %}
+        </p>
 
-			<p class="request-description">
-				{% if demande.pieces|length > 0 %}
-					{% for piece in demande.pieces|slice(0,3) %}
-						{{ piece.observation }}
-						{% if not loop.last %}, {% endif %}
-					{% endfor %}
-					{% if demande.pieces|length > 3 %}...{% endif %}
-				{% else %}
-					Pas de description disponible.
-				{% endif %}
-			</p>
+        {% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
+        {% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
 
+        <a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" 
+           class="btn btn-register btn-circle w-100 text-center" 
+           style="pointer-events: auto;"
+           {% if not app.user %} onclick="AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !'); return false;" 
+           {% elseif not estVendeur %} onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;" 
+           {% elseif dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
+            <i class="fas fa-envelope-open-text me-2"></i> Proposer un prix
+        </a>
 
-		{% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
-{% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
-
-<a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" 
-   class="btn btn-register btn-circle w-100 text-center"
-   {% if not app.user %}
-       onclick="AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !'); return false;"
-   {% elseif not estVendeur %}
-       onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;"
-   {% elseif dejaPropose %}
-       onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;"
-   {% endif %}>
-    <i class="fas fa-envelope-open-text me-2"></i>
-    Proposer un prix
+    </div>
 </a>
 
-		</div>
-	</div>
-	{% endif %}
-{% else %}
-	<p class="text-center text-muted">Aucune demande récente.</p>
-	
-{% endfor %}
-</div>
+							</div>
+						{% endif %}
+					{% else %}
+						<p class="text-center text-muted">Aucune demande récente.</p>
+
+					{% endfor %}
 				</div>
 			</div>
-		</section>
-	</div>
+		</div>
+	</section>
+</div>
+
 
 	{# fin categorie parent  #}
 {% endblock %}

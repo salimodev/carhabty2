@@ -59,7 +59,7 @@
     border-radius: 0 20px 20px 0;
     font-size: 11px;
     font-weight: 700;
-    color: #ff4b4b;
+    color: #00B7B7;
     box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
@@ -93,6 +93,15 @@
     margin-right: 4px;
     opacity: 0.7;
 }
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* nombre de lignes avant de tronquer */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
 </style>
 {% endblock %}
 {% endblock %}
@@ -189,12 +198,12 @@
                 <div class="title text-truncate-2">{{ annonce.nom }}</div>
 
                 <p class="info mb-1">
-                    <i class="las la-map-marker-alt"></i>
+                    <i class="las la-map-marker-alt" style="color: #00B7B7;"></i>
                     {{ annonce.user.adresse ?: 'Adresse non renseignée' }}
                 </p>
 
                 <p class="info mb-0">
-                    <i class="las la-clock"></i>
+                    <i class="las la-clock" style="color: #00B7B7;"></i>
                     <span class="time-ago" data-timestamp="{{ annonce.dateCreation|date('U') }}"></span>
                 </p>
             </div>

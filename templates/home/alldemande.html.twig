@@ -405,83 +405,80 @@
 					<input type="hidden" name="min_price" value="">
 					<input type="hidden" name="max_price" value="">
 					<div class="row gutters-5 row-cols-xxl-3 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1" id="filterrech">
-			{% for demande in lastDemandes %}
-			 {% if demande.statut != 'fermer' %}
-    {% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
-    {% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
+						{% for demande in lastDemandes %}
+							{% if demande.statut != 'fermer' %}
+								{% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
+								{% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
 
-    <div class="col mb-3">
-        <div class="carousel-box">
-            <div class="request-card">
+								<div class="col mb-3">
+									<div class="carousel-box">
+									<a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}" class="text-decoration-none text-dark">
+    <div class="request-card">
 
-                <div class="request-header">
-                    <a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}" class="text-decoration-none text-dark">
-                        <div class="request-title">
-                            {% if demande.pieces|length > 0 %}
-                                {% for piece in demande.pieces %}
-                                    {{ demande.marque }} {{ piece.designation }}{% if not loop.last %}, {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                {{ demande.marque }} {{ demande.modele }}
-                            {% endif %}
-                        </div>
-                    </a>
-                    <div class="request-badge">
-                      {% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
-					Neuve /
-						Occasion
-					{% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
-						Neuve
-					{% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}	
-					Occasion
-					{% endif %}
-                    </div>
-                </div>
-
-                <div class="request-meta">
-                    <span><i class="fas fa-map-marker-alt"></i> {{ demande.zone }}</span>
-                    <span><i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.prenom : 'Anonyme' }}</span>
-                    <span><i class="far fa-clock"></i> {{ demande.datecreate|time_ago }}</span>
-                </div>
-
-               <div class="request-image">
-    <a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}">
-        {% set firstPiece = demande.Pieces|first %}
-        {% set photo = firstPiece and firstPiece.photo ? firstPiece.photo : '/image/placeholder.png' %}
-        <img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
-    </a>
-</div>
-
-                <p class="request-description">
-                    {% if demande.pieces|length > 0 %}
-                        {% for piece in demande.pieces|slice(0,3) %}
-                            {{ piece.observation }}{% if not loop.last %}, {% endif %}
-                        {% endfor %}
-                        {% if demande.pieces|length > 3 %}...{% endif %}
-                    {% else %}
-                        Pas de description disponible.
-                    {% endif %}
-                </p>
-
-                <a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" 
-                   class="btn btn-register btn-circle w-100 text-center"
-                   {% if not app.user %}
-                       onclick="AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !'); return false;"
-                   {% elseif not estVendeur %}
-                       onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;"
-                   {% elseif dejaPropose %}
-                       onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;"
-                   {% endif %}>
-                    <i class="fas fa-envelope-open-text me-2"></i>
-                    Proposer un prix
-                </a>
-
+        <div class="request-header">
+            <div class="request-title">
+                {% if demande.pieces|length > 0 %}
+                    {% for piece in demande.pieces %}
+                        {{ demande.marque }}
+                        {{ piece.designation }}
+                        {% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {{ demande.marque }}
+                    {{ demande.modele }}
+                {% endif %}
+            </div>
+            <div class="request-badge">
+                {% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
+                    Neuve / Occasion
+                {% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
+                    Neuve
+                {% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}
+                    Occasion
+                {% endif %}
             </div>
         </div>
-		 
+
+        <div class="request-meta">
+            <span><i class="fas fa-map-marker-alt"></i> {{ demande.zone }}</span>
+            <span><i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.prenom : 'Anonyme' }}</span>
+            <span><i class="far fa-clock"></i> {{ demande.datecreate|time_ago }}</span>
+        </div>
+
+        <div class="request-image">
+            {% set firstPiece = demande.Pieces|first %}
+            {% set photo = firstPiece and firstPiece.photo ? firstPiece.photo : '/image/placeholder.png' %}
+            <img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
+        </div>
+
+        <p class="request-description">
+            {% if demande.pieces|length > 0 %}
+                {% for piece in demande.pieces|slice(0,3) %}
+                    {{ piece.observation }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+                {% if demande.pieces|length > 3 %}...{% endif %}
+            {% else %}
+                Pas de description disponible.
+            {% endif %}
+        </p>
+
+        <a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" 
+           class="btn btn-register btn-circle w-100 text-center" 
+           style="pointer-events: auto;"
+           {% if not app.user %} onclick="AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !'); return false;" 
+           {% elseif not estVendeur %} onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;" 
+           {% elseif dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
+            <i class="fas fa-envelope-open-text me-2"></i> Proposer un prix
+        </a>
+
     </div>
-	 {% endif %}
-{% endfor %}
+</a>
+
+									</div>
+
+								</div>
+							{% endif %}
+						{% endfor %}
 
 					</div>
 				</div>
@@ -493,6 +490,7 @@
 		</form>
 	</div>
 </section>
+
 
 {% endblock %}
 {% block javascript %}
@@ -555,44 +553,48 @@ function filtrerDemandes() {
                         if (d.pieces.length > 3) piecesDesc += "...";
                     }
 
+                    let detailUrl = "{{ path('detail_demande_accuill', {'id': 'ID_DEMANDE'}) }}".replace('ID_DEMANDE', d.id);
+
                     html += `
 <div class="col mb-3">
-    <div class="carousel-box">
-        <div class="request-card">
-            <div class="request-header">
-                <div class="request-title">${piecesTitle || (d.marque + " " + d.modele)}</div>
-                <div class="request-badge">${d.type === 'occasion' ? 'Occasion' : 'Neuve'}</div>
+    <a href="${detailUrl}" class="text-decoration-none text-dark">
+        <div class="carousel-box">
+            <div class="request-card">
+                <div class="request-header">
+                    <div class="request-title">${piecesTitle || (d.marque + " " + d.modele)}</div>
+                    <div class="request-badge">${d.type === 'occasion' ? 'Occasion' : 'Neuve'}</div>
+                </div>
+                <div class="request-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>
+                    <span><i class="fas fa-user"></i> ${d.offrecompte}</span>
+                    <span><i class="far fa-clock"></i> ${timeAgo(d.date)}</span>
+                </div>
+                <div class="request-image">
+                    <img src="${(d.pieces[0] && d.pieces[0].photo) || '/image/placeholder.png'}" alt="photo" class="img-fit mx-auto rounded">
+                </div>
+                <p class="request-description">${piecesDesc || 'Pas de description disponible.'}</p>
+                <button class="btn btn-register w-100 propose-btn" 
+                    style="pointer-events: auto;"
+                    data-id="${d.id}" 
+                    data-deja="${d.dejaPropose}" 
+                    data-vendeur="${d.estVendeur}" 
+                    data-connecte="${d.estConnecte}"
+                    data-demandezone="${d.zone}"
+                    data-userzone="${d.userZone || 'Toute la Tunisie'}"
+                    data-type="${d.type}"
+                    data-vendeur-type="${d.vendeurType}">
+                    <i class="fas fa-envelope-open-text"></i> Proposer un prix
+                </button>
             </div>
-            <div class="request-meta">
-                <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>
-                <span><i class="fas fa-user"></i> ${d.offrecompte}</span>
-                <span><i class="far fa-clock"></i> ${timeAgo(d.date)}</span>
-            </div>
-            <div class="request-image">
-                <img src="${(d.pieces[0] && d.pieces[0].photo) || '/image/placeholder.png'}" alt="photo" class="img-fit mx-auto rounded">
-            </div>
-            <p class="request-description">${piecesDesc || 'Pas de description disponible.'}</p>
-           <button class="btn btn-register w-100 propose-btn" 
-        data-id="${d.id}" 
-        data-deja="${d.dejaPropose}" 
-        data-vendeur="${d.estVendeur}" 
-        data-connecte="${d.estConnecte}"
-        data-demandezone="${d.zone}"
-        data-userzone="${d.userZone || 'Toute la Tunisie'}"
-        data-type="${d.type}"
-        data-vendeur-type="${d.vendeurType}">
-    <i class="fas fa-envelope-open-text"></i> Proposer un prix
-</button>
-
         </div>
-    </div>
+    </a>
 </div>`;
                 });
             }
 
             $('#filterrech').html(html);
 
-            // Gestion des clics sur les boutons
+            // Gestion des clics sur les boutons "Proposer un prix"
             $('#filterrech').find('.propose-btn').each(function() {
                 $(this).on('click', function(e) {
                     e.preventDefault();
@@ -603,7 +605,8 @@ function filtrerDemandes() {
                     let demandeId = $(this).data('id');
                     let demandeZone = $(this).data('demandezone');
                     let userZone = $(this).data('userzone');
-					let vendeurType = $(this).data('vendeurType');
+                    let vendeurType = $(this).data('vendeurType');
+                    let demandeType = $(this).data('type');
 
                     if (!estConnecte) {
                         AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !');
@@ -621,13 +624,10 @@ function filtrerDemandes() {
                         AIZ.plugins.notify('danger', 'Vous pouvez proposer des offres uniquement dans votre zone !');
                         return;
                     }
-			let demandeType = $(this).data('type'); // récupérer le type de la demande
-if (vendeurType === 'neuf' && demandeType === 'occasion') {
-    AIZ.plugins.notify('danger', 'Vous ne pouvez proposer des offres que pour les demandes de type Neuf !');
-    return;
-}
-
-
+                    if (vendeurType === 'neuf' && demandeType === 'occasion') {
+                        AIZ.plugins.notify('danger', 'Vous ne pouvez proposer des offres que pour les demandes de type Neuf !');
+                        return;
+                    }
 
                     let url = "{{ path('propose_offre', {'id': 'ID_DEMANDE'}) }}".replace('ID_DEMANDE', demandeId);
                     window.location.href = url;
@@ -636,5 +636,6 @@ if (vendeurType === 'neuf' && demandeType === 'occasion') {
         }
     });
 }
+
 </script>
 {% endblock %}

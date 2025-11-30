@@ -5,14 +5,14 @@
 {% block LinksCss %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
-    {# AOS CSS pour animations #}
+    {# AOS CSS #}
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         .inviter-container {
             padding: 3rem 1rem;
             text-align: center;
-            background: #f0f8ff;
+            background: #f9f9f9;
             border-radius: 15px;
             max-width: 900px;
             margin: 2rem auto;
@@ -47,8 +47,8 @@
             margin-bottom: 1.5rem;
         }
 
-        .btn-registerveninvit {
-           padding: 0.75rem 2rem;
+        .btn-registerinvit {
+            padding: 0.75rem 2rem;
             font-size: 1rem;
             font-weight: 600;
             border-radius: 50px;
@@ -57,8 +57,8 @@
             transition: 0.3s;
         }
 
-        .btn-registerveninvit:hover {
-              background: linear-gradient(90deg, #1c7c78, #25a89d);
+        .btn-registerinvit:hover {
+            background: linear-gradient(90deg, #1c7c78, #25a89d);
             color: #fff;
             text-decoration: none;
         }
@@ -84,30 +84,35 @@
         {{ parent() }}
     {% endblock %}
 
-    <section class="inviter-container">
-        <h1 data-aos="fade-down" data-aos-duration="1000">Bienvenue, Vendeur Neuf !</h1>
+ <section class="inviter-container">
+    <h1 data-aos="fade-down" data-aos-duration="1000">Bienvenue, Particulier !</h1>
 
-        <video class="inviter-video" controls data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-            <source src="{{ asset('videos/descriptif_vendeur_neuf.mp4') }}" type="video/mp4">
-            Votre navigateur ne supporte pas la lecture de vidéos.
-        </video>
 
-        <div class="inviter-text" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
-            <p>
-                En tant que vendeur neuf, vous pouvez proposer vos offres sur les demandes des propriétaires
-                et améliorer vos chances de conclure des ventes.
-            </p>
-            <p>
-                Notre plateforme vous permet de suivre vos offres, recevoir des notifications instantanées,
-                et répondre rapidement aux demandes pour maximiser votre visibilité.
-            </p>
-            <p>
-                Cliquez sur le bouton ci-dessous pour créer une compte vendeur et commencer à publier vos offres !
-            </p>
+<video class="inviter-video" controls data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+    <source src="{{ asset('videos/descriptif_particulier.mp4') }}" type="video/mp4">
+    Votre navigateur ne supporte pas la lecture de vidéos.
+</video>
 
-            <a href="{{path('app_register')}}" class="btn btn-registerveninvit">Créer une compte</a>
-        </div>
-    </section>
+<div class="inviter-text" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+    <p>
+        Vous avez une pièce manquante pour votre véhicule que vous cherchez à acheter ?  
+        Ou vous possédez une pièce supplémentaire que quelqu’un pourrait vouloir acheter ?
+    </p>
+    <p>
+        Sur notre plateforme, vous pouvez publier vos besoins ou vos offres de pièces facilement et rapidement.
+    </p>
+    <p>
+        Discutez avec d’autres utilisateurs pour échanger des informations, poser des questions et trouver exactement ce que vous cherchez.
+    </p>
+
+    <a href="{{ path('app_register') }}" class="btn btn-registerinvit">Créer un compte</a>
+</div>
+
+</section>
+
+
+
+
 {% endblock %}
 
 {% block javascript %}
@@ -116,7 +121,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({
-            once: true,
+            once: true, // animation une seule fois au scroll
             offset: 100
         });
     </script>

@@ -449,4 +449,10 @@ public function markAsRead(
     return $this->json(['success' => true]);
 }
 
+ #[Route('/inviter/particulier', name: 'inviter_particulier')]
+    public function inviter(): Response
+    {
+        return $this->render('particulier/inviter.html.twig');
+    }
+
 }

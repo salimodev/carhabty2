@@ -134,7 +134,7 @@
 
                         {% for annonce in annonces %}
                             <div class="col-lg-3 col-md-6 col-sm-6">
-                                <a href="" class="text-reset text-decoration-none">
+                                <a href="{{ path('detail_annonce_accueil', {'id': annonce.id}) }}" class="text-reset text-decoration-none">
                                     <div class="aiz-card-box">
 
                                         <img class="card-img"

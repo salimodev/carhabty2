@@ -147,7 +147,7 @@
 								<div class="col-md-4">
 									<div class="bg-grad-2 text-white rounded-lg mb-4 overflow-hidden">
 										<div class="px-3 pt-3">
-											<div class="h3 fw-700"> 0 Messages</div>
+											<div class="h3 fw-700">{{unreadCount}} Messages</div>
 											<div class="opacity-50">reçues</div>
 										</div>
 										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1440 320">
@@ -159,7 +159,7 @@
 								<div class="col-md-4">
 									<div class="bg-grad-3 text-white rounded-lg mb-4 overflow-hidden">
 										<div class="px-3 pt-3">
-											<div class="h3 fw-700">0 Piéces</div>
+											<div class="h3 fw-700">{{piecesVendues}} Piéces</div>
 											<div class="opacity-50">vendues</div>
 										</div>
 										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1440 320">
@@ -182,7 +182,7 @@
             <div class="row g-3">
                 {% for annonce in annonces %}
                    <div class="col-lg-3 col-md-6 col-sm-6">
-    <a href="" class="text-reset text-decoration-none">
+    <a href="{{ path('detail_annonce_accueil', {'id': annonce.id}) }}" class="text-reset text-decoration-none">
         <div class="aiz-card-box">
 
             <img class="card-img"
@@ -191,6 +191,8 @@
                  onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
 
             <span class="badge-custom">Occasion</span>
+           
+             
 
             <div class="p-3">
                 <div class="price">{{ annonce.prix }} TND</div>

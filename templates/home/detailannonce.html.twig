@@ -3,7 +3,7 @@
 {% block title %}Essayara{% endblock %}
 
 {% block LinksCss %}
-{{ parent() }} <link type="text/css" rel="stylesheet" href="{{ asset('css/popup.css') }}">
+{{ parent() }} 
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"> 
  <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}"> <link rel="stylesheet" href="{{ asset('css/thumbImage.css') }}">
     <style>
@@ -147,6 +147,35 @@
 {% endblock %}
 
 {% block Content %}
+<!-- Modal -->
+
+<div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content shadow">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="chatModalLabel">Chat avec <span id="chatVendeurNom"></span></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+
+      </div>
+      <div class="modal-body">
+        <div class="d-flex align-items-center mb-3">
+            <img id="chatAnnonceImg" src="" alt="" class="rounded" style="width: 160px; height: 160px; object-fit: cover; margin-right: 15px; border:1px solid #ccc;">
+            <div>
+                <div id="chatAnnonceNom" class="fw-bold"></div>
+                <small class="text-muted">Annonce</small>
+            </div>
+        </div>
+        <div class="mb-3">
+            <input type="text" id="chatMessageInput" class="form-control" placeholder="Écrire un message...">
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-chat rounded-pill fw-bold" id="sendChatBtn">Envoyer</button>
+        </div>
+        <div id="chatStatus" class="mt-2 text-success fw-bold"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <section class="mb-5 pt-4">
     <div class="container">
@@ -223,38 +252,64 @@
                         <p class="text-secondary">{{ annonce.description|raw }}</p>
                     </div>
 
-                    <!-- BOUTONS -->
-                 
+           <div class="d-flex flex-wrap gap-2 mt-3">
 
-                     
-<div class="d-flex flex-wrap gap-2 mt-3">
+    {% if app.user and app.user.id == annonce.user.id %}
+        <!-- Modifier -->
+        <a href="{{ path('modifier_annonce', {'id': annonce.id}) }}" class="btn btn-warning rounded-pill fw-bold">
+            <i class="las la-edit"></i> Modifier l'annonce
+        </a>
 
+        <!-- Supprimer -->
+       <a href="javascript:void(0);" 
+   class="btn btn-danger rounded-pill fw-bold" 
+  onclick="supprimerAnnonce($(this), {{ annonce.id }})">
+    <i class="las la-trash"></i> Supprimer
+</a>
 
-<!-- Afficher le numéro -->
-<div id="tel-container" class="d-flex align-items-center gap-2">
-    <button type="button" id="show-number-btn" class="btn btn-affichnum rounded-pill fw-bold">
-        <i class="las la-phone"></i> Afficher le numéro
+        <!-- Marquer vendu -->
+    <a href="javascript:void(0);" class="btn btn-success rounded-pill fw-bold"
+   onclick="changerStatusannonce({{ annonce.id }})">
+    <i class="las la-check-circle"></i> Marquer comme vendu
+</a>
+
+    {% else %}
+        <!-- Afficher le numéro -->
+        <div id="tel-container" class="d-flex align-items-center gap-2">
+            <button type="button" id="show-number-btn" class="btn btn-affichnum rounded-pill fw-bold">
+                <i class="las la-phone"></i> Afficher le numéro
+            </button>
+        </div>
+
+        <!-- Chat -->
+
+    {% if app.user and is_granted('ROLE_PARTICULIER') %}
+    <!-- Utilisateur connecté et particulier -->
+    <button type="button" class="btn btn-chat rounded-pill fw-bold"
+        onclick="ouvrirChat({{ annonce.id }}, '{{ annonce.nom }}', '{{ annonce.imagePrincipale }}', '{{ annonce.user.nom }}', {{ annonce.user.id }})">
+        <i class="las la-comment"></i> Chat avec le vendeur
     </button>
-</div>
-
-<!-- Chat -->
-<a href="#" class="btn btn-chat rounded-pill fw-bold">
-    <i class="las la-comment"></i> Chat avec le vendeur
-</a>
-
-<!-- WhatsApp -->
-{% if annonce.user.tel1 is not empty %}
-   <a href="https://wa.me/{{ annonce.user.tel1 }}" target="_blank" class="btn btn-success rounded-pill fw-bold" style="background-color:#25D366;">
-    <i class="lab la-whatsapp fs-4"></i> WhatsApp
-</a>
-
 {% else %}
-    <button type="button" class="btn btn-secondary rounded-pill fw-bold" disabled>
-        WhatsApp indisponible
+    <!-- Utilisateur non connecté ou pas particulier -->
+    <button type="button" class="btn btn-chat rounded-pill fw-bold"
+        onclick="AIZ.plugins.notify('danger',' Vous devez créer un compte particulier pour discuter avec ce vendeur.')">
+        <i class="las la-comment"></i> Chat avec le vendeur
     </button>
 {% endif %}
 
-
+      
+        <!-- WhatsApp -->
+        {% if annonce.user.tel1 %}
+            <a href="https://wa.me/{{ annonce.user.tel1 }}" target="_blank"
+               class="btn btn-success rounded-pill fw-bold" style="background-color:#25D366;">
+                <i class="lab la-whatsapp fs-4"></i> WhatsApp
+            </a>
+        {% else %}
+            <button type="button" class="btn btn-secondary rounded-pill fw-bold" disabled>
+                WhatsApp indisponible
+            </button>
+        {% endif %}
+    {% endif %}
 </div>
 
 
@@ -325,6 +380,20 @@
 
 {% block javascript %}
 {{ parent() }}
+ <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/fr.js"></script>
+    <script>
+        dayjs.extend(dayjs_plugin_relativeTime)
+        dayjs.locale('fr')
+        document.querySelectorAll('.time-ago').forEach(el => {
+            let ts = el.dataset.timestamp
+            el.textContent = dayjs.unix(ts).fromNow()
+        })
+
+
+        
+    </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const btn = document.getElementById('show-number-btn');
@@ -355,5 +424,167 @@ document.addEventListener('DOMContentLoaded', function() {
         telContainer.appendChild(copyBtn);
     });
 });
+
+function supprimerAnnonce(element, $id) {
+$_data = {
+'id': $id
+},
+Swal.fire({
+title: 'Êtes-vous sûr de vouloir supprimer cette annonce ?',
+type: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#25a89d ',
+cancelButtonColor: '#ff6b35',
+confirmButtonText: 'Supprimer',
+cancelButtonText: 'Annuler'
+}).then((result) => {
+if (result.value) {
+$.ajax({
+type: "POST",
+url: "{{ path('supprimer_annonce_ajax') }}",
+data: $_data,
+success: function (response) {
+element.parent().remove();
+Swal.fire({title: "success!", text: "l'annonce à été supprimer avec succés!", icon: "success"});
+
+
+window.location.href = "{{ path('app_home_annonces') }}";
+}
+});
+}
+})
+}
+
+function marquerCommeVendu(element, id) {
+    let $_data = {
+        'id': id,
+        '_token': "{{ csrf_token('marquer_vendu') }}"  // si tu utilises CSRF dans Symfony
+    };
+
+    Swal.fire({
+        title: 'Voulez-vous vraiment marquer cette annonce comme vendue ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#25a89d',
+        cancelButtonColor: '#ff6b35',
+        confirmButtonText: 'Oui, marquer comme vendu',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: "{{ path('marquer_vendu_ajax') }}",
+                data: $_data,
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Succès !",
+                            text: "L'annonce a été marquée comme vendue.",
+                            icon: "success"
+                        }).then(() => {
+                            // redirection vers la page annonces
+                            window.location.href = "{{ path('app_home_annonces') }}";
+                        });
+                    } else {
+                        Swal.fire("Erreur !", "Impossible de mettre à jour l'annonce.", "error");
+                    }
+                },
+                error: function() {
+                    Swal.fire("Erreur !", "Impossible de mettre à jour l'annonce.", "error");
+                }
+            });
+        }
+    });
+}
+
+
+ function changerStatusannonce(id) {
+    let $_data = {id: id};
+    Swal.fire({
+        title: 'Voulez-vous vraiment marquer cette annonce comme vendue ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#25a89d',
+        cancelButtonColor: '#ff6b35',
+        confirmButtonText: 'Oui',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: "POST",
+                url: "{{ path('marquer_vendu_ajax') }}",
+                data: $_data,
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Succès !",
+                            text: "L'annonce a été marquée comme vendue.",
+                            icon: "success"
+                        }).then(() => {
+                            // redirection vers la page annonces
+                            window.location.href = "{{ path('app_home_annonces') }}";
+                        });
+                    } else {
+                        Swal.fire("Erreur !", "Impossible de mettre à jour l'annonce.", "error");
+                    }
+                },
+                error: function() {
+                    Swal.fire("Erreur !", "Impossible de mettre à jour l'annonce.", "error");
+                }
+            });
+        }
+    });
+}
 </script>
+
+<script>
+let chatModalInstance;
+
+function ouvrirChat(annonceId, annonceNom, annonceImg, vendeurNom, receiverId) {
+    // Mettre à jour l'image et le nom de l'annonce
+    document.getElementById('chatAnnonceImg').src = annonceImg;
+    document.getElementById('chatAnnonceNom').textContent = annonceNom;
+    document.getElementById('chatVendeurNom').textContent = vendeurNom;
+
+    // Ouvrir la modal
+    const chatModalEl = document.getElementById('chatModal');
+    chatModalInstance = new bootstrap.Modal(chatModalEl);
+    chatModalInstance.show();
+
+    // Ajouter l'événement bouton envoyer
+    document.getElementById('sendChatBtn').onclick = function() {
+        let content = document.getElementById('chatMessageInput').value.trim();
+        if(content === '') {
+            alert("Veuillez écrire un message !");
+            return;
+        }
+
+        fetch("{{ path('part_message', {'receiverId': 0}) }}".replace('0', receiverId), {
+            method: "POST",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'content=' + encodeURIComponent(content)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success){
+                document.getElementById('chatMessageInput').value = '';
+                document.getElementById('chatStatus').textContent = 'Message envoyé !';
+                setTimeout(() => { document.getElementById('chatStatus').textContent = ''; }, 2000);
+            } else {
+                document.getElementById('chatStatus').textContent = 'Erreur lors de l\'envoi';
+            }
+        });
+    }
+
+    // Fermer modal si bouton close est cliqué (optionnel, Bootstrap le gère normalement)
+    chatModalEl.querySelector('.btn-close').addEventListener('click', () => {
+        chatModalInstance.hide();
+    });
+}
+
+</script>
+
+
 {% endblock %}
+
+

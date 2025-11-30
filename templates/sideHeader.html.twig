@@ -256,9 +256,9 @@
 						</li>
 
 
-						<li {% if PageMenu is defined and PageMenu == 'mecan_offres' %} class="aiz-side-nav-item" {% else %} class="aiz-side-nav-item" {% endif %}>
+						<li {% if PageMenu is defined and PageMenu == 'part_message' %} class="aiz-side-nav-item" {% else %} class="aiz-side-nav-item" {% endif %}>
 							<a
-								href="{{ path('mecan_offres') }}" {% if PageMenu is defined and PageMenu == 'mecan_offres' %} class="aiz-side-nav-link active" {% else %} class="aiz-side-nav-link" {% endif %}>
+								href="{{ path('part_message', {'receiverId': app.user.id}) }}" {% if PageMenu is defined and PageMenu == 'part_message' %} class="aiz-side-nav-link active" {% else %} class="aiz-side-nav-link" {% endif %}>
 
 								<!-- Nouveau ICON message -->
 								<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24">
@@ -269,7 +269,7 @@
 								</svg>
 
 								<span class="aiz-side-nav-text ml-3">Mes messages</span>
-								<span class="badge badge-inline badge-success">{{ nbOffres }}</span>
+								<span class="badge badge-inline badge-success">{{ unreadCount }}</span>
 							</a>
 						</li>
 

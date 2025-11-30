@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\OffreRepository;
 use App\Repository\AnnonceRepository;
+use App\Repository\MessageRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class HomeController extends AbstractController
@@ -126,7 +127,7 @@ return $this->render('home/index.html.twig', [
     }
 
     #[Route(path: '/sideheader', name: 'sideheader')]
-    public function sideheader(Request $request, EntityManagerInterface $em, OffreRepository $offreRepo): Response
+    public function sideheader(Request $request, EntityManagerInterface $em,MessageRepository $messageRepo, OffreRepository $offreRepo): Response
     {
         $user = $this->getUser();
 
@@ -146,11 +147,20 @@ return $this->render('home/index.html.twig', [
         }
 
          $nbPieces =$em->getRepository(Annonce::class)->count(['user' => $user]);
+ // Récupérer le nombre de messages non lus pour l'utilisateur connecté
+$user = $this->getUser();
+$unreadCount = $messageRepo->createQueryBuilder('m')
+    ->select('COUNT(m.id)')
+    ->where('m.receiver = :user')
+    ->andWhere('m.isRead = false')
+    ->setParameter('user', $user)
+    ->getQuery()
+    ->getSingleScalarResult();
 
         return $this->render('/sideHeader.html.twig', [
             'demandeCount' => $demandeCount,
             'nbOffres' => $nbOffres,
-            'nbPieces' => $nbPieces
+            'nbPieces' => $nbPieces,'unreadCount' => $unreadCount,
         ]);
     }
 

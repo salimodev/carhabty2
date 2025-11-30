@@ -842,33 +842,36 @@
                  data-items="5" data-xl-items="5" data-lg-items="4" data-md-items="3" data-sm-items="2" data-xs-items="1" 
                  data-arrows="true" data-infinite="true">
                 
-                {% if annonces|length > 0 %}
-                    {% for annonce in annonces %}
-                        <div class="col-custom">
-                            <a href="" class="text-reset text-decoration-none">
-                                <div class="aiz-card-box">
-                                    <img class="card-img" src="{{ annonce.imagePrincipale }}" alt="{{ annonce.nom }}" 
-                                         onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
-                                    <span class="badge-custom">Occasion</span>
-                                    <div class="p-3">
-                                        <div class="price">{{ annonce.prix }} TND</div>
-                                        <div class="title text-truncate-2">{{ annonce.nom }}</div>
-                                        <p class="info mb-1">
-                                            <i class="bi bi-geo-alt" style="color: #00B7B7;"></i>
-                                            {{ annonce.user.adresse ?: 'Adresse non renseignée' }}
-                                        </p>
-                                        <p class="info mb-0">
-                                            <i class="bi bi-clock" style="color: #00B7B7;"></i>
-                                            <span class="time-ago" data-timestamp="{{ annonce.dateCreation|date('U') }}"></span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="alert alert-info">Aucune annonce disponible pour le moment.</div>
-                {% endif %}
+               {% set annoncesDisponibles = annonces|filter(a => a.statut != 'vendu') %}
+
+{% if annoncesDisponibles|length > 0 %}
+    {% for annonce in annoncesDisponibles %}
+        <div class="col-custom">
+            <a href="{{ path('detail_annonce_accueil', {'id': annonce.id}) }}" class="text-reset text-decoration-none">
+                <div class="aiz-card-box">
+                    <img class="card-img" src="{{ annonce.imagePrincipale }}" alt="{{ annonce.nom }}" 
+                         onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
+                    <span class="badge-custom">Occasion</span>
+                    <div class="p-3">
+                        <div class="price">{{ annonce.prix }} TND</div>
+                        <div class="title text-truncate-2">{{ annonce.nom }}</div>
+                        <p class="info mb-1">
+                            <i class="bi bi-geo-alt" style="color: #00B7B7;"></i>
+                            {{ annonce.user.adresse ?: 'Adresse non renseignée' }}
+                        </p>
+                        <p class="info mb-0">
+                            <i class="bi bi-clock" style="color: #00B7B7;"></i>
+                            <span class="time-ago" data-timestamp="{{ annonce.dateCreation|date('U') }}"></span>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info">Aucune annonce disponible pour le moment.</div>
+{% endif %}
+
 
             </div>
 

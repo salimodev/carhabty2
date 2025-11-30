@@ -417,16 +417,16 @@
 
         <div class="request-header">
             <div class="request-title">
-                {% if demande.pieces|length > 0 %}
-                    {% for piece in demande.pieces %}
-                        {{ demande.marque }}
-                        {{ piece.designation }}
-                        {% if not loop.last %}, {% endif %}
-                    {% endfor %}
-                {% else %}
-                    {{ demande.marque }}
-                    {{ demande.modele }}
-                {% endif %}
+               {% if demande.pieces|length > 0 %}
+												{% for piece in demande.pieces %}
+													{{ piece.designation }}
+													{% if not loop.last %},
+													{% endif %}
+												{% endfor %}
+											{% else %}
+												{{ demande.marque }}
+												{{ demande.modele }}
+											{% endif %}
             </div>
             <div class="request-badge">
                 {% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}

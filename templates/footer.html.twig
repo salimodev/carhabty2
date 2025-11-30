@@ -610,7 +610,7 @@
 									</a>
 								</li>
 								<li {% if PageMenu is defined and PageMenu == 'app_prop_offres'%} class="aiz-side-nav-item active" {% else %} class="aiz-side-nav-item" {% endif %}>
-									<a href="{{path('proprietaire_offres')}}" {% if PageMenu is defined and PageMenu == "app_prop_offres"%} class="aiz-side-nav-link active" {% else %} class="aiz-side-nav-link" {% endif %}>
+									<a href="{{ path('part_message', {'receiverId': app.user.id}) }}" {% if PageMenu is defined and PageMenu == "app_prop_offres"%} class="aiz-side-nav-link active" {% else %} class="aiz-side-nav-link" {% endif %}>
 										<!-- Nouveau ICON message -->
 								<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24">
 									<path fill="#b5b5bf" d="M20 4H4a2 2 0 0 0-2 2v12a2

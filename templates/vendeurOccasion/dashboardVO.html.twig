@@ -149,7 +149,7 @@
 							{% for demande in demandes %}
 								<tr>
 									<td>
-										<a href="{{path('detail_demande_vendeur_occa',{'id':demande.id})}}">{{ demande.code }}</a>
+										<a href="{{path('detail_demande_vendeur_occa',{'code':demande.code})}}">{{ demande.code }}</a>
 									</td>
 									<td>{{ demande.marque }}</td>
 									<td>{{ demande.modele }}</td>
@@ -163,14 +163,16 @@
     {% endif %} </td>
 									<td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
 									<td>
-										{% if demande.statut == 'ouvert' %}
-											<span class="badge badge-inline badge-success">ouvert</span>
-										{% elseif demande.statut == 'fermer' %}
-											<span class="badge badge-inline badge-danger">fermé</span>
-										{% endif %}
+										{% if demande.statut == 'en_attente' %}
+                                            <span class="badge badge-inline badge-warning">en attente</span>
+                                             {% elseif demande.statut == 'publié' %}
+                                              <span class="badge badge-inline badge-info ">publié</span>
+                                        {% elseif demande.statut == 'fermer' %}
+                                            <span class="badge badge-inline badge-success">Servue</span>
+                                        {% endif %}
 									</td>
 									<td class="text-right">
-										<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande_vendeur_occa',{'id':demande.id})}}" title="Voir détail">
+										<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande_vendeur_occa',{'code':demande.code})}}" title="Voir détail">
 											<i class="las la-eye"></i>
 										</a>
 
@@ -214,7 +216,7 @@
 										<td>{{ loop.index }}</td>
 										<td class="fw-semibold text-primary">{{ offre.numeroOffre }}</td>
 										<td>
-											<a href="{{ path('detail_demande_vendeur', {'id': offre.demande.id}) }}" class="text-decoration-none text-dark fw-semibold">
+											<a href="{{ path('detail_demande_vendeur', {'code': offre.demande.code}) }}" class="text-decoration-none text-dark fw-semibold">
 												{{ offre.demande.code ?? '—' }}
 											</a>
 										</td>
@@ -252,7 +254,7 @@
 </td>
                                     <td class="text-right">
     {% if offre.status == 'en_attente' %}
-        <a href="{{ path('offre_edit_occ', {'id': offre.id}) }}" 
+        <a href="{{ path('offre_edit_occ', {'numeroOffre': offre.numeroOffre}) }}" 
            class="btn btn-soft-warning btn-icon btn-circle btn-sm" 
            title="Modifier">
             <i class="las la-edit"></i>
@@ -265,7 +267,7 @@
     {% endif %}
 
     {# Nouveau bouton "Voir l'offre" disponible pour tous les statuts #}
-    <a href="{{ path('offre_show_occ', {'id': offre.id}) }}" 
+    <a href="{{ path('offre_show_occ', {'numeroOffre': offre.numeroOffre}) }}" 
        class="btn btn-soft-info btn-icon btn-circle btn-sm" 
        title="Voir l'offre">
         <i class="las la-eye"></i>

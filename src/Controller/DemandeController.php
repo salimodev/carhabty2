@@ -97,7 +97,8 @@ public function envoyerDemande(Request $request, EntityManagerInterface $em): Js
     $demande->setVendeurOccasion($vendOcc);
     $demande->setOffreemail($email);
     $demande->setCode($this->generateCode());
-    $demande->setStatut('ouvert');
+    $demande->setPublier(false); 
+    $demande->setStatut('en_attente');
     $demande->setDatecreate(new \DateTimeImmutable());
 
     if ($userId && $user = $em->getRepository(\App\Entity\Users::class)->find($userId)) {
@@ -145,7 +146,7 @@ $email = (new TemplatedEmail())
 
 // Embed images
 $email 
-    ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1762169290/logo1_hdbhq8.png', 'logo', 'image/png')
+    ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1765309135/logo_essayara_igu3v8.png', 'logo', 'image/png')
     ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422924/h2qdkkms0lmucs44rc6s.png', 'facebook', 'image/png')
     ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422987/jtxpgab3dhykivmpw6y5.png', 'instagram', 'image/png')
     ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423044/gchpepwboglj5oyudqr8.png', 'twitter', 'image/png')
@@ -202,9 +203,9 @@ public function supprimerPiece(Request $request, EntityManagerInterface $em): Js
 }
 
 
-   #[Route('demande/detail/{id}', name: 'detail_demande_accuill')]
+   #[Route('demande/detail/{code}', name: 'detail_demande_accuill')]
 public function detailDemande(
-    int $id,
+    string  $code,
     Request $request,
     SessionInterface $session,
     DemandeRepository $demandeRepository
@@ -213,7 +214,9 @@ public function detailDemande(
     $session->set('PageMenu', 'detail_demande');
 
     // 🔹 Récupérer la demande
-    $demande = $demandeRepository->find($id);
+    $demande = $demandeRepository->findOneBy([
+        'code' => $code
+    ]);
 
     if (!$demande) {
         throw $this->createNotFoundException('Demande introuvable');

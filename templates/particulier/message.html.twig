@@ -8,55 +8,46 @@
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
 <style>
-.user-item:hover {
-    background-color: #f0f0f0;
-}
+.user-item:hover { background-color: #f0f0f0; }
+
 #chat-container {
-    height:500px; overflow-y:auto; padding:10px; background:#f7f7f7; border-radius:12px;
+    height:500px; overflow-y:auto; padding:10px;
+    background:#f7f7f7; border-radius:12px;
     display:flex; flex-direction:column; gap:6px;
 }
 .msg-left, .msg-right {
-    padding:10px 15px; border-radius:20px; max-width:75%; word-wrap: break-word;
+    padding:10px 15px; border-radius:20px;
+    max-width:75%; word-wrap: break-word;
     font-size:0.95rem;
 }
 .msg-left {
-    background:#e4e6eb; color:#000; align-self:flex-start;
+    background:#e4e6eb; color:#000;
+    align-self:flex-start;
     border-radius:20px 20px 20px 0;
 }
 .msg-right {
-    background:#0d6efd; color:#fff; align-self:flex-end;
+    background:#0d6efd; color:#fff;
+    align-self:flex-end;
     border-radius:20px 20px 0 20px;
 }
 #message-input-container {
     display:flex; gap:8px; margin-top:8px;
 }
-#message-input {
-    flex:1;
-    font-size:0.95rem;
-}
-.avatarchat {
-    width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; background:#ddd; margin-right:8px;
-    font-size:0.85rem;
-}
+#message-input { flex:1; font-size:0.95rem; }
+
 .user-list-container {
-    height:400px; overflow-y:auto; padding:8px; background:#fff; border-radius:12px;
+    height:400px; overflow-y:auto;
+    padding:8px; background:#fff;
+    border-radius:12px;
 }
 
-/* Responsive mobile */
 @media (max-width: 767px) {
     .row > .col-lg-4, .row > .col-lg-8 {
-        flex: 0 0 100%; max-width: 100%;
+        flex:0 0 100%; max-width:100%;
     }
-    #chat-container {
-        height:300px;
-    }
-    .user-list-container {
-        height:200px;
-        margin-bottom:10px;
-    }
-    .msg-left, .msg-right {
-        max-width:85%;
-    }
+    #chat-container { height:300px; }
+    .user-list-container { height:200px; margin-bottom:10px; }
+    .msg-left, .msg-right { max-width:85%; }
 }
 </style>
 {% endblock %}
@@ -66,19 +57,14 @@
 {% block loader %}{{ parent() }}{% endblock %}
 
 {% if app.user and is_granted('ROLE_PARTICULIER') %}
-
 <section class="py-5" style="background:#f5f5f5;">
   <div class="container">
     <div class="row">
 
-      <!-- Colonne gauche -->
       <div class="col-lg-3">
-        {% block sideHeader %}
-            {{ parent() }}
-        {% endblock %}
+        {% block sideHeader %}{{ parent() }}{% endblock %}
       </div>
 
-      <!-- Liste des utilisateurs -->
       <div class="col-lg-9">
         <div class="bg-white rounded shadow-sm p-4">
           <h4 class="fw-bold mb-4">Mes messages</h4>
@@ -89,22 +75,27 @@
 
           <div class="row">
 
+            <!-- ✅ Liste utilisateurs (lettre seulement) -->
             <div class="col-lg-4">
-              <div class="bg-white rounded shadow-sm p-3" style=" overflow-y:auto;">
+              <div class="bg-white rounded shadow-sm p-3 user-list-container">
                 <ul class="list-group">
                   {% for entry in usersWithMessages %}
                     <li class="list-group-item user-item d-flex align-items-center p-2 mb-2 rounded"
                         data-user-id="{{ entry.user.id }}" style="cursor:pointer;">
 
-                      <div class="avatar me-2"
-                           style="width:40px;height:40px;border-radius:50%;background:#ddd;display:flex;align-items:center;justify-content:center;font-weight:bold;">
-                           {{ entry.user.nom|slice(0,1)|upper }}
+                      <div class="me-2"
+                           style="width:40px;height:40px;border-radius:50%;
+                                  background:#ddd;display:flex;
+                                  align-items:center;justify-content:center;font-weight:bold;">
+                        {{ entry.user.nom|slice(0,1)|upper }}
                       </div>
 
                       <div>
                         <strong>{{ entry.user.nom }}</strong>
-                        <p class="mb-0 text-truncate" style="max-width:180px; font-size:0.9rem; color:#555; 
-                            {% if entry.lastMessage.isRead == false and entry.lastMessage.sender.id != app.user.id %} font-weight:bold; {% endif %}">
+                        <p class="mb-0 text-truncate"
+                           style="max-width:180px;font-size:0.9rem;color:#555;
+                           {% if entry.lastMessage.isRead == false 
+                                and entry.lastMessage.sender.id != app.user.id %}font-weight:bold;{% endif %}">
                           {{ entry.lastMessage.content|default('Aucun message') }}
                         </p>
                       </div>
@@ -115,15 +106,18 @@
               </div>
             </div>
 
-            <!-- Chat -->
+            <!-- ✅ Chat -->
             <div class="col-lg-8 d-flex flex-column">
-                <div id="chat-container" style="height:500px; overflow-y:auto; background:#f7f7f7; padding:10px; border-radius:12px;">
-                    <p class="text-center text-muted mt-4">👉 Cliquez sur un utilisateur pour ouvrir la discussion</p>
-                </div>
-                <div id="message-input-container" class="mt-2 d-flex gap-2">
-                    <input type="text" id="message-input" class="form-control" placeholder="Écrire un message...">
-                    <button class="btn btn-primary" id="send-btn">Envoyer</button>
-                </div>
+              <div id="chat-container">
+                <p class="text-center text-muted mt-4">
+                  👉 Cliquez sur un utilisateur pour ouvrir la discussion
+                </p>
+              </div>
+
+              <div id="message-input-container">
+                <input type="text" id="message-input" class="form-control" placeholder="Écrire un message...">
+                <button class="btn btn-primary" id="send-btn">Envoyer</button>
+              </div>
             </div>
 
           </div>
@@ -133,7 +127,6 @@
     </div>
   </div>
 </section>
-
 {% endif %}
 {% endblock %}
 
@@ -142,60 +135,77 @@
 <script>
 let selectedUserId = null;
 
-// Afficher messages dans le chat
 function afficherMessages(data, senderId) {
     const container = document.getElementById('chat-container');
     container.innerHTML = '';
-    if(data.messages.length === 0){
+
+    if (!data.messages || data.messages.length === 0) {
         container.innerHTML = '<p class="text-center text-muted mt-4">Aucun message pour le moment</p>';
         return;
     }
+
     data.messages.forEach(msg => {
         const div = document.createElement('div');
-        div.className = msg.senderId == senderId ? "msg-right mb-2" : "msg-left mb-2";
-        div.textContent = msg.content;
+        div.className = msg.senderId == senderId ? "msg-right" : "msg-left";
+
+        // ✅ Image seulement si CE message a une photo
+        if (msg.photo) {
+            const img = document.createElement('img');
+            img.src = msg.photo;
+            img.style.maxWidth = '150px';
+            img.style.borderRadius = '12px';
+            img.style.display = 'block';
+            img.style.marginBottom = '5px';
+            div.appendChild(img);
+        }
+
+        if (msg.content) {
+            const text = document.createElement('span');
+            text.textContent = msg.content;
+            div.appendChild(text);
+        }
+
         container.appendChild(div);
     });
+
     container.scrollTop = container.scrollHeight;
 }
 
-// Click utilisateur
+// ✅ Click utilisateur
 document.querySelectorAll('.user-item').forEach(el => {
     el.addEventListener('click', function () {
         selectedUserId = this.dataset.userId;
 
-        // Récupérer les messages
         fetch("{{ path('get_messages', {'receiverId': 0}) }}".replace('0', selectedUserId))
             .then(res => res.json())
             .then(data => afficherMessages(data, {{ app.user.id }}));
 
-        // Marquer les messages comme lus côté serveur
         fetch("{{ path('mark_as_read', {'senderId': 0}) }}".replace('0', selectedUserId), {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
             body: JSON.stringify({})
         }).then(() => {
-            // Retirer le gras pour le dernier message
             const p = this.querySelector('p');
-            if(p) p.style.fontWeight = 'normal';
+            if (p) p.style.fontWeight = 'normal';
         });
     });
 });
 
-// Envoyer message
+// ✅ Envoyer message
 document.getElementById('send-btn').addEventListener('click', function(){
-    if(!selectedUserId) return;
+    if (!selectedUserId) return;
+
     let content = document.getElementById('message-input').value;
-    if(content.trim() === "") return;
+    if (content.trim() === "") return;
 
     fetch("{{ path('part_message', {'receiverId': 0}) }}".replace('0', selectedUserId), {
-        method: "POST",
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: 'content=' + encodeURIComponent(content)
+        method:"POST",
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:'content=' + encodeURIComponent(content)
     })
     .then(res => res.json())
     .then(data => {
-        if(data.success){
+        if (data.success) {
             document.getElementById('message-input').value = "";
             fetch("{{ path('get_messages', {'receiverId': 0}) }}".replace('0', selectedUserId))
                 .then(res => res.json())

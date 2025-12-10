@@ -93,7 +93,7 @@
 										<td>{{ loop.index }}</td>
 										<td class="fw-semibold text-primary">{{ offre.numeroOffre }}</td>
 										<td>
-											<a href="{{ path('detail_demande_vendeur', {'id': offre.demande.id}) }}" class="text-decoration-none text-dark fw-semibold">
+											<a href="{{ path('detail_demande_vendeur', {'code': offre.demande.code}) }}" class="text-decoration-none text-dark fw-semibold">
 												{{ offre.demande.code ?? '—' }}
 											</a>
 										</td>
@@ -132,7 +132,7 @@
 										</td>
 										<td class="text-right">
 											{% if offre.status == 'en_attente' %}
-												<a href="{{ path('offre_edit', {'id': offre.id}) }}" class="btn btn-soft-warning btn-icon btn-circle btn-sm" title="Modifier">
+												<a href="{{ path('offre_edit', {'numeroOffre': offre.numeroOffre}) }}" class="btn btn-soft-warning btn-icon btn-circle btn-sm" title="Modifier">
 													<i class="las la-edit"></i>
 												</a>
 												<a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Supprimer" onclick="supprimerOffre($(this), {{ offre.id }})">
@@ -141,7 +141,7 @@
 											{% endif %}
 
 											{# Nouveau bouton "Voir l'offre" disponible pour tous les statuts #}
-											<a href="{{ path('offre_show', {'id': offre.id}) }}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="Voir l'offre">
+											<a href="{{ path('offre_show', {'numeroOffre': offre.numeroOffre}) }}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="Voir l'offre">
 												<i class="las la-eye"></i>
 											</a>
 

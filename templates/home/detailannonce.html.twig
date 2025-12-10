@@ -154,6 +154,7 @@
     <div class="modal-content shadow">
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title" id="chatModalLabel">Chat avec <span id="chatVendeurNom"></span></h5>
+        <input type="hidden" id="chatPieceImage">
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
 
       </div>
@@ -545,6 +546,8 @@ function ouvrirChat(annonceId, annonceNom, annonceImg, vendeurNom, receiverId) {
     document.getElementById('chatAnnonceImg').src = annonceImg;
     document.getElementById('chatAnnonceNom').textContent = annonceNom;
     document.getElementById('chatVendeurNom').textContent = vendeurNom;
+    document.getElementById('chatPieceImage').value = annonceImg;
+
 
     // Ouvrir la modal
     const chatModalEl = document.getElementById('chatModal');
@@ -558,11 +561,13 @@ function ouvrirChat(annonceId, annonceNom, annonceImg, vendeurNom, receiverId) {
             alert("Veuillez écrire un message !");
             return;
         }
-
+        let pieceImage = document.getElementById('chatPieceImage').value;
         fetch("{{ path('part_message', {'receiverId': 0}) }}".replace('0', receiverId), {
+            
             method: "POST",
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: 'content=' + encodeURIComponent(content)
+            body: 'content=' + encodeURIComponent(content) + 
+                  '&pieceImage=' + encodeURIComponent(pieceImage) +'&annonceId=' + encodeURIComponent(annonceId) 
         })
         .then(res => res.json())
         .then(data => {

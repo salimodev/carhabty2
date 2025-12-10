@@ -9,6 +9,131 @@
 	 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
 	<style>
+	/* ----- Section style ----- */
+.about-modern-section {
+    background: linear-gradient(135deg, #f2f4f8, #008F8F);
+    padding: 80px 0;
+    overflow: hidden;
+}
+
+/* Texte */
+.modern-text-box {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+.modern-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.modern-text {
+    font-size: 17px;
+    color: #555;
+    line-height: 1.7;
+}
+
+/* Vidéo */
+.video-description-section {
+    background: linear-gradient(135deg, #f2f2f2, #008F8F);
+    padding: 80px 0;
+    overflow: hidden;
+}
+
+.video-box {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    transform: translateZ(0);
+}
+
+.promo-video {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    background: #000;
+    border-radius: 20px;
+}
+
+/* Animation de base */
+.fade-left, .fade-right {
+    opacity: 0;
+    transition: all 1s ease;
+}
+
+/* Texte vient de gauche */
+.fade-left {
+    transform: translateX(-100px);
+}
+
+/* Vidéo vient de droite */
+.fade-right {
+    transform: translateX(100px);
+}
+
+/* Quand visible */
+.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ----- Animations ----- */
+.animate-left,
+.animate-right {
+    opacity: 0;
+    transition: all 1s ease;
+}
+
+.animate-left {
+    transform: translateX(-100px);
+}
+
+.animate-right {
+    transform: translateX(100px);
+}
+
+.animate-left.visible,
+.animate-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ===== Responsive Mobile ONLY ===== */
+@media (max-width: 768px) {
+
+    .video-description-section {
+        padding: 40px 0;
+    }
+
+    .fade-left, .fade-right {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+    }
+
+    .modern-title {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .modern-text {
+        font-size: 15px;
+        text-align: center;
+    }
+
+    .video-box {
+        margin-top: 20px;
+    }
+
+    .promo-video {
+        height: auto;
+        max-height: 250px;
+        background: #000;
+    }
+}
+
 	
 		/***** 🎨 Style amélioré des cartes utilisateurs *****/
 		.user {
@@ -566,30 +691,259 @@
 {% block Content %}
 <br>
 
-<div class=" col-lg-12">
-
+<div class="col-lg-12">
 	<div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true" data-dots="true" data-autoplay="true" data-infinite="true">
 
-		<div class="carousel-box">
-			<a href="">
-				<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1762608293/1600w-n13TkX-2HZo_oyan3h.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
-			</a>
-		</div>
-		<div class="carousel-box">
-			<a href="">
-				<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1762608738/1600w-3CEVdzRUSFU_y3zxbz.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
-			</a>
-		</div>
-		<div class="carousel-box">
-			<a href="">
-				<img class="d-block w-100 rounded" src="https://res.cloudinary.com/aladdineshoping/image/upload/v1762608806/1600w-Rgpn1PVgFmA_ddm1ib.jpg" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="First slide">
-			</a>
-		</div>
-
+		{% for banner in banners %}
+			<div class="carousel-box">
+				<a href="{{ banner.link ?? '#' }}">
+					<img class="d-block w-100 rounded" src="{{ banner.logo }}" onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';" alt="Banner">
+				</a>
+			</div>
+		{% else %}
+			<div class="text-center p-4">
+				<p>Aucune bannière disponible</p>
+			</div>
+		{% endfor %}
 	</div>
 </div>
+
 {% if not app.user %}
 	{# categorie parent  #}
+	<div id="section_home_categories">
+		<section class="mb-4">
+			<div class="container">
+				<div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">
+
+					<div class="d-flex mb-3 align-items-baseline border-bottom">
+						<h3 class="h5 fw-700 mb-0">
+							<span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
+								Choisissez votre rôle
+							</span>
+						</h3>
+					</div>
+
+					<!-- ✅ AIZ Carousel des Profils -->
+					<div
+						class="aiz-carousel half-outside-arrow gutters-10" data-items="5" data-xl-items="4" data-lg-items="3" data-md-items="2" data-sm-items="1" data-arrows="true" data-infinite="true" data-autoplay="true">
+
+						<!-- Rôle : Propriétaire -->
+						<div class="carousel-box">
+							<div class="user text-center p-4 shadow-sm rounded bg-white">
+								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
+									<div class="user-icon text-primary">
+										<i class="fas fa-car fa-3x"></i>
+									</div>
+								</div>
+								<div class="user-meta mb-3">
+									<div class="user-name fw-bold">Propriétaire</div>
+									<div class="user-location text-muted" style="color: #000000 !important;">نلوّج في قطعة لكرهبتي
+									</div>
+								</div>
+								<div class="user-buttons mt-3">
+									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+									<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
+									<button class="btn btn-secondary w-100" onclick="location.href='{{path('inviter_proprietaire')}}'">Inviter</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- Rôle : Mécanicien -->
+						<div class="carousel-box">
+							<div class="user text-center p-4 shadow-sm rounded bg-white">
+								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
+									<div class="user-icon text-success">
+										<i class="fas fa-tools fa-3x"></i>
+									</div>
+								</div>
+								<div class="user-meta mb-3">
+									<div class="user-name fw-bold">Mécanicien</div>
+									<div class="user-location text-muted" style="color: #000000 !important;">
+										نلوج على قطعة للي يصلح عندي
+									</div>
+								</div>
+								<div class="user-buttons mt-3">
+									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+									<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
+									<button class="btn btn-secondary w-100" onclick="location.href='{{path('inviter_mecanicien')}}'">Inviter</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- Rôle : Vendeur Neuf -->
+						<div class="carousel-box">
+							<div class="user text-center p-4 shadow-sm rounded bg-white">
+								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
+									<div class="user-icon text-info">
+										<i class="fas fa-store fa-3x"></i>
+									</div>
+								</div>
+								<div class="user-meta mb-3">
+									<div class="user-name fw-bold">Vendeur des piéces Neuves</div>
+									<div class="user-location text-muted" style="color: #000000 !important;">
+										نبيع قطايع جدد و نجاوب كل واحد يلوج في قطعة
+									</div>
+								</div>
+								<div class="user-buttons mt-3">
+									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+									<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
+									<button class="btn btn-secondary w-100" onclick="location.href='{{path('inviter_vendeurNeuf')}}'">Inviter</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- Rôle : Vendeur Occasion -->
+						<div class="carousel-box">
+							<div class="user text-center p-4 shadow-sm rounded bg-white">
+								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
+									<div class="user-icon text-warning">
+										<i class="fas fa-cogs fa-3x"></i>
+									</div>
+								</div>
+								<div class="user-meta mb-3">
+									<div class="user-name fw-bold">Vendeur des piéces Occasion</div>
+									<div class="user-location text-muted" style="color: #000000 !important;">نبيع قطايع قدم (كاس) و نجاوب  كل واحد يلوج  قطعة في الحين</div>
+								</div>
+								<div class="user-buttons mt-3">
+									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+									<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
+									<button class="btn btn-secondary w-100" onclick="location.href='{{path('inviter_vendeurOccasion')}}'">Inviter</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- Rôle : Particulier -->
+						<div class="carousel-box">
+							<div class="user text-center p-4 shadow-sm rounded bg-white">
+								<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
+									<div class="user-icon text-danger">
+										<i class="fas fa-user fa-3x"></i>
+									</div>
+								</div>
+								<div class="user-meta mb-3">
+									<div class="user-name fw-bold">Particulier</div>
+									<div class="user-location text-muted" style="color: #000000 !important;">عندك قطعة مفقودة تلوج عليها   أو عندك قطعة زايدة للي يحب يشري
+									</div>
+								</div>
+								<div class="user-buttons mt-3">
+									<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
+									<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
+									<button class="btn btn-secondary w-100" onclick="location.href='{{path('inviter_particulier')}}'">Inviter</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</section>
+	</div>
+{% endif %}{# fin categorie parent  #}{# categorie parent  #}<div id="section_home_categories">
+	<section class="mb-4">
+		<div class="container">
+			<div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">
+
+				<div class="d-flex mb-3 align-items-baseline border-bottom">
+					<h3 class="h5 fw-700 mb-0">
+						<span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
+							Demandes récentes
+						</span>
+					</h3>
+					<a href="{{path('app_demande_all')}}" class="ml-auto btn btn-register btn-sm shadow-md">Voir plus</a>
+				</div>
+
+				<!-- ✅ AIZ Carousel -->
+				<div class="aiz-carousel half-outside-arrow gutters-10" data-items="3" data-xl-items="3" data-lg-items="2" data-md-items="2" data-sm-items="1" data-xs-items="1" data-arrows="true" data-infinite="true">
+
+					{% for demande in lastDemandes %}
+						{% if demande.publier == 1 and demande.statut == 'publié' %}
+							<div class="carousel-box">
+								<a href="{{ path('detail_demande_accuill', {'code': demande.code}) }}" class="text-decoration-none text-dark">
+									<div class="request-card">
+
+										<div class="request-header">
+											<div class="request-title">
+												{% if demande.pieces|length > 0 %}
+													{% for piece in demande.pieces %}
+														{{ piece.designation }}
+														{% if not loop.last %},
+														{% endif %}
+													{% endfor %}
+												{% else %}
+													{{ demande.marque }}
+													{{ demande.modele }}
+												{% endif %}
+											</div>
+											<div class="request-badge">
+												{% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
+													Neuve / Occasion
+												{% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
+													Neuve
+												{% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}
+													Occasion
+												{% endif %}
+											</div>
+										</div>
+
+										<div class="request-meta">
+											<span>
+												<i class="fas fa-map-marker-alt"></i>
+												{{ demande.zone }}</span>
+											<span>
+												<i class="fas fa-user"></i>
+												{{ demande.offrecompte ? demande.offrecompte.prenom : 'Anonyme' }}</span>
+											<span>
+												<i class="far fa-clock"></i>
+												{{ demande.datecreate|time_ago }}</span>
+										</div>
+
+										<div class="request-image">
+											{% set firstPiece = demande.Pieces|first %}
+											{% set photo = firstPiece and firstPiece.photo ? firstPiece.photo : '/image/placeholder.png' %}
+											<img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
+										</div>
+
+										<p class="request-description">
+											{% if demande.pieces|length > 0 %}
+												{% for piece in demande.pieces|slice(0,3) %}
+													{{ piece.observation }}
+													{% if not loop.last %},
+													{% endif %}
+												{% endfor %}
+												{% if demande.pieces|length > 3 %}...
+												{% endif %}
+											{% else %}
+												Pas de description disponible.
+											{% endif %}
+										</p>
+
+										{% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
+										{% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
+
+										<a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'code': demande.code}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" style="pointer-events: auto;" {% if not app.user %} onclick="AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !'); return false;" {% elseif not estVendeur %} onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;" {% elseif dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
+											<i class="fas fa-envelope-open-text me-2"></i>
+											Proposer un prix
+										</a>
+
+									</div>
+								</a>
+
+							</div>
+						{% endif %}
+					{% else %}
+						<p class="text-center text-muted">Aucune demande récente.</p>
+
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+
+
+{# fin categorie parent  #}
+
 <div id="section_home_categories">
 	<section class="mb-4">
 		<div class="container">
@@ -598,275 +952,41 @@
 				<div class="d-flex mb-3 align-items-baseline border-bottom">
 					<h3 class="h5 fw-700 mb-0">
 						<span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
-							Choisissez votre rôle
+							Pièces occasion
 						</span>
 					</h3>
+					<a href="{{ path('app_home_annonces') }}" class="ml-auto btn btn-register btn-sm shadow-md">Voir plus</a>
 				</div>
 
-				<!-- ✅ AIZ Carousel des Profils -->
-				<div
-					class="aiz-carousel half-outside-arrow gutters-10" data-items="5" data-xl-items="4" data-lg-items="3" data-md-items="2" data-sm-items="1" data-arrows="true" data-infinite="true" data-autoplay="true">
+				<!-- ✅ AIZ Carousel -->
+				<div class="aiz-carousel half-outside-arrow gutters-10" data-items="5" data-xl-items="5" data-lg-items="4" data-md-items="3" data-sm-items="2" data-xs-items="1" data-arrows="true" data-infinite="true">
 
-					<!-- Rôle : Propriétaire -->
-					<div class="carousel-box">
-						<div class="user text-center p-4 shadow-sm rounded bg-white">
-							<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-								<div class="user-icon text-primary">
-									<i class="fas fa-car fa-3x"></i>
-								</div>
-							</div>
-							<div class="user-meta mb-3">
-								<div class="user-name fw-bold">Propriétaire</div>
-								<div class="user-location text-muted" style="color: #000000 !important;">نلوّج في قطعة لكرهبتي
-								</div>
-							</div>
-							<div class="user-buttons mt-3">
-								<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
-								<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
-								<button class="btn btn-secondary w-100" onclick="location.href='{{path('inviter_proprietaire')}}'">Inviter</button>
-							</div>
-						</div>
-					</div>
+					{% set annoncesDisponibles = annonces|filter(a => a.statut != 'vendu' and a.publier == 1 ) %}
 
-					<!-- Rôle : Mécanicien -->
-					<div class="carousel-box">
-						<div class="user text-center p-4 shadow-sm rounded bg-white">
-							<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-								<div class="user-icon text-success">
-									<i class="fas fa-tools fa-3x"></i>
-								</div>
-							</div>
-							<div class="user-meta mb-3">
-								<div class="user-name fw-bold">Mécanicien</div>
-								<div class="user-location text-muted" style="color: #000000 !important;">
-									نلوج على قطعة للي يصلح عندي
-								</div>
-							</div>
-							<div class="user-buttons mt-3">
-								<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
-								<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
-								<button class="btn btn-secondary w-100" onclick="location.href='{{path('inviter_mecanicien')}}'">Inviter</button>
-							</div>
-						</div>
-					</div>
-
-					<!-- Rôle : Vendeur Neuf -->
-					<div class="carousel-box">
-						<div class="user text-center p-4 shadow-sm rounded bg-white">
-							<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-								<div class="user-icon text-info">
-									<i class="fas fa-store fa-3x"></i>
-								</div>
-							</div>
-							<div class="user-meta mb-3">
-								<div class="user-name fw-bold">Vendeur des piéces Neuves</div>
-								<div class="user-location text-muted" style="color: #000000 !important;">
-									نبيع قطايع جدد و نجاوب كل واحد يلوج في قطعة
-								</div>
-							</div>
-							<div class="user-buttons mt-3">
-								<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
-								<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
-								<button class="btn btn-secondary w-100" onclick="location.href='{{path('inviter_vendeurNeuf')}}'">Inviter</button>
-							</div>
-						</div>
-					</div>
-
-					<!-- Rôle : Vendeur Occasion -->
-					<div class="carousel-box">
-						<div class="user text-center p-4 shadow-sm rounded bg-white">
-							<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-								<div class="user-icon text-warning">
-									<i class="fas fa-cogs fa-3x"></i>
-								</div>
-							</div>
-							<div class="user-meta mb-3">
-								<div class="user-name fw-bold">Vendeur des piéces Occasion</div>
-								<div class="user-location text-muted" style="color: #000000 !important;">نبيع قطايع قدم (كاس) و نجاوب  كل واحد يلوج  قطعة في الحين</div>
-							</div>
-							<div class="user-buttons mt-3">
-								<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
-								<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
-								<button class="btn btn-secondary w-100" onclick="location.href='{{path('inviter_vendeurOccasion')}}'">Inviter</button>
-							</div>
-						</div>
-					</div>
-
-					<!-- Rôle : Particulier -->
-					<div class="carousel-box">
-						<div class="user text-center p-4 shadow-sm rounded bg-white">
-							<div class="user-img-wrap mb-3 d-flex justify-content-center align-items-center">
-								<div class="user-icon text-danger">
-									<i class="fas fa-user fa-3x"></i>
-								</div>
-							</div>
-							<div class="user-meta mb-3">
-								<div class="user-name fw-bold">Particulier</div>
-								<div class="user-location text-muted" style="color: #000000 !important;">عندك قطعة مفقودة تلوج عليها   أو عندك قطعة زايدة للي يحب يشري
-								</div>
-							</div>
-							<div class="user-buttons mt-3">
-								<button class="btn btn-register w-100 mb-2" onclick="location.href='{{path('app_login')}}'">Se connecter</button>
-								<button class="btn btn-outline-primary w-100 mb-2" onclick="location.href='{{path('app_register')}}'">S’inscrire</button>
-								<button class="btn btn-secondary w-100" onclick="location.href='{{path('inviter_particulier')}}'">Inviter</button>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-			</div>
-		</div>
-	</section>
-</div>{% endif %}{# fin categorie parent  #}{# categorie parent  #}<div id="section_home_categories">
-<section class="mb-4">
-	<div class="container">
-		<div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">
-
-			<div class="d-flex mb-3 align-items-baseline border-bottom">
-				<h3 class="h5 fw-700 mb-0">
-					<span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
-						Demandes récentes
-					</span>
-				</h3>
-				<a href="{{path('app_demande_all')}}" class="ml-auto btn btn-register btn-sm shadow-md">Voir plus</a>
-			</div>
-
-			<!-- ✅ AIZ Carousel -->
-			<div class="aiz-carousel half-outside-arrow gutters-10" data-items="3" data-xl-items="3" data-lg-items="2" data-md-items="2" data-sm-items="1" data-xs-items="1" data-arrows="true" data-infinite="true">
-
-				{% for demande in lastDemandes %}
-					{% if demande.statut != 'fermer' %}
-						<div class="carousel-box">
-							<a href="{{ path('detail_demande_accuill', {'id': demande.id}) }}" class="text-decoration-none text-dark">
-								<div class="request-card">
-
-									<div class="request-header">
-										<div class="request-title">
-											{% if demande.pieces|length > 0 %}
-												{% for piece in demande.pieces %}
-													{{ piece.designation }}
-													{% if not loop.last %},
-													{% endif %}
-												{% endfor %}
-											{% else %}
-												{{ demande.marque }}
-												{{ demande.modele }}
-											{% endif %}
-										</div>
-										<div class="request-badge">
-											{% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
-												Neuve / Occasion
-											{% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
-												Neuve
-											{% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}
-												Occasion
-											{% endif %}
+					{% if annoncesDisponibles|length > 0 %}
+						{% for annonce in annoncesDisponibles %}
+							<div class="col-custom">
+								<a href="{{ path('detail_annonce_accueil', {'id': annonce.id}) }}" class="text-reset text-decoration-none">
+									<div class="aiz-card-box">
+										<img class="card-img" src="{{ annonce.imagePrincipale }}" alt="{{ annonce.nom }}" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
+										<span class="badge-custom">Occasion</span>
+										<div class="p-3">
+											<div class="price">{{ annonce.prix }}
+												TND</div>
+											<div class="title text-truncate-2">{{ annonce.nom }}</div>
+											<p class="info mb-1">
+												<i class="bi bi-geo-alt" style="color: #00B7B7;"></i>
+												{{ annonce.user.adresse ?: 'Adresse non renseignée' }}
+											</p>
+											<p class="info mb-0">
+												<i class="bi bi-clock" style="color: #00B7B7;"></i>
+												<span class="time-ago" data-timestamp="{{ annonce.dateCreation|date('U') }}"></span>
+											</p>
 										</div>
 									</div>
+								</a>
+							</div>
 
-									<div class="request-meta">
-										<span>
-											<i class="fas fa-map-marker-alt"></i>
-											{{ demande.zone }}</span>
-										<span>
-											<i class="fas fa-user"></i>
-											{{ demande.offrecompte ? demande.offrecompte.prenom : 'Anonyme' }}</span>
-										<span>
-											<i class="far fa-clock"></i>
-											{{ demande.datecreate|time_ago }}</span>
-									</div>
-
-									<div class="request-image">
-										{% set firstPiece = demande.Pieces|first %}
-										{% set photo = firstPiece and firstPiece.photo ? firstPiece.photo : '/image/placeholder.png' %}
-										<img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
-									</div>
-
-									<p class="request-description">
-										{% if demande.pieces|length > 0 %}
-											{% for piece in demande.pieces|slice(0,3) %}
-												{{ piece.observation }}
-												{% if not loop.last %},
-												{% endif %}
-											{% endfor %}
-											{% if demande.pieces|length > 3 %}...
-											{% endif %}
-										{% else %}
-											Pas de description disponible.
-										{% endif %}
-									</p>
-
-									{% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
-									{% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
-
-									<a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" style="pointer-events: auto;" {% if not app.user %} onclick="AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !'); return false;" {% elseif not estVendeur %} onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;" {% elseif dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
-										<i class="fas fa-envelope-open-text me-2"></i>
-										Proposer un prix
-									</a>
-
-								</div>
-							</a>
-
-						</div>
-					{% endif %}
-				{% else %}
-					<p class="text-center text-muted">Aucune demande récente.</p>
-
-				{% endfor %}
-			</div>
-		</div>
-	</div>
-</section></div>
-
-
-
-	{# fin categorie parent  #}
-
-<div id="section_home_categories">
-<section class="mb-4">
-    <div class="container">
-        <div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">
-
-            <div class="d-flex mb-3 align-items-baseline border-bottom">
-                <h3 class="h5 fw-700 mb-0">
-                    <span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
-                        Pièces occasion
-                    </span>
-                </h3>
-                <a href="{{ path('app_home_annonces') }}" class="ml-auto btn btn-register btn-sm shadow-md">Voir plus</a>
-            </div>
-
-            <!-- ✅ AIZ Carousel -->
-            <div class="aiz-carousel half-outside-arrow gutters-10" 
-                 data-items="5" data-xl-items="5" data-lg-items="4" data-md-items="3" data-sm-items="2" data-xs-items="1" 
-                 data-arrows="true" data-infinite="true">
-                
-               {% set annoncesDisponibles = annonces|filter(a => a.statut != 'vendu') %}
-
-{% if annoncesDisponibles|length > 0 %}
-    {% for annonce in annoncesDisponibles %}
-        <div class="col-custom">
-            <a href="{{ path('detail_annonce_accueil', {'id': annonce.id}) }}" class="text-reset text-decoration-none">
-                <div class="aiz-card-box">
-                    <img class="card-img" src="{{ annonce.imagePrincipale }}" alt="{{ annonce.nom }}" 
-                         onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
-                    <span class="badge-custom">Occasion</span>
-                    <div class="p-3">
-                        <div class="price">{{ annonce.prix }} TND</div>
-                        <div class="title text-truncate-2">{{ annonce.nom }}</div>
-                        <p class="info mb-1">
-                            <i class="bi bi-geo-alt" style="color: #00B7B7;"></i>
-                            {{ annonce.user.adresse ?: 'Adresse non renseignée' }}
-                        </p>
-                        <p class="info mb-0">
-                            <i class="bi bi-clock" style="color: #00B7B7;"></i>
-                            <span class="time-ago" data-timestamp="{{ annonce.dateCreation|date('U') }}"></span>
-                        </p>
-                    </div>
-                </div>
-            </a>
-        </div>
     {% endfor %}
 {% else %}
     <div class="alert alert-info">Aucune annonce disponible pour le moment.</div>
@@ -880,7 +1000,48 @@
 </section>
 </div>
 
+{# ===== Section description + vidéo ===== #}
+<!-- ================= SECTION VIDEO + TEXTE ================= -->
+<section class="video-description-section">
+    <div class="container">
+        <div class="row align-items-center">
 
+            <!-- Texte à gauche -->
+            <div class="col-lg-6 fade-left">
+                  <h3 class="fw-bold mb-3">
+                            Pourquoi choisir Essayara ?
+                        </h3>
+
+                        <p class="text-muted" style="line-height: 1.8;">
+                            Essayara est une plateforme qui facilite la recherche et la vente de pièces automobiles
+                            entre particuliers, mécaniciens et vendeurs professionnels.
+                            Trouvez rapidement les pièces dont vous avez besoin, comparez les offres
+                            et vérifier les prix et marques proposés.
+                        </p>
+
+                        <p class="text-muted">
+                            Gagnez du temps, économisez de l'argent et trouvez la bonne pièce en quelques clics.
+                        </p>
+
+                        <a href="{{ path('app_register') }}" class="btn btn-register mt-2">
+                            Rejoindre la plateforme
+                        </a>
+            </div>
+ 
+            <!-- Vidéo à droite -->
+            <div class="col-lg-6 fade-right text-center">
+                <div class="video-box">
+                   <video class="promo-video" controls muted playsinline>
+    <source src="{{ asset('videos/presentation.mp4') }}" type="video/mp4">
+    Votre navigateur ne supporte pas la vidéo.
+</video>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 {% endblock %}
 {% block javascript %}
 	{{ parent() }}
@@ -899,5 +1060,23 @@
 
         
     </script>
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+    const elements = document.querySelectorAll(".fade-left, .fade-right");
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("show");
+            }
+        });
+    }, { threshold: 0.2 });
+
+    elements.forEach(el => observer.observe(el));
+});
+
+
+</script>
+
 {% endblock %}
 

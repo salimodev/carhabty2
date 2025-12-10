@@ -1,0 +1,312 @@
+{% extends 'layoutAdmin.html.twig' %}
+{% block Head %}
+	{{ parent() }}
+
+ {% block LinksCss %}
+ {{ parent() }}
+ 
+ {% endblock %}
+
+{% endblock %}
+
+{% block title %}
+banner flash deal!
+{% endblock %}
+{% block loader %} {{ parent() }} {% endblock %}
+{% block sidebar %}
+{{ parent() }}
+{% endblock %}
+
+{% block page %}
+	{{ parent() }}
+    
+<div class="px-15px px-lg-25px">
+
+    <!-- FORM -->
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Banner Menu Configurations</h6>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <input type="hidden" name="_token">
+
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">
+                                Ajouter nouvelle Banner <small>(1600x600)</small>
+                            </label>
+
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text bg-soft-secondary font-weight-medium"
+                                             style="cursor:pointer;" onclick="cloudDinaryBannerMenu()">
+                                            Browse
+                                        </div>
+                                    </div>
+
+                                    <div class="form-control file-amount"
+                                         style="cursor:pointer;" onclick="cloudDinaryBannerMenu()">
+                                        1 File selected
+                                    </div>
+
+                                    <input type="hidden" id="srcLogo" class="selected-files" value="">
+                                    <input type="hidden" name="logo" value="99" class="selected-files">
+                                </div>
+
+                                <div class="file-preview box sm" id="NewPhotos">
+                                    <div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="99">
+                                        <div class="align-items-center align-self-stretch d-flex justify-content-center thumb">
+                                            <img src="" id="logoImg" class="img-fit">
+                                        </div>
+                                        <div class="col body">
+                                            <h6 class="d-flex">
+                                                <span class="text-truncate title"></span>image<span class="ext"></span>
+                                            </h6>
+                                            <p></p>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <button type="button" onclick="AjouterBannerMenu()" class="btn btn-custom rounded-pill fw-bold fs-14 px-4 py-2">
+                                Ajouter
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LISTE -->
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Liste Banner Menu</h6>
+                </div>
+                <div class="card-body">
+
+                    {% for banner in BannerMenu %}
+                        <div class="form-group row align-items-center">
+
+                            <div class="col-md-9">
+                                <img class="d-block w-100"
+                                     src="{{ banner.logo }}"
+                                     onerror="this.onerror=null;this.src='assets/img/placeholder-rect.png';"
+                                     alt="Banner">
+                            </div>
+
+                            <div class="col-md-3 text-center">
+    <input type="hidden" class="selected-files">
+
+    <!-- Titre "Publié" -->
+    <div class="fw-bold text-muted mb-1">
+        Publié
+    </div>
+
+    <!-- Switch -->
+    <label class="aiz-switch aiz-switch-success mb-2">
+        <input type="checkbox"
+               onchange="publier_Banner(this)"
+               value="{{ banner.id }}"
+               {% if banner.publier == 1 %}checked{% endif %}>
+        <span></span>
+    </label>
+
+    <br>
+
+    <!-- Icône supprimer avec cursor -->
+    <a onclick="supprimerBannerMenu($(this),'{{ banner.id }}');"
+       class="link link--style-3 link-danger"
+       title="Supprimer"
+       style="cursor: pointer; display: inline-block;">
+        <i class="la la-trash la-2x text-danger"></i>
+    </a>
+</div>
+
+
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block javascript %}
+	{{ parent() }}
+<script type="text/javascript">
+	cloudinary.setCloudName('b-ja');
+
+function cloudDinaryBannerMenu() {
+     // Afficher le preloader
+    $('#cloudinaryPreloader').show();
+
+    cloudinary.openUploadWidget({
+        api_key: '539474279193439',
+        api_secret: '7A1irSbuKcg2XIH1TLqB4pBUZfA',
+        cloud_name: 'aladdineshoping',
+        upload_preset: 'aladdineshop',
+        folder: 'ml_default',
+
+        theme: 'minimal',
+        max_file_size: 300000000,
+
+        image_metadata: true,
+        client_allowed_formats: ["png", "jpeg"],
+        resource_type: 'image',
+        folder: 'folder',
+        cropping: 'server',
+        cropping_coordinates_mode: 'custom',
+        cropping_aspect_ratio: 0.72,
+        sources: ['local', 'url'],
+        button_caption: 'Télécherger image',
+       
+       
+    },
+           
+
+
+              (error, result) => { 
+                  // Masquer le preloader dès que Cloudinary ferme le popup
+        $('#cloudinaryPreloader').hide();
+
+    if (!error && result && result.event === "success") { 
+                $type = "photo";
+                $("#srcLogo").val(result.info.secure_url);
+
+
+
+                $('#logoImg').attr('src', result.info.secure_url);
+				$('#NewPhotos').css('display', 'block');
+                $('#logoImg').css('display', 'block');
+
+      console.log('Done! Here is the image info: ', result.info.secure_url); 
+    }
+  }
+            );
+
+
+
+}
+
+
+function AjouterBannerMenu(){
+	$_data = {};
+    var pathConfigHeader = '{{path('AjouterBannerMenu')}}'
+	var banner = $('#srcLogo').val();
+    var publier = 0;
+    $_data = {
+		'banner': banner,
+        'publier': publier
+	}
+
+	 if ( $('#banner').val()!= "" && $('#link').val()!= ""  ) {
+        $.ajax({
+            type: "POST",
+            url: pathConfigHeader,
+            data: $_data,
+            success: function (response) {
+               Swal.fire({
+                   title: "success!",
+                   text: "Banner à été Ajouter avec succés!",
+                   icon: "success",
+                   
+                  }); 
+                
+                   
+                  location.reload();
+                
+
+
+            },
+            beforeSend: function(){ $('#loaderAcc').show();},
+            complete: function()  { $('#loaderAcc').hide(); }
+        })
+        
+      }else if ( $('#banner').val()== ""){
+          Swal.fire({
+                       title: "warning",
+                       text: "merci de choisir banner!",
+                       icon: "warning",
+                       dangerMode: true,
+                    })
+      }else{
+          Swal.fire({
+                       title: "warning",
+                       text: "merci de remplire le champ link!",
+                       icon: "warning",
+                       dangerMode: true,
+                    })
+      }
+
+}
+
+function publier_Banner(el){
+            if(el.checked){
+                var Publier = 1;
+            }
+            else{
+                var Publier = 0;
+            }
+    $_data = {
+        'id': el.value,
+        'Publier': Publier,
+    },
+     $.ajax({
+            type: "POST",
+            url: "{{ path('PublierBannermenu') }}",
+            data: $_data,
+            success: function (response) {
+              AIZ.plugins.notify('success', "statut banner à été modifier avec succés!");
+           
+            },
+            beforeSend: function(){ $('#loaderAcc').show();},
+            complete: function()  { $('#loaderAcc').hide(); }
+        })
+   
+}
+
+function supprimerBannerMenu(element, $id) {
+    $_data = {'id': $id},
+     Swal.fire({
+    title: 'êtes-vous sûr de vouloir supprimer ce banner',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#25a89d ',
+    cancelButtonColor: '#ff6b35',
+    confirmButtonText: 'Supprimer',
+    cancelButtonText: 'Annuler'
+    }).then((result) => {
+    if (result.value) {
+    $.ajax({
+    type: "POST",
+    url: "{{ path('Supprimer_BannerMenu') }}",
+    data: $_data,
+    success: function (response) {
+    
+      AIZ.plugins.notify('success', "Banner supprimer avec succés!");
+       location.reload();
+     },
+    beforeSend: function(){ $('#loaderAcc').show();},
+    complete: function()  { $('#loaderAcc').hide(); }
+    });
+     }
+})
+}
+</script>
+{% endblock %}

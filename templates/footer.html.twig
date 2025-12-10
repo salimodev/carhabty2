@@ -35,8 +35,12 @@
 		<div class="row">
 			<div class="col-lg-5 col-xl-4 text-center text-md-left">
 				<div class="mt-4">
-					<a href=" / " class="d-block">
-						<img class=" ls-is-cached lazyloaded" src="{{ asset ('image/logfoot.png')}}" style="height: 270px; max-width: 100% !important;margin-top: -33%;" onerror="this.onerror=null;this.src='/image/logfoot.png';" alt="essayara" height="44">
+					<a href="/" class="d-block">
+						<img 
+  src="{{ footer is defined and footer.logo ? footer.logo : asset('image/logfoot.png') }}"
+  style="height:270px;max-width:100%;margin-top:-33%;"
+  onerror="this.onerror=null;this.src='{{ asset('image/logfoot.png') }}';"
+>
 					</a>
 					<div class="my-3">
 						<span style="color: rgb(242, 243, 248); font-family: " open="" sans",=" " sans-serif;=" " background-color:=" " rgb(17,=" " 23,=" " 35);"="">
@@ -77,19 +81,20 @@
 						<li class="mb-2">
 							<span class="d-block opacity-30">Addresse:</span>
 							<span class="d-block opacity-70">
-								Tunisie
+								{{ footer.adresse ?? '' }}
+
 							</span>
 						</li>
 						<li class="mb-2">
 							<span class="d-block opacity-30">Téléphone:</span>
 							<span class="d-block opacity-70">
-								90256692
+								{{ footer.telephone ?? '' }}
 							</span>
 						</li>
 						<li class="mb-2">
 							<span class="d-block opacity-30">Email:</span>
 							<span class="d-block opacity-70">
-								<a href="mailto:#">salimabbessi.dev@gmail.com</a>
+								<a href="mailto:{{ footer.email ?? '' }}">{{ footer.email ?? '' }}</a>
 							</span>
 						</li>
 					</ul>
@@ -187,28 +192,19 @@
 			</div>
 			<div class="col-lg-4">
 				<ul class="list-inline my-3 my-md-0 social colored text-center">
+				
 					<li class="list-inline-item">
-						<a href="#" target="_blank">
+						<a href="{{ footer.facebook ?? '#' }}" target="_blank">
 							<img src="{{ asset ('image/facebook.png')}}" style="height: 35px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/facebook.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50">
 						</a>
 					</li>
 					<li class="list-inline-item">
-						<a href="#" target="_blank">
+						<a href="{{ footer.instagram ?? '#' }}" target="_blank">
+
 							<img src="{{ asset ('image/instagram.png')}}" style="height: 35px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/instagram.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50">
 						</a>
 					</li>
-					<li class="list-inline-item">
-						<a href="#" target="_blank">
-							<img src="{{ asset ('image/twitter.png')}}" style="height: 35px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/twitter.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50">
-
-						</a>
-					</li>
-					<li class="list-inline-item">
-						<a href="#" target="_blank">
-							<img src="{{ asset ('image/Linkidin.png')}}" style="height: 35px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/Linkidin.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50">
-
-						</a>
-					</li>
+					
 				</ul>
 			</div>
 

@@ -64,6 +64,9 @@ private ?string $photocartegrise = null;
     #[ORM\Column(length: 255)]
     private ?string $statut = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $publier = false; 
+
     /**
      * @var Collection<int, Offre>
      */
@@ -308,4 +311,15 @@ private ?string $photocartegrise = null;
 
         return $this;
     }
+
+    public function isPublier(): bool
+{
+    return $this->publier;
+}
+
+public function setPublier(bool $publier): self
+{
+    $this->publier = $publier;
+    return $this;
+}
 }

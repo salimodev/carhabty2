@@ -179,7 +179,7 @@
             </form>
         </div>
 
-       {% set annoncesDisponibles = annonces|filter(a => a.statut != 'vendu') %}
+       {% set annoncesDisponibles = annonces|filter(a => a.statut != 'vendu' and a.publier == 1 ) %}
 
 {% if annoncesDisponibles|length > 0 %}
     <div class="row g-3">

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Annonce;
+use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,15 @@ class AnnonceRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function countByUser(Users $user): int
+{
+    return (int) $this->createQueryBuilder('a')
+        ->select('COUNT(a.id)')
+        ->andWhere('a.user = :u')
+        ->setParameter('u', $user)
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
 }

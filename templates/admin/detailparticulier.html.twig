@@ -1,0 +1,328 @@
+{% extends 'layoutAdmin.html.twig' %}
+
+{% block Head %}
+    {{ parent() }}
+    {% block LinksCss %}
+        {{ parent() }}
+        <link rel="stylesheet" href="{{ asset('css/style-detail-cos.css') }}">
+              <style>
+        /* --- Styles cartes statistiques --- */
+        .stat-card {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-radius: 12px;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-height: 120px;
+            height:90%;
+             margin-bottom: 2%;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .stat-card .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: rgba(255,255,255,0.2);
+            margin-right: 15px;
+        }
+        .stat-card .stat-text .title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .stat-card .stat-text .subtitle {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        /* Couleurs spécifiques */
+        .bg-primary { background: linear-gradient(135deg,#6c5ce7,#a29bfe); }
+        .bg-success { background: linear-gradient(135deg,#00b894,#55efc4); }
+
+        /* --- Card info utilisateur --- */
+        .card-user {
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 120px;
+        }
+        .card-user .avatar-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+        .card-user .card-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .card-user p {
+            margin: 2px 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        </style>
+    {% endblock %}
+{% endblock %}
+
+{% block title %}Particulier{% endblock %}
+
+{% block page %}
+  {{ parent() }}
+<div class="px-15px px-lg-25px">
+	<div class="content container-fluid">
+
+		<div class="d-print-none pb-3">
+			<h1 class="page-header-title mb-0">Utilisateur ID #{{ particulier.id }}</h1>
+		</div>
+
+		<div
+			class="row mb-3 g-3">
+
+			<!-- Card info particulier -->
+			<div class="col-lg-4 d-flex align-items-stretch">
+				<div class="card card-user flex-fill">
+					<div class="card-header">
+						<h4 class="card-title">
+							<i class="las la-user mr-2"></i>
+							{{ particulier.nom }}</h4>
+					</div>
+					<div class="card-body d-flex align-items-center">
+						<img class="avatar-img" src="{{ particulier.photo ?: asset('image/avatar-place.png') }}" alt="Photo">
+						<div class="ms-3">
+							<p>
+								<i class="las la-mail-bulk"></i>
+								{{ particulier.email }}</p>
+							<p>
+								<i class="las la-phone"></i>
+								{{ particulier.tel1 }}</p>
+							<p>
+								<i class="las la-map-marker"></i>
+								{{ particulier.adresse }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Statistiques annonces -->
+			<div class="col-lg-8 d-flex align-items-stretch">
+				<div class="stat-card bg-primary flex-fill">
+					<div class="icon-circle">
+						<i class="las la-bullhorn"></i>
+					</div>
+					<div class="stat-text">
+						<div class="title">{{ totalAnnonces }}</div>
+						<div class="subtitle">Annonces créées</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- TABLEAU DES ANNONCES -->
+		<div class="row g-3">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="mb-0 h6">Annonces du particulier</h5>
+					</div>
+					<div class="card-body">
+						<table id="annoncestab" style="width:100%">
+							<thead>
+								<tr>
+									<th>Photo</th>
+									<th>Titre</th>
+									<th>Numéro</th>
+									<th>Prix</th>
+									<th>Date de publication</th>
+									<th>Publié</th>
+									<th>Status</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for annonce in annonces %}
+									<tr>
+										<td>
+											{% if annonce.imagePrincipale %}
+												<img src="{{ asset(annonce.imagePrincipale) }}" alt="photo annonce" style="width:80px; height:50px; object-fit:cover; border-radius:6px;
+													                    border:1px solid #25a89d; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+													                    transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 6px rgba(0,0,0,0.2)';">
+											{% else %}
+												-
+											{% endif %}
+										</td>
+										<td>{{ annonce.nom }}</td>
+										<td>{{ annonce.user.tel1 }}</td>
+										<td>{{ annonce.prix }}
+											DT</td>
+										<td>{{ annonce.dateCreation|date('d/m/Y') }}</td>
+										<td>
+											{% if annonce.statut != 'vendu'%}
+												<label class="aiz-switch aiz-switch-success mb-0">
+													<input onchange="update_prod_status(this)" value="{{ annonce.id }}" type="checkbox" id="Publier" name="Publier" {% if annonce.publier == 1 %} checked {% endif %}>
+													<span class="slider round"></span>
+												</label>
+											{% endif %}
+										</td>
+
+										<td>
+											{% if annonce.statut == 'en_attente' %}
+												<span class="badge badge-inline badge-warning">en attente</span>
+											{% elseif annonce.statut == 'publié' %}
+												<span class="badge badge-inline badge-primary ">publié</span>
+											{% elseif annonce.statut == 'vendu' %}
+												<span class="badge badge-inline badge-success">Vendue</span>
+											{% endif %}
+										</td>
+
+										<td class="text-right">
+											{% if annonce.statut == 'publié' or annonce.statut == 'vendu'  %}
+												<a href="javascript:void(0)" onclick="toggleVendu({{ annonce.id }})" class="btn btn-soft-success btn-icon btn-circle btn-sm" title="{{ annonce.statut == 'vendu' ? 'Marquer comme non vendu' : 'Marquer comme vendu' }}" id="btn-vendu-{{ annonce.id }}">
+													{% if annonce.statut == 'vendu' %}
+														<i class="las la-undo-alt"></i>
+													{% else %}
+														<i class="las la-check-circle"></i>
+													{% endif %}
+												</a>
+											{% endif %}
+
+											<a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{ path('detail_annonce_admin', {'id': annonce.id}) }}" title="Voir">
+												<i class="las la-eye"></i>
+											</a>
+
+
+											<a onclick="supprimerAnnonce($(this),'{{ annonce.id }}');" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Supprimer">
+												<i class="las la-trash"></i>
+											</a>
+										</td>
+								
+								{% endfor %}
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+<script>
+$(document).ready(function() {
+    $('#annoncestab').DataTable({
+        language: { "url": 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json' },
+        responsive: true
+    });
+});
+
+function supprimerAnnonce(element, $id) {
+     id = parseInt($id);
+$_data = {
+'id': $id
+},
+Swal.fire({
+title: 'Êtes-vous sûr de vouloir supprimer cette annonces ?',
+type: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#25a89d ',
+cancelButtonColor: '#ff6b35',
+confirmButtonText: 'Supprimer',
+cancelButtonText: 'Annuler'
+}).then((result) => {
+if (result.value) {
+$.ajax({
+type: "POST",
+url: "{{ path('admin_supprimer_annonce') }}",
+data: $_data,
+success: function (response) {
+element.parent().remove();
+Swal.fire({title: "success!", text: "la  marque à été supprimer avec succés!", icon: "success"});
+
+
+location.reload();
+}
+});
+}
+})
+}
+
+
+
+function update_prod_status(element) {
+
+    let id = element.value;
+    let publier = element.checked ? 1 : 0;
+
+    $.ajax({
+        type: "POST",
+        url: "{{ path('admin_update_publier_annonce') }}",
+        data: {
+            id: id,
+            publier: publier
+        },
+        success: function (response) {
+            Swal.fire({
+                title: "Succès",
+                text: "Le statut de l’annonce a été mis à jour avec succès.",
+                icon: "success",
+                confirmButtonText: "OK"
+            }).then(() => {
+                // Recharge la page pour afficher le nouveau statut
+                location.reload();
+            });
+        },
+        error: function () {
+            Swal.fire({
+                title: "Erreur",
+                text: "Une erreur s’est produite lors de la mise à jour.",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        }
+    });
+}
+
+function toggleVendu(id) {
+    $.ajax({
+        type: "POST",
+        url: "{{ path('admin_update_statut_annonce') }}",
+        data: { id: id },
+        success: function (response) {
+
+            Swal.fire({
+                title: "Succès",
+                text: response.message,
+                icon: "success"
+            }).then(() => {
+                // 🔄 Recharge la page après validation de l’alerte
+                location.reload();
+            });
+        },
+        error: function () {
+            Swal.fire({
+                title: "Erreur",
+                text: "Une erreur s’est produite.",
+                icon: "error"
+            });
+        }
+    });
+}
+
+
+</script>
+{% endblock %}

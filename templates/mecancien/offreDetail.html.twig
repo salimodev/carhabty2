@@ -154,6 +154,7 @@
                                         <table class="table-borderless table">
                                             <tbody>
                                                 <tr><td class="w-50 fw-600">Numéro de l'offre:</td><td>{{ offre.numeroOffre }}</td></tr>
+                                                <tr><td class="w-50 fw-600">Numéro de l'offreur:</td><td>{{ offre.user.tel1 }}</td></tr>
                                                 <tr><td class="w-50 fw-600">Date de création:</td><td>{{ offre.createdAt|date('d/m/Y H:i') }}</td></tr>
                                                 <tr><td class="w-50 fw-600">Observation:</td><td>{{ offre.observation ?: 'Aucune observation.' }}</td></tr>
                                                 <tr>
@@ -192,7 +193,25 @@
                                         <table class="table-borderless table">
                                             <tbody>
                                                 <tr><td class="w-50 fw-600">Demande associée:</td><td>{{ offre.demande.code }}</td></tr>
-                                                <tr><td class="w-50 fw-600">Propriétaire:</td><td>{{ offre.demande.offrecompte.nom ~ ' ' ~ offre.demande.offrecompte.prenom }}</td></tr>
+                                                <tr>
+    <td class="w-50 fw-600">Nom de demandeur:</td>
+    <td>
+        {% if offre.demande.offrecompte %}
+            {{ offre.demande.offrecompte.nom ~ ' ' ~ offre.demande.offrecompte.prenom }}
+        {% else %}
+            Non renseigné
+        {% endif %}
+    </td>
+</tr>
+<td class="w-50 fw-600">Email de demandeur:</td>
+    <td>
+        {% if offre.demande.offreemail %}
+            {{ offre.demande.offreemail }}
+        {% else %}
+            Non renseigné
+        {% endif %}
+    </td>
+</tr>
                                                 <tr><td class="w-50 fw-600">Zone de livraison:</td><td>{{ offre.demande.zone }}</td></tr>
                                             </tbody>
                                         </table>

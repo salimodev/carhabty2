@@ -6,7 +6,9 @@ use App\Entity\Annonce;
 use App\Entity\Message;
 use App\Entity\Users;
 use App\Service\UsersService;
+use App\Service\SendMailService;
 use App\Entity\Notification;
+use App\Entity\Pieces;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -24,6 +26,10 @@ use App\Repository\NotificationRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
 
 
 final class ParticulierController extends AbstractController
@@ -181,7 +187,7 @@ public function mesannonces(Request $request, EntityManagerInterface $em, Pagina
 
 
    #[Route('/particulier/annonces/add', name: 'Ajouter_annonces_particulier', methods: ['POST'])]
-public function ajout_ann_part(Request $request, EntityManagerInterface $em): Response
+public function ajout_ann_part(Request $request, EntityManagerInterface $em, MailerInterface $mailer, SendMailService $mail,): Response
 {
     // Vérifier si l'utilisateur est connecté
     $user = $this->getUser();
@@ -228,6 +234,23 @@ public function ajout_ann_part(Request $request, EntityManagerInterface $em): Re
     $em->persist($annonce);
     $em->flush();
 
+
+      // 📧 Envoi du mail de creation annonce
+        $context = [
+    'user' => $user,
+    'annonce' => $annonce
+];
+
+        $mail->sendannonce(
+            'salimabbessi.dev@gmail.com',
+            $user->getEmail(),
+            'Votre annonce a été créée',
+            'annonce',
+            $context
+        );
+
+
+
     return new JsonResponse(['success' => true, 'id' => $annonce->getId()]);
 }
 
@@ -236,15 +259,19 @@ public function ajout_ann_part(Request $request, EntityManagerInterface $em): Re
  #[Route('/particulier/annonces/modifier/{id}', name: 'modifier_annonce', methods: ['GET'])]
 public function afficherFormModifier(Annonce $annonce): Response
 {
-    // Benutzer darf nur seine eigene Anzeige bearbeiten
-    if (!$this->isGranted('ROLE_PARTICULIER') || $annonce->getUser() !== $this->getUser()) {
-        throw $this->createAccessDeniedException("Sie können diese Anzeige nicht bearbeiten.");
+    // 1. Vérifier que l'utilisateur est connecté
+    $this->denyAccessUnlessGranted('ROLE_PARTICULIER');
+
+    // 2. Vérifier que l'annonce appartient à l'utilisateur connecté
+    if ($annonce->getUser() !== $this->getUser()) {
+        throw $this->createAccessDeniedException("Vous n'avez pas le droit de modifier cette annonce.");
     }
 
     return $this->render('particulier/modifierAnnonce.html.twig', [
         'annonce' => $annonce
     ]);
 }
+
 
 
 #[Route('/particulier/annonces/modifier/{id}', name: 'modifier_annonce_ajax', methods: ['POST'])]
@@ -326,15 +353,21 @@ public function message(
     UsersRepository $usersRepo,
     MessageRepository $messageRepo
 ) {
+    // Vérifier que l'utilisateur est connecté
     $sender = $this->getUser();
-    $receiver = $usersRepo->find($receiverId);
-
-    if (!$receiver) {
-        throw $this->createNotFoundException('Utilisateur non trouvé');
+    if (!$sender) {
+        throw $this->createAccessDeniedException("Vous devez être connecté pour accéder à la messagerie.");
     }
 
+    // Récupération du destinataire
+    $receiver = $usersRepo->find($receiverId);
+    if (!$receiver) {
+        throw $this->createNotFoundException("Utilisateur non trouvé.");
+    }
+
+   
     // ---------------------------
-    // Liste des utilisateurs avec lesquels on a échangé des messages
+    // Liste des conversations
     // ---------------------------
     $allMessages = $messageRepo->createQueryBuilder('m')
         ->where('m.receiver = :me OR m.sender = :me')
@@ -345,10 +378,10 @@ public function message(
 
     $usersWithMessages = [];
     foreach ($allMessages as $msg) {
-        // Identifier l'autre utilisateur dans la conversation
-        $otherUser = $msg->getSender()->getId() === $sender->getId() ? $msg->getReceiver() : $msg->getSender();
+        $otherUser = $msg->getSender()->getId() === $sender->getId()
+            ? $msg->getReceiver()
+            : $msg->getSender();
 
-        // On ne garde que le dernier message par utilisateur
         if (!isset($usersWithMessages[$otherUser->getId()])) {
             $usersWithMessages[$otherUser->getId()] = [
                 'user' => $otherUser,
@@ -356,23 +389,38 @@ public function message(
             ];
         }
     }
-
     $usersWithMessages = array_values($usersWithMessages);
 
     // ---------------------------
     // Envoi d’un message
     // ---------------------------
     if ($request->isMethod('POST')) {
-        $content = $request->request->get('content');
+        $content = trim($request->request->get('content'));
+
+        if (empty($content)) {
+            return $this->json(['success' => false, 'message' => 'Message vide interdit.']);
+        }
+        $annoncephoto = $request->request->get('pieceImage');
+        $annonceId = $request->request->get('annonceId'); // nouvel input
+       
+
+
+
 
         $message = new Message();
         $message->setSender($sender);
         $message->setReceiver($receiver);
         $message->setContent($content);
         $message->setCreatedAt(new \DateTimeImmutable());
-        // Définir isRead à false pour un message nouvellement envoyé
-    $message->setIsRead(false);
-
+        $message->setIsRead(false);
+        $message->setPhoto($annoncephoto);
+ // Assigner l'annonce si elle existe
+    if ($annonceId) {
+        $annonce = $em->getRepository(Annonce::class)->find($annonceId);
+        if ($annonce) {
+            $message->setAnnonce($annonce);
+        }
+    }
         $em->persist($message);
         $em->flush();
 
@@ -380,9 +428,11 @@ public function message(
     }
 
     // ---------------------------
-    // Charger la conversation entre sender et receiver
+    // Charger la conversation
     // ---------------------------
     $messages = $messageRepo->findConversation($sender, $receiver);
+
+  
 
     return $this->render('particulier/message.html.twig', [
         'messages' => $messages,
@@ -406,7 +456,6 @@ public function getMessages(
 
     $messages = $messageRepo->findConversation($sender, $receiver);
 
-    // Transformer les messages en format JSON
     $data = [];
     foreach ($messages as $msg) {
         $data[] = [
@@ -415,11 +464,14 @@ public function getMessages(
             'senderId' => $msg->getSender()->getId(),
             'receiverId' => $msg->getReceiver()->getId(),
             'createdAt' => $msg->getCreatedAt()->format('Y-m-d H:i'),
+            'photo' => $msg->getPhoto(), // URL Cloudinary complète
+            'annonceId' => $msg->getAnnonce()?->getId()
         ];
     }
 
     return $this->json(['messages' => $data]);
 }
+
 
 
 #[Route('/particulier/mark-as-read/{senderId}', name: 'mark_as_read', methods: ['POST'])]

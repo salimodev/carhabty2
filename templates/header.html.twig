@@ -9,18 +9,18 @@
 						<a href="tel:+216 90256692" class="text-reset d-inline-block opacity-100 py-2" style="color:#fff !important">
 							<i class="la la-phone"></i>
 							<span>
-								Contactez-nous : +216 90 256 692</span>
+								Contactez-nous : +216 {{ footer.telephone ?? '' }}</span>
 						</a>
 					</li>
 					<div class="col-lg-4">
 						<ul class="list-inline my-3 my-md-0 social colored text-center">
 							<li class="list-inline-item">
-								<a href="#" target="_blank">
+								<a href="{{ footer.facebook ?? '#' }}" target="_blank">
 									<img src="{{ asset ('image/facebook.png')}}" style="height: 25px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/facebook.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50">
 								</a>
 							</li>
 							<li class="list-inline-item">
-								<a href="#" target="_blank">
+								<a href="{{ footer.instagram ?? '#' }}" target="_blank">
 									<img src="{{ asset ('image/instagram.png')}}" style="height: 25px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='image/instagram.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50">
 								</a>
 							</li>
@@ -39,7 +39,7 @@
 		<div class="container">
 			<div class="d-flex align-items-center">
 				<div class="col-auto col-xl-3 pl-0 pr-3 d-flex align-items-center" style="height: 100px;">
-					<a class="d-block py-10px mr-3 ml-0" href="/"><img src="{{ asset ('image/blanclogo.png')}}" style="height: 283px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='/image/blanclogo.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50"></a>
+					<a class="d-block py-10px mr-3 ml-0" href="/"><img  src="{{ footer is defined and footer.logoheader ? footer.logoheader : asset('image/blanclogo.png') }}" style="height: 283px;max-width:100% !important;position:relative;z-index:1;" onerror="this.onerror=null;this.src='/image/blanclogo.png';style='height: 50px;max-width:100% !important'" alt="essayara" height="50"></a>
 				</div>
 				<div class="d-lg-none ml-auto mr-0">
 					<a class="p-2 d-block text-reset" href="javascript:void(0);" data-toggle="class-toggle" data-target=".front-header-search">

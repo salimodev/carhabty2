@@ -83,12 +83,14 @@
 													<tr>
 														<td class="w-50 fw-600">Statut:</td>
 														<td>
-															{% if demande.statut == 'ouvert' %}
-																<span class="badge badge-inline badge-success">ouvert</span>
-															{% elseif demande.statut == 'fermé' %}
-																<span class="badge badge-inline badge-danger">fermé</span>
-															{% endif %}
-														</td>
+                                        {% if demande.statut == 'en_attente' %}
+                                            <span class="badge badge-inline badge-warning">en attente</span>
+                                             {% elseif demande.statut == 'publié' %}
+                                              <span class="badge badge-inline badge-primary ">publié</span>
+                                        {% elseif demande.statut == 'fermer' %}
+                                            <span class="badge badge-inline badge-success">Servue</span>
+                                        {% endif %}
+                                    </td>
 													</tr>
 													<tr>
 														<td class="w-50 fw-600">Photo carte grise:</td>
@@ -114,7 +116,7 @@
 								<div class="col-md-12">
 									<div class="card">
 										<div class="card-header">
-											<h5 class="h6 mb-0">Détails de la demande</h5>
+											<h5 class="mb-0">Pièces demandées</h5>
 										</div>
 										<div class="card-body">
 											<div id="tab_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">

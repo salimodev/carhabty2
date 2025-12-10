@@ -1,0 +1,403 @@
+{% extends 'layoutAdmin.html.twig' %}
+
+{% block Head %}
+    {{ parent() }}
+    {% block LinksCss %}
+        {{ parent() }}
+        <link rel="stylesheet" href="{{ asset('css/style-detail-cos.css') }}">
+        <style>
+        /* --- Styles cartes statistiques --- */
+        .stat-card {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-radius: 12px;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-height: 120px;
+            height:90%;
+             margin-bottom: 2%;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .stat-card .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: rgba(255,255,255,0.2);
+            margin-right: 15px;
+        }
+        .stat-card .stat-text .title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .stat-card .stat-text .subtitle {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        /* Couleurs spécifiques */
+        .bg-primary { background: linear-gradient(135deg,#6c5ce7,#a29bfe); }
+        .bg-success { background: linear-gradient(135deg,#00b894,#55efc4); }
+
+        /* --- Card info utilisateur --- */
+        .card-user {
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 120px;
+        }
+        .card-user .avatar-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+        .card-user .card-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .card-user p {
+            margin: 2px 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        </style>
+    {% endblock %}
+{% endblock %}
+
+{% block title %}Mécanicien{% endblock %}
+{% block loader %}{{ parent() }}{% endblock %}
+{% block sidebar %}{{ parent() }}{% endblock %}
+
+{% block page %}
+{{ parent() }}
+
+<div class="px-15px px-lg-25px">
+    <div class="content container-fluid">
+
+        <div class="d-print-none pb-3">
+            <h1 class="page-header-title mb-0">Utilisateur ID #{{ vendeur.id }}</h1>
+        </div>
+
+        <!-- STATISTIQUES + INFO MECANICIEN -->
+        <div class="row mb-3 g-3">
+
+           
+
+            <!-- Card info mécanicien -->
+            <div class="col-lg-4 d-flex align-items-stretch">
+                <div class="card card-user flex-fill">
+                    <div class="card-header">
+                        <h4 class="card-title"><i class="las la-user mr-2"></i>{{ vendeur.nom }}</h4>
+                    </div>
+                    <div class="card-body d-flex align-items-center">
+                        <img class="avatar-img" src="{{ vendeur.photo ?: asset('image/avatar-place.png') }}" alt="Photo">
+                        <div class="ms-3">
+                            <p><i class="las la-mail-bulk"></i> {{ vendeur.email }}</p>
+                            <p><i class="las la-phone"></i> {{ vendeur.tel1 }}</p>
+                            <p><i class="las la-map-marker"></i> {{ vendeur.adresse }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Cartes statistiques -->
+            <div class="col-lg-8 d-flex align-items-stretch">
+                <div class="row g-3 flex-fill">
+                    <div class="col-md-6">
+                        <div class="stat-card bg-primary ">
+                            <div class="icon-circle">
+                                <i class="las la-clipboard-list"></i>
+                            </div>
+                            <div class="stat-text">
+                                <div class="title">{{totalDemandes}}</div>
+                                <div class="subtitle">Demandes dans le même zone</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="stat-card bg-success">
+                            <div class="icon-circle">
+                                <i class="las la-hand-holding-usd"></i>
+                            </div>
+                            <div class="stat-text">
+                                <div class="title">{{totalOffres}}</div>
+                                <div class="subtitle">Offres envoyer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TABLEAUX DEMANDES & OFFRES -->
+        <div class="row g-3">
+            <div class="col-12">
+                <!-- TABLEAU DES DEMANDES -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0 h6">Demandes dans le même zone</h5>
+                    </div>
+                    <div class="card-body">
+                        <table id="mechantab" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Marque</th>
+                                    <th>Modèle</th>
+                                    <th>N° Châssis</th>
+                                    <th>Énergie</th>
+                                    <th>État moteur</th>
+                                    <th>Zone</th>
+                                    <th>Date</th>
+                                    <th>publié</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for demande in demandesneuf %}
+                                <tr>
+                                    <td><a href="{{ path('detail_demande_admin', {'id': demande.id}) }}">{{ demande.code }}</a></td>
+                                    <td>{{ demande.marque }}</td>
+                                    <td>{{ demande.modele }}</td>
+                                    <td>{{ demande.chassis }}</td>
+                                    <td>{{ demande.energie }}</td>
+                                    <td>{{ demande.etatmoteur }}</td>
+                                     <td>{{ demande.zone }}</td>
+                                    <td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
+                                     <td>
+                                   {% if demande.statut != 'fermer' %}
+    <label class="aiz-switch aiz-switch-success mb-0">
+        <input onchange="updateDemandePublier(this)" 
+               value="{{ demande.id }}" 
+               type="checkbox" 
+               id="Publier" 
+               name="Publier"
+               {% if demande.publier == 1 %} checked {% endif %}>
+        <span class="slider round"></span>
+    </label>
+     {% endif %}
+</td>
+                                    <td>
+                                        {% if demande.statut == 'en_attente' %}
+                                            <span class="badge badge-inline badge-warning">en attente</span>
+                                             {% elseif demande.statut == 'publié' %}
+                                              <span class="badge badge-inline badge-primary ">publié</span>
+                                        {% elseif demande.statut == 'fermer' %}
+                                            <span class="badge badge-inline badge-success">Servue</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-right">
+                                    
+                                                           {% if demande.statut == 'fermer' or demande.statut == 'publié' %}
+    <a href="javascript:void(0);"
+       onclick="toggleServue({{ demande.id }})"
+       class="btn btn-soft-success btn-icon btn-circle btn-sm"
+       title="{{ demande.statut == 'fermer' ? 'Marquer comme non servue' : 'Marquer comme servue' }}"
+       id="btn-servue-{{ demande.id }}">
+        {% if demande.statut == 'fermer' %}
+        <i class="las la-undo-alt"></i>
+            {# Servue #}
+        {% else %}
+            <i class="las la-check-circle"></i>  {# Non servue #}
+        {% endif %}
+    </a>
+{% endif %}
+                                        <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{ path('detail_demande_admin', {'id': demande.id}) }}" title="Voir">
+                                            <i class="las la-eye"></i>
+                                        </a>
+                                        <a onclick="supprimerdemande($(this),'{{ demande.id }}');" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Supprimer">
+                                            <i class="las la-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TABLEAU DES OFFRES REÇUES -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0 h6">Offres envoyer</h5>
+                    </div>
+                    <div class="card-body">
+                        <table id="offrestab" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>N° de demande</th>
+                                    <th>Date de demande</th>
+                                    <th>Marque</th>
+                                    <th>Modèle</th>
+                                    <th>Offreur</th>
+                                    <th>Offre N°</th>
+                                    <th>Validité</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              
+                                    {% for offre in offres %}
+                                    <tr>
+                                        <td><a href="{{ path('detail_demande_admin', {'id': offre.demande.id}) }}">{{ offre.demande.code }}</a></td>
+                                        <td>{{ offre.demande.datecreate|date('d/m/Y') }}</td>
+                                        <td>{{ offre.demande.marque }}</td>
+                                        <td>{{ offre.demande.modele }}</td>
+                                        <td>{{ offre.user.nom ~ ' ' ~ offre.user.prenom }}</td>
+                                        <td>{{ offre.numeroOffre }}</td>
+                                        <td>
+                                            {% if offre.validiteDebut and offre.validiteFin %}
+                                                {% set diff = offre.validiteFin.timestamp - offre.validiteDebut.timestamp %}
+                                                {% set jours = (diff / 86400)|round(0, 'floor') %}
+                                                {{ jours }} jour{{ jours > 1 ? 's' : '' }}
+                                            {% else %}
+                                                <span class="text-muted">Non définie</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if offre.status == 'acceptee' %}
+                                                <span class="badge badge-inline badge-success">Acceptée</span>
+                                            {% elseif offre.status == 'refusee' %}
+                                                <span class="badge badge-inline badge-danger">Refusée</span>
+                                            {% else %}
+                                                <span class="badge badge-inline badge-warning text-dark">En attente</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-right">
+                                            <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{ path('detail_offre_admin', {'id': offre.id}) }}" title="Voir">
+                                                <i class="las la-eye"></i>
+                                            </a>
+                                          
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+<script>
+$(document).ready(function() {
+    $('#mechantab').DataTable({
+        language: { "url": 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json' },
+        responsive: true
+    });
+    $('#offrestab').DataTable({
+       language: { "url": 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json' },
+        responsive: true
+    });
+
+});
+
+
+function supprimerdemande(element, $id) {
+     id = parseInt($id);
+$_data = {
+'id': $id
+},
+Swal.fire({
+title: 'Êtes-vous sûr de vouloir supprimer cette demande ?',
+type: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#25a89d ',
+cancelButtonColor: '#ff6b35',
+confirmButtonText: 'Supprimer',
+cancelButtonText: 'Annuler'
+}).then((result) => {
+if (result.value) {
+$.ajax({
+type: "POST",
+url: "{{ path('admin_supprimer_demande') }}",
+data: $_data,
+success: function (response) {
+element.parent().remove();
+Swal.fire({title: "success!", text: "la  marque à été supprimer avec succés!", icon: "success"});
+
+
+location.reload();
+}
+});
+}
+})
+}
+
+
+function updateDemandePublier(element) {
+    let id = element.value;
+    let publier = element.checked ? 1 : 0;
+
+    $.ajax({
+        type: "POST",
+        url: "{{ path('admin_update_publier_demande') }}",
+        data: { id: id, publier: publier },
+        success: function(response) {
+            Swal.fire({
+                title: "Succès",
+                text: response.message,
+                icon: "success"
+            }).then(() => {
+                location.reload(); // recharge la page pour voir le changement
+            });
+        },
+        error: function() {
+            Swal.fire({
+                title: "Erreur",
+                text: "Une erreur s’est produite",
+                icon: "error"
+            });
+        }
+    });
+}
+
+
+function toggleServue(id) {
+    $.ajax({
+        type: "POST",
+        url: "{{ path('admin_toggle_servue') }}",
+        data: { id: id },
+        success: function (response) {
+            Swal.fire({
+                title: "Succès",
+                text: response.message,
+                icon: "success"
+            }).then(() => {
+                // 🔄 Recharger la page pour voir les changements
+                location.reload();
+            });
+        },
+        error: function () {
+            Swal.fire({
+                title: "Erreur",
+                text: "Une erreur s’est produite.",
+                icon: "error"
+            });
+        }
+    });
+}
+
+</script>
+{% endblock %}

@@ -370,10 +370,12 @@ function envoyerdemande() {
             html += "<div class='card shadow-sm border-0 rounded'>";
             html += "<div class='card-body'>";
             html += "<div class='text-center py-4 mb-4'>";
-            html += "<i class='la la-check-circle la-3x text-success mb-3'></i>";
+            html += "<i class='la la-check-circle la-3x text-success mb-3' style='font-size: 78px;'></i>";
             html += "<h1 class='h3 mb-3 fw-600'>Merci pour votre demande !</h1>";
             html += "<h2 class='h5'>Code de demande : <span class='fw-700 text-primary'>" + response.code + "</span></h2>";
-            html += "<p class='opacity-70 font-italic'>Un e-mail de confirmation de votre demande a été envoyé à " + response.reception + "</p>";
+            html += "<p class='opacity-70 font-italic'>Un e-mail de confirmation a été envoyé à <strong>" + response.reception + "</strong>.</p>";
+            html += "<p class='opacity-70 font-italic'>Votre demande sera vérifiée et publiée par l’administrateur dans un délai maximum de 24 heures.</p>";
+            
             html += "</div>";
 
            html += "<div class='mb-4'>";

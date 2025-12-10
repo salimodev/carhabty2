@@ -57,4 +57,40 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
     //            ->getOneOrNullResult()
     //        ;
     //    }
+   
+public function countRole(string $role): int
+{
+    $conn = $this->getEntityManager()->getConnection();
+
+    $sql = 'SELECT COUNT(*) AS total FROM users WHERE JSON_CONTAINS(roles, :role)';
+    $stmt = $conn->prepare($sql);
+    $result = $stmt->executeQuery(['role' => '"' . $role . '"']);
+    $data = $result->fetchAssociative();
+
+    return (int) $data['total'];
+}
+public function findByRole(string $role): array
+{
+    return $this->createQueryBuilder('u')
+        ->where('u.roles LIKE :role')
+        ->setParameter('role', '%"'.$role.'"%') // le rôle est stocké en JSON
+        ->orderBy('u.id', 'DESC')
+        ->getQuery()
+        ->getResult();
+}
+
+public function countDemandesForMecanicien(int $mecanicienId): int
+{
+    return $this->getEntityManager()->createQuery("
+        SELECT COUNT(DISTINCT d.id)
+        FROM App\Entity\Demande d
+        JOIN d.offres o
+        WHERE o.user = :mec
+    ")
+    ->setParameter('mec', $mecanicienId)
+    ->getSingleScalarResult();
+}
+
+
+
 }

@@ -76,7 +76,13 @@
                             <tbody>
                                 <tr><td class="w-50 fw-600">Date de demande:</td><td>{{ demande.datecreate|date('d/m/Y H:i') }}</td></tr>
                                 <tr><td class="w-50 fw-600">Statut:</td>
-                                    <td>{% if demande.statut=='ouvert' %}<span class="badge badge-inline badge-success">ouvert</span>{% else %}<span class="badge badge-inline badge-danger">fermé</span>{% endif %}</td>
+                                    <td>{% if demande.statut == 'en_attente' %}
+                                            <span class="badge badge-inline badge-warning">en attente</span>
+                                             {% elseif demande.statut == 'publié' %}
+                                              <span class="badge badge-inline badge-info ">publié</span>
+                                        {% elseif demande.statut == 'fermer' %}
+                                            <span class="badge badge-inline badge-success">Servue</span>
+                                        {% endif %}</td>
                                 </tr>
                                 <tr><td class="w-50 fw-600">Photo carte grise:</td><td>{% if demande.photocartegrise %}
     <img src="{{ demande.photocartegrise }}" 
@@ -130,7 +136,7 @@
                     Proposer un prix
                 </button>
             {% else %}
-                <form action="{{ path('propose_offre', {'id': demande.id}) }}" class="d-inline">
+                <form action="{{ path('propose_offre', {'code': demande.code}) }}" class="d-inline">
                     <button type="submit" class="btn btn-primary rounded-pill shadow-sm"
                             style="background: linear-gradient(90deg,#007bff,#00c6ff); border:none; font-weight:600; width:200px;">
                         Proposer un prix

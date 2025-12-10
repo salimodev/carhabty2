@@ -1,0 +1,189 @@
+{% extends 'layoutAdmin.html.twig' %}
+
+{% block Head %}
+    {{ parent() }}
+    {% block LinksCss %}
+        {{ parent() }}
+        <style>
+            div.dataTables_wrapper div.dataTables_filter input {
+                margin-left: 0.5em !important;
+                display: inline-block;
+                width: 170px;
+            }
+        </style>
+    {% endblock %}
+{% endblock %}
+
+{% block title %}Liste des propriétaires{% endblock %}
+{% block loader %} {{ parent() }} {% endblock %}
+{% block sidebar %} {{ parent() }} {% endblock %}
+
+{% block page %}
+ {{ parent() }}
+<div class="px-15px px-lg-25px">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">Liste des propriétaires</h5>
+                </div>
+
+                <div class="card-body">
+                    <table id="users-table" class="display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Photo</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                
+                                <th>date d'inscription</th>
+                                <th>Nombre de Demandes</th>
+                                <th>Rôle</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>
+                                    <span class="avatar avatar-sm">
+                                        <img 
+                                            src="{{ user.photo ? asset(user.photo) : asset('image/avatar-place.png') }}"
+                                            onerror="this.onerror=null;this.src='{{ asset('image/avatar-place.png') }}';"
+                                            class="h-50px"
+                                            alt="photo">
+                                    </span>
+                                </td>
+                                <td>{{ user.nom }}</td>
+                                <td>{{ user.prenom }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.tel1 }}</td>
+                                
+                                <td>{{ user.dateInscription ? user.dateInscription|date('d/m/Y H:i') : '' }}</td>
+
+<td>{{ user.nbDemandes ?? 0 }}</td>
+<td>
+                                    {% for role in user.roles %}
+                                        {% if role != 'ROLE_ADMIN' and role != 'ROLE_USER' %}
+                                            {% set roleName = role == 'ROLE_PROPRIETAIRE' ? 'Propriétaire' : role %}
+                                            {% set badgeClass = role == 'ROLE_PROPRIETAIRE' ? 'badge badge-inline bg-warning text-dark' : 'badge badge-inline bg-light text-dark' %}
+                                            <span class="{{ badgeClass }}">{{ roleName }}</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+<td>
+   {% if not user.isBlocked %}
+        <span class="badge badge-inline bg-success">Actif</span>
+    {% else %}
+        <span class="badge badge-inline bg-danger">Bloqué</span>
+    {% endif %}
+</td>
+                                <td>
+                                    <!-- Voir le détail du mécanicien -->
+<a class="btn btn-soft-primary btn-icon btn-circle btn-sm" 
+   href="{{ path('admin_mecanicien_detail', {'id': user.id}) }}" 
+   title="Voir">
+    <i class="las la-eye"></i>
+</a>
+
+                                    {% if not user.isBlocked %}
+                                        <a class="btn btn-soft-warning btn-icon btn-circle btn-sm"
+                                           onclick="bloqueClient('{{ user.id }}')"
+                                           title="Bloquer">
+                                            <i class="las la-user-alt"></i>
+                                        </a>
+                                    {% else %}
+                                        <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
+                                           onclick="debloqueClient('{{ user.id }}')"
+                                           title="Débloquer">
+                                            <i class="las la-user-alt-slash"></i>
+                                        </a>
+                                    {% endif %}
+
+                                      {% if user.nbDemandes == 0 %}
+        <a class="btn btn-soft-danger btn-icon btn-circle btn-sm"
+           onclick="supprimercostumer('{{ user.id }}')"
+           title="Supprimer">
+            <i class="las la-trash"></i>
+        </a>
+    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#users-table').DataTable({
+        language: { "url": 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'},
+        responsive: true
+    });
+});
+
+// Routes spécifiques aux propriétaires
+function supprimercostumer(id) {
+    Swal.fire({
+        title: 'Supprimer cet utilisateur ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#f62718',
+        confirmButtonText: 'Supprimer',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.value) {
+            window.location.href = "{{ path('admin_users_delete_proprietaire', {'id':'ID'}) }}".replace('ID', id);
+        }
+    })
+}
+
+function bloqueClient(id) {
+    Swal.fire({
+        title: 'Voulez-vous bloquer cet utilisateur ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#f62718',
+        confirmButtonText: 'Bloquer',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.value) {
+            window.location.href = "{{ path('admin_users_toggle_block_proprietaire', {'id':'ID'}) }}".replace('ID', id);
+        }
+    })
+}
+
+function debloqueClient(id) {
+    Swal.fire({
+        title: 'Voulez-vous débloquer cet utilisateur ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#f62718',
+        confirmButtonText: 'Débloquer',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.value) {
+            window.location.href = "{{ path('admin_users_toggle_block_proprietaire', {'id':'ID'}) }}".replace('ID', id);
+        }
+    })
+}
+</script>
+{% endblock %}

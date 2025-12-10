@@ -57,7 +57,7 @@
         {% for offre in offres %}
             <tr>
                 <td>
-                    <a href="{{ path('detail_demande', {'id': offre.demande.id}) }}">
+                    <a href="{{ path('detail_demande', {'code': offre.demande.code}) }}">
                         {{ offre.demande.code }}
                     </a>
                 </td>
@@ -89,7 +89,7 @@
                 </td>
                <td class="text-right">
     <a class="btn btn-soft-info btn-icon btn-circle btn-sm"
-       href="{{ path('offre_show_prop', {'id': offre.id}) }}" 
+       href="{{ path('offre_show_prop', {'numeroOffre': offre.numeroOffre}) }}" 
        title="Voir">
         <i class="las la-eye"></i>
     </a>

@@ -21,7 +21,7 @@
                 Modifier l'offre pour la demande {{ demande.code }}
             </h3>
 
-            <form id="formOffre" method="POST" action="{{ path('offre_edit', {'id': offre.id}) }}">
+            <form id="formOffre" method="POST" action="{{ path('offre_edit', {'numeroOffre': offre.numeroOffre}) }}">
                 {% for piece in demande.pieces %}
                     {# Récupérer l'OffrePiece correspondant à cette pièce #}
                     {% set offrePiece = null %}

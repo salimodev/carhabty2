@@ -53,6 +53,14 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $resetToken = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isBlocked = false;
+
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $date_inscription;
+
+   
+
     /**
      * @var Collection<int, Demande>
      */
@@ -93,6 +101,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->notifications = new ArrayCollection();
         $this->annonces = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        // Initialiser la date d'inscription automatiquement à la création
+        $this->date_inscription = new \DateTime();
     }
 
     public function getId(): ?int
@@ -396,6 +406,30 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
             }
         }
 
+        return $this;
+    }
+
+    public function isBlocked(): bool
+{
+    return $this->isBlocked;
+}
+
+public function setIsBlocked(bool $isBlocked): self
+{
+    $this->isBlocked = $isBlocked;
+    return $this;
+}
+
+ // getter pour date_inscription
+    public function getDateInscription(): \DateTimeInterface
+    {
+        return $this->date_inscription;
+    }
+
+    // setter optionnel si tu veux pouvoir modifier manuellement
+    public function setDateInscription(\DateTimeInterface $date_inscription): self
+    {
+        $this->date_inscription = $date_inscription;
         return $this;
     }
 }

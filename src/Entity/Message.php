@@ -31,6 +31,13 @@ class Message
     #[ORM\Column]
     private ?bool $isRead = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
+
+    #[ORM\ManyToOne(targetEntity: Annonce::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Annonce $annonce = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,4 +102,27 @@ class Message
 
         return $this;
     }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): static
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getAnnonce(): ?Annonce
+{
+    return $this->annonce;
+}
+
+public function setAnnonce(?Annonce $annonce): self
+{
+    $this->annonce = $annonce;
+    return $this;
+}
 }

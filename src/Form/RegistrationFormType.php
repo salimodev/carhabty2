@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType; 
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class RegistrationFormType extends AbstractType
 {
@@ -64,8 +65,35 @@ class RegistrationFormType extends AbstractType
     'label'    => false,
     'mapped'   => false, 
 ])
-            ->add('tel1', null, array('label'=>false))
-            ->add('tel2', null, array('label'=>false))
+            ->add('tel1', null, [
+    'label' => false,
+    'constraints' => [
+        new Assert\Length([
+            'min' => 8,
+            'max' => 8,
+            'exactMessage' => 'Le numéro de téléphone doit contenir exactement {{ limit }} chiffres.',
+        ]),
+        new Assert\Regex([
+            'pattern' => '/^[0-9]+$/',
+            'message' => 'Le numéro de téléphone doit contenir uniquement des chiffres.',
+        ]),
+    ],
+])
+->add('tel2', null, [
+    'label' => false,
+    'required' => false,
+    'constraints' => [
+        new Assert\Length([
+            'min' => 8,
+            'max' => 8,
+            'exactMessage' => 'Le numéro de téléphone doit contenir exactement {{ limit }} chiffres.',
+        ]),
+        new Assert\Regex([
+            'pattern' => '/^[0-9]+$/',
+            'message' => 'Le numéro de téléphone doit contenir uniquement des chiffres.',
+        ]),
+    ],
+])
             ->add('email',null, array('label'=>false))
              ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,

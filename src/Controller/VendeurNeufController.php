@@ -130,9 +130,9 @@ foreach ($dernieresOffres as $offre) {
 }
 
 
-    #[Route('/vendeur/Neuf/demande/detail/{id}', name: 'detail_demande_vendeur')]
+    #[Route('/vendeur/Neuf/demande/detail/{code}', name: 'detail_demande_vendeur')]
     public function detailDemande(
-        int $id,
+        string $code,
         Request $request,EntityManagerInterface $em,Security $security,PaginatorInterface $paginator,
         SessionInterface $session,
         DemandeRepository $demandeRepository
@@ -141,7 +141,9 @@ foreach ($dernieresOffres as $offre) {
         $session->set('PageMenu', 'detail_demande');
 
         // 🔹 Récupérer la demande
-        $demande = $demandeRepository->find($id);
+        $demande = $demandeRepository->findOneBy([
+        'code' => $code
+    ]);
 
         if (!$demande) {
             throw $this->createNotFoundException('Demande introuvable');
@@ -242,6 +244,7 @@ if ($vendeur) {
 // Ajouter les données au tableau résultat
 $result[] = [
     'id'           => $d->getId(),
+    'code'           => $d->getCode(),
     'marque'       => $d->getMarque(),
     'modele'       => $d->getModele(),
     'zone'         => $d->getZone(),
@@ -320,7 +323,7 @@ public function profile(
         
         return new response('success');
     }
-  #[Route('/demande/{id}/vendeur/neuf/proposer-offre', name: 'propose_offre', methods: ['GET'])]
+  #[Route('/demande/{code}/vendeur/neuf/proposer-offre', name: 'propose_offre', methods: ['GET'])]
     public function showForm(Demande $demande,EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
     {
         // Vérifier que l'utilisateur est vendeur
@@ -473,7 +476,7 @@ foreach ($offre->getOffrePieces() as $op) {
         $prix = $op->{'getPrix'.$i}();
         $marque = $op->{'getMarque'.$i}();
         if ($prix && $marque) {
-            $htmlContent .= "Qualité $i : Marque {$marque}, Prix {$prix} DT<br>";
+            $htmlContent .= "Qualité $i : Marque {$marque}, Prix {$prix} DT TTC<br>";
         }
     }
     $htmlContent .= "</li>";
@@ -573,7 +576,7 @@ public function retirerOffre(Request $request, EntityManagerInterface $em): Json
 
 // src/Controller/VendeurNeufController.php
 
-#[Route('/offre/{id}/modifier', name: 'offre_edit', methods: ['GET', 'POST'])]
+#[Route('/offre/{numeroOffre}/modifier', name: 'offre_edit', methods: ['GET', 'POST'])]
 public function editOffre(
     Offre $offre,EntityManagerInterface $em, Security $security, PaginatorInterface $paginator,
     Request $request,
@@ -656,7 +659,7 @@ public function editOffre(
 }
 
 
-#[Route('/vendeur/offre/{id}', name: 'offre_show')]
+#[Route('/vendeur/offre/{numeroOffre}', name: 'offre_show')]
 public function show(Offre $offre, EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
 {
     $user = $security->getUser();

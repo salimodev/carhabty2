@@ -142,8 +142,9 @@
                                              alt="{{ annonce.nom }}"
                                              onerror="this.onerror=null;this.src='{{ asset('images/placeholder.png') }}';">
 
-                                        <span class="badge-custom">Occasion</span>
-
+           <span class="badge-custom" style="background: {{ annonce.publier == 1 ? '#28a745' : '#ffc107' }};">
+    {{ annonce.publier == 1 ? 'Publiée' : 'En attente de validation' }}
+</span>
                                         <div class="p-3">
                                             <div class="price">{{ annonce.prix }} TND</div>
 

@@ -130,9 +130,9 @@ class VendeurOccasionController extends AbstractController
         ]);
     }
 
-    #[Route('/vendeur/occasion/demande/detail/{id}', name: 'detail_demande_vendeur_occa')]
+    #[Route('/vendeur/occasion/demande/detail/{code}', name: 'detail_demande_vendeur_occa')]
     public function detailDemande_occ(
-        int $id,
+        string $code,
         Request $request,
         EntityManagerInterface $em,
         Security $security,
@@ -144,7 +144,9 @@ class VendeurOccasionController extends AbstractController
         $session->set('PageMenu', 'detail_demande_occ');
 
         // 🔹 Récupérer la demande
-        $demande = $demandeRepository->find($id);
+        $demande = $demandeRepository->findOneBy([
+        'code' => $code
+    ]);
 
         if (!$demande) {
             throw $this->createNotFoundException('Demande introuvable');
@@ -246,6 +248,7 @@ class VendeurOccasionController extends AbstractController
             // Ajouter les données au tableau résultat
             $result[] = [
                 'id'           => $d->getId(),
+                'code'         => $d->getCode(),
                 'marque'       => $d->getMarque(),
                 'modele'       => $d->getModele(),
                 'zone'         => $d->getZone(),
@@ -386,7 +389,7 @@ class VendeurOccasionController extends AbstractController
         ]);
     }
 
-    #[Route('/demande/{id}/vendeur/occasion/proposer-offre', name: 'propose_offre_vo', methods: ['GET'])]
+    #[Route('/demande/{code}/vendeur/occasion/proposer-offre', name: 'propose_offre_vo', methods: ['GET'])]
     public function showForm(Demande $demande, EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
     {
         // Vérifier que l'utilisateur est vendeur
@@ -565,7 +568,7 @@ class VendeurOccasionController extends AbstractController
         return $this->redirectToRoute('vendeur_occ_offres');
     }
 
-    #[Route('/vendeur/occasion/offre/{id}', name: 'offre_show_occ')]
+    #[Route('/vendeur/occasion/offre/{numeroOffre}', name: 'offre_show_occ')]
     public function show(Offre $offre, EntityManagerInterface $em, Security $security, PaginatorInterface $paginator, Request $request): Response
     {
         $user = $security->getUser();
@@ -596,7 +599,7 @@ class VendeurOccasionController extends AbstractController
         ]);
     }
 
-    #[Route('/offre/{id}/vendeur/occasion/modifier', name: 'offre_edit_occ', methods: ['GET', 'POST'])]
+    #[Route('/offre/{numeroOffre}/vendeur/occasion/modifier', name: 'offre_edit_occ', methods: ['GET', 'POST'])]
     public function editOffre(
         Offre $offre,
         EntityManagerInterface $em,

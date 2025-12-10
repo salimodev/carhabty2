@@ -49,6 +49,9 @@ class Annonce
     #[ORM\Column]
     private ?\DateTime $dateModification = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $publier = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -197,4 +200,16 @@ public function setImages(?array $images): static
 
         return $this;
     }
+
+    public function isPublier(): ?bool
+{
+    return $this->publier;
+}
+
+public function setPublier(bool $publier): self
+{
+    $this->publier = $publier;
+    return $this;
+}
+
 }

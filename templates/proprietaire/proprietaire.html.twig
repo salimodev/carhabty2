@@ -104,7 +104,7 @@
 													{% for demande in demandes %}
 														<tr>
 															<td>
-																<a href="{{path('detail_demande',{'id':demande.id})}}">{{ demande.code }}</a>
+																<a href="{{path('detail_demande',{'code':demande.code})}}">{{ demande.code }}</a>
 															</td>
 															<td>{{ demande.marque }}</td>
 															<td>{{ demande.modele }}</td>
@@ -113,14 +113,16 @@
 															<td>{{ demande.etatmoteur }}</td>
 															<td>{{ demande.datecreate|date('d/m/Y H:i') }}</td>
 															<td>
-																{% if demande.statut == 'ouvert' %}
-																	<span class="badge badge-inline badge-success">ouvert</span>
-																{% elseif demande.statut == 'fermer' %}
-																	<span class="badge badge-inline badge-danger">fermé</span>
-																{% endif %}
-															</td>
+                                        {% if demande.statut == 'en_attente' %}
+                                            <span class="badge badge-inline badge-warning">en attente</span>
+                                             {% elseif demande.statut == 'publié' %}
+                                              <span class="badge badge-inline badge-primary ">publié</span>
+                                        {% elseif demande.statut == 'fermer' %}
+                                            <span class="badge badge-inline badge-success">Servue</span>
+                                        {% endif %}
+                                    </td>
 															<td class="text-right">
-																<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande',{'id':demande.id})}}" title="Voir">
+																<a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{path('detail_demande',{'code':demande.code})}}" title="Voir">
 																	<i class="las la-eye"></i>
 																</a>
 																<a onclick="supprimerdemande($(this),'{{ demande.id }}');" class="btn btn-soft-danger btn-icon btn-circle btn-sm" title="Supprimer">

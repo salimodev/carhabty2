@@ -29,13 +29,10 @@ class SendMailService
             ->from($from)
             ->to($to)
             ->subject($subject)
-            ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1762169290/logo1_hdbhq8.png', 'logo', 'image/png')
+            ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1765309135/logo_essayara_igu3v8.png', 'logo', 'image/png')
             ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422924/h2qdkkms0lmucs44rc6s.png', 'facebook', 'image/png')
             ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422987/jtxpgab3dhykivmpw6y5.png', 'instagram', 'image/png')
-            ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423044/gchpepwboglj5oyudqr8.png', 'twitter', 'image/png')
-            ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423097/afyzbcguyosyjfbhpn8v.png', 'Linkidin', 'image/png')
-            //->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423192/irpvbr5wdjsewm0i5jgu.png', 'Tick', 'image/png')
-            ->htmlTemplate("emails/$template.html.twig")
+           ->htmlTemplate("emails/$template.html.twig")
             ->context($context);
 
         // On envoie le mail
@@ -57,11 +54,35 @@ class SendMailService
             ->from($from)
             ->to($to)
             ->subject($subject)
-            ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1762169290/logo1_hdbhq8.png', 'logo', 'image/png')
+            ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1765309135/logo_essayara_igu3v8.png', 'logo', 'image/png')
             ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422924/h2qdkkms0lmucs44rc6s.png', 'facebook', 'image/png')
             ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422987/jtxpgab3dhykivmpw6y5.png', 'instagram', 'image/png')
-            ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423044/gchpepwboglj5oyudqr8.png', 'twitter', 'image/png')
-            ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423097/afyzbcguyosyjfbhpn8v.png', 'Linkidin', 'image/png')
+            ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423192/irpvbr5wdjsewm0i5jgu.png', 'Tick', 'image/png')
+            ->htmlTemplate("emails/$template.html.twig")
+            ->context($context);
+
+        // On envoie le mail
+        $this->mailer->send($email);
+    }
+
+
+     // mail Bienvenue
+     public function sendannonce(
+        string $from,
+        string $to,
+        string $subject,
+        string $template,
+        array $context
+    ): void
+    {
+        //On crée le mail
+        $email = (new TemplatedEmail())
+            ->from($from)
+            ->to($to)
+            ->subject($subject)
+            ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1765309135/logo_essayara_igu3v8.png', 'logo', 'image/png')
+            ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422924/h2qdkkms0lmucs44rc6s.png', 'facebook', 'image/png')
+            ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422987/jtxpgab3dhykivmpw6y5.png', 'instagram', 'image/png')
             ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423192/irpvbr5wdjsewm0i5jgu.png', 'Tick', 'image/png')
             ->htmlTemplate("emails/$template.html.twig")
             ->context($context);
@@ -85,7 +106,7 @@ class SendMailService
             ->from($from)
             ->to($to)
             ->subject($subject)
-            ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1762169290/logo1_hdbhq8.png', 'logo10', 'image/png')
+            ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1765309135/logo_essayara_igu3v8.png', 'logo10', 'image/png')
             ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422924/h2qdkkms0lmucs44rc6s.png', 'facebook', 'image/png')
             ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422987/jtxpgab3dhykivmpw6y5.png', 'instagram', 'image/png')
             ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423044/gchpepwboglj5oyudqr8.png', 'twitter', 'image/png')
@@ -112,7 +133,7 @@ class SendMailService
         ->from($from)
         ->to($to)
         ->subject($subject)
-        ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1762169290/logo1_hdbhq8.png', 'logo10', 'image/png')
+        ->embedFromPath('https://res.cloudinary.com/aladdineshoping/image/upload/v1765309135/logo_essayara_igu3v8.png', 'logo10', 'image/png')
         ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422924/h2qdkkms0lmucs44rc6s.png', 'facebook', 'image/png')
         ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681422987/jtxpgab3dhykivmpw6y5.png', 'instagram', 'image/png')
         ->embedFromPath('https://res.cloudinary.com/b-ja/image/upload/v1681423044/gchpepwboglj5oyudqr8.png', 'twitter', 'image/png')

@@ -150,9 +150,9 @@ final class MecancienController extends AbstractController
         ]);
     }
 
-    #[Route('/mecanicien/demande/detail/{id}', name: 'detail_demande_mecan')]
+    #[Route('/mecanicien/demande/detail/{code}', name: 'detail_demande_mecan')]
     public function detailDemande(
-        int $id,
+        string $code,
         Request $request,
         SessionInterface $session,
         DemandeRepository $demandeRepository
@@ -161,7 +161,9 @@ final class MecancienController extends AbstractController
         $session->set('PageMenu', 'detail_demande_mecan');
 
         // 🔹 Récupérer la demande
-        $demande = $demandeRepository->find($id);
+        $demande = $demandeRepository->findOneBy([
+        'code' => $code
+    ]);
 
         if (!$demande) {
             throw $this->createNotFoundException('Demande introuvable');
@@ -286,7 +288,7 @@ final class MecancienController extends AbstractController
 
 
 
-    #[Route('/mecanicien/offre/{id}', name: 'offre_show_mecano', methods: ['GET'])]
+    #[Route('/mecanicien/offre/{numeroOffre}', name: 'offre_show_mecano', methods: ['GET'])]
     public function showOffre(
         EntityManagerInterface $em,
         NotificationRepository $notificationRepository,

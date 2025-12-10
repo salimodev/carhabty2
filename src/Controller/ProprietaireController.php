@@ -186,9 +186,9 @@ final class ProprietaireController extends AbstractController
         return $this->render('contact.html.twig');
     }
 
-    #[Route('/proprietaire/demande/detail/{id}', name: 'detail_demande')]
+    #[Route('/proprietaire/demande/detail/{code}', name: 'detail_demande')]
     public function detailDemande(
-        int $id,
+        string $code,
         Request $request,
         SessionInterface $session,
         DemandeRepository $demandeRepository
@@ -197,7 +197,9 @@ final class ProprietaireController extends AbstractController
         $session->set('PageMenu', 'detail_demande');
 
         // 🔹 Récupérer la demande
-        $demande = $demandeRepository->find($id);
+        $demande = $demandeRepository->findOneBy([
+        'code' => $code
+    ]);
 
         if (!$demande) {
             throw $this->createNotFoundException('Demande introuvable');
@@ -319,7 +321,7 @@ final class ProprietaireController extends AbstractController
     }
 
 
-    #[Route('/proprietaire/offre/{id}', name: 'offre_show_prop', methods: ['GET'])]
+    #[Route('/proprietaire/offre/{numeroOffre}', name: 'offre_show_prop', methods: ['GET'])]
     public function showOffre(
         EntityManagerInterface $em,
         NotificationRepository $notificationRepository,

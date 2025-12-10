@@ -311,7 +311,7 @@
 													class="request-card">
 
 													{# Titre cliquable #}
-													<a href="{{ path('detail_demande_vendeur', {'id': demande.id}) }}" class="text-decoration-none text-dark">
+													<a href="{{ path('detail_demande_vendeur', {'code': demande.code}) }}" class="text-decoration-none text-dark">
 														<div class="request-header">
 															<div class="request-title">
 																{% if demande.pieces|length > 0 %}
@@ -350,7 +350,7 @@
 													</div>
 
 													{# Image cliquable #}
-													<a href="{{ path('detail_demande_vendeur', {'id': demande.id}) }}">
+													<a href="{{ path('detail_demande_vendeur', {'code': demande.code}) }}">
     <div class="request-image">
         {% if demande.pieces|length > 0 and (demande.pieces|first).photo %}
             <img src="{{ (demande.pieces|first).photo }}" alt="photo" class="img-fit mx-auto rounded">
@@ -378,7 +378,7 @@
 
 													{% set dejaPropose = demande.offres|filter(o => o.user.id == app.user.id)|length > 0 %}
 
-													<a href="{% if not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" {% if dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
+													<a href="{% if not dejaPropose %}{{ path('propose_offre', {'code': demande.code}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" {% if dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
 														<i class="fas fa-envelope-open-text me-2"></i>
 														Proposer un prix
 													</a>
@@ -528,8 +528,8 @@ piecesDesc += "...";
 var dejaPropose = d.dejaPropose || false;
 
 // 🔗 lien vers la page de détail
-var lienDetail = "{{ path('detail_demande_vendeur', {'id': 'ID_DEMANDE'}) }}";
-lienDetail = lienDetail.replace('ID_DEMANDE', d.id);
+var lienDetail = "{{ path('detail_demande_vendeur', {'code': 'ID_DEMANDE'}) }}";
+lienDetail = lienDetail.replace('ID_DEMANDE', d.code);
 
 html += `
 <div class="col mb-3">
@@ -560,7 +560,7 @@ piecesTitle || (d.marque + " " + d.modele)
 piecesDesc || 'Pas de description disponible.'
 }</p>
             <button class="btn btn-register w-100 propose-btn" data-id="${
-d.id
+d.code
 }" data-deja="${dejaPropose}">
                 <i class="fas fa-envelope-open-text"></i> Proposer un prix
             </button>
@@ -582,7 +582,7 @@ let demandeId = $(this).data('id');
 if (deja) {
 AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');
 } else {
-let url = "{{ path('propose_offre', {'id': 'ID_DEMANDE'}) }}";
+let url = "{{ path('propose_offre', {'code': 'ID_DEMANDE'}) }}";
 url = url.replace('ID_DEMANDE', demandeId);
 window.location.href = url;
 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Demande;
 use App\Entity\Annonce;
+use App\Entity\Footer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,15 +13,17 @@ use App\Repository\DemandeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Persistence\ManagerRegistry; 
 use App\Repository\OffreRepository;
 use App\Repository\AnnonceRepository;
 use App\Repository\MessageRepository;
+use App\Repository\BannerMenuRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'Accueil')]
-    public function index(Request $request, DemandeRepository $demandeRepository, EntityManagerInterface $em,): Response
+    public function index(Request $request, DemandeRepository $demandeRepository, EntityManagerInterface $em,BannerMenuRepository $bannerMenuRepository): Response
     {
         $session = $request->getSession();
         $session->set('PageMenu', 'Accueil');
@@ -83,47 +86,59 @@ class HomeController extends AbstractController
     ->getQuery()
     ->getResult(); // <-- important pour récupérer les annonces
 
+
+     $banners = $bannerMenuRepository->findBy(
+        ['publier' => 1],
+        ['id' => 'DESC']
+    );
 return $this->render('home/index.html.twig', [
     'lastDemandes' => $lastDemandes,
-    'annonces' => $annonces
+    'annonces' => $annonces, 'banners' => $banners
 ]);
 
     }
 
 
-    #[Route(path: '/footer', name: 'app_footer')]
-    public function footer(Request $request, EntityManagerInterface $em, OffreRepository $offreRepo): Response
-    {
-        $user = $this->getUser();
+#[Route(path: '/footer', name: 'app_footer')]
+public function footer(Request $request, EntityManagerInterface $em, OffreRepository $offreRepo): Response
+{
+    $user = $this->getUser();
 
-        // Si utilisateur non connecté, on initialise les compteurs à 0
-        if ($user) {
-            $demandeCount = $em->getRepository(Demande::class)->countByUser($user);
+    if ($user) {
+        $demandeCount = $em->getRepository(Demande::class)->countByUser($user);
 
-            $nbOffres = $offreRepo->createQueryBuilder('o')
-                ->join('o.demande', 'd')
-                ->where('d.offrecompte = :userId')
-                ->setParameter('userId', $user->getId())
-                ->select('COUNT(o.id)')
-                ->getQuery()
-                ->getSingleScalarResult();
-        } else {
-            $demandeCount = 0;
-            $nbOffres = 0;
-        }
-
-        return $this->render('/footer.html.twig', [
-            'demandeCount' => $demandeCount,
-            'nbOffres' => $nbOffres,
-        ]);
+        $nbOffres = $offreRepo->createQueryBuilder('o')
+            ->join('o.demande', 'd')
+            ->where('d.offrecompte = :userId')
+            ->setParameter('userId', $user->getId())
+            ->select('COUNT(o.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    } else {
+        $demandeCount = 0;
+        $nbOffres = 0;
     }
+
+    $footer = $em->getRepository(Footer::class)->find(1);
+
+    return $this->render('footer.html.twig', [
+        'demandeCount' => $demandeCount,
+        'nbOffres' => $nbOffres,
+        'footer' => $footer,
+    ]);
+}
+
 
 
     #[Route(path: '/header', name: 'app_header')]
-    public function header(Request $request): Response
+    public function header(Request $request,EntityManagerInterface $em,): Response
     {
+          $footer = $em->getRepository(Footer::class)->find(1);
 
-        return $this->render('/header.html.twig');
+        return $this->render('/header.html.twig', [
+        
+        'footer' => $footer,
+    ]);
     }
 
     #[Route(path: '/sideheader', name: 'sideheader')]
@@ -292,6 +307,7 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
         // 🔹 JSON-Antwort aufbauen
         $result[] = [
             'id'           => $d->getId(),
+            'code' => $d->getCode(),
             'marque'       => $d->getMarque(),
             'modele'       => $d->getModele(),
             'zone'         => $d->getZone(),

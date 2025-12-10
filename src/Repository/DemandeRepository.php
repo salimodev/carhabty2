@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Demande;
+use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -279,5 +280,94 @@ public function countDemandesDispoVendeurOcc(string $zoneVendeur): int
         ->getSingleScalarResult();
 }
 
- 
+
+// src/Repository/DemandeRepository.php
+
+public function countTotalDemandes(): int
+{
+    return (int) $this->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+public function countDemandesNeuf(): int
+{
+    return (int) $this->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.vendeurneuf = 1')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+public function countDemandesOccasion(): int
+{
+    return (int) $this->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.vendeuroccasion = 1')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+ public function countByUserId(int $userId): int
+{
+    return (int) $this->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->andWhere('IDENTITY(d.offrecompte) = :id')
+        ->setParameter('id', $userId)
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+public function countByProprietaire(\App\Entity\Users $user): int
+{
+    return (int) $this->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->andWhere('d.offrecompte = :u')
+        ->setParameter('u', $user)
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+public function countAll(): int
+{
+    return $this->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+public function countEnAttente(): int
+{
+    return $this->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 0')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'en_attente')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+public function countPublie(): int
+{
+    return $this->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 1')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'publié')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+public function countServue(): int
+{
+    return $this->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.statut = :statut')
+        ->setParameter('statut', 'fermer')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+
 }

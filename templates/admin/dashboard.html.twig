@@ -461,7 +461,7 @@ document.addEventListener('DOMContentLoaded', function() {
             labels: [], // remplis par fetch
             datasets: [
                 {
-                    label: "Demandes Neuf",
+                    label: "Demandes Neuve",
                     data: [],
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
@@ -505,68 +505,57 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
 let pieOffresChart;
 
-function updateOffresChart() {
-    fetch("{{ path('dashboard_offres_data') }}")
-        .then(response => response.json())
-        .then(data => {
+function updateOffresChartDonut() {
+    fetch("{{ path('dashboard_offres_data') }}", {
+        headers: {'Accept': 'application/json'}
+    })
+    .then(response => response.json())
+    .then(data => {
 
-            const chartData = [
-                data.refuse,
-                data.accepte,
-                data.total,
-                data.en_attente
-            ];
+        const chartData = [
+            data.refuse,
+            data.accepte,
+            data.total,
+            data.en_attente
+        ];
 
-            if (pieOffresChart) {
-                // Mise à jour des données si chart existe déjà
-                pieOffresChart.data.datasets[0].data = chartData;
-                pieOffresChart.update();
-            } else {
-                // Création du chart la première fois
-                pieOffresChart = AIZ.plugins.chart('#pie-3', {
-                    type: 'doughnut',
-                    data: {
-                        labels: [
-                            'Offres annulées',
-                            'Offres acceptées',
-                            'Total offres',
-                            'Offres en attente'
-                        ],
-                        datasets: [{
-                            data: chartData,
-                            backgroundColor: [
-                                "#fd3995",
-                                "#34bfa3",
-                                "#5d78ff",
-                                "#fdcb6e"
-                            ]
-                        }]
-                    },
-                    options: {
-                        cutoutPercentage: 70,
-                        legend: {
-                            labels: {
-                                fontFamily: 'Montserrat',
-                                boxWidth: 10,
-                                usePointStyle: true
-                            },
-                            onClick: function () {
-                                return '';
-                            },
-                            position: 'bottom'
-                        }
+        if (pieOffresChart) {
+            pieOffresChart.data.datasets[0].data = chartData;
+            pieOffresChart.update();
+        } else {
+            pieOffresChart = AIZ.plugins.chart('#pie-3', {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Offres annulées',
+                        'Offres acceptées',
+                        'Total offres',
+                        'Offres en attente'
+                    ],
+                    datasets: [{
+                        data: chartData,
+                        backgroundColor: [
+                            "#fd3995",
+                            "#34bfa3",
+                            "#5d78ff",
+                            "#fdcb6e"
+                        ]
+                    }]
+                },
+                options: {
+                    cutoutPercentage: 70,
+                    legend: {
+                        position: 'bottom'
                     }
-                });
-            }
+                }
+            });
+        }
 
-        }).catch(err => console.error('Erreur fetch chart offres:', err));
+    }).catch(err => console.error('Erreur fetch chart offres:', err));
 }
 
-// Actualisation toutes les 5 secondes
-setInterval(updateOffresChart, 50000);
-
-// Premier appel immédiat
-updateOffresChart();
+setInterval(updateOffresChartDonut, 50000);
+updateOffresChartDonut();
 
 </script>
 <script>
@@ -596,7 +585,7 @@ let offresChart = new Chart(ctxOffres, {
 });
 
 // Fonction pour mettre à jour le graphique des offres
-function updateOffresChart() {
+function updateOffresJourChart() {
     $.ajax({
         url: '{{ path("dashboard_offres_jour") }}',
         type: 'GET',
@@ -612,7 +601,7 @@ function updateOffresChart() {
 }
 
 // Rafraîchissement toutes les 5 secondes
-updateOffresChart(); // premier appel
-setInterval(updateOffresChart, 5000);
+updateOffresJourChart(); // premier appel
+setInterval(updateOffresJourChart, 5000);
 </script>
 {% endblock %}

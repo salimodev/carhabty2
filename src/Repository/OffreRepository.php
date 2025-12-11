@@ -57,19 +57,22 @@ public function countOffresByProprietaire($proprietaireId): int
 
 public function getOffresStatsForJson(): array
 {
-    $qb = $this->createQueryBuilder('o')
-        ->addSelect("SUM(CASE WHEN o.status = 'en_attente' THEN 1 ELSE 0 END) as en_attente")
-        ->addSelect("SUM(CASE WHEN o.status = 'acceptee' THEN 1 ELSE 0 END) as acceptee")
-        ->addSelect("SUM(CASE WHEN o.status = 'refusee' THEN 1 ELSE 0 END) as refusee")
-        ->addSelect("COUNT(o.id) as total");
-
-    return $qb->getQuery()->getSingleResult() ?? [
-        'en_attente' => 0,
-        'acceptee' => 0,
-        'refusee' => 0,
-        'total' => 0
-    ];
+    return $this->createQueryBuilder('o')
+        ->select("
+            SUM(CASE WHEN o.status = 'refusee' THEN 1 ELSE 0 END) AS refusee,
+            SUM(CASE WHEN o.status = 'acceptee' THEN 1 ELSE 0 END) AS acceptee,
+            SUM(CASE WHEN o.status = 'en_attente' THEN 1 ELSE 0 END) AS en_attente,
+            COUNT(o.id) AS total
+        ")
+        ->getQuery()
+        ->getOneOrNullResult() ?? [
+            'refusee' => 0,
+            'acceptee' => 0,
+            'en_attente' => 0,
+            'total' => 0
+        ];
 }
+
 
 
 public function countOffresParJour(): array

@@ -68,17 +68,28 @@ public function dashboard(VisitRepository $visitRepository,UsersRepository $user
     ->getQuery()
     ->getSingleScalarResult();
        
-    $totalAnnoncesAttente = $repo->count(['publier' => 0]);
-$totalAnnoncesPublie  = $repo->count(['publier' => 1]);
-$totalAnnoncesVendu   = $repo->count(['statut' => 'vendu']);
+    
     // Passer à Twig
     return $this->render('admin/dashboard.html.twig', [
         'visitorsToday' => $visitorsToday, 'demandesEnAttente' => $demandesEnAttente,'totalEnAttenteA'=>$totalEnAttenteA,
-        'totalAnnoncesAttente' => $totalAnnoncesAttente,
-    'totalAnnoncesPublie'  => $totalAnnoncesPublie,
-    'totalAnnoncesVendu'   => $totalAnnoncesVendu,
+        
     ]);
 }
+
+#[Route('/admin/dashboard/annonces-data', name: 'dashboard_annonces_data')]
+public function annoncesData(AnnonceRepository $repo): JsonResponse
+{
+   $totalAttente = (int) $repo->count(['publier' => 0]) ?? 0;
+$totalPublie  = (int) $repo->count(['publier' => 1]) ?? 0;
+$totalVendu   = (int) $repo->count(['statut' => 'vendu']) ?? 0;
+
+    return $this->json([
+        'attente' => (int) $totalAttente,
+        'publie'  => (int) $totalPublie,
+        'vendu'   => (int) $totalVendu
+    ]);
+}
+
     
 #[Route(path: '/admin/visiteurs/total', name: 'visiteurs_total')]
 public function visiteursTotal(VisitRepository $visitRepository): JsonResponse
@@ -135,15 +146,30 @@ public function demandesData(DemandeRepository $demandeRepository): JsonResponse
 
     $results = $qb->getQuery()->getResult();
 
+    // 👉 Sécurité : si aucune demande dans la BD
+    if (empty($results)) {
+        return $this->json([
+            'labels' => [],
+            'neuf' => [],
+            'occasion' => []
+        ]);
+    }
+
     $labels = [];
     $neufData = [];
     $occasionData = [];
 
     foreach ($results as $r) {
-        $date = new \DateTimeImmutable($r['jour']);
-        $labels[] = $date->format('d/m');
-        $neufData[] = (int) $r['nbNeuf'];
-        $occasionData[] = (int) $r['nbOccasion'];
+        // 👉 Sécurité : vérifier que la date existe
+        if (!empty($r['jour'])) {
+            $date = new \DateTimeImmutable($r['jour']);
+            $labels[] = $date->format('d/m');
+        } else {
+            $labels[] = "";
+        }
+
+        $neufData[] = (int) ($r['nbNeuf'] ?? 0);
+        $occasionData[] = (int) ($r['nbOccasion'] ?? 0);
     }
 
     return $this->json([
@@ -152,6 +178,7 @@ public function demandesData(DemandeRepository $demandeRepository): JsonResponse
         'occasion' => $occasionData
     ]);
 }
+
 
 #[Route('/admin/dashboard/offres-data', name: 'dashboard_offres_data')]
 public function offresData(OffreRepository $offreRepository): JsonResponse

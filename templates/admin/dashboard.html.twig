@@ -193,7 +193,7 @@
                             <h6 class="mb-0 fs-14">Annonces</h6>
                         </div>
                         <div class="card-body">
-                            <canvas id="pie-2" style="width:100%; max-width:400px; height:300px;"></canvas>
+                            <canvas id="pie-annonces" style="width:100%; max-width:400px; height:300px;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -267,47 +267,49 @@
 } );
 
  
-   AIZ.plugins.chart('#pie-2', {
-    type: 'doughnut',
-    data: {
-        labels: [
-            'Annonces en attente',
-            'Annonces publiées',
-            'Annonces vendues'
-        ],
-        datasets: [
-            {
-                data: [
-                    {{ totalAnnoncesAttente }},
-                    {{ totalAnnoncesPublie }},
-                    {{ totalAnnoncesVendu }}
-                ],
-                backgroundColor: [
-                    "#fdcb6e",
-                    "#5d78ff",
-                    "#34bfa3"
-                ]
+  let pieAnnoncesChart;
+
+function updateAnnoncesPie() {
+    fetch("{{ path('dashboard_annonces_data') }}")
+        .then(r => r.json())
+        .then(data => {
+
+            const values = [
+                data.attente,
+                data.publie,
+                data.vendu
+            ];
+
+            if (pieAnnoncesChart) {
+                pieAnnoncesChart.data.datasets[0].data = values;
+                pieAnnoncesChart.update();
+            } else {
+                pieAnnoncesChart = AIZ.plugins.chart('#pie-annonces', {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['En attente', 'Publiées', 'Vendues'],
+                        datasets: [{
+                            data: values,
+                            backgroundColor: [
+                                "#fdcb6e",
+                                "#34bfa3",
+                                "#fd3995"
+                            ]
+                        }]
+                    },
+                    options: {
+                        cutoutPercentage: 70,
+                        legend: { position: 'bottom' }
+                    }
+                });
             }
-        ]
-    },
-    options: {
-        cutoutPercentage: 70,
-        legend: {
-            labels: {
-                fontFamily: 'Montserrat',
-                boxWidth: 10,
-                usePointStyle: true
-            },
-            onClick: function () {
-                return '';
-            },
-            position: 'bottom'
-        }
-    }
-});
 
+        }).catch(e => console.error("Erreur data annonces:", e));
+}
 
-    
+updateAnnoncesPie();
+setInterval(updateAnnoncesPie, 50000);
+
 </script>
 <script>
 let ctx = document.getElementById('demandeChart').getContext('2d');

@@ -220,26 +220,72 @@
 				<span class="d-block fs-10 fw-600 opacity-60 ">Accueil</span>
 			</a>
 		</div>
-		<div class="col" {% if PageMenu is defined and PageMenu == "demande_all"%} style="color:#ef1c00 !important" {% endif %}>
-			<a href="{{path('app_demande_all')}}" class="text-reset d-block text-center pb-2 pt-3">
-				<i class="las la-list-ul fs-20 opacity-60 "></i>
-				<span class="d-block fs-10 fw-600 opacity-60 ">Demandes</span>
-			</a>
-		</div>
 
-		<div class='col' {% if PageMenu is defined and PageMenu == "notifications_prop"%} style="color:#ef1c00 !important" {% endif %} {% if PageMenu is defined and PageMenu == "vendeur_notifications"%} style="color:#ef1c00 !important" {% endif %} {% if PageMenu is defined and PageMenu == "mecanicien_notifications"%} style="color:#ef1c00 !important" {% endif %}>
-			<a {% if app.user and is_granted('ROLE_PROPRIETAIRE') %} href="{{ path('proprietaire_notifications') }}" {% elseif app.user and is_granted('ROLE_VENDEUR_NEUF') %} href="{{ path('vendeur_notifications') }}" {% elseif app.user and is_granted('ROLE_MECANICIEN') %} href="{{ path('mecanicien_notifications') }}" {% else %} href="{{ path('app_login') }}" {% endif %} class="text-reset d-block text-center pb-2 pt-3" {% if PageMenu is defined and PageMenu == 'notifications' %} style="color:#ef1c00 !important;" {% endif %}>
-				<span class="d-inline-block position-relative px-2">
-					<i class="las la-bell fs-20 opacity-60"></i>
+		<div class="col" {% if PageMenu is defined and PageMenu == "app_home_annonces"%} style="color:#ef1c00 !important" {% endif %}>
+    {% if app.user and 'ROLE_PARTICULIER' in app.user.roles %}
+        <a href="{{ path('app_home_annonces') }}" class="text-reset d-block text-center pb-2 pt-3">
+            <i class="las la-list-ul fs-20 opacity-60"></i>
+            <span class="d-block fs-10 fw-600 opacity-60">Annonces</span>
+        </a>
+    {% else %}
+        <a href="{{ path('app_demande_all') }}" class="text-reset d-block text-center pb-2 pt-3">
+            <i class="las la-list-ul fs-20 opacity-60"></i>
+            <span class="d-block fs-10 fw-600 opacity-60">Demandes</span>
+        </a>
+    {% endif %}
+</div>
 
-					{# Badge visible si tu veux signaler des notifications non lues #}
-					{% if app.user and app.user.notifications is defined and app.user.notifications|filter(n => not n.isRead)|length > 0 %}
-						<span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right" style="right: 10px; top: 0px;"></span>
-					{% endif %}
-				</span>
-				<span class="d-block fs-10 fw-600 opacity-60">Notifications</span>
-			</a>
-		</div>
+
+		<div class='col' 
+     {% if PageMenu is defined and PageMenu in ["notifications_prop", "vendeur_notifications", "mecanicien_notifications"] %} 
+         style="color:#ef1c00 !important" 
+     {% endif %}>
+     
+    <a 
+        {% if app.user and is_granted('ROLE_PARTICULIER') %} 
+            href="{{ path('part_message', {'receiverId': app.user.id}) }}" 
+        {% elseif app.user and is_granted('ROLE_PROPRIETAIRE') %} 
+            href="{{ path('proprietaire_notifications') }}" 
+        {% elseif app.user and is_granted('ROLE_VENDEUR_NEUF') %} 
+            href="{{ path('vendeur_notifications') }}" 
+        {% elseif app.user and is_granted('ROLE_VENDEUR_OCCASION') %} 
+            href="{{ path('vendeur_occa_notifications') }}" 
+        {% elseif app.user and is_granted('ROLE_MECANICIEN') %} 
+            href="{{ path('mecanicien_notifications') }}" 
+        {% else %} 
+            href="{{ path('app_login') }}" 
+        {% endif %} 
+        class="text-reset d-block text-center pb-2 pt-3" 
+        {% if PageMenu is defined and PageMenu == 'notifications' %} style="color:#ef1c00 !important;" {% endif %}>
+        
+        <span class="d-inline-block position-relative px-2">
+            <i class="las 
+                {% if app.user and is_granted('ROLE_PARTICULIER') %} 
+                    la-envelope 
+                {% else %} 
+                    la-bell 
+                {% endif %} 
+            fs-20 opacity-60"></i>
+
+            {# Badge pour notifications/messages non lus #}
+            {% if app.user %}
+                {% if is_granted('ROLE_PARTICULIER') and app.user.messages is defined and app.user.messages|filter(m => not m.isRead)|length > 0 %}
+                    <span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right" style="right: 10px; top: 0px;"></span>
+                {% elseif app.user.notifications is defined and app.user.notifications|filter(n => not n.isRead)|length > 0 %}
+                    <span class="badge badge-sm badge-dot badge-circle badge-primary position-absolute absolute-top-right" style="right: 10px; top: 0px;"></span>
+                {% endif %}
+            {% endif %}
+        </span>
+
+        <span class="d-block fs-10 fw-600 opacity-60">
+            {% if app.user and is_granted('ROLE_PARTICULIER') %}
+                Messages
+            {% else %}
+                Notifications
+            {% endif %}
+        </span>
+    </a>
+</div>
 
 		<div class="col">
 			{% if app.user %}

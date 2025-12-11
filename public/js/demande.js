@@ -151,13 +151,13 @@ $('body').css('overflow', 'auto');
                     ? `<img src="${photo}" alt="photo" style="width:60px;height:60px;border-radius:6px;">`
                     : '—',
                 observation,
-               `<button class="btn btn-danger btn-sm"
-         onclick="supprimerPiece($(this), '${result.id}')"
-         style="padding: 0.416rem !important;
-                width: calc(2.02rem + 2px);
-                height: calc(2.02rem + 2px);">
-     <i class="la la-trash"></i>
- </button>`
+             //  `<button class="btn btn-danger btn-sm"
+        // onclick="supprimerPiece($(this), '${result.id}')"
+        // style="padding: 0.416rem !important;
+          //      width: calc(2.02rem + 2px);
+           //     height: calc(2.02rem + 2px);">
+   //  <i class="la la-trash"></i>
+ //</button>`
 
             ]).draw(false);
 

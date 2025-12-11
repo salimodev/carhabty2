@@ -308,6 +308,18 @@
   .aiz-pagination .pagination { gap: 0.35rem; }
 }
 
+.alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
 	</style>
 {% endblock %}
 
@@ -391,16 +403,14 @@
 
                     <input type="hidden" name="min_price" value="">
                     <input type="hidden" name="max_price" value="">
-
+  {% if lastDemandes|length == 0 %}
+   <div class="row g-3">
+							 <div class="alert alert-info" style="text-align: center;">  Aucune demande disponible pour le moment.</div>
+                      </div>
+					    {% else %}
                     <div class="row gutters-5 row-cols-xxl-3 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1" id="filterrech">
 
-                        {% if lastDemandes|length == 0 %}
-                            <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 200px;">
-                                <div class="alert alert-info text-center">
-                                    Aucune demande disponible pour le moment.
-                                </div>
-                            </div>
-                        {% else %}
+                      
                             {% for demande in lastDemandes %}
                                 {% if demande.publier == 1 and demande.statut == 'publié' %}
                                     {% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
@@ -475,6 +485,8 @@
             <div class="aiz-pagination aiz-pagination-center mt-4">
                 {{ knp_pagination_render(lastDemandes) }}
             </div>
+			
+
         </form>
     </div>
 </section>

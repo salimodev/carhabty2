@@ -159,11 +159,12 @@ public function offresData(OffreRepository $offreRepository): JsonResponse
     $stats = $offreRepository->getOffresStatsForJson();
 
     return $this->json([
-        'refuse' => (int)$stats['refusee'],
-        'accepte' => (int)$stats['acceptee'],
-        'en_attente' => (int)$stats['en_attente'],
-        'total' => (int)$stats['total']
-    ]);
+    'refuse' => (int)($stats['refusee'] ?? 0),
+    'accepte' => (int)($stats['acceptee'] ?? 0),
+    'en_attente' => (int)($stats['en_attente'] ?? 0),
+    'total' => (int)($stats['total'] ?? 0)
+]);
+
 }
 
  #[Route('/admin/dashboard/offres-par-jour', name: 'dashboard_offres_jour')]

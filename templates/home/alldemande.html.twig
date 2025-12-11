@@ -316,186 +316,168 @@
 		{{ parent() }}
 	{% endblock %}
 <section class="mb-4 pt-3">
-	<div class="container sm-px-0">
-		<form class="" id="search-form" action="" method="GET">
-			<div class="row">
+    <div class="container sm-px-0">
+        <form class="" id="search-form" action="" method="GET">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="text-left">
+                        <div class="row gutters-5 flex-wrap align-items-center">
+                            <div class="col col-10">
+                                <h1 class="h4 fw-600 text-body">Demandes</h1>
+                            </div>
+                            <div class="row justify-content-end align-items-end g-2 mb-4 filtre-demandes">
+                                <!-- Filtre Marque -->
+                                <div class="col-6 col-md-auto">
+                                    <label class="mb-0 opacity-50 small">Marque</label>
+                                    <select class="form-control form-control-sm" onchange="filtrerDemandes()" id="marque" data-live-search="true">
+                                        <option value="">Toutes les marques</option>
+                                        <option value="Audi">Audi</option>
+                                        <option value="BMW">BMW</option>
+                                        <option value="Mercedes">Mercedes</option>
+                                        <option value="Toyota">Toyota</option>
+                                    </select>
+                                </div>
+                                <!-- Filtre Zone -->
+                                <div class="col-6 col-md-auto">
+                                    <label class="mb-0 opacity-50 small">Zone</label>
+                                    <select class="form-control form-control-sm" onchange="filtrerDemandes()" id="zone" data-live-search="true">
+                                        <option value="">Toute la Tunisie</option>
+                                        <option value="Tunis">Tunis</option>
+                                        <option value="Ariana">Ariana</option>
+                                        <option value="Ben Arous">Ben Arous</option>
+                                        <option value="Manouba">Manouba</option>
+                                        <option value="Nabeul">Nabeul</option>
+                                        <option value="Zaghouan">Zaghouan</option>
+                                        <option value="Bizerte">Bizerte</option>
+                                        <option value="Béja">Béja</option>
+                                        <option value="Jendouba">Jendouba</option>
+                                        <option value="Kef">Kef</option>
+                                        <option value="Siliana">Siliana</option>
+                                        <option value="Sousse">Sousse</option>
+                                        <option value="Kébili">Sfax</option>
+                                        <option value="Monastir">Monastir</option>
+                                        <option value="Mahdia">Mahdia</option>
+                                        <option value="Kairouan">Kairouan</option>
+                                        <option value="Kasserine">Kasserine</option>
+                                        <option value="Sidi Bouzid">Sidi Bouzid</option>
+                                        <option value="Gabès">Gabès</option>
+                                        <option value="Médenine">Médenine</option>
+                                        <option value="Tataouine">Tataouine</option>
+                                        <option value="Gafsa">Gafsa</option>
+                                        <option value="Tozeur">Tozeur</option>
+                                        <option value="Kébili">Kébili</option>
+                                    </select>
+                                </div>
+                                <!-- Filtre Date -->
+                                <div class="col-6 col-md-auto">
+                                    <label class="mb-0 opacity-50 small">Date</label>
+                                    <select class="form-control form-control-sm" onchange="filtrerDemandes()" id="date">
+                                        <option value="recent">Le plus récent</option>
+                                        <option value="ancien">Le plus ancien</option>
+                                    </select>
+                                </div>
+                                <!-- Filtre Type -->
+                                <div class="col-6 col-md-auto">
+                                    <label class="mb-0 opacity-50 small">Type</label>
+                                    <select class="form-control form-control-sm" onchange="filtrerDemandes()" id="type">
+                                        <option value="">Tous</option>
+                                        <option value="neuf">Neuve</option>
+                                        <option value="occasion">Occasion</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-				<div class="col-xl-12">
+                    <input type="hidden" name="min_price" value="">
+                    <input type="hidden" name="max_price" value="">
 
+                    <div class="row gutters-5 row-cols-xxl-3 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1" id="filterrech">
 
-					<div class="text-left">
-						<div class="row gutters-5 flex-wrap align-items-center">
-							<div class="col col-10">
-								<h1 class="h4 fw-600 text-body">
-									Demandes
-								</h1>
-							</div>
-							<div
-								class="row justify-content-end align-items-end g-2 mb-4 filtre-demandes">
+                        {% if lastDemandes|length == 0 %}
+                            <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 200px;">
+                                <div class="alert alert-info text-center">
+                                    Aucune demande disponible pour le moment.
+                                </div>
+                            </div>
+                        {% else %}
+                            {% for demande in lastDemandes %}
+                                {% if demande.publier == 1 and demande.statut == 'publié' %}
+                                    {% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
+                                    {% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
 
-								<!-- Filtre Marque -->
-								<div class="col-6 col-md-auto">
-									<label class="mb-0 opacity-50 small">Marque</label>
-									<select class="form-control form-control-sm" onchange="filtrerDemandes()" id="marque" data-live-search="true">
-										<option value="">Toutes les marques</option>
-										<option value="Audi">Audi</option>
-										<option value="BMW">BMW</option>
-										<option value="Mercedes">Mercedes</option>
-										<option value="Toyota">Toyota</option>
-									</select>
-								</div>
+                                    <div class="col mb-3">
+                                        <div class="carousel-box">
+                                            <a href="{{ path('detail_demande_accuill', {'code': demande.code}) }}" class="text-decoration-none text-dark">
+                                                <div class="request-card">
+                                                    <div class="request-header">
+                                                        <div class="request-title">
+                                                            {% if demande.pieces|length > 0 %}
+                                                                {% for piece in demande.pieces %}
+                                                                    {{ piece.designation }}{% if not loop.last %}, {% endif %}
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                {{ demande.marque }} {{ demande.modele }}
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="request-badge">
+                                                            {% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
+                                                                Neuve / Occasion
+                                                            {% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
+                                                                Neuve
+                                                            {% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}
+                                                                Occasion
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
 
-								<!-- Filtre Zone -->
-								<div class="col-6 col-md-auto">
-									<label class="mb-0 opacity-50 small">Zone</label>
-									<select class="form-control form-control-sm" onchange="filtrerDemandes()" id="zone" data-live-search="true">
-										<option value="">Toute la Tunisie</option>
-										<option value="Tunis">Tunis</option>
-										<option value="Ariana">Ariana</option>
-										<option value="Ben Arous">Ben Arous</option>
-										<option value="Manouba">Manouba</option>
-										<option value="Nabeul">Nabeul</option>
-										<option value="Zaghouan">Zaghouan</option>
-										<option value="Bizerte">Bizerte</option>
-										<option value="Béja">Béja</option>
-										<option value="Jendouba">Jendouba</option>
-										<option value="Kef">Kef</option>
-										<option value="Siliana">Siliana</option>
-										<option value="Sousse">Sousse</option>
-										<option value="Kébili">Sfax</option>
-										<option value="Monastir">Monastir</option>
-										<option value="Mahdia">Mahdia</option>
-										<option value="Kairouan">Kairouan</option>
-										<option value="Kasserine">Kasserine</option>
-										<option value="Sidi Bouzid">Sidi Bouzid</option>
-										<option value="Gabès">Gabès</option>
-										<option value="Médenine">Médenine</option>
-										<option value="Tataouine">Tataouine</option>
-										<option value="Gafsa">Gafsa</option>
-										<option value="Tozeur">Tozeur</option>
-										<option value="Kébili">Kébili</option>
+                                                    <div class="request-meta">
+                                                        <span><i class="fas fa-map-marker-alt"></i> {{ demande.zone }}</span>
+                                                        <span><i class="fas fa-user"></i> {{ demande.offrecompte ? demande.offrecompte.prenom : 'Anonyme' }}</span>
+                                                        <span><i class="far fa-clock"></i> {{ demande.datecreate|time_ago }}</span>
+                                                    </div>
 
-									</select>
-								</div>
+                                                    <div class="request-image">
+                                                        {% set firstPiece = demande.Pieces|first %}
+                                                        {% set photo = firstPiece and firstPiece.photo ? firstPiece.photo : '/image/placeholder.png' %}
+                                                        <img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
+                                                    </div>
 
-								<!-- Filtre Date -->
-								<div class="col-6 col-md-auto">
-									<label class="mb-0 opacity-50 small">Date</label>
-									<select class="form-control form-control-sm" onchange="filtrerDemandes()" id="date">
-										<option value="recent">Le plus récent</option>
-										<option value="ancien">Le plus ancien</option>
-									</select>
-								</div>
+                                                    <p class="request-description">
+                                                        {% if demande.pieces|length > 0 %}
+                                                            {% for piece in demande.pieces|slice(0,3) %}
+                                                                {{ piece.observation }}{% if not loop.last %}, {% endif %}
+                                                            {% endfor %}
+                                                            {% if demande.pieces|length > 3 %}...{% endif %}
+                                                        {% else %}
+                                                            Pas de description disponible.
+                                                        {% endif %}
+                                                    </p>
 
-								<!-- Filtre Type -->
-								<div class="col-6 col-md-auto">
-									<label class="mb-0 opacity-50 small">Type</label>
-									<select class="form-control form-control-sm" onchange="filtrerDemandes()" id="type">
-										<option value="">Tous</option>
-										<option value="neuf">Neuve</option>
-										<option value="occasion">Occasion</option>
-									</select>
-								</div>
+                                                    <a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" style="pointer-events: auto;"
+                                                       {% if not app.user %} onclick="AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !'); return false;" 
+                                                       {% elseif not estVendeur %} onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;" 
+                                                       {% elseif dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" 
+                                                       {% endif %}>
+                                                        <i class="fas fa-envelope-open-text me-2"></i> Proposer un prix
+                                                    </a>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
 
-							</div>
-
-
-						</div>
-					</div>
-					<input type="hidden" name="min_price" value="">
-					<input type="hidden" name="max_price" value="">
-					<div class="row gutters-5 row-cols-xxl-3 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1" id="filterrech">
-						{% for demande in lastDemandes %}
-    {% if demande.publier == 1 and demande.statut == 'publié' %}
-								{% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
-								{% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
-
-								<div class="col mb-3">
-									<div class="carousel-box">
-										<a href="{{ path('detail_demande_accuill', {'code': demande.code}) }}" class="text-decoration-none text-dark">
-											<div class="request-card">
-
-												<div class="request-header">
-													<div class="request-title">
-														{% if demande.pieces|length > 0 %}
-															{% for piece in demande.pieces %}
-																{{ piece.designation }}
-																{% if not loop.last %},
-																{% endif %}
-															{% endfor %}
-														{% else %}
-															{{ demande.marque }}
-															{{ demande.modele }}
-														{% endif %}
-													</div>
-													<div class="request-badge">
-														{% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
-															Neuve / Occasion
-														{% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
-															Neuve
-														{% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}
-															Occasion
-														{% endif %}
-													</div>
-												</div>
-
-												<div class="request-meta">
-													<span>
-														<i class="fas fa-map-marker-alt"></i>
-														{{ demande.zone }}</span>
-													<span>
-														<i class="fas fa-user"></i>
-														{{ demande.offrecompte ? demande.offrecompte.prenom : 'Anonyme' }}</span>
-													<span>
-														<i class="far fa-clock"></i>
-														{{ demande.datecreate|time_ago }}</span>
-												</div>
-
-												<div class="request-image">
-													{% set firstPiece = demande.Pieces|first %}
-													{% set photo = firstPiece and firstPiece.photo ? firstPiece.photo : '/image/placeholder.png' %}
-													<img src="{{ photo }}" alt="photo" class="img-fit mx-auto rounded">
-												</div>
-
-												<p class="request-description">
-													{% if demande.pieces|length > 0 %}
-														{% for piece in demande.pieces|slice(0,3) %}
-															{{ piece.observation }}
-															{% if not loop.last %},
-															{% endif %}
-														{% endfor %}
-														{% if demande.pieces|length > 3 %}...
-														{% endif %}
-													{% else %}
-														Pas de description disponible.
-													{% endif %}
-												</p>
-
-												<a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" style="pointer-events: auto;" {% if not app.user %} onclick="AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !'); return false;" {% elseif not estVendeur %} onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;" {% elseif dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
-													<i class="fas fa-envelope-open-text me-2"></i>
-													Proposer un prix
-												</a>
-
-											</div>
-										</a>
-
-									</div>
-
-								</div>
-							{% endif %}
-						{% endfor %}
-
-					</div>
-				</div>
-			</div>
-			<div class="aiz-pagination aiz-pagination-center mt-4">
-				{{ knp_pagination_render(lastDemandes) }}
-			</div>
-
-		</form>
-	</div>
+                    </div>
+                </div>
+            </div>
+            <div class="aiz-pagination aiz-pagination-center mt-4">
+                {{ knp_pagination_render(lastDemandes) }}
+            </div>
+        </form>
+    </div>
 </section>
-
 
 
 {% endblock %}

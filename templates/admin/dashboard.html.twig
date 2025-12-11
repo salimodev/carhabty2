@@ -364,8 +364,8 @@ function updateVisitorCount() {
         .catch(error => console.error('Erreur:', error));
 }
 
-// Mise à jour toutes les 10 secondes
-setInterval(updateVisitorCount, 10000);
+// Mise à jour toutes les 5 secondes
+setInterval(updateVisitorCount, 50000);
 
 // Premier chargement
 updateVisitorCount();
@@ -384,7 +384,7 @@ function updateUserStats() {
 }
 
 // Actualisation toutes les 5 secondes
-setInterval(updateUserStats, 500);
+setInterval(updateUserStats, 50000);
 </script>
 
 <script>
@@ -505,7 +505,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
 let pieOffresChart;
 
-function updateOffresChartDonut() {
+function updateOffresPie() {
     fetch("{{ path('dashboard_offres_data') }}", {
         headers: {'Accept': 'application/json'}
     })
@@ -554,8 +554,8 @@ function updateOffresChartDonut() {
     }).catch(err => console.error('Erreur fetch chart offres:', err));
 }
 
-setInterval(updateOffresChartDonut, 50000);
-updateOffresChartDonut();
+setInterval(updateOffresPie, 50000);
+updateOffresPie();
 
 </script>
 <script>
@@ -602,6 +602,6 @@ function updateOffresJourChart() {
 
 // Rafraîchissement toutes les 5 secondes
 updateOffresJourChart(); // premier appel
-setInterval(updateOffresJourChart, 5000);
+setInterval(updateOffresJourChart, 50000);
 </script>
 {% endblock %}

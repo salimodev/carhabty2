@@ -304,7 +304,7 @@
 								<input type="hidden" name="max_price" value="">
 								<div class="row gutters-5 row-cols-xxl-3 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1" id="filterrech">
 									{% for demande in demandes %}
-									 {% if demande.statut != 'fermer' %}
+									{% if demande.publier == 1 and demande.statut == 'publié' %}
 										<div class="col mb-3">
 											<div class="carousel-box">
 												<div
@@ -327,12 +327,14 @@
 																{% endif %}
 															</div>
 															<div class="request-badge">
-																{% if demande.vendeuroccasion == 1 %}
-																	Occasion
-																{% else %}
-																	Neuve
-																{% endif %}
-															</div>
+                                                            {% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
+                                                                Neuve / Occasion
+                                                            {% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
+                                                                Neuve
+                                                            {% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}
+                                                                Occasion
+                                                            {% endif %}
+                                                        </div>
 														</div>
 													</a>
 

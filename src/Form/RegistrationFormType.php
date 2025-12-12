@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType; 
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class RegistrationFormType extends AbstractType
@@ -94,7 +96,13 @@ class RegistrationFormType extends AbstractType
         ]),
     ],
 ])
-            ->add('email',null, array('label'=>false))
+           ->add('email', EmailType::class, [
+        'label' => false,
+        'constraints' => [
+            new NotBlank(['message' => 'Veuillez entrer une adresse e-mail.']),
+            new Email(['message' => 'Veuillez entrer une adresse e-mail valide.'])
+        ]
+    ])
              ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller

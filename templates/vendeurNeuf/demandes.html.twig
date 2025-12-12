@@ -302,9 +302,14 @@
 								</div>
 								<input type="hidden" name="min_price" value="">
 								<input type="hidden" name="max_price" value="">
+								 {% if demandes|length == 0 %}
+   <div class="row g-3">
+							 <div class="alert alert-info" style="text-align: center;">  Aucune demande disponible pour le moment.</div>
+                      </div>
+					    {% else %}
 								<div class="row gutters-5 row-cols-xxl-3 row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-1" id="filterrech">
 									{% for demande in demandes %}
-									 {% if demande.statut != 'fermer' %}
+									{% if demande.publier == 1 and demande.statut == 'publié' %}
 										<div class="col mb-3">
 											<div class="carousel-box">
 												<div
@@ -326,14 +331,15 @@
 																	{{ demande.modele }}
 																{% endif %}
 															</div>
-															<div class="request-badge">
-																{% if demande.vendeuroccasion == 1 %}
-																	Occasion
-																{% else %}
-																	Neuf
-																{% endif %}
-															</div>
-														</div>
+                                                        <div class="request-badge">
+                                                            {% if demande.vendeuroccasion == 1 and demande.vendeurneuf == 1 %}
+                                                                Neuve / Occasion
+                                                            {% elseif demande.vendeuroccasion == 0 and demande.vendeurneuf == 1 %}
+                                                                Neuve
+                                                            {% elseif demande.vendeuroccasion == 1 and demande.vendeurneuf == 0 %}
+                                                                Occasion
+                                                            {% endif %}
+                                                        </div>														</div>
 													</a>
 
 													{# Meta info #}
@@ -389,7 +395,7 @@
 										</div>
 										{% endif %}
 									{% endfor %}
-
+ {% endif %}
 								</div>
 							</div>
 						</div>

@@ -147,6 +147,7 @@
 						</thead>
 						<tbody>
 							{% for demande in demandes %}
+							{% if demande.publier == 1 and demande.statut == 'publié' %}
 								<tr>
 									<td>
 										<a href="{{path('detail_demande_vendeur_occa',{'code':demande.code})}}">{{ demande.code }}</a>
@@ -180,6 +181,7 @@
 									</td>
 
 								</tr>
+								{% endif %}
 							{% endfor %}
 						</tbody>
 					</table>

@@ -346,7 +346,7 @@ div.dataTables_wrapper div.dataTables_filter input {
 	<div class="aiz-sidebar left c-scrollbar" style="background-color:#e7f9e2;">
 		<div class="aiz-side-nav-logo-wrap" style="background-color:#e7f9e2;">
 			<div class="d-block text-center my-3">
-				<img height="100" width="100" class="rounded-circle size-100px" src="" src="{{ asset ('image/placeholder.png') }}" class="image rounded-circle" onerror="this.onerror=null;this.src='/image/avatar-place.png';" alt="">
+				<img height="100" width="100" class="rounded-circle size-100px" src="{{ app.user.photo ? asset(app.user.photo) : asset('image/avatar-place.png.png') }}"  class="image rounded-circle" onerror="this.onerror=null;this.src='/image/avatar-place.png';" alt="">
 				<h3 class="fs-16  m-0 text-primary"></h3>
 				<p class="text-primary"></p>
 			</div>

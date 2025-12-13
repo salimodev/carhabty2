@@ -17,28 +17,48 @@ class VisitSubscriber implements EventSubscriberInterface
         $this->em = $em;
     }
 
-    public function onKernelRequest(RequestEvent $event)
-    {
-        if (!$event->isMainRequest()) {
-            return;
-        }
-
-        $request = $event->getRequest();
-        $session = $request->getSession(); // <-- récupère la session ici
-
-        if ($session->get('visitor_counted')) {
-            return;
-        }
-
-        $visit = new Visit();
-        $visit->setIp($request->getClientIp());
-        $visit->setVisitedAt(new \DateTimeImmutable());
-
-        $this->em->persist($visit);
-        $this->em->flush();
-
-        $session->set('visitor_counted', true);
+ public function onKernelRequest(RequestEvent $event)
+{
+    if (!$event->isMainRequest()) {
+        return;
     }
+
+    $request = $event->getRequest();
+    $ip = $request->getClientIp();
+
+    if (!$ip) {
+        return; // pas d'IP, ne rien faire
+    }
+
+    $today = new \DateTimeImmutable();
+    $today = $today->setTime(0, 0, 0);
+
+    // Vérifier si cette IP a déjà visité aujourd'hui
+    $existingVisit = $this->em->getRepository(Visit::class)
+        ->createQueryBuilder('v')
+        ->select('v.id')
+        ->where('v.ip = :ip')
+        ->andWhere('v.visitedAt >= :today')
+        ->setParameter('ip', $ip)
+        ->setParameter('today', $today)
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+    if ($existingVisit) {
+        return; // déjà compté pour aujourd'hui
+    }
+
+    // Ajouter la nouvelle visite
+    $visit = new Visit();
+    $visit->setIp($ip);
+    $visit->setVisitedAt(new \DateTimeImmutable());
+
+    $this->em->persist($visit);
+    $this->em->flush();
+}
+
+
 
     public static function getSubscribedEvents(): array
     {

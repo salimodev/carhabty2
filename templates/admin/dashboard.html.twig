@@ -308,7 +308,7 @@ function updateAnnoncesPie() {
 }
 
 updateAnnoncesPie();
-setInterval(updateAnnoncesPie, 5000);
+setInterval(updateAnnoncesPie, 50000);
 
 </script>
 <script>
@@ -447,7 +447,7 @@ function updateDemandesChart() {
 }
 
 // Actualisation toutes les 5 secondes
-setInterval(updateDemandesChart, 5000);
+setInterval(updateDemandesChart, 50000);
 
 // Premier appel immédiat
 updateDemandesChart();
@@ -556,7 +556,7 @@ function updateOffresPie() {
     }).catch(err => console.error('Erreur fetch chart offres:', err));
 }
 
-setInterval(updateOffresPie, 5000);
+setInterval(updateOffresPie, 50000);
 updateOffresPie();
 
 </script>
@@ -604,6 +604,6 @@ function updateOffresJourChart() {
 
 // Rafraîchissement toutes les 5 secondes
 updateOffresJourChart(); // premier appel
-setInterval(updateOffresJourChart, 5000);
+setInterval(updateOffresJourChart, 50000);
 </script>
 {% endblock %}

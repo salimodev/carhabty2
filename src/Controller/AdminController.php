@@ -48,16 +48,17 @@ final class AdminController extends AbstractController
 public function dashboard(VisitRepository $visitRepository,UsersRepository $usersRepository,DemandeRepository $demandeRepository,AnnonceRepository $repo): Response
 {
      $totalEnAttenteA = $repo->count(['statut' => 'en_attente']);
-    // Nombre de visiteurs aujourd'hui
     $today = new \DateTime();
     $today->setTime(0, 0, 0);
 
-    $visitorsToday = $visitRepository->createQueryBuilder('v')
-        ->select('COUNT(v.id)')
+    // Query : compter les visites uniques par IP depuis aujourd'hui
+    $qb = $visitRepository->createQueryBuilder('v')
+        ->select('COUNT(DISTINCT v.ip)') // DISTINCT v.ip → une seule visite par IP
         ->where('v.visitedAt >= :today')
-        ->setParameter('today', $today)
-        ->getQuery()
-        ->getSingleScalarResult();
+        ->setParameter('today', $today);
+
+    $visitorsToday = $qb->getQuery()->getSingleScalarResult();
+
 
      $demandesEnAttente = $demandeRepository->createQueryBuilder('d')
     ->select('COUNT(d.id)')
@@ -97,15 +98,17 @@ public function visiteursTotal(VisitRepository $visitRepository): JsonResponse
     $today = new \DateTime();
     $today->setTime(0, 0, 0);
 
-    $visitorsToday = $visitRepository->createQueryBuilder('v')
-        ->select('COUNT(v.id)')
+    // Query : compter les visites uniques par IP depuis aujourd'hui
+    $qb = $visitRepository->createQueryBuilder('v')
+        ->select('COUNT(DISTINCT v.ip)') // DISTINCT v.ip → une seule visite par IP
         ->where('v.visitedAt >= :today')
-        ->setParameter('today', $today)
-        ->getQuery()
-        ->getSingleScalarResult();
+        ->setParameter('today', $today);
+
+    $visitorsToday = $qb->getQuery()->getSingleScalarResult();
 
     return new JsonResponse(['total' => $visitorsToday]);
 }
+
 
 
 #[Route('/admin/stats/users-role', name: 'stats_users_role')]

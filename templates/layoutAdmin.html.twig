@@ -5,19 +5,22 @@
 		{%block Head %}
 
 			<meta name="csrf-token" content="VpA81Ra2oe5qHpO2Y4iorD3lU7RV4e6ZqcWsl5od">
-			<meta name="app-url" content="http://127.0.0.1:8000">
-			<meta name="file-base-url" content="http://127.0.0.1:8000">
+<meta name="app-url" content="https://www.essayara.com/">
+<meta name="file-base-url" content="https://www.essayara.com/">
 
-			<!-- Required meta tags -->
-			<meta charset="utf-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-			<!-- Favicon -->
-			
-		   
-			<link rel="icon"  href="{{ asset ('image/logoico.png')}}" >
-		  
-			<title>Admin</title>
+<!-- Favicon -->
+<link rel="icon" href="{{ asset('image/logoico.png') }}">
+
+<!-- Titre de la page admin -->
+<title>{% block title %}Admin - Essayara.com{% endblock %}</title>
+
+<!-- Méta description (optionnel pour admin) -->
+<meta name="description" content="Panneau d’administration du site Essayara.com, gestion des annonces et des utilisateurs.">
+
 
 			<!-- google font -->
 			<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">

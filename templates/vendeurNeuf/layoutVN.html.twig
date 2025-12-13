@@ -147,6 +147,20 @@ complete: 'Complete',
 file: 'File',
 files: 'Files'
 }</script><style>
+.avatar {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #e5e7eb;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.05);
+}
+
 @media(max-width: 991px) {
 	.user-icon i {
 		font-size: 1.5rem !important;
@@ -347,8 +361,12 @@ div.dataTables_wrapper div.dataTables_filter input {
 		<div class="aiz-side-nav-logo-wrap" style="background-color: #d1e7f1;">
 			<div class="d-block text-center my-3">
 			
-				<img height="100" width="100" class="rounded-circle size-100px" src="{{ app.user.photo ? asset(app.user.photo) : asset('image/avatar-place.png.png') }}"  class="image rounded-circle" onerror="this.onerror=null;this.src='/image/avatar-place.png';" alt="">
-				<h3 class="fs-16  m-0 text-primary"></h3>
+				<img
+    src="{{ app.user.photo ? asset(app.user.photo) : asset('image/avatar-place.png') }}"
+    alt="Profilbild"
+    class="avatar"
+    onerror="this.onerror=null; this.src='/image/avatar-place.png';">
+	<h3 class="fs-16  m-0 text-primary"></h3>
 				<p class="text-primary"></p>
 			</div>
 		</div>

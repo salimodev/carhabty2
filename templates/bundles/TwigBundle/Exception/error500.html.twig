@@ -1,53 +1,53 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Erreur serveur - Essayara{% endblock %}
+{% block title %}500 - Erreur serveur{% endblock %}
 
-{% block body %}
+{% block LinksCss %}
+{{ parent() }}
 <style>
-  body {
+.error-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80vh;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #ffe6e6, #ffcccc);
-    color: #333;
-    margin: 0;
-  }
-  .error-container {
+    height: 70vh;
     text-align: center;
-  }
-  .error-container h1 {
-    font-size: 6rem;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+.error-container h1 {
+    font-size: 8rem;
+    color: #00B7B7;
     margin: 0;
-    color: #cc0000;
-  }
-  .error-container h2 {
+}
+.error-container h2 {
     font-size: 2rem;
     margin: 10px 0 20px;
-  }
-  .error-container p {
+}
+.error-container p {
     font-size: 1.2rem;
     margin-bottom: 30px;
-  }
-  .error-container a {
+}
+.error-container a {
     display: inline-block;
     padding: 12px 25px;
-    background-color: #cc0000;
+    background-color: #00B7B7;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
     transition: 0.3s;
-  }
-  .error-container a:hover {
-    background-color: #990000;
-  }
+}
+.error-container a:hover {
+    background-color: #00B7B7;
+}
 </style>
+{% endblock %}
 
+{% block MainContent %}
 <div class="error-container">
-  <h1>500</h1>
-  <h2>Erreur serveur</h2>
-  <p>Une erreur est survenue côté serveur. Veuillez réessayer plus tard.</p>
-  <a href="{{ path('Accueil') }}">Retour à l'accueil</a>
+    <h1>500</h1>
+    <h2>Oops ! Erreur serveur</h2>
+    <p>Une erreur est survenue. Veuillez réessayer plus tard.</p>
+    <a href="{{ path('Accueil') }}">Retour à l'accueil</a>
 </div>
 {% endblock %}

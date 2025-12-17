@@ -466,18 +466,13 @@ public function detailAnnonce(
     ]);
 }
 
-#[Route('/test-error/{code}', name: 'test_error')]
-public function testError($code): Response
-{
-    switch ($code) {
-        case 403:
-            throw new AccessDeniedException();
-        case 404:
-            throw $this->createNotFoundException();
-        case 500:
-            throw new \Exception("Erreur serveur test");
-    }
-}
+#[Route('/test404')]
+public function test404() { throw $this->createNotFoundException(); }
 
+#[Route('/test403')]
+public function test403() { throw new AccessDeniedException(); }
+
+#[Route('/test500')]
+public function test500() { throw new \Exception("Erreur 500 test"); }
 
 }

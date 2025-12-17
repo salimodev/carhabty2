@@ -1,53 +1,54 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Page introuvable - Essayara{% endblock %}
+{% block title %}404 - Page introuvable{% endblock %}
 
-{% block body %}
+{% block LinksCss %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
 <style>
-  body {
+.error-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80vh;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    color: #333;
-    margin: 0;
-  }
-  .error-container {
+    height: 70vh;
     text-align: center;
-  }
-  .error-container h1 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+.error-container h1 {
     font-size: 8rem;
+    color: #00B7B7;
     margin: 0;
-    color: #ff4c4c;
-  }
-  .error-container h2 {
+}
+.error-container h2 {
     font-size: 2rem;
     margin: 10px 0 20px;
-  }
-  .error-container p {
+}
+.error-container p {
     font-size: 1.2rem;
     margin-bottom: 30px;
-  }
-  .error-container a {
+}
+.error-container a {
     display: inline-block;
     padding: 12px 25px;
-    background-color: #ff4c4c;
+    background-color: #00B7B7;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
     transition: 0.3s;
-  }
-  .error-container a:hover {
-    background-color: #e03e3e;
-  }
+}
+.error-container a:hover {
+    background-color: #00B7B7;
+}
 </style>
+{% endblock %}
 
+{% block MainContent %}
 <div class="error-container">
-  <h1>404</h1>
-  <h2>Oups ! Page introuvable</h2>
-  <p>La page que vous cherchez n'existe pas ou a été déplacée.</p>
-  <a href="{{ path('Accueil') }}">Retour à l'accueil</a>
+    <h1>404</h1>
+    <h2>Oups ! Page introuvable</h2>
+    <p>La page que vous cherchez n'existe pas ou a été déplacée.</p>
+    <a href="{{ path('Accueil') }}">Retour à l'accueil</a>
 </div>
 {% endblock %}

@@ -26,7 +26,7 @@ security:
             form_login:
                 login_path: app_login      # page de login User
                 check_path: app_login_check
-            user_checker: App\Security\UserBlockedChecker
+            user_checker: App\Security\UserChecker
             custom_authenticator:
                 - App\Security\AdminAuthenticator
                 - App\Security\UsersAuthenticator

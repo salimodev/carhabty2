@@ -241,6 +241,11 @@ public function all_demande(
     return $this->render('home/alldemande.html.twig', [
         'lastDemandes' => $dem,
     ]);
+
+    // Forcer l'indexation par Google
+$response->headers->set('X-Robots-Tag', 'index, follow');
+
+return $response;
 }
 
 #[Route('/recherche/demande', name: 'recherche_demande')]

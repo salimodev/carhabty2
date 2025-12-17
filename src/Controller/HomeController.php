@@ -465,6 +465,14 @@ public function detailAnnonce(
     ]);
 }
 
+#[Route('/test404')]
+public function test404() { throw $this->createNotFoundException(); }
+
+#[Route('/test403')]
+public function test403() { throw new AccessDeniedException(); }
+
+#[Route('/test500')]
+public function test500() { throw new \Exception("Erreur 500 test"); }
 
 
 }

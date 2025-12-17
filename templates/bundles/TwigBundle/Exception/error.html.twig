@@ -1,0 +1,12 @@
+{% extends 'layout.html.twig' %}
+{% block title %} page non trouvée  {% endblock %}
+{% block Content %} 
+ <div id="notfound">
+        <div class="notfound">
+            <div class="notfound-404"></div>
+            <h1>Oops! voilà qui n'était pas prévu!</h1>
+            <p>Désolé mais ce lien est introuvable! Dirigez-vous vers la page d'accueil </p>
+            <a href='{{path('Accueil')}}'  onclick='location.href = "{{path('Accueil')}}";' >REVENIR A LA PAGE D'ACCUEIL</a>
+        </div>
+    </div>
+{% endblock %}

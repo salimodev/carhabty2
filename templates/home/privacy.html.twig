@@ -1,0 +1,100 @@
+{% extends 'Layout.html.twig' %}
+{% block Head %}
+	{{ parent() }}
+
+	{% block LinksCss %}
+		{{ parent() }}
+	{% endblock %}
+
+{% endblock %}
+
+{% block title %}
+	Politique de confidentialité
+{% endblock %}
+
+{% block Header %}
+	{{ parent() }}
+{% endblock %}
+
+{% block Content %}
+	{% block loader %}
+		{{ parent() }}
+	{% endblock %}
+	{% block popups %}
+		{{ parent() }}
+	   
+		{% endblock %}
+	<section class="pt-4 mb-4">
+		<div class="container text-center">
+			<div class="row">
+				<div class="col-lg-6 text-center text-lg-left">
+					<h1 class="fw-600 h4">Politique de confidentialité</h1>
+				</div>
+				<div class="col-lg-6">
+					<ul class="breadcrumb bg-transparent p-0 justify-content-center justify-content-lg-end">
+						<li class="breadcrumb-item opacity-50">
+							<a class="text-reset" href="{{path('Accueil')}}">Accueil</a>
+						</li>
+						<li class="text-dark fw-600 breadcrumb-item">
+							<a class="text-reset" href="{{path('app_Privacy')}}">"Politique de confidentialité"</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+<section class="mb-4">
+  <div class="container">
+    <div class="p-4 bg-white rounded shadow-sm overflow-hidden mw-100 text-left">
+
+      <h1>Politique de confidentialité – Essayara</h1>
+
+      <p>
+        Conformément à la loi tunisienne n°2004-63 relative à la protection
+        des données à caractère personnel, Essayara s’engage à assurer
+        la confidentialité et la sécurité des données de ses utilisateurs.
+      </p>
+
+      <h4>Données collectées</h4>
+      <ul>
+        <li>Nom et numéro de téléphone</li>
+        <li>Informations de compte utilisateur</li>
+        <li>Données liées aux demandes de pièces et à l’utilisation de l’application</li>
+      </ul>
+
+      <h4>Utilisation des données</h4>
+      <ul>
+        <li>Mise en relation entre acheteurs et vendeurs</li>
+        <li>Amélioration des services proposés</li>
+        <li>Sécurité et bon fonctionnement de la plateforme</li>
+      </ul>
+
+      <h4>Droits de l’utilisateur</h4>
+      <ul>
+        <li>Droit d’accès, de rectification et de suppression de ses données personnelles</li>
+        <li>Les données ne sont ni vendues ni partagées sans le consentement de l’utilisateur</li>
+      </ul>
+
+      <p>
+        L’utilisation de l’application Essayara vaut acceptation
+        de la présente politique de confidentialité.
+      </p>
+
+      <h4>Informations légales</h4>
+      <p><strong>Éditeur de l’application :</strong> Smiri Zoubaier</p>
+      <p><strong>Pays :</strong> Tunisie</p>
+      <p><strong>Contact :</strong> 
+        <a href="mailto:zoubeirsmiri@gmail.com">zoubeirsmiri@gmail.com</a> / +216 98 119 962
+      </p>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+{% block footer %}
+	{{ parent() }}
+{% endblock %}
+{% block javascript %}
+	{{ parent() }}
+{% endblock %}

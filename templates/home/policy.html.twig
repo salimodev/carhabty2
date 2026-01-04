@@ -1,0 +1,86 @@
+{% extends 'Layout.html.twig' %}
+{% block Head %}
+	{{ parent() }}
+
+ {% block LinksCss %}
+ {{ parent() }}
+ {% endblock %}
+
+{% endblock %}
+
+{% block title %}
+	Page Politique d'assistance
+{% endblock %}
+
+{% block Header %}
+{{ parent() }}
+{% endblock %}
+
+{% block Content %}
+{% block loader %} {{ parent() }} {% endblock %}
+    {% block popups %}
+        {{ parent() }}
+       
+        {% endblock %}
+<section class="pt-4 mb-4">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-6 text-center text-lg-left">
+                <h1 class="fw-600 h4">Page Politique d'assistance</h1>
+            </div>
+            <div class="col-lg-6">
+                <ul class="breadcrumb bg-transparent p-0 justify-content-center justify-content-lg-end">
+                    <li class="breadcrumb-item opacity-50">
+                        <a class="text-reset" href="{{path('Accueil')}}">Accueil</a>
+                    </li>
+                    <li class="text-dark fw-600 breadcrumb-item">
+                        <a class="text-reset" href="{{path('app_Policy')}}">Politique de soutien – Essayara</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="mb-4">
+  <div class="container">
+    <div class="p-4 bg-white rounded shadow-sm overflow-hidden mw-100 text-left">
+
+      <h1>Politique de soutien – Essayara</h1>
+
+      <p>
+        Essayara fournit un service de soutien technique et fonctionnel
+        conformément à la législation tunisienne en vigueur.
+      </p>
+
+      <h4>Le service de soutien comprend :</h4>
+      <ul>
+        <li>Assistance à l’utilisation de la plateforme</li>
+        <li>Support en cas de dysfonctionnement technique</li>
+        <li>Traitement des réclamations liées au service numérique</li>
+      </ul>
+
+      <h4>Limites de responsabilité</h4>
+      <ul>
+        <li>Essayara agit exclusivement en tant qu’intermédiaire numérique</li>
+        <li>Essayara n’intervient pas dans les transactions financières</li>
+        <li>Essayara n’est pas responsable de la qualité, de l’authenticité, du prix ou de la livraison des pièces</li>
+        <li>Chaque vendeur est seul responsable des informations et engagements fournis</li>
+      </ul>
+
+      <p>
+        Essayara se réserve le droit de suspendre ou de supprimer tout compte
+        en cas d’utilisation frauduleuse, abusive ou contraire aux conditions d’utilisation.
+      </p>
+
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}
+{% block footer %}
+{{ parent() }}
+{% endblock %}
+{% block javascript %}
+{{ parent() }}
+{% endblock %}

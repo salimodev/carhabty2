@@ -1,0 +1,89 @@
+{% extends 'Layout.html.twig' %}
+{% block Head %}
+	{{ parent() }}
+
+ {% block LinksCss %}
+ {{ parent() }}
+ {% endblock %}
+
+{% endblock %}
+
+{% block title %}
+	Politique de retour
+{% endblock %}
+
+{% block Header %}
+{{ parent() }}
+{% endblock %}
+
+{% block Content %}
+{% block loader %} {{ parent() }} {% endblock %}
+    {% block popups %}
+        {{ parent() }}
+       
+        {% endblock %}
+<section class="pt-4 mb-4">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-6 text-center text-lg-left">
+                <h1 class="fw-600 h4">Centre d’aide – Essayara</h1>
+            </div>
+            <div class="col-lg-6">
+                <ul class="breadcrumb bg-transparent p-0 justify-content-center justify-content-lg-end">
+                    <li class="breadcrumb-item opacity-50">
+                        <a class="text-reset" href="{{path('Accueil')}}">Accueil</a>
+                    </li>
+                    <li class="text-dark fw-600 breadcrumb-item">
+                        <a class="text-reset" href="{{path('app_Retour')}}">Centre d’aide – Essayara</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="mb-4">
+  <div class="container">
+    <div class="p-4 bg-white rounded shadow-sm overflow-hidden mw-100 text-left">
+
+      <h1>Centre d’aide – Essayara</h1>
+
+      <p>
+        Bienvenue au centre d’aide de l’application <strong>Essayara</strong>.
+      </p>
+
+      <p>
+        Essayara est une plateforme numérique exploitée en Tunisie, destinée à
+        faciliter la mise en relation entre les propriétaires de véhicules et
+        les vendeurs de pièces automobiles neuves et d’occasion.
+      </p>
+
+      <h4>À travers l’application, l’utilisateur peut :</h4>
+      <ul>
+        <li>Publier une demande de pièce automobile</li>
+        <li>Recevoir et comparer des offres de vendeurs</li>
+        <li>Contacter les vendeurs directement via la plateforme</li>
+      </ul>
+
+      <h4>Besoin d’aide ?</h4>
+      <p>
+        Pour toute question, difficulté technique ou réclamation,
+        l’utilisateur peut contacter l’équipe Essayara via :
+      </p>
+
+      <ul>
+        <li>Email : <a href="mailto:direction@essayara.com">direction@essayara.com</a></li>
+        <li>Téléphone : +216 79 212 733</li>
+      </ul>
+
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}
+{% block footer %}
+{{ parent() }}
+{% endblock %}
+{% block javascript %}
+{{ parent() }}
+{% endblock %}

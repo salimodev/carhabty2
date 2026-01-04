@@ -1,0 +1,121 @@
+{% extends 'Layout.html.twig' %}
+{% block Head %}
+	{{ parent() }}
+
+ {% block LinksCss %}
+ {{ parent() }}
+ {% endblock %}
+
+{% endblock %}
+
+{% block title %}
+	Terms and conditions
+{% endblock %}
+
+{% block Header %}
+{{ parent() }}
+{% endblock %}
+
+{% block Content %}
+{% block loader %} {{ parent() }} {% endblock %}
+    {% block popups %}
+        {{ parent() }}
+       
+        {% endblock %}
+<section class="pt-4 mb-4">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-6 text-center text-lg-left">
+                <h1 class="fw-600 h4"> Page Termes et conditions</h1>
+            </div>
+            <div class="col-lg-6">
+                <ul class="breadcrumb bg-transparent p-0 justify-content-center justify-content-lg-end">
+                    <li class="breadcrumb-item opacity-50">
+                        <a class="text-reset" href="{{path('Accueil')}}">Accueil</a>
+                    </li>
+                    <li class="text-dark fw-600 breadcrumb-item">
+                        <a class="text-reset" href="{{path('app_Terms')}}">"Terms &amp; conditions"</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="mb-4">
+    <div class="container">
+        <div class="p-4 bg-white rounded shadow-sm overflow-hidden mw-100 text-left">
+            <h2 style="font-family: Helvetica, Arial, sans-serif; font-weight:700; font-size:20px;">
+                Conditions Générales d’Utilisation (CGU)
+            </h2>
+
+            <p>Bienvenue sur <strong>essayara.com</strong>.</p>
+
+            <p>
+                Les présentes Conditions Générales d’Utilisation régissent l’accès et l’utilisation
+                du site <strong>essayara.com</strong>, plateforme de mise en relation entre acheteurs
+                et vendeurs de pièces automobiles neuves et d’occasion.
+            </p>
+
+            <p>
+                En utilisant ce site, vous acceptez pleinement et sans réserve les présentes CGU.
+                Si vous n’acceptez pas ces conditions, veuillez ne pas utiliser le site.
+            </p>
+
+            <h3 style="font-size:16px; font-weight:700;">1. Rôle de la plateforme</h3>
+            <p>
+                Essayara.com agit uniquement comme intermédiaire. La plateforme ne vend pas de
+                pièces automobiles et n’est pas partie aux transactions entre utilisateurs.
+            </p>
+
+            <h3 style="font-size:16px; font-weight:700;">2. Inscription</h3>
+            <p>
+                L’accès à certaines fonctionnalités nécessite une inscription. Les utilisateurs
+                s’engagent à fournir des informations exactes et à jour.
+            </p>
+
+            <h3 style="font-size:16px; font-weight:700;">3. Responsabilité des utilisateurs</h3>
+            <p>
+                Les vendeurs sont responsables des prix et des
+                descriptions. Les acheteurs contactent directement les vendeurs.
+                Essayara.com ne garantit ni la qualité ni la disponibilité des pièces.
+            </p>
+
+            <h3 style="font-size:16px; font-weight:700;">4. Contenus interdits</h3>
+            <p>
+                Il est interdit de publier des contenus faux, trompeurs, illégaux ou contraires
+                aux lois en vigueur.
+            </p>
+
+            <h3 style="font-size:16px; font-weight:700;">5. Limitation de responsabilité</h3>
+            <p>
+                Essayara.com ne pourra être tenu responsable des litiges, pertes ou dommages
+                résultant des transactions entre acheteurs et vendeurs.
+            </p>
+
+            <h3 style="font-size:16px; font-weight:700;">6. Données personnelles</h3>
+            <p>
+                Les données personnelles sont traitées conformément à la politique de
+                confidentialité du site.
+            </p>
+
+            <h3 style="font-size:16px; font-weight:700;">7. Modification des CGU</h3>
+            <p>
+                Essayara.com se réserve le droit de modifier les présentes CGU à tout moment.
+            </p>
+
+            <h3 style="font-size:16px; font-weight:700;">8. Droit applicable</h3>
+            <p>
+                Les présentes CGU sont soumises au droit applicable dans le pays d’établissement
+                de l’éditeur du site.
+            </p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+{% block footer %}
+{{ parent() }}
+{% endblock %}
+{% block javascript %}
+{{ parent() }}
+{% endblock %}

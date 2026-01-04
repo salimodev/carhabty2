@@ -105,19 +105,19 @@
 					{% if app.user %}
 						{% if is_granted('ROLE_VENDEUR_NEUF') %}
 							<button type="button" class="btn btn-register" onclick="AIZ.plugins.notify('danger', 'Seul le propriétaire et le mécanicien peut faire une demande !');">
-								demandez|اطلب قطعة
+								Demandez | اطلب قطعة
 							</button>
 							{% elseif is_granted('ROLE_VENDEUR_OCCASION') %}
 							<button type="button" class="btn btn-register" onclick="AIZ.plugins.notify('danger', 'Seul le propriétaire et le mécanicien peut faire une demande !');">
-								demandez|اطلب قطعة
+								Demandez | اطلب قطعة
 							</button>
 						{% elseif is_granted('ROLE_PROPRIETAIRE') or is_granted('ROLE_MECANICIEN') %}
-							<a href="{{ path('app_demande') }}" class="btn btn-register">demandez|اطلب قطعة</a>
+							<a href="{{ path('app_demande') }}" class="btn btn-register">Demandez | اطلب قطعة</a>
 							{% elseif is_granted('ROLE_PARTICULIER') or is_granted('ROLE_PARTICULIER') %}
 							<a href="{{ path('add_annonces') }}" class="btn btn-register">Publier une annonce</a>
 						{% endif %}
 					{% else %}
-						<a href="{{ path('app_demande') }}" class="btn btn-register">demandez|اطلب قطعة</a>
+						<a href="{{ path('app_demande') }}" class="btn btn-register">Demandez | اطلب قطعة</a>
 					{% endif %}
 				</li>
 				<li {% if PageMenu == "Accueil" %} class="list-inline-item mr-0 active" style="border-bottom: solid;" {% else %} class="list-inline-item mr-0" {% endif %}>

@@ -132,7 +132,7 @@
 				</div>
 				<div class="card-body">
 					{% if dernieresOffres is not empty %}
-						<table class="table table-hover mb-0 align-middle" id="tabprod1">
+						<table class="table" id="tabprod1">
 							<thead class="table-light">
 								<tr>
 									<th>#</th>
@@ -156,7 +156,7 @@
 												{{ offre.demande.code ?? '—' }}
 											</a>
 										</td>
-										{# ✅ Affichage du nom ou email du demandeur #}
+									
 										<td>
 											{% if offre.demande.offrecompte %}
 												{{ offre.demande.offrecompte.nom ?? offre.demande.offrecompte.email }}

@@ -490,25 +490,25 @@ public function test500() { throw new \Exception("Erreur 500 test"); }
      #[Route(path: '/Centre/aide', name: 'app_Retour')]
     public function Retour()  {
        
-        return $this->render('Accueil/retour.html.twig');
+        return $this->render('home/retour.html.twig');
     }
 
 
       #[Route(path: '/Politique/soutien', name: 'app_Policy')]
     public function Policy()  {
        
-        return $this->render('Accueil/policy.html.twig');
+        return $this->render('home/policy.html.twig');
     }
 
     #[Route(path: '/About', name: 'app_About')]
     public function About()  {
        
-        return $this->render('Accueil/about.html.twig');
+        return $this->render('home/about.html.twig');
     }
 
     #[Route(path: '/Politique/confidentialité', name: 'app_Privacy')]
     public function privacy()  {
        
-        return $this->render('Accueil/privacy.html.twig');
+        return $this->render('home/privacy.html.twig');
     }
 }

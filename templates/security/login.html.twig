@@ -45,9 +45,16 @@
 
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                            <div class="mb-4">
-                                <input type="email" class="form-control form-control rounded-pill" placeholder="Email" name="email" style="background-color: #dfdfdf;" value="{{ last_username }}" required>
-                            </div>
+                          <div class="mb-4">
+    <input type="text" 
+           class="form-control form-control rounded-pill" 
+           placeholder="Email ou numéro de téléphone" 
+           name="email" 
+           style="background-color: #dfdfdf;" 
+           value="{{ last_username }}" 
+           required>
+</div>
+
 
                             <div class="mb-4">
                                 <input type="password" class="form-control rounded-pill" placeholder="Mot de passe" style="background-color: #dfdfdf;" name="password" required>

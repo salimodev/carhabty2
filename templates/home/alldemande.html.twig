@@ -486,7 +486,7 @@
                                                        {% elseif not estVendeur %} onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;" 
                                                        {% elseif dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" 
                                                        {% endif %}>
-                                                        <i class="fas fa-envelope-open-text me-2"></i> Proposer un prix
+                                                        <i class="fas fa-envelope-open-text me-2"></i> Proposer un prix | أعطي سومك
                                                     </a>
                                                 </div>
                                             </a>
@@ -600,7 +600,7 @@ function filtrerDemandes() {
                     data-userzone="${d.userZone || 'Toute la Tunisie'}"
                     data-type="${d.type}"
                     data-vendeur-type="${d.vendeurType}">
-                    <i class="fas fa-envelope-open-text"></i> Proposer un prix
+                    <i class="fas fa-envelope-open-text"></i> Proposer un prix | أعطي سومك
                 </button>
             </div>
         </div>

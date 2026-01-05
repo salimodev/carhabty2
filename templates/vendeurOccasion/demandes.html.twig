@@ -400,7 +400,7 @@
 
 													<a href="{% if not dejaPropose %}{{ path('propose_offre_vo', {'code': demande.code}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" {% if dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
 														<i class="fas fa-envelope-open-text me-2"></i>
-														Proposer un prix
+														 Proposer un prix | أعطي سومك
 													</a>
 
 
@@ -582,7 +582,7 @@ piecesDesc || 'Pas de description disponible.'
             <button class="btn btn-register w-100 propose-btn" data-id="${
 d.code
 }" data-deja="${dejaPropose}">
-                <i class="fas fa-envelope-open-text"></i> Proposer un prix
+                <i class="fas fa-envelope-open-text"></i>  Proposer un prix | أعطي سومك
             </button>
         </div>
     </div>

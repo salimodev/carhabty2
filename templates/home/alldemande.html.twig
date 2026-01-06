@@ -558,7 +558,16 @@ function filtrerDemandes() {
             <div class="request-card">
                 <div class="request-header">
                     <div class="request-title">${piecesTitle || (d.marque + " " + d.modele)}</div>
-                    <div class="request-badge">${d.type === 'occasion' ? 'Occasion' : 'Neuve'}</div>
+                <div class="request-badge">
+  ${
+    d.type === 'neuve/occasion' ? 'Neuve / Occasion' :
+    (d.type === 'neuve' ? 'Neuve' :
+    (d.type === 'occasion' ? 'Occasion' : 'Non spécifié'))
+  }
+</div>
+
+
+
                 </div>
                 <div class="request-meta">
                     <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>

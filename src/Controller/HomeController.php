@@ -261,13 +261,13 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
     $user = $this->getUser();
     $estConnecte = $user !== null;
 
-    // 🔹 Rollenprüfung
+  
     $isVendeurNeuf = $user && in_array('ROLE_VENDEUR_NEUF', $user->getRoles());
     $isVendeurOccasion = $user && in_array('ROLE_VENDEUR_OCCASION', $user->getRoles());
 
     $userZone = $user ? $user->getAdresse() : null;
 
-    // 🔹 Holen der gefilterten Anfragen
+    
     $demandes = $em->getRepository(Demande::class)
         ->filterDemandes($marque, $zone, $date, $type, $trier);
 
@@ -275,12 +275,12 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
 
     foreach ($demandes as $d) {
 
-        // ❌ geschlossene Anfragen ignorieren
+       
         if ($d->getStatut() === 'fermer') {
             continue;
         }
 
-        // 🔹 Rollenspezifische Filterung
+        
         if ($isVendeurNeuf) {
             if ($d->getVendeurneuf() != 1) continue;
             if ($d->getZone() !== $userZone && $d->getZone() !== "Toute la Tunisie") continue;
@@ -291,7 +291,6 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
             if ($d->getZone() !== $userZone && $d->getZone() !== "Toute la Tunisie") continue;
         }
 
-        // 🔹 Stücke vorbereiten
         $pieces = [];
         foreach ($d->getPieces() as $p) {
             $pieces[] = [
@@ -301,7 +300,7 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
             ];
         }
 
-        // 🔹 Prüfen, ob der eingeloggte Verkäufer schon ein Angebot gemacht hat
+       
         $dejaPropose = false;
 
         if ($user && ($isVendeurNeuf || $isVendeurOccasion)) {
@@ -311,24 +310,37 @@ public function rechercheDemande(Request $request, EntityManagerInterface $em): 
             )) > 0;
         }
 
-        // 🔹 JSON-Antwort aufbauen
-        $result[] = [
-            'id'           => $d->getId(),
-            'code' => $d->getCode(),
-            'marque'       => $d->getMarque(),
-            'modele'       => $d->getModele(),
-            'zone'         => $d->getZone(),
-            'date'         => $d->getDatecreate()->format('Y-m-d H:i'),
-            'time_ago'     => $this->timeAgo($d->getDatecreate()),
-            'type'         => $d->getVendeuroccasion() == 1 ? 'occasion' : 'neuf',
-            'vendeurType'  => $isVendeurNeuf ? 'neuf' : ($isVendeurOccasion ? 'occasion' : null),
-            'offrecompte'  => $d->getOffrecompte() ? $d->getOffrecompte()->getPrenom() : 'Anonyme',
-            'pieces'       => $pieces,
-            'dejaPropose'  => $dejaPropose,
-            'estConnecte'  => $estConnecte,
-            'estVendeur'   => ($isVendeurNeuf || $isVendeurOccasion),
-            'userZone'     => $userZone,
-        ];
+    
+if ($d->getVendeurneuf() == 1 && $d->getVendeuroccasion() == 1) {
+    $type = 'neuve/occasion';
+} elseif ($d->getVendeurneuf() == 1) {
+    $type = 'neuve';
+} elseif ($d->getVendeuroccasion() == 1) {
+    $type = 'occasion';
+} else {
+    $type = 'non spécifié';
+}
+
+
+      
+       $result[] = [
+    'id'           => $d->getId(),
+    'code'         => $d->getCode(),
+    'marque'       => $d->getMarque(),
+    'modele'       => $d->getModele(),
+    'zone'         => $d->getZone(),
+    'date'         => $d->getDatecreate()->format('Y-m-d H:i'),
+    'time_ago'     => $this->timeAgo($d->getDatecreate()),
+    'type'         => $type, // ← ici
+    'vendeurType'  => $isVendeurNeuf ? 'neuf' : ($isVendeurOccasion ? 'occasion' : null),
+    'offrecompte'  => $d->getOffrecompte() ? $d->getOffrecompte()->getPrenom() : 'Anonyme',
+    'pieces'       => $pieces,
+    'dejaPropose'  => $dejaPropose,
+    'estConnecte'  => $estConnecte,
+    'estVendeur'   => ($isVendeurNeuf || $isVendeurOccasion),
+    'userZone'     => $userZone,
+];
+
     }
 
     return new JsonResponse($result);

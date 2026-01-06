@@ -8,6 +8,8 @@ use App\Entity\Pieces;
 use App\Service\UsersService;
 use App\Entity\Offre;
 use App\Entity\Annonce;
+use App\Entity\Marque;
+use App\Entity\Modele;
 use App\Entity\BannerMenu;
 use App\Entity\Footer;
 use App\Repository\VisitRepository;
@@ -1268,5 +1270,178 @@ public function saveFooter(Request $request, EntityManagerInterface $em): JsonRe
     return new JsonResponse(['status' => 'success']);
 }
 
+ #[Route('/admin/marques', name: 'admin_liste_marques')]
+    public function listeMarques(EntityManagerInterface $em, AnnonceRepository $annonceRepository,
+    DemandeRepository $demandeRepository): Response
+    {
+
+          $demandesEnAttente = $demandeRepository->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 0')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'en_attente')
+        ->getQuery()
+        ->getSingleScalarResult();
+         $totalEnAttenteA = $annonceRepository->count(['statut' => 'en_attente']);
+        // Récupérer toutes les marques
+        $list = $em->getRepository(Marque::class)->findAll();
+
+        // Passer les données au template Twig
+        return $this->render('admin/marque/marque.html.twig', [
+            'list' => $list,'demandesEnAttente' => $demandesEnAttente,
+        'totalEnAttenteA' => $totalEnAttenteA
+        ]);
+    }
+
+  #[Route('/admin/marque/ajouter', name: 'Ajoutermarque', methods:['POST'])]
+    public function ajouterMarque(Request $request, EntityManagerInterface $em): Response
+    {
+        $nom = $request->request->get('nom');
+
+        if (!$nom) {
+            return $this->json(['error' => 'Nom requis'], 400);
+        }
+
+        $marque = new Marque();
+        $marque->setNom($nom);
+
+        $em->persist($marque);
+        $em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+     #[Route('/admin/marque/modifier/{id}', name: 'Modifiermarque', methods:['GET','POST'])]
+    public function modifierMarque(Request $request, EntityManagerInterface $em,AnnonceRepository $annonceRepository,
+    DemandeRepository $demandeRepository, $id): Response
+    {
+
+          $demandesEnAttente = $demandeRepository->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 0')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'en_attente')
+        ->getQuery()
+        ->getSingleScalarResult();
+         $totalEnAttenteA = $annonceRepository->count(['statut' => 'en_attente']);
+        $marque = $em->getRepository(Marque::class)->find($id);
+        if (!$marque) {
+            throw $this->createNotFoundException('Marque non trouvée');
+        }
+
+        if ($request->isMethod('POST')) {
+            $nom = $request->request->get('nom');
+            if (!$nom) {
+                return $this->json(['error' => 'Nom requis'], 400);
+            }
+
+            $marque->setNom($nom);
+            $em->flush();
+
+            return $this->json(['success' => true]);
+        }
+
+        // GET: retourner une vue de modification si nécessaire
+        return $this->render('admin/marque/modifiermarque.html.twig', [
+            'marque' => $marque,'demandesEnAttente' => $demandesEnAttente,
+        'totalEnAttenteA' => $totalEnAttenteA
+        ]);
+    }
+
+ #[Route('/admin/marque/supprimer', name: 'Supprimer_marque', methods:['POST'])]
+    public function supprimerMarque(Request $request, EntityManagerInterface $em): Response
+    {
+        $id = $request->request->get('id');
+        $marque = $em->getRepository(Marque::class)->find($id);
+
+        if (!$marque) {
+            return $this->json(['error' => 'Marque non trouvée'], 404);
+        }
+
+        $em->remove($marque);
+        $em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+#[Route('/admin/marque/modifier', name: 'modifier_marque', methods:['POST'])]
+public function modifierMarqueAjax(Request $request, EntityManagerInterface $em): Response
+{
+    $id = $request->request->get('id');
+    $nom = $request->request->get('nom');
+
+    $marque = $em->getRepository(Marque::class)->find($id);
+    if (!$marque) {
+        return $this->json(['error' => 'Marque non trouvée'], 404);
+    }
+
+    $marque->setNom($nom);
+    $em->flush();
+
+    return $this->json(['success' => true]);
+}
+
+#[Route('/admin/modele/ajouter', name: 'ajouter_modele', methods:['POST'])]
+public function ajouterModele(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $marqueId = $request->request->get('marque');
+    $nom = trim($request->request->get('nom'));
+
+    if (!$marqueId || $nom === '') {
+        return $this->json(['error' => 'Tous les champs sont requis'], 400);
+    }
+
+    $marque = $em->getRepository(Marque::class)->find($marqueId);
+    if (!$marque) {
+        return $this->json(['error' => 'Marque non trouvée'], 404);
+    }
+
+    $modele = new Modele();
+    $modele->setNom($nom);
+    $modele->setMarque($marque);
+
+    $em->persist($modele);
+    $em->flush();
+
+    return $this->json(['success' => true]);
+}
+
+#[Route('/admin/modele/supprimer', name: 'Supprimer_modele', methods:['POST'])]
+public function supprimerModele(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $id = $request->request->get('id');
+    $modele = $em->getRepository(Modele::class)->find($id);
+
+    if (!$modele) {
+        return $this->json(['error' => 'Modèle non trouvé'], 404);
+    }
+
+    $em->remove($modele);
+    $em->flush();
+
+    return $this->json(['success' => true]);
+}
+
+#[Route('/admin/modele', name: 'admin_liste_modeles', methods:['GET'])]
+public function listeModeles(EntityManagerInterface $em,AnnonceRepository $annonceRepository,
+    DemandeRepository $demandeRepository,): Response
+{
+      $demandesEnAttente = $demandeRepository->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 0')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'en_attente')
+        ->getQuery()
+        ->getSingleScalarResult();
+         $totalEnAttenteA = $annonceRepository->count(['statut' => 'en_attente']);
+    $listModeles = $em->getRepository(Modele::class)->findAll();
+    $listMarques = $em->getRepository(Marque::class)->findAll();
+
+    return $this->render('admin/modele/modele.html.twig', [
+        'listModeles' => $listModeles,
+        'listMarques' => $listMarques,'demandesEnAttente' => $demandesEnAttente,
+        'totalEnAttenteA' => $totalEnAttenteA
+    ]);
+}
 
 }

@@ -1,0 +1,151 @@
+{% extends 'layoutAdmin.html.twig' %}
+
+{% block Head %}
+    {{ parent() }}
+    {% block LinksCss %}
+        {{ parent() }}
+         <link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
+        <style>
+            div.dataTables_wrapper div.dataTables_filter input {
+                margin-left: 0.5em;
+                display: inline-block;
+                width: 75%;
+            }
+        </style>
+    {% endblock %}
+{% endblock %}
+
+{% block title %}Ajouter Marque{% endblock %}
+{% block loader %} {{ parent() }} {% endblock %}
+{% block sidebar %} {{ parent() }} {% endblock %}
+
+{% block page %}
+{{ parent() }}
+
+<div class="px-15px px-lg-25px">
+    <div class="aiz-titlebar text-left mt-2 mb-3">
+        <div class="align-items-center">
+            <h1 class="h3">Marques</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Liste des marques -->
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-header row gutters-5">
+                    <div class="col text-center text-md-left">
+                        <h5 class="mb-md-0 h6">Marques</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table id="tab" class="display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Marque</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for marque in list %}
+                            <tr>
+                                <td>{{ marque.id }}</td>
+                                <td>{{ marque.nom }}</td>
+                                <td class="text-right">
+                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{ path('Modifiermarque',{'id':marque.id}) }}" title="Edit">
+                                        <i class="las la-edit"></i>
+                                    </a>
+                                    <a onclick="supprimerMarque($(this),'{{ marque.id }}');" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" title="Delete">
+                                        <i class="las la-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ajouter nouvelle marque -->
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0 h6">Ajouter nouvelle marque</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <input type="hidden" name="_token" value="{{ csrf_token('ajouter_marque') }}">
+                        <div class="form-group mb-3">
+                            <label for="nom">Nom</label>
+                            <input type="text" id="nom" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group mb-3 text-right">
+                            <button type="button" onclick="CreerNouvellemarque()" class="btn btn-register ">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+<script>
+$(document).ready(function() {
+    $('#tab').DataTable({
+        language: {
+            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+        },
+        responsive: true
+    });
+});
+
+function CreerNouvellemarque() {
+    var nom = $('#nom').val();
+    if(nom.trim() === "") {
+        Swal.fire({ title: "Warning", text: "Merci de remplir le champ nom!", icon: "warning" });
+        return;
+    }
+
+    $.ajax({
+        type: "POST",
+        url: '{{ path("Ajoutermarque") }}',
+        data: { 'nom': nom },
+        success: function(response) {
+            Swal.fire({ title: "Success!", text: "La nouvelle marque a été créée avec succès!", icon: "success" });
+            location.reload();
+        },
+        beforeSend: function(){ $('#loaderAcc').show(); },
+        complete: function(){ $('#loaderAcc').hide(); }
+    });
+}
+
+function supprimerMarque(element, id) {
+    Swal.fire({
+        title: 'Êtes-vous sûr de vouloir supprimer cette marque?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#f62718',
+        confirmButtonText: 'Supprimer',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if(result.value) {
+            $.ajax({
+                type: "POST",
+                url: "{{ path('Supprimer_marque') }}",
+                data: { 'id': id },
+                success: function() {
+                    Swal.fire({ title: "Success!", text: "La marque a été supprimée avec succès!", icon: "success" })
+                    .then(() => { location.reload(); });
+                }
+            });
+        }
+    });
+}
+</script>
+{% endblock %}

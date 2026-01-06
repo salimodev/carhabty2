@@ -27,66 +27,64 @@ document.addEventListener('DOMContentLoaded', function() {
     // Désactive le champ email par défaut
     emailInput.disabled = true;
 }); 
-	function piece() {
-    // Récupération des valeurs pour vérification
-    let marque = $('input[name="element_0"]').val().trim();
-   let modele = $('input[name="element_1"]').val().trim();
-    let chassis = $('input[name="element_2"]').val().trim();
+function piece() {
+    // Récupération des valeurs depuis les selects et inputs
+    let marque = $('#marque').val();
+    let modele = $('#modele').val();
+
+    let chassis = $('input[name="element_2"]').val() || '';
+    chassis = chassis.trim();
+
     let NewPhotos2 = $('#srcLogo2').val();
 
-	 if ($('#essence').is(':checked')){
-         var carbu = 'essence'
-  }else if ($('#diesel').is(':checked')){
-         var carbu = 'diesel'
-    }else if ($('#hybride').is(':checked')){
-       var carbu = 'hybride'
-    }else if ($('#electrique').is(':checked')){
-       var carbu = 'electrique'
-}else{
-        var carbu = ''
-	}
+    // Type de carburant
+    let carbu = '';
+    if ($('#essence').is(':checked')) carbu = 'essence';
+    else if ($('#diesel').is(':checked')) carbu = 'diesel';
+    else if ($('#hybride').is(':checked')) carbu = 'hybride';
+    else if ($('#electrique').is(':checked')) carbu = 'electrique';
 
-if ($('#Origine').is(':checked')){
-         var etatmoteur = 'Origine'
-    }else if ($('#Changé').is(':checked')){
-         var etatmoteur = 'Changé'
-     }else if ($('#autreetat').is(':checked')){
-       var etatmoteur = 'autreetat'
-	}else{
- var etatmoteur = ''
-	}
+    // État du moteur
+    let etatmoteur = '';
+    if ($('#Origine').is(':checked')) etatmoteur = 'Origine';
+    else if ($('#Changé').is(':checked')) etatmoteur = 'Changé';
+    else if ($('#autreetat').is(':checked')) etatmoteur = 'autreetat';
 
     // Validation basique
-   if (marque === ""){
-         AIZ.plugins.notify('danger', "Merci de remplire le champ marque");
-		 return;
-   } else if(modele === "" ){
-	    AIZ.plugins.notify('danger', "Merci de remplire le champ modèle");
-		return;
- }else if (chassis === "" ){
-	AIZ.plugins.notify('danger', "Merci de remplire tous le champ n° chassis");
-	return;
-   }else if (carbu === ""){
-		AIZ.plugins.notify('danger', "Merci de choisi type du carburant");
-		return;
-   }else if(etatmoteur === ""){
-		AIZ.plugins.notify('danger', "Merci de choisi l'etat du moteur");
-     return;
-   }
+    if (!marque) {
+        AIZ.plugins.notify('danger', "Merci de sélectionner une marque");
+        return;
+    }
+    if (!modele) {
+        AIZ.plugins.notify('danger', "Merci de sélectionner un modèle");
+        return;
+    }
+    if (!chassis) {
+        AIZ.plugins.notify('danger', "Merci de remplir le champ n° chassis");
+        return;
+    }
+    if (!carbu) {
+        AIZ.plugins.notify('danger', "Merci de choisir le type du carburant");
+        return;
+    }
+    if (!etatmoteur) {
+        AIZ.plugins.notify('danger', "Merci de choisir l'état du moteur");
+        return;
+    }
 
     // --- Gestion des sections ---
-    $('.autoinfo').hide();     // Masquer la section véhicule
-    $('.piece').show();             // Afficher la section des pièces demandées
+    $('.autoinfo').hide();     
+    $('.piece').show();             
     $('.delevryInfo').hide();
     $('.confirmationsection').hide();
     $('.payementsection').hide();
 
     // --- Gestion du stepper ---
-    $('.auto').addClass('done').removeClass('active'); // Étape véhicule terminée
+    $('.auto').addClass('done').removeClass('active'); 
     $('.auto').children().addClass('text-success').removeClass('text-light');
     $('.auto').children().children().removeClass('opacity-50');
 
-    $('.pieceauto').addClass('active'); // Étape suivante (pièces demandées)
+    $('.pieceauto').addClass('active'); 
     $('.pieceauto').children().addClass('text-primary');
     $('.pieceauto').children().children().removeClass('opacity-50');
 
@@ -94,18 +92,15 @@ if ($('#Origine').is(':checked')){
     $('html, body').animate({ scrollTop: 0 }, 'slow');
 }
 
-  
-
-	$(".switch1:not([checked])").on('change', function () {
-$(".switch1").not(this).prop("checked", false);
-
+// Gestion des switch (type carburant et état moteur)
+$(".switch1:not([checked])").on('change', function () {
+    $(".switch1").not(this).prop("checked", false);
 });
 
 $(".switch:not([checked])").on('change', function () {
-$(".switch").not(this).prop("checked", false);
-
+    $(".switch").not(this).prop("checked", false);
 });
- 
+
  var piecesTemp = [];
 
 function ajouterpiece() {

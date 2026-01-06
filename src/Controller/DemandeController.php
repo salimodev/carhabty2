@@ -7,6 +7,8 @@ use App\Service\pieceService;
 use App\Entity\Pieces;
 use App\Entity\Demande;
 use App\Repository\DemandeRepository;
+use App\Repository\ModeleRepository;
+use App\Repository\MarqueRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,11 +32,13 @@ final class DemandeController extends AbstractController
     }
 
       #[Route('/demande', name: 'app_demande')]
-    public function demande2(Request $request): Response
+    public function demande2(Request $request,MarqueRepository $marqueRepository): Response
     {
        $session =$request->getSession();
        $session->set('PageMenu', 'demande');
-        return $this->render('demande/demande.html.twig');
+        return $this->render('demande/demande.html.twig', [
+        'marques' => $marqueRepository->findAll(),
+    ]);
     }
 
    #[Route('/piece/ajouter', name: 'add_piece', methods: ['POST'])]
@@ -232,5 +236,24 @@ public function detailDemande(
         'client' => $client,
     ]);
 }
+
+#[Route('/get-modeles/{id}', name: 'get_modeles', methods: ['GET'])]
+public function getModeles(
+    int $id,
+    ModeleRepository $modeleRepository
+): JsonResponse {
+    $modeles = $modeleRepository->findBy(['marque' => $id]);
+
+    $data = [];
+    foreach ($modeles as $modele) {
+        $data[] = [
+            'id' => $modele->getId(),
+            'nom' => $modele->getNom(),
+        ];
+    }
+
+    return new JsonResponse($data);
+}
+
 
 }

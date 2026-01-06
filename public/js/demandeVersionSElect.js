@@ -537,12 +537,20 @@ function cloudDinaryCreationLogomarque() {
   });
 }
 
-    
-    
-    var tablePieces = $('#tab').DataTable({
-    responsive: true, // Rend le tableau adaptatif sur mobile
-    language: {
-        url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
-    },
-    
+ $(document).ready(function () {
+    if ($.fn.DataTable.isDataTable('#tab')) {
+        $('#tab').DataTable().clear().destroy();
+    }
+
+    window.tablePieces = $('#tab').DataTable({
+        responsive: true,
+        autoWidth: false,
+        columnDefs: [
+            { targets: '_all', className: 'text-nowrap text-center align-middle' },
+            { targets: -1, orderable: false } // dernière colonne (Action)
+        ],
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
+        }
+    });
 });

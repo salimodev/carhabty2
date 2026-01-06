@@ -625,6 +625,7 @@
 {% block javascript %}
 	{{ parent() }}
 	<script type="text/javascript">
+
 		var pathaddpiece = '{{ path('add_piece') }}';
 		var pathenvoyerdemande = "{{ path('envoyer_demande') }}";
 
@@ -723,6 +724,16 @@ document.getElementById('marque').addEventListener('change', function () {
             modeleSelect.disabled = false;
         });
 });
+
+
+
+
+
+
+
+
+
+
 </script>
 
 {% endblock %}

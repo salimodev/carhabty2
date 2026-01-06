@@ -1,4 +1,4 @@
-
+	
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -256,11 +256,14 @@ let vendeurNeuf = $('input[name="vendeurneuf"]').is(':checked');
 }
 
 function envoyerdemande() {
-    // --- Récupération des infos véhicule ---
-    let marque = $('input[name="element_0"]').val().trim();
-    let modele = $('input[name="element_1"]').val().trim();
-    let numerochassis = $('input[name="element_2"]').val().trim();
-    let NewPhotos2 = $('#srcLogo2').val();
+  // --- Récupération des infos véhicule ---
+ let marque = $('#marque option:selected').text(); // nom de la marque
+ let modele = $('#modele option:selected').text(); // nom du modèle
+let numerochassis = $('input[name="element_2"]').val() || '';  // input chassis
+numerochassis = numerochassis.trim(); // trim seulement si input
+
+let NewPhotos2 = $('#srcLogo2').val();
+
 
     // --- Carburant ---
     let carburant = '';
@@ -534,12 +537,12 @@ function cloudDinaryCreationLogomarque() {
   });
 }
 
-var tablePieces = $('#tab').DataTable({
+    
+    
+    var tablePieces = $('#tab').DataTable({
     responsive: true, // Rend le tableau adaptatif sur mobile
     language: {
         url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
     },
     
 });
-
-

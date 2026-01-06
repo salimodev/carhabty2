@@ -454,28 +454,32 @@ html += "<td>" + photoPiece + "</td>";
 }
 
 function cloudDinaryimageCINrecto() {
-        $('#cloudinaryPreloader').show();
-  cloudinary.openUploadWidget({
-    cloudName: 'b-ja',
-    uploadPreset: 'aladdineshop',
-    folder: 'ml_default',
-    theme: 'minimal',
-    maxFileSize: 3000000, // 3 Mo
-    sources: ['local', 'url'],
-    clientAllowedFormats: ['png', 'jpeg'],
-    resourceType: 'image',
-    buttonCaption: 'Télécharger image'
-  }, 
-  (error, result) => {
-       $('#cloudinaryPreloader').hide();
-    if (!error && result && result.event === "success") {
-      console.log('Upload réussi : ', result.info.secure_url);
-      document.getElementById("srcLogo2").value = result.info.secure_url;
-      document.getElementById("logoImg2").src = result.info.secure_url;
-      document.getElementById("NewPhotos2").style.display = 'block';
-    }
-  });
+    $('#cloudinaryPreloader').show();
+
+    cloudinary.openUploadWidget({
+        cloudName: 'b-ja',
+        uploadPreset: 'aladdineshop',
+        folder: 'ml_default',
+        theme: 'minimal',
+        maxFileSize: 3000000, // 3 Mo
+        sources: ['local', 'url'],
+        clientAllowedFormats: ['png', 'jpeg', 'jpg', 'gif', 'webp'], 
+        resourceType: 'image',
+        buttonCaption: 'Télécharger image',
+        maxFiles: 1 
+    }, 
+    (error, result) => {
+        $('#cloudinaryPreloader').hide();
+        if (!error && result && result.event === "success") {
+            console.log('Upload réussi : ', result.info.secure_url);
+
+            document.getElementById("srcLogo2").value = result.info.secure_url;
+            document.getElementById("logoImg2").src = result.info.secure_url;
+            document.getElementById("NewPhotos2").style.display = 'block';
+        }
+    });
 }
+
 
 
 
@@ -514,28 +518,32 @@ document.getElementById('click_to_convert').addEventListener('click', function(e
 
 
 function cloudDinaryCreationLogomarque() {
-      $('#cloudinaryPreloader').show();
-  cloudinary.openUploadWidget({
-    cloudName: 'b-ja',
-    uploadPreset: 'aladdineshop',
-    folder: 'ml_default',
-    theme: 'minimal',
-    maxFileSize: 3000000, // 3 Mo
-    sources: ['local', 'url'],
-    clientAllowedFormats: ['png', 'jpeg'],
-    resourceType: 'image',
-    buttonCaption: 'Télécharger image'
-  }, 
-  (error, result) => {
-      $('#cloudinaryPreloader').hide();
-    if (!error && result && result.event === "success") {
-      console.log('Upload réussi : ', result.info.secure_url);
-      document.getElementById("srcLogo").value = result.info.secure_url;
-      document.getElementById("logoImg").src = result.info.secure_url;
-      document.getElementById("NewPhotos").style.display = 'block';
-    }
-  });
+    $('#cloudinaryPreloader').show();
+
+    cloudinary.openUploadWidget({
+        cloudName: 'b-ja',
+        uploadPreset: 'aladdineshop',
+        folder: 'ml_default',
+        theme: 'minimal',
+        maxFileSize: 3000000, // 3 Mo
+        sources: ['local', 'url'],
+        clientAllowedFormats: ['png', 'jpeg', 'jpg', 'gif', 'webp'], 
+        resourceType: 'image',
+        buttonCaption: 'Télécharger image',
+        maxFiles: 1 
+    }, 
+    (error, result) => {
+        $('#cloudinaryPreloader').hide();
+        if (!error && result && result.event === "success") {
+            console.log('Upload réussi : ', result.info.secure_url);
+
+            document.getElementById("srcLogo").value = result.info.secure_url;
+            document.getElementById("logoImg").src = result.info.secure_url;
+            document.getElementById("NewPhotos").style.display = 'block';
+        }
+    });
 }
+
 
  $(document).ready(function () {
     if ($.fn.DataTable.isDataTable('#tab')) {

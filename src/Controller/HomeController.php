@@ -19,6 +19,7 @@ use App\Repository\OffreRepository;
 use App\Repository\AnnonceRepository;
 use App\Repository\MessageRepository;
 use App\Repository\BannerMenuRepository;
+use App\Repository\MarqueRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class HomeController extends AbstractController
@@ -193,7 +194,7 @@ $unreadCount = $messageRepo->createQueryBuilder('m')
 public function all_demande(
     Request $request,
     DemandeRepository $demandeRepository,
-    PaginatorInterface $paginator
+    PaginatorInterface $paginator,MarqueRepository $marqueRepository
 ): Response {
     $session = $request->getSession();
     $session->set('PageMenu', 'demande_all');
@@ -239,7 +240,7 @@ public function all_demande(
     );
 
     return $this->render('home/alldemande.html.twig', [
-        'lastDemandes' => $dem,
+        'lastDemandes' => $dem,'marques' => $marqueRepository->findAll(),
     ]);
 
     // Forcer l'indexation par Google

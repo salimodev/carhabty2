@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\OffreRepository;
+use App\Repository\MarqueRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -178,7 +179,7 @@ class VendeurOccasionController extends AbstractController
 
 
     #[Route('/vendeur/occasion/demandes', name: 'vendeur_demandes_occa')]
-    public function demandesDisponibles_occa(EntityManagerInterface $em, Request $request, DemandeRepository $demandeRepository, Security $security, PaginatorInterface $paginator): Response
+    public function demandesDisponibles_occa(EntityManagerInterface $em, Request $request,MarqueRepository $marqueRepository, DemandeRepository $demandeRepository, Security $security, PaginatorInterface $paginator): Response
     {
         $session = $request->getSession();
         $session->set('PageMenu', 'vendeur_demandes_occa');
@@ -204,7 +205,7 @@ class VendeurOccasionController extends AbstractController
 
         return $this->render('vendeurOccasion/demandes.html.twig', [
             'demandes' => $dem,
-            'notifications' => $notifications,
+            'notifications' => $notifications,'marques' => $marqueRepository->findAll(),
         ]);
     }
 

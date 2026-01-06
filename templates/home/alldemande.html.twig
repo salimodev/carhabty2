@@ -339,37 +339,16 @@
                             </div>
                             <div class="row justify-content-end align-items-end g-2 mb-4 filtre-demandes">
                                 <!-- Filtre Marque -->
-                                <div class="col-6 col-md-auto">
-                                    <label class="mb-0 opacity-50 small">Marque</label>
-                                    <select class="form-control form-control-sm" onchange="filtrerDemandes()" id="marque" data-live-search="true">
-                                        <option value="">Toutes les marques</option>
-                                        <option value="Audi">Audi</option>
-                                        <option value="BMW">BMW</option>
-                                        <option value="Mercedes">Mercedes</option>
-                                        <option value="Toyota">Toyota</option>
-                                         <option value="Volkswagen">Volkswagen</option>
-                                          <option value="Porsche">Porsche</option>
-                                           <option value="Opel">Opel</option>
-                                            <option value="Peugeot">Peugeot</option>
-                                             <option value="Renault">Renault</option>
-                                              <option value="Citroen">Citroen</option>
-                                               <option value="Fiat">Fiat</option>
-                                                <option value="Honda">Honda</option>
-                                                 <option value="Nissan">Nissan</option>
-                                                  <option value="Mazda">Mazda</option>
-                                                   <option value="Mitsubishi">Mitsubishi</option>
-                                                    <option value="Suzuki">Suzuki</option>
-                                                     <option value="Subaru">Subaru</option>
-                                                      <option value="Hyundai">Hyundai</option>
-                                                     <option value="Kia">Kia</option>
-                                                      <option value="Ford">Ford</option>
-                                                     <option value="Chevrolet">Chevrolet</option>
-                                                      <option value="Volvo">Volvo</option>
-                                                     
-
-                                    </select>
-                                </div>
-                                <!-- Filtre Zone -->
+<div class="col-6 col-md-auto">
+    <label class="mb-0 opacity-50 small">Marque</label>
+    <select class="form-control form-control-sm" onchange="filtrerDemandes()" id="marque" data-live-search="true">
+        <option value="">Toutes les marques</option>
+        {% for marque in marques %}
+            <option value="{{ marque.nom }}">{{ marque.nom }}</option>
+        {% endfor %}
+    </select>
+</div>
+<!-- Filtre Zone -->
                                 <div class="col-6 col-md-auto">
                                     <label class="mb-0 opacity-50 small">Zone</label>
                                     <select class="form-control form-control-sm" onchange="filtrerDemandes()" id="zone" data-live-search="true">
@@ -481,7 +460,7 @@
                                                         {% endif %}
                                                     </p>
 
-                                                    <a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'id': demande.id}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" style="pointer-events: auto;"
+                                                    <a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'code': demande.code}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" style="pointer-events: auto;"
                                                        {% if not app.user %} onclick="AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !'); return false;" 
                                                        {% elseif not estVendeur %} onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;" 
                                                        {% elseif dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" 

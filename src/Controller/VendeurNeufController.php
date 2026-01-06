@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\DemandeRepository;
+use App\Repository\MarqueRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Knp\Component\Pager\PaginatorInterface;
@@ -174,7 +175,7 @@ foreach ($dernieresOffres as $offre) {
     }
 
     #[Route('/vendeur/demandes', name: 'vendeur_demandes')]
-public function demandesDisponibles(EntityManagerInterface $em,Request $request,DemandeRepository $demandeRepository,Security $security, PaginatorInterface $paginator): Response
+public function demandesDisponibles(EntityManagerInterface $em,Request $request,MarqueRepository $marqueRepository,DemandeRepository $demandeRepository,Security $security, PaginatorInterface $paginator): Response
 {
     $session = $request->getSession();
         $session->set('PageMenu', 'vendeur_demandes');
@@ -200,7 +201,7 @@ $dem = $paginator->paginate(
 
     return $this->render('vendeurNeuf/demandes.html.twig', [
         'demandes' => $dem,
-        'notifications' => $notifications,
+        'notifications' => $notifications,'marques' => $marqueRepository->findAll(),
     ]);
 }
 

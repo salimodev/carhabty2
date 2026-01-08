@@ -9,6 +9,7 @@ use App\Entity\OffrePiece;
 use App\Entity\Pieces;
 use App\Entity\Offre;
 use App\Entity\Notification;
+use App\Entity\InvitePageVendeurOccasion;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -704,9 +705,12 @@ class VendeurOccasionController extends AbstractController
 
 
     #[Route('/inviter/vendeur/occasion', name: 'inviter_vendeurOccasion')]
-public function inviter(): Response
+public function inviter(EntityManagerInterface $em): Response
 {
-    return $this->render('vendeurOccasion/inviter.html.twig');
+     $invitePage = $em->getRepository(InvitePageVendeurOccasion::class)->find(1);
+    return $this->render('vendeurOccasion/inviter.html.twig', [
+        'invitePage' => $invitePage
+    ]);
 }
 
 #[Route('/vendeur/occasion/notifications', name: 'vendeur_occa_notifications')]

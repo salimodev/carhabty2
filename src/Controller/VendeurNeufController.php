@@ -9,6 +9,7 @@ use App\Entity\OffrePiece;
 use App\Entity\Pieces;
 use App\Entity\Offre;
 use App\Entity\Notification;
+use App\Entity\InvitePageVendeurNeuf;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -693,9 +694,13 @@ public function show(Offre $offre, EntityManagerInterface $em, Security $securit
 
 
 #[Route('/inviter/vendeur/neuf', name: 'inviter_vendeurNeuf')]
-public function inviter(): Response
+public function inviter(EntityManagerInterface $em): Response
 {
-    return $this->render('vendeurNeuf/inviter.html.twig');
+     $invitePage = $em->getRepository(InvitePageVendeurNeuf::class)->find(1);
+    return $this->render('vendeurNeuf/inviter.html.twig', [
+        'invitePage' => $invitePage
+    ]);
+
 }
 
 #[Route('/vendeur/neuf/notifications', name: 'vendeur_notifications')]

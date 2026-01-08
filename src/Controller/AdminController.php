@@ -7,11 +7,17 @@ use App\Entity\Demande;
 use App\Entity\Pieces;
 use App\Service\UsersService;
 use App\Entity\Offre;
+use App\Entity\InvitePageMecanicien;
+use App\Entity\InvitePageParticulier;
+use App\Entity\InvitePageVendeurNeuf;
+use App\Entity\InvitePageVendeurOccasion;
 use App\Entity\Annonce;
 use App\Entity\Marque;
 use App\Entity\Modele;
 use App\Entity\BannerMenu;
+use App\Entity\HomeContent;
 use App\Entity\Footer;
+use App\Entity\InvitePageProprietaire;
 use App\Repository\VisitRepository;
 use App\Repository\UsersRepository;
 use App\Repository\DemandeRepository;
@@ -1443,5 +1449,285 @@ public function listeModeles(EntityManagerInterface $em,AnnonceRepository $annon
         'totalEnAttenteA' => $totalEnAttenteA
     ]);
 }
+
+
+ #[Route('/admin/invite/proprietaire', name: 'admin_invite_proprietaire')]
+    public function pageinviterprop(EntityManagerInterface $em,AnnonceRepository $annonceRepository,
+    DemandeRepository $demandeRepository,): Response
+    {
+
+         $demandesEnAttente = $demandeRepository->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 0')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'en_attente')
+        ->getQuery()
+        ->getSingleScalarResult();
+         $totalEnAttenteA = $annonceRepository->count(['statut' => 'en_attente']);
+        // Récupérer le contenu de la page si existant
+        $invitePage = $em->getRepository(InvitePageProprietaire::class)
+                         ->findOneBy([]);
+
+        return $this->render('admin/invite_proprietaire.html.twig', [
+            'invitePage' => $invitePage,'demandesEnAttente' => $demandesEnAttente,
+        'totalEnAttenteA' => $totalEnAttenteA
+        ]);
+    }
+#[Route('/admin/invite-mecanicien', name:'admin_invite_mecanicien')]
+public function inviteMecanicien(EntityManagerInterface $em,AnnonceRepository $annonceRepository,
+    DemandeRepository $demandeRepository,): Response
+{
+      $demandesEnAttente = $demandeRepository->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 0')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'en_attente')
+        ->getQuery()
+        ->getSingleScalarResult();
+         $totalEnAttenteA = $annonceRepository->count(['statut' => 'en_attente']);
+    $invitePage = $em->getRepository(InvitePageMecanicien::class)->find(1);
+    return $this->render('admin/invite_mecanicien.html.twig', [
+            'invitePage' => $invitePage,'demandesEnAttente' => $demandesEnAttente,
+        'totalEnAttenteA' => $totalEnAttenteA
+        ]);
+}
+
+#[Route('/admin/invite-particulier', name:'admin_invite_particulier')]
+public function inviteParticulier(EntityManagerInterface $em,AnnonceRepository $annonceRepository,
+    DemandeRepository $demandeRepository,): Response
+{ 
+    $demandesEnAttente = $demandeRepository->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 0')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'en_attente')
+        ->getQuery()
+        ->getSingleScalarResult();
+         $totalEnAttenteA = $annonceRepository->count(['statut' => 'en_attente']);
+    $invitePage = $em->getRepository(InvitePageParticulier::class)->find(1);
+    return $this->render('admin/invite_particulier.html.twig', [
+            'invitePage' => $invitePage,'demandesEnAttente' => $demandesEnAttente,
+        'totalEnAttenteA' => $totalEnAttenteA
+        ]);
+}
+
+    #[Route('/admin/invite-vendeur-neuf', name:'admin_invite_vendeur_neuf')]
+    public function inviteVendeurNeuf(EntityManagerInterface $em,AnnonceRepository $annonceRepository,
+    DemandeRepository $demandeRepository,): Response
+    {
+         $demandesEnAttente = $demandeRepository->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 0')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'en_attente')
+        ->getQuery()
+        ->getSingleScalarResult();
+         $totalEnAttenteA = $annonceRepository->count(['statut' => 'en_attente']);
+        $invitePage = $em->getRepository(InvitePageVendeurNeuf::class)->find(1);
+        return $this->render('admin/invite_vendeur_neuf.html.twig', [
+            'invitePage' => $invitePage,'demandesEnAttente' => $demandesEnAttente,
+        'totalEnAttenteA' => $totalEnAttenteA
+        ]);
+    }
+
+    #[Route('/admin/invite-vendeur-occasion', name:'admin_invite_vendeur_occasion')]
+    public function inviteVendeurOccasion(EntityManagerInterface $em,AnnonceRepository $annonceRepository,
+    DemandeRepository $demandeRepository,): Response
+    {
+         $demandesEnAttente = $demandeRepository->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 0')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'en_attente')
+        ->getQuery()
+        ->getSingleScalarResult();
+         $totalEnAttenteA = $annonceRepository->count(['statut' => 'en_attente']);
+        $invitePage = $em->getRepository(InvitePageVendeurOccasion::class)->find(1);
+        return $this->render('admin/invite_vendeur_occasion.html.twig', [
+            'invitePage' => $invitePage,'demandesEnAttente' => $demandesEnAttente,
+        'totalEnAttenteA' => $totalEnAttenteA
+        ]);
+    }
+
+  #[Route('/admin/invite-page-proprietaire/update', name:'admin_invite_proprietaire_update', methods:['POST'])]
+public function updateProprietaire(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    // Chercher la page existante (ID = 1)
+    $page = $em->getRepository(InvitePageProprietaire::class)->find(1);
+
+    // Si elle n'existe pas, la créer
+    if (!$page) {
+        $page = new InvitePageProprietaire();
+        $em->persist($page);
+    }
+
+    // Récupérer les données du formulaire
+    $description = $request->request->get('description');
+    $videoPath   = $request->request->get('videoPath');
+
+    // Mettre à jour
+    $page->setDescription($description);
+    $page->setVideoPath($videoPath);
+
+    $em->flush();
+
+    return new JsonResponse([
+        'status' => 'success',
+        'message' => 'Page mise à jour avec succès !'
+    ]);
+}
+
+#[Route('/admin/invite-page-particulier/update', name:'admin_invite_particulier_update', methods:['POST'])]
+public function updateParticulier(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    // Chercher la page existante (ID = 1)
+    $page = $em->getRepository(InvitePageParticulier::class)->find(1);
+
+    // Si elle n'existe pas, la créer
+    if (!$page) {
+        $page = new InvitePageParticulier();
+        $em->persist($page);
+    }
+
+    // Récupérer les données du formulaire
+    $description = $request->request->get('description');
+    $videoPath   = $request->request->get('videoPath');
+
+    // Mettre à jour
+    $page->setDescription($description);
+    $page->setVideoPath($videoPath);
+
+    $em->flush();
+
+    return new JsonResponse([
+        'status' => 'success',
+        'message' => 'Page mise à jour avec succès !'
+    ]);
+}
+
+#[Route('/admin/invite-page-mecanicien/update', name:'admin_invite_mecanicien_update', methods:['POST'])]
+public function updateMecancien(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    // Chercher la page existante (ID = 1)
+    $page = $em->getRepository(InvitePageMecanicien::class)->find(1);
+
+    // Si elle n'existe pas, la créer
+    if (!$page) {
+        $page = new InvitePageMecanicien();
+        $em->persist($page);
+    }
+
+    // Récupérer les données du formulaire
+    $description = $request->request->get('description');
+    $videoPath   = $request->request->get('videoPath');
+
+    // Mettre à jour
+    $page->setDescription($description);
+    $page->setVideoPath($videoPath);
+
+    $em->flush();
+
+    return new JsonResponse([
+        'status' => 'success',
+        'message' => 'Page mise à jour avec succès !'
+    ]);
+}
+
+#[Route('/admin/invite-page-vendeur-neuf/update', name:'admin_invite_vendeur_neuf_update', methods:['POST'])]
+public function updatevendNeuf(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    // Chercher la page existante (ID = 1)
+    $page = $em->getRepository(InvitePageVendeurNeuf::class)->find(1);
+
+    // Si elle n'existe pas, la créer
+    if (!$page) {
+        $page = new InvitePageVendeurNeuf();
+        $em->persist($page);
+    }
+
+    // Récupérer les données du formulaire
+    $description = $request->request->get('description');
+    $videoPath   = $request->request->get('videoPath');
+
+    // Mettre à jour
+    $page->setDescription($description);
+    $page->setVideoPath($videoPath);
+
+    $em->flush();
+
+    return new JsonResponse([
+        'status' => 'success',
+        'message' => 'Page mise à jour avec succès !'
+    ]);
+}
+
+#[Route('/admin/invite-page-vendeur-occasion/update', name:'admin_invite_vendeur_occ_update', methods:['POST'])]
+public function updatevendoccasion(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    // Chercher la page existante (ID = 1)
+    $page = $em->getRepository(InvitePageVendeurOccasion::class)->find(1);
+
+    // Si elle n'existe pas, la créer
+    if (!$page) {
+        $page = new InvitePageVendeurOccasion();
+        $em->persist($page);
+    }
+
+    // Récupérer les données du formulaire
+    $description = $request->request->get('description');
+    $videoPath   = $request->request->get('videoPath');
+
+    // Mettre à jour
+    $page->setDescription($description);
+    $page->setVideoPath($videoPath);
+
+    $em->flush();
+
+    return new JsonResponse([
+        'status' => 'success',
+        'message' => 'Page mise à jour avec succès !'
+    ]);
+}
+
+#[Route('/admin/home-content', name: 'admin_home_content')]
+public function editHome(EntityManagerInterface $em,AnnonceRepository $annonceRepository,
+    DemandeRepository $demandeRepository,): Response
+{
+    $content = $em->getRepository(HomeContent::class)->find(1);
+  $demandesEnAttente = $demandeRepository->createQueryBuilder('d')
+        ->select('COUNT(d.id)')
+        ->where('d.publier = 0')
+        ->andWhere('d.statut = :statut')
+        ->setParameter('statut', 'en_attente')
+        ->getQuery()
+        ->getSingleScalarResult();
+         $totalEnAttenteA = $annonceRepository->count(['statut' => 'en_attente']);
+    return $this->render('admin/home_content.html.twig', [
+        'content' => $content,'demandesEnAttente' => $demandesEnAttente,
+        'totalEnAttenteA' => $totalEnAttenteA
+    ]);
+}
+
+#[Route('/admin/home-content/update', name: 'admin_home_content_update', methods: ['POST'])]
+public function updateHome(Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $content = $em->getRepository(HomeContent::class)->find(1);
+
+    if (!$content) {
+        $content = new HomeContent();
+        $em->persist($content);
+    }
+
+    $content->setDescription($request->request->get('description'));
+    $content->setVideoPath($request->request->get('videoPath'));
+
+    $em->flush();
+
+    return new JsonResponse([
+        'status' => 'success',
+        'message' => 'Accueil mis à jour avec succès'
+    ]);
+}
+
 
 }

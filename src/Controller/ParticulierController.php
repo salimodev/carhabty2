@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Annonce;
 use App\Entity\Message;
 use App\Entity\Users;
+use App\Entity\Modele;
+use App\Entity\InvitePageParticulier;
 use App\Service\UsersService;
 use App\Service\SendMailService;
 use App\Entity\Notification;
@@ -18,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\DemandeRepository;
+use App\Repository\MarqueRepository;
 use App\Repository\OffreRepository;
 use App\Repository\AnnonceRepository;
 use App\Repository\MessageRepository;
@@ -178,11 +181,12 @@ public function mesannonces(Request $request, EntityManagerInterface $em, Pagina
     }
 
     #[Route('/particulier/annonces/ajouter', name: 'add_annonces')]
-    public function addannonces(Request $request): Response
+    public function addannonces(Request $request,MarqueRepository $marqueRepository): Response
     {
        $session =$request->getSession();
        $session->set('PageMenu', 'add_annonces');
-        return $this->render('particulier/ajouterannonces.html.twig');
+        return $this->render('particulier/ajouterannonces.html.twig', ['marques' => $marqueRepository->findAll(),
+    ]);
     }
 
 
@@ -502,9 +506,30 @@ public function markAsRead(
 }
 
  #[Route('/inviter/particulier', name: 'inviter_particulier')]
-    public function inviter(): Response
+    public function inviter(EntityManagerInterface $em): Response
     {
-        return $this->render('particulier/inviter.html.twig');
+          $invitePage = $em->getRepository(InvitePageParticulier::class)->find(1);
+        return $this->render('particulier/inviter.html.twig', [
+        'invitePage' => $invitePage
+    ]);
     }
+
+    #[Route('/get-modeles/{marqueId}', name: 'get_modeles')]
+public function getModeles(int $marqueId, EntityManagerInterface $em): JsonResponse
+{
+    $modeles = $em->getRepository(Modele::class)
+        ->findBy(['marque' => $marqueId]);
+
+    $data = [];
+    foreach ($modeles as $m) {
+        $data[] = [
+            'id' => $m->getId(),
+            'nom' => $m->getNom(),
+        ];
+    }
+
+    return new JsonResponse($data);
+}
+
 
 }

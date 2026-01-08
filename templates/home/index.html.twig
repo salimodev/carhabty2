@@ -15,7 +15,10 @@
     padding: 80px 0;
     overflow: hidden;
 }
-
+.content-description{
+    font-size: 1.2rem;   /* größer */
+    line-height: 1.8;
+}
 /* Texte */
 .modern-text-box {
     background: rgba(255, 255, 255, 0.85);
@@ -1008,21 +1011,13 @@
 
             <!-- Texte à gauche -->
             <div class="col-lg-6 fade-left">
-                  <h3 class="fw-bold mb-3">
+                  <h2 class="fw-bold mb-3">
                             Pourquoi choisir Essayara ?
-                        </h3>
+                        </h2>
 
-                        <p class="text-muted" style="line-height: 1.8;">
-                            Essayara est une plateforme qui facilite la recherche et la vente de pièces automobiles
-                            entre particuliers, mécaniciens et vendeurs professionnels.
-                            Trouvez rapidement les pièces dont vous avez besoin, comparez les offres
-                            et vérifier les prix et marques proposés.
-                        </p>
-
-                        <p class="text-muted">
-                            Gagnez du temps, économisez de l'argent et trouvez la bonne pièce en quelques clics.
-                        </p>
-
+                     <p class="content-description">
+    {{ content ? content.description|raw : '' }}
+</p>
                         <a href="{{ path('app_register') }}" class="btn btn-register mt-2">
                             Rejoindre la plateforme
                         </a>
@@ -1031,12 +1026,19 @@
             <!-- Vidéo à droite -->
             <div class="col-lg-6 fade-right text-center">
                 <div class="video-box">
-                   <video class="promo-video" controls muted playsinline>
-    <source src="{{ asset('videos/presentation.mp4') }}" type="video/mp4">
-    Votre navigateur ne supporte pas la vidéo.
-</video>
+    {% if content and content.videoPath %}
+        <video style="max-width:100%" class="inviter-video" controls>
+            <source src="{{ content.videoPath }}" type="video/mp4">
+            Dein Browser unterstützt dieses Video nicht.
+        </video>
+    {% else %}
+        <video style="max-width:100%" class="promo-video" controls muted playsinline>
+            <source src="{{ asset('videos/presentation.mp4') }}" type="video/mp4">
+            Dein Browser unterstützt dieses Video nicht.
+        </video>
+    {% endif %}
+</div>
 
-                </div>
             </div>
 
         </div>

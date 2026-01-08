@@ -343,29 +343,52 @@ files: 'Files'
 				<!-- Staffs -->
 
 				<!-- Website Setup -->
-				<li class="aiz-side-nav-item">
-					<a href="#" class="aiz-side-nav-link ">
-						<i class="las la-desktop aiz-side-nav-icon"></i>
-						<span class="aiz-side-nav-text">Paramètres Généraux</span>
-						<span class="aiz-side-nav-arrow"></span>
-					</a>
-					<ul class="aiz-side-nav-list level-2 mm-collapse">
-                       
-						<li class="aiz-side-nav-item">
-							<a href="{{ path('admin_footer')}}" class="aiz-side-nav-link">
-								<span class="aiz-side-nav-text">Paramètres de l'application</span>
-							</a>
-						</li>
-						
-						<li class="aiz-side-nav-item">
-							<a href="{{ path('Banner_menu')}}" class="aiz-side-nav-link">
-								<span class="aiz-side-nav-text">Gestion des médias</span>
-							</a>
-						</li>
+<li class="aiz-side-nav-item">
+    <a href="#" class="aiz-side-nav-link ">
+        <i class="las la-desktop aiz-side-nav-icon"></i>
+        <span class="aiz-side-nav-text">Paramètres Généraux</span>
+        <span class="aiz-side-nav-arrow"></span>
+    </a>
+    <ul class="aiz-side-nav-list level-2 mm-collapse">
+       
+        <li class="aiz-side-nav-item">
+            <a href="{{ path('admin_footer')}}" class="aiz-side-nav-link">
+                <span class="aiz-side-nav-text">Paramètres de l'application</span>
+            </a>
+        </li>
+        
+        <li class="aiz-side-nav-item">
+            <a href="{{ path('Banner_menu')}}" class="aiz-side-nav-link">
+                <span class="aiz-side-nav-text">Gestion des médias</span>
+            </a>
+        </li>
 
+        <li class="aiz-side-nav-item">
+            <a href="{{ path('admin_home_content') }}" class="aiz-side-nav-link">
+                <span class="aiz-side-nav-text">Page Accueil </span>
+            </a>
+        </li>
+        <li class="aiz-side-nav-item">
+            <a href="{{ path('admin_invite_proprietaire') }}" class="aiz-side-nav-link">
+                <span class="aiz-side-nav-text">Page Propriétaire</span>
+            </a>
+        </li>
+		<li class="aiz-side-nav-item">
+    <a href="{{ path('admin_invite_mecanicien') }}" class="aiz-side-nav-link">Page Mécanicien</a>
+</li>
+<li class="aiz-side-nav-item">
+    <a href="{{ path('admin_invite_particulier') }}" class="aiz-side-nav-link">Page Particulier</a>
+</li>
+<li class="aiz-side-nav-item">
+    <a href="{{ path('admin_invite_vendeur_neuf') }}" class="aiz-side-nav-link">Page Vendeur de pièces Neuves</a>
+</li>
+<li class="aiz-side-nav-item">
+    <a href="{{ path('admin_invite_vendeur_occasion') }}" class="aiz-side-nav-link">Page Vendeur de pièces d'occasion</a>
+</li>
 
-					</ul>
-				</li>
+    </ul>
+</li>
+
 
 				<!-- Addon Manager -->
 

@@ -9,7 +9,14 @@
 	{% block LinksCss %}
 		{{ parent() }}
 		<link rel="stylesheet" href="{{ asset('css/stylebutton.css') }}">
-
+    <style>
+	select.form-control {
+    -webkit-appearance: menulist;
+    -moz-appearance: menulist;
+    appearance: menulist;
+    background-image: none !important;
+}
+</style>
 	{% endblock %}
 {% endblock %}
 
@@ -56,18 +63,28 @@
 										</label>
 										<input type="text" id="reference" class="form-control" name="reference" placeholder="Référence" required>
 									</div>
-									<div class="form-group">
-										<label>Marque
-											<span class="text-danger">*</span>
-										</label>
-										<input type="text" id="marque" class="form-control" name="brand" placeholder="Marque" required>
-									</div>
-									<div class="form-group">
-										<label>Modèle
-											<span class="text-danger">*</span>
-										</label>
-										<input type="text" id="modele" class="form-control" name="model" placeholder="Modèle" required>
-									</div>
+							<div class="form-group">
+    <label>Marque *</label>
+    <select id="marque" name="brand" class="form-control" required>
+        <option value="">Choisir une marque</option>
+        {% for marque in marques %}
+            <option 
+                value="{{ marque.nom }}" 
+                data-id="{{ marque.id }}">
+                {{ marque.nom }}
+            </option>
+        {% endfor %}
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Modèle *</label>
+    <select id="modele" name="model" class="form-control" required>
+        <option value="">Choisir un modèle</option>
+    </select>
+</div>
+
+
 									<div class="form-group">
 										<label>Prix
 											<span class="text-danger">*</span>
@@ -191,7 +208,7 @@ function cloudDinaryimageProd() {
         max_file_size: 300000000,
 
         image_metadata: true,
-        client_allowed_formats: ["png", "jpeg"],
+        client_allowed_formats: ['png', 'jpeg', 'jpg', 'gif', 'webp'],
         resource_type: 'image',
         folder: 'folder',
         cropping: 'server',
@@ -243,7 +260,7 @@ function cloudDinaryBanner() {
           // max_file_size: 300000000,
 
           // image_metadata:true,
-        client_allowed_formats: ["png", "jpeg"],
+        client_allowed_formats: ['png', 'jpeg', 'jpg', 'gif', 'webp'], 
         resource_type: 'image',
           // folder: 'icones',
           // cropping: 'server',
@@ -392,6 +409,30 @@ function addNewAnnoces(){
 
 
 		</script>
+<script>
+document.getElementById('marque').addEventListener('change', function () {
+    const selectedOption = this.options[this.selectedIndex];
+    const marqueId = selectedOption.dataset.id;
+
+    const modeleSelect = document.getElementById('modele');
+    modeleSelect.innerHTML = '<option value="">Chargement...</option>';
+
+    if (!marqueId) return;
+
+    fetch('/get-modeles/' + marqueId)
+        .then(res => res.json())
+        .then(data => {
+            modeleSelect.innerHTML = '<option value="">Choisir un modèle</option>';
+            data.forEach(m => {
+                modeleSelect.innerHTML += `
+                    <option value="${m.nom}">
+                        ${m.nom}
+                    </option>`;
+            });
+        });
+});
+
+</script>
 
 	{% endblock %}
 

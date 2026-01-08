@@ -230,7 +230,7 @@
             <span class="d-block fs-10 fw-600 opacity-60">Annonces</span>
         </a>
     {% else %}
-        <a href="{{ path('app_demande_all') }}" class="text-reset d-block text-center pb-2 pt-3">
+        <a href="{{ path('app_demande_all') }}" {% if PageMenu is defined and PageMenu == "demande_all"%} style="color:#ef1c00 !important"{% endif %} class="text-reset d-block text-center pb-2 pt-3">
             <i class="las la-list-ul fs-20 opacity-60"></i>
             <span class="d-block fs-10 fw-600 opacity-60">Demandes</span>
         </a>

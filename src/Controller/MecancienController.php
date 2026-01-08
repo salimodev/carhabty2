@@ -8,6 +8,7 @@ use App\Entity\Users;
 use App\Service\UsersService;
 use App\Entity\Offre;
 use App\Entity\Notification;
+use App\Entity\InvitePageMecanicien;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -322,9 +323,12 @@ final class MecancienController extends AbstractController
 
 
     #[Route('/inviter/mecanicien', name: 'inviter_mecanicien')]
-    public function inviter(): Response
+    public function inviter(EntityManagerInterface $em): Response
     {
-        return $this->render('mecancien/inviter.html.twig');
+        $invitePage = $em->getRepository(InvitePageMecanicien::class)->find(1);
+        return $this->render('mecancien/inviter.html.twig', [
+        'invitePage' => $invitePage
+    ]);
     }
 
        #[Route('/mecanicien/notifications', name: 'mecanicien_notifications')]

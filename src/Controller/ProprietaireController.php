@@ -8,6 +8,7 @@ use App\Entity\Users;
 use App\Service\UsersService;
 use App\Entity\Offre;
 use App\Entity\Notification;
+use App\Entity\InvitePageProprietaire;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -414,9 +415,13 @@ final class ProprietaireController extends AbstractController
 
 
     #[Route('/inviter/proprietaire', name: 'inviter_proprietaire')]
-    public function inviter(): Response
+    public function inviter(EntityManagerInterface $em): Response
     {
-        return $this->render('proprietaire/inviter.html.twig');
+          // On récupère la page avec ID = 1 (ou celle que tu veux)
+    $invitePage = $em->getRepository(InvitePageProprietaire::class)->find(1);
+        return $this->render('proprietaire/inviter.html.twig', [
+        'invitePage' => $invitePage
+    ]);
     }
 
     #[Route('/proprietaire/notifications', name: 'proprietaire_notifications')]

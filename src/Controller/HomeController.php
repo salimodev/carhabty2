@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Demande;
 use App\Entity\Annonce;
 use App\Entity\Footer;
+use App\Entity\HomeContent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -93,9 +94,10 @@ class HomeController extends AbstractController
         ['publier' => 1],
         ['id' => 'DESC']
     );
+     $content = $em->getRepository(HomeContent::class)->find(1);
 return $this->render('home/index.html.twig', [
     'lastDemandes' => $lastDemandes,
-    'annonces' => $annonces, 'banners' => $banners
+    'annonces' => $annonces, 'banners' => $banners, 'content' => $content
 ]);
 
     }
@@ -430,7 +432,7 @@ public function filtrer(Request $request, AnnonceRepository $annonceRepository):
 
 
     #[Route('/annonces', name: 'app_home_annonces')]
-public function home_annonces(Request $request, EntityManagerInterface $em, PaginatorInterface $paginator): Response
+public function home_annonces(Request $request, EntityManagerInterface $em,MarqueRepository $marqueRepository, PaginatorInterface $paginator): Response
 {
      $session = $request->getSession();
     $session->set('PageMenu', 'app_home_annonces');
@@ -449,7 +451,7 @@ public function home_annonces(Request $request, EntityManagerInterface $em, Pagi
     );
 
     return $this->render('home/piecesoccasion.html.twig', [
-        'annonces' => $annonces
+        'annonces' => $annonces,'marques' => $marqueRepository->findAll(),
     ]);
 }
 

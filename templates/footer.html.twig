@@ -289,7 +289,7 @@
     </a>
 </div>
 
-		<div class="col">
+		<div class="col" {% if PageMenu is defined and PageMenu == "app_login"%} style="color:#ef1c00 !important" {% endif %}>
 			{% if app.user %}
 				<a href="javascript:void(0);" onclick="opensidebar();" class="text-reset d-block text-center pb-2 pt-3 ">
 					<span class="d-block mx-auto">

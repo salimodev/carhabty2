@@ -1029,12 +1029,12 @@
     {% if content and content.videoPath %}
         <video style="max-width:100%" class="inviter-video" controls>
             <source src="{{ content.videoPath }}" type="video/mp4">
-            Dein Browser unterstützt dieses Video nicht.
+          Votre navigateur ne prend pas en charge cette vidéo.
         </video>
     {% else %}
         <video style="max-width:100%" class="promo-video" controls muted playsinline>
             <source src="{{ asset('videos/presentation.mp4') }}" type="video/mp4">
-            Dein Browser unterstützt dieses Video nicht.
+           Votre navigateur ne prend pas en charge cette vidéo.
         </video>
     {% endif %}
 </div>

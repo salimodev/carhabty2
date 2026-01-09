@@ -7,13 +7,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
    #[Route(path: '/login', name: 'app_login')]
-public function login(AuthenticationUtils $authenticationUtils, EntityManagerInterface $em): Response
+public function login(Request $request,AuthenticationUtils $authenticationUtils, EntityManagerInterface $em): Response
 {
+     $session = $request->getSession();
+    $session->set('PageMenu', 'app_login');
     // récupérer l'erreur de login si elle existe
     $error = $authenticationUtils->getLastAuthenticationError();
     // récupérer le dernier username entré

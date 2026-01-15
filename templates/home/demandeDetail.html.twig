@@ -202,11 +202,13 @@
     {% endif %}
 
 {% else %}
-    <button type="button" class="btn btn-primary btn-lg rounded-pill shadow-sm"
-            onclick="AIZ.plugins.notify('info', 'Veuillez vous connecter pour proposer une offre.');"
-            style="background: linear-gradient(45deg,#00B7B7,#3C4C5C); border:none; font-weight:600; width:200px;">
-       Proposer un prix | أعطي سومك
-    </button>
+    <button type="button"
+        class="btn btn-primary btn-lg rounded-pill shadow-sm"
+        onclick="window.location.href='{{ path('app_login') }}';"
+        style="background: linear-gradient(45deg,#00B7B7,#3C4C5C); border:none; font-weight:600; width:200px;">
+    Proposer un prix | أعطي سومك
+</button>
+
 {% endif %}
 
     </div>

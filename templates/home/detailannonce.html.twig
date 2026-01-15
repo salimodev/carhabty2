@@ -291,11 +291,12 @@
         <i class="las la-comment"></i> Chat avec le vendeur
     </button>
 {% else %}
-    <!-- Utilisateur non connecté ou pas particulier -->
-    <button type="button" class="btn btn-chat rounded-pill fw-bold"
-        onclick="AIZ.plugins.notify('danger',' Vous devez créer un compte particulier pour discuter avec ce vendeur.')">
-        <i class="las la-comment"></i> Chat avec le vendeur
-    </button>
+  <button type="button"
+        class="btn btn-chat rounded-pill fw-bold"
+        onclick="window.location.href='{{ path('app_login') }}';">
+    <i class="las la-comment"></i> Chat avec le vendeur
+</button>
+
 {% endif %}
 
       

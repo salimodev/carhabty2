@@ -139,7 +139,7 @@ foreach ($pieces as $prod) {
     }
 }
 $email = (new TemplatedEmail())
-    ->from('salimabbessi.dev@gmail.com')
+    ->from('essayaracontact@gmail.com')
     ->to($email)
     ->subject('Votre demande a été bien creé')
     ->htmlTemplate('emails/demande.html.twig')

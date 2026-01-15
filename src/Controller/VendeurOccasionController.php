@@ -558,7 +558,7 @@ class VendeurOccasionController extends AbstractController
 
             // Envoi du mail
             $email = (new Email())
-                ->from('salimabbessi.dev@gmail.com')
+                ->from('essayaracontact@gmail.com')
                 ->to($proprietaireEmail)
                 ->subject('Nouvelle offre reçue')
                 ->html($htmlContent);

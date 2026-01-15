@@ -64,7 +64,7 @@ class ResetPasswordController extends AbstractController
 
                 // Envoi du mail
                 $mail->send(
-                    'salimabbessi.dev@gmail.com',
+                    'essayaracontact@gmail.com',
                     $user->getEmail(),
                     'Réinitialisation de mot de passe',
                     'password',

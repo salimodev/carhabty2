@@ -246,7 +246,7 @@ public function ajout_ann_part(Request $request, EntityManagerInterface $em, Mai
 ];
 
         $mail->sendannonce(
-            'salimabbessi.dev@gmail.com',
+            'essayaracontact@gmail.com',
             $user->getEmail(),
             'Votre annonce a été créée',
             'annonce',

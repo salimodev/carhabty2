@@ -46,7 +46,7 @@ public function register(
         // 📧 Envoi du mail de bienvenue
         $context = compact('user');
         $mail->sendBienvenue(
-            'salimabbessi.dev@gmail.com',
+            'essayaracontact@gmail.com',
             $user->getEmail(),
             'Bienvenue',
             'bienvenue',

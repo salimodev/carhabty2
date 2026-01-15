@@ -920,14 +920,22 @@
 												Pas de description disponible.
 											{% endif %}
 										</p>
-
-										{% set dejaPropose = app.user ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0) : false %}
-										{% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
-
-										<a href="{% if estVendeur and not dejaPropose %}{{ path('propose_offre', {'code': demande.code}) }}{% else %}#{% endif %}" class="btn btn-register btn-circle w-100 text-center" style="pointer-events: auto;" {% if not app.user %} onclick="AIZ.plugins.notify('danger', 'Veuillez vous connecter pour proposer une offre !'); return false;" {% elseif not estVendeur %} onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;" {% elseif dejaPropose %} onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;" {% endif %}>
-											<i class="fas fa-envelope-open-text me-2"></i>
-											 Proposer un prix | أعطي سومك
-										</a>
+<a href="{% if not app.user %}
+            {{ path('app_login') }}
+         {% elseif estVendeur and not dejaPropose %}
+            {{ path('propose_offre', {'code': demande.code}) }}
+         {% else %}
+            #
+         {% endif %}"
+   class="btn btn-register btn-circle w-100 text-center"
+   {% if app.user and not estVendeur %}
+        onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;"
+   {% elseif app.user and dejaPropose %}
+        onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;"
+   {% endif %}>
+    <i class="fas fa-envelope-open-text me-2"></i>
+    Proposer un prix | أعطي سومك
+</a>
 
 									</div>
 								</a>

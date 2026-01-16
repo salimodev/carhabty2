@@ -861,6 +861,11 @@
 
 					{% for demande in lastDemandes %}
 						{% if demande.publier == 1 and demande.statut == 'publié' %}
+						{% set estVendeur = app.user and 'ROLE_VENDEUR_NEUF' in app.user.roles %}
+{% set dejaPropose = app.user
+    ? (demande.offres|filter(o => o.user.id == app.user.id)|length > 0)
+    : false
+%}
 							<div class="carousel-box">
 								<a href="{{ path('detail_demande_accuill', {'code': demande.code}) }}" class="text-decoration-none text-dark">
 									<div class="request-card">
@@ -920,6 +925,8 @@
 												Pas de description disponible.
 											{% endif %}
 										</p>
+										
+
 <a href="{% if not app.user %}
             {{ path('app_login') }}
          {% elseif estVendeur and not dejaPropose %}
@@ -928,14 +935,17 @@
             #
          {% endif %}"
    class="btn btn-register btn-circle w-100 text-center"
+
    {% if app.user and not estVendeur %}
         onclick="AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !'); return false;"
    {% elseif app.user and dejaPropose %}
         onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !'); return false;"
    {% endif %}>
+   
     <i class="fas fa-envelope-open-text me-2"></i>
     Proposer un prix | أعطي سومك
 </a>
+
 
 									</div>
 								</a>

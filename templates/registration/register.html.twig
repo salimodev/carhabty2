@@ -108,14 +108,20 @@
 
 {% endblock %}
 {% block javascript %}
-    {{ parent() }}
-   
-   <script>
-function togglePassword() {
-    const passwordInput = document.getElementById('password-field');
-    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-}
-</script>
+{{ parent() }}
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.querySelector('.password-toggle');
+    const passwordInput = document.getElementById('password-field');
+
+    if (toggleBtn && passwordInput) {
+        toggleBtn.addEventListener('click', function() {
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+        });
+    }
+});
+</script>
 {% endblock %}
+
 

@@ -7,6 +7,16 @@
 	{% block LinksCss %}
 		{{ parent() }}
 		<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
+		<style>
+		.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #555;
+}
+</style>
 	{% endblock %}
 
 {% endblock %}
@@ -57,9 +67,22 @@
 									{{ form_row(registrationForm.email, {'attr': {'class': 'form-control  rounded-pill','style':'background-color: #dfdfdf;', 'placeholder':'Email'}}) }}
 								</div>
 
-								<div class="mb-3">
-									{{ form_row(registrationForm.plainPassword, {'attr': {'class': 'form-control rounded-pill','style':'background-color: #dfdfdf;', 'placeholder':'Mot de passe'}}) }}
-								</div>
+								<div class="mb-3 position-relative">
+    {{ form_widget(registrationForm.plainPassword, {
+        'attr': {
+            'class': 'form-control rounded-pill',
+            'style': 'background-color: #dfdfdf;',
+            'placeholder': 'Mot de passe',
+            'type': 'password',
+            'id': 'password-field'
+        }
+    }) }}
+
+    <span class="password-toggle" onclick="togglePassword()">
+        👁
+    </span>
+</div>
+
 
 								<div class="mb-3">
 									<div class="g-recaptcha" data-sitekey="6Ld_nrsZAAAAAO-MowQQPfbD9yoio52GiMgUrmRX"></div>
@@ -82,6 +105,17 @@
 		</div>
 	</section>
 
+
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+   
+   <script>
+function togglePassword() {
+    const passwordInput = document.getElementById('password-field');
+    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+}
+</script>
 
 {% endblock %}
 

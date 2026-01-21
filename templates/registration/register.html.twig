@@ -58,8 +58,22 @@
 									{{ form_row(registrationForm.email, {'attr': {'class': 'form-control  rounded-pill','style':'background-color: #dfdfdf;', 'placeholder':'Email'}}) }}
 								</div>
 
-								<div class="mb-3"> {{ form_row(registrationForm.plainPassword, {'attr': {'class': 'form-control rounded-pill','style':'background-color: #dfdfdf;', 'placeholder':'Mot de passe'}}) }} </div>
 								<div class="mb-3">
+    <div class="input-group">
+        {{ form_widget(registrationForm.plainPassword, {
+            'attr': {
+                'class': 'form-control rounded-pill',
+                'style': 'background-color: #dfdfdf;',
+                'placeholder': 'Mot de passe',
+                'type': 'password'
+            }
+        }) }}
+        <button class="btn btn-outline-secondary rounded-pill" type="button" onclick="togglePassword(this)">
+            👁
+        </button>
+    </div>
+</div>
+<div class="mb-3">
 									<div class="g-recaptcha" data-sitekey="6Ld_nrsZAAAAAO-MowQQPfbD9yoio52GiMgUrmRX"></div>
 								</div>
 

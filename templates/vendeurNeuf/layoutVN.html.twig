@@ -361,11 +361,18 @@ div.dataTables_wrapper div.dataTables_filter input {
 		<div class="aiz-side-nav-logo-wrap" style="background-color: #d1e7f1;">
 			<div class="d-block text-center my-3">
 			
-				<img
-    src="{{ app.user.photo ? asset(app.user.photo) : asset('image/avatar-place.png') }}"
+			{% set avatar = 'image/avatar-place.png' %}
+
+{% if app.user and app.user.photo %}
+    {% set avatar = app.user.photo %}
+{% endif %}
+
+<img
+    src="{{ asset(avatar) }}"
     alt="Profilbild"
     class="avatar"
     onerror="this.onerror=null; this.src='/image/avatar-place.png';">
+
 	<h3 class="fs-16  m-0 text-primary"></h3>
 				<p class="text-primary"></p>
 			</div>

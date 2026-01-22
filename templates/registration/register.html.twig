@@ -69,15 +69,13 @@
 <div class="mb-3 position-relative">
     {{ form_row(registrationForm.plainPassword, {
         'attr': {
-            'class': 'form-control rounded-pill',
-            'style': 'background-color: #dfdfdf; color:#000; padding-right: 40px;', 
+            'class': 'form-control rounded-pill pe-5', 
+            'style': 'background-color: #dfdfdf;', 
             'placeholder': 'Mot de passe'
         }
     }) }}
-
-    <!-- L’œil positionné dans le champ -->
-    <span class="position-absolute" 
-          style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;" 
+    <span class="password-toggle position-absolute" 
+          style="top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;"
           onclick="togglePassword(this)">
         👁
     </span>

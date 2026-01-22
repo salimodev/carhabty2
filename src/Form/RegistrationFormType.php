@@ -104,27 +104,26 @@ class RegistrationFormType extends AbstractType
         ]
     ])
              ->add('plainPassword', RepeatedType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'label'=>false,
-                'mapped' => false,
-               // 'options' => ['attr' =>['class'=>'form-control','placeholder'=>'Mot de passe']],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Entre votre mot de passe ',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'minimum 6 characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
-                'first_options' => ['label' => false,'attr' =>['class'=>'form-control rounded-pill','placeholder'=>'Mot de passe', 'style'=>'background-color: #dfdfdf;margin-bottom: 16px;']],
-                'second_options' => ['label' => false,'attr' =>['class'=>'form-control rounded-pill','placeholder'=>'Confirmer votre mot de passe', 'style'=>'background-color: #dfdfdf;']],
-                'invalid_message' => 'votre mot de passe de confirmation incorrect'
-            ])
-        ;
+    'type' => PasswordType::class,  // <-- obligé pour masquer dès le départ
+    'mapped' => false,
+    'first_options' => [
+        'label' => false,
+        'attr' => [
+            'class' => 'form-control rounded-pill',
+            'placeholder' => 'Mot de passe',
+            'style' => 'background-color: #dfdfdf; padding-right: 40px;',
+        ],
+    ],
+    'second_options' => [
+        'label' => false,
+        'attr' => [
+            'class' => 'form-control rounded-pill',
+            'placeholder' => 'Confirmer votre mot de passe',
+            'style' => 'background-color: #dfdfdf; padding-right: 40px;',
+        ],
+    ],
+    'invalid_message' => 'votre mot de passe de confirmation incorrect',
+]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

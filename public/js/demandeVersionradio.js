@@ -37,59 +37,36 @@ function piece() {
 
     let NewPhotos2 = $('#srcLogo2').val();
 
-    // Type de carburant
-    let carbu = '';
-    if ($('#essence').is(':checked')) carbu = 'essence';
-    else if ($('#diesel').is(':checked')) carbu = 'diesel';
-    else if ($('#hybride').is(':checked')) carbu = 'hybride';
-    else if ($('#electrique').is(':checked')) carbu = 'electrique';
+   // Type de carburant et État du moteur
+let carbu = $('input[name="carb"]:checked').val() || '';
+let etatmoteur = $('input[name="etatmoteurinput"]:checked').val() || '';
 
-    // État du moteur
-    let etatmoteur = '';
-    if ($('#Origine').is(':checked')) etatmoteur = 'Origine';
-    else if ($('#Changé').is(':checked')) etatmoteur = 'Changé';
-    else if ($('#autreetat').is(':checked')) etatmoteur = 'autreetat';
+// Validation
+if (!marque) { AIZ.plugins.notify('danger', "Merci de sélectionner une marque"); return; }
+if (!modele) { AIZ.plugins.notify('danger', "Merci de sélectionner un modèle"); return; }
+if (!chassis) { AIZ.plugins.notify('danger', "Merci de remplir le champ n° chassis"); return; }
+if (!carbu) { AIZ.plugins.notify('danger', "Merci de choisir le type du carburant"); return; }
+if (!etatmoteur) { AIZ.plugins.notify('danger', "Merci de choisir l'état du moteur"); return; }
 
-    // Validation basique
-    if (!marque) {
-        AIZ.plugins.notify('danger', "Merci de sélectionner une marque");
-        return;
-    }
-    if (!modele) {
-        AIZ.plugins.notify('danger', "Merci de sélectionner un modèle");
-        return;
-    }
-    if (!chassis) {
-        AIZ.plugins.notify('danger', "Merci de remplir le champ n° chassis");
-        return;
-    }
-    if (!carbu) {
-        AIZ.plugins.notify('danger', "Merci de choisir le type du carburant");
-        return;
-    }
-    if (!etatmoteur) {
-        AIZ.plugins.notify('danger', "Merci de choisir l'état du moteur");
-        return;
-    }
+// Gestion des sections
+$('.autoinfo').hide();     
+$('.piece').show();             
+$('.delevryInfo').hide();
+$('.confirmationsection').hide();
+$('.payementsection').hide();
 
-    // --- Gestion des sections ---
-    $('.autoinfo').hide();     
-    $('.piece').show();             
-    $('.delevryInfo').hide();
-    $('.confirmationsection').hide();
-    $('.payementsection').hide();
+// Gestion du stepper
+$('.auto').addClass('done').removeClass('active'); 
+$('.auto').children().addClass('text-success').removeClass('text-light');
+$('.auto').children().children().removeClass('opacity-50');
 
-    // --- Gestion du stepper ---
-    $('.auto').addClass('done').removeClass('active'); 
-    $('.auto').children().addClass('text-success').removeClass('text-light');
-    $('.auto').children().children().removeClass('opacity-50');
+$('.pieceauto').addClass('active'); 
+$('.pieceauto').children().addClass('text-primary');
+$('.pieceauto').children().children().removeClass('opacity-50');
 
-    $('.pieceauto').addClass('active'); 
-    $('.pieceauto').children().addClass('text-primary');
-    $('.pieceauto').children().children().removeClass('opacity-50');
+// Remonter la page
+$('html, body').animate({ scrollTop: 0 }, 'slow');
 
-    // --- Remonter la page ---
-    $('html, body').animate({ scrollTop: 0 }, 'slow');
 }
 
 // Gestion des switch (type carburant et état moteur)
@@ -266,17 +243,11 @@ let NewPhotos2 = $('#srcLogo2').val();
 
 
     // --- Carburant ---
-    let carburant = '';
-    if ($('#essence').is(':checked')) carburant = 'essence';
-    else if ($('#diesel').is(':checked')) carburant = 'diesel';
-    else if ($('#hybride').is(':checked')) carburant = 'hybride';
-    else if ($('#electrique').is(':checked')) carburant = 'electrique';
+   let carburant = $('input[name="carb"]:checked').val() || '';
 
     // --- État moteur ---
-    let etatmoteur = '';
-    if ($('#Origine').is(':checked')) etatmoteur = 'Origine';
-    else if ($('#Changé').is(':checked')) etatmoteur = 'Changé';
-    else if ($('#autreetat').is(':checked')) etatmoteur = 'autreetat';
+ let etatmoteur = $('input[name="etatmoteurinput"]:checked').val() || '';
+
 
     // --- Réception des offres ---
     let choixEmail = $('#choix_email').is(':checked');

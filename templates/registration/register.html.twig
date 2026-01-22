@@ -16,6 +16,7 @@
     color: #555;
     font-size: 1.2rem;
 }
+
 </style>
 	{% endblock %}
 
@@ -72,7 +73,8 @@
         'attr': {
             'class': 'form-control rounded-pill password-field',
             'style': 'background-color: #dfdfdf;',
-            'placeholder': 'Mot de passe'
+            'placeholder': 'Mot de passe',
+            'type': 'password'   # important : masque par défaut
         }
     }) }}
 
@@ -109,15 +111,16 @@
     {{ parent() }}
     <script>
         function togglePassword(button) {
-            // récupère le champ input à l’intérieur du même div
             const input = button.closest('.mb-3').querySelector('input');
+
             if (input.type === 'password') {
-                input.type = 'text';
-                button.textContent = '🙈';
+                input.type = 'text';     // montrer le mot de passe
+                button.textContent = '🙈'; // icône œil barré
             } else {
-                input.type = 'password';
-                button.textContent = '👁';
+                input.type = 'password'; // masquer le mot de passe
+                button.textContent = '👁'; // icône œil normal
             }
         }
     </script>
 {% endblock %}
+

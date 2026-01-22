@@ -67,15 +67,9 @@
 									{{ form_row(registrationForm.email, {'attr': {'class': 'form-control  rounded-pill','style':'background-color: #dfdfdf;', 'placeholder':'Email'}}) }}
 								</div>
 <div class="mb-3 position-relative">
-    {{ form_widget(registrationForm.plainPassword, {
-        'attr': {
-            'class': 'form-control rounded-pill pe-5',
-            'style': 'background-color: #dfdfdf;',
-            'placeholder': 'Mot de passe'
-        }
-    }) }}
-    <span class="password-toggle position-absolute" 
-          style="top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;"
+    {{ form_row(registrationForm.plainPassword) }}
+    <span class="password-toggle"
+          style="position:absolute; top:50%; right:15px; transform:translateY(-50%); cursor:pointer;"
           onclick="togglePassword(this)">
         👁
     </span>
@@ -115,7 +109,7 @@ function togglePassword() {
 </script>
 <script>
 function togglePassword(el) {
-    const input = el.parentElement.querySelector('input');
+    const input = el.parentElement.querySelector('.password-field');
     if (input.type === "password") {
         input.type = "text";
         el.textContent = "🙈";

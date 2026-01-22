@@ -107,6 +107,10 @@ class RegistrationFormType extends AbstractType
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'type' => PasswordType::class,
+                'attr' => [
+        'class' => 'form-control rounded-pill password-field',
+        'placeholder' => 'Mot de passe',
+    ],
                 'label'=>false,
                 'mapped' => false,
                // 'options' => ['attr' =>['class'=>'form-control','placeholder'=>'Mot de passe']],

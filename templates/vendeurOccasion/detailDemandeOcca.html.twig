@@ -132,13 +132,13 @@
             {% if dejaPropose %}
                 <button type="button" class="btn btn-primary rounded-pill shadow-sm"
                         onclick="AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');"
-                        style="background: linear-gradient(135deg, #28a745 0%, #85e085 100%); border:none; font-weight:600; width:200px;">
+                        style="background: linear-gradient(135deg, #28a745 0%, #85e085 100%); border:none; font-weight:600; width:300px;">
                     Proposer un prix | أعطي سومك
                 </button>
             {% else %}
-                <form action="{{ path('propose_offre', {'code': demande.code}) }}" class="d-inline">
+                <form action="{{ path('propose_offre_vo', {'code': demande.code}) }}" class="d-inline">
                     <button type="submit" class="btn btn-primary rounded-pill shadow-sm"
-                            style="background: linear-gradient(135deg, #28a745 0%, #85e085 100%); border:none; font-weight:600; width:200px;">
+                            style="background: linear-gradient(135deg, #28a745 0%, #85e085 100%); border:none; font-weight:600; width:300px;">
                         Proposer un prix | أعطي سومك
                     </button>
                 </form>

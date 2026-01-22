@@ -7,7 +7,8 @@
 	{% block LinksCss %}
 		{{ parent() }}
 		<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
-		<style>.password-toggle {
+		<style>
+	.password-toggle {
     position: absolute;
     top: 50%;
     right: 20px;
@@ -16,6 +17,7 @@
     color: #555;
     font-size: 1.2rem;
 }
+
 
 </style>
 	{% endblock %}
@@ -67,7 +69,7 @@
 								<div class="mb-3">
 									{{ form_row(registrationForm.email, {'attr': {'class': 'form-control  rounded-pill','style':'background-color: #dfdfdf;', 'placeholder':'Email'}}) }}
 								</div>
-<div class="mb-3 position-relative password-container">
+<div class="mb-3 position-relative">
     {{ form_row(registrationForm.plainPassword, {
         'attr': {
             'class': 'form-control rounded-pill password-field',
@@ -76,7 +78,7 @@
         }
     }) }}
 
-    <span class="password-toggle" onclick="togglePassword(this)">👁</span>
+    <span class="password-toggle" onclick="togglePassword()">👁</span>
 </div>
 
 
@@ -107,19 +109,18 @@
 {% block javascript %}
 {{ parent() }}
 <script>
-function togglePassword(button) {
-    // on cible le input avec la classe 'password-field'
-    const container = button.closest('.password-container');
-    const input = container.querySelector('.password-field');
+function togglePassword() {
+    // cible directement l'input via sa classe
+    const input = document.querySelector('.password-field');
 
-    if (!input) return; // sécurité
+    if (!input) return;
 
     if (input.type === 'password') {
         input.type = 'text';
-        button.textContent = '🙈';
+        document.querySelector('.password-toggle').textContent = '🙈';
     } else {
         input.type = 'password';
-        button.textContent = '👁';
+        document.querySelector('.password-toggle').textContent = '👁';
     }
 }
 </script>

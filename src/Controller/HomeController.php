@@ -104,7 +104,7 @@ return $this->render('home/index.html.twig', [
 
 
 #[Route(path: '/footer', name: 'app_footer')]
-public function footer(Request $request, EntityManagerInterface $em, OffreRepository $offreRepo): Response
+public function footer(Request $request, EntityManagerInterface $em,MessageRepository $messageRepo, OffreRepository $offreRepo): Response
 {
     $user = $this->getUser();
 
@@ -124,11 +124,17 @@ public function footer(Request $request, EntityManagerInterface $em, OffreReposi
     }
 
     $footer = $em->getRepository(Footer::class)->find(1);
-
+$unreadCount = $messageRepo->createQueryBuilder('m')
+    ->select('COUNT(m.id)')
+    ->where('m.receiver = :user')
+    ->andWhere('m.isRead = false')
+    ->setParameter('user', $user)
+    ->getQuery()
+    ->getSingleScalarResult();
     return $this->render('footer.html.twig', [
         'demandeCount' => $demandeCount,
         'nbOffres' => $nbOffres,
-        'footer' => $footer,
+        'footer' => $footer,'unreadCount' => $unreadCount,
     ]);
 }
 

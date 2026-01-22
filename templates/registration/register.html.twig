@@ -113,10 +113,6 @@ function togglePassword() {
     passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
 }
 </script>
-
-{% endblock %}
-{% block javascript %}
-{{ parent() }}
 <script>
 function togglePassword(el) {
     const input = el.closest('.mb-3').querySelector('input[type="password"], input[type="text"]');

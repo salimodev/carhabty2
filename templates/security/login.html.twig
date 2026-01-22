@@ -56,9 +56,13 @@
 </div>
 
 
-                            <div class="mb-4">
-                                <input type="password" class="form-control rounded-pill" placeholder="Mot de passe" style="background-color: #dfdfdf;" name="password" required>
-                            </div>
+                            <div class="mb-4 position-relative">
+    <input type="password" class="form-control rounded-pill" placeholder="Mot de passe"
+           style="background-color: #dfdfdf; color:#000;" name="password" required>
+    <span class="position-absolute" style="right:15px; top:50%; transform:translateY(-50%); cursor:pointer;" onclick="togglePassword(this)">
+        👁
+    </span>
+</div>
 
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <div>
@@ -93,5 +97,11 @@
 {% endblock %}
 {% block javascript %}
 {{ parent() }}
-		
+	<script>
+function togglePassword(el) {
+    const input = el.previousElementSibling;
+    if (input.type === "password") input.type = "text";
+    else input.type = "password";
+}
+</script>	
 {% endblock %}

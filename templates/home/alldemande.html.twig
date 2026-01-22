@@ -574,13 +574,13 @@ function filtrerDemandes() {
 
                     if (!d.estConnecte) {
                         href = "{{ path('app_login') }}";
-                    } else if ((d.estVendeurNeuf || d.estVendeurOccasion) && !d.dejaPropose) {
-                        if (d.estVendeurNeuf) {
+                    } else if (d.estVendeur && !d.dejaPropose) {
+                        if (d.vendeurType === 'neuf') {
                             href = "{{ path('propose_offre', {'code': 'ID_DEMANDE'}) }}".replace('ID_DEMANDE', d.code);
-                        } else if (d.estVendeurOccasion) {
+                        } else if (d.vendeurType === 'occasion') {
                             href = "{{ path('propose_offre_vo', {'code': 'ID_DEMANDE'}) }}".replace('ID_DEMANDE', d.code);
                         }
-                    } else if (d.estConnecte && !(d.estVendeurNeuf || d.estVendeurOccasion)) {
+                    } else if (d.estConnecte && !d.estVendeur) {
                         onclick = "AIZ.plugins.notify('danger','Seuls les vendeurs peuvent proposer une offre !'); return false;";
                     } else if (d.dejaPropose) {
                         onclick = "AIZ.plugins.notify('danger','Vous avez déjà proposé une offre pour cette demande !'); return false;";
@@ -628,6 +628,7 @@ function filtrerDemandes() {
         }
     });
 }
+
 
 </script>
 {% endblock %}

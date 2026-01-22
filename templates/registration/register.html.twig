@@ -8,14 +8,21 @@
 		{{ parent() }}
 		<link rel="stylesheet" href="{{ asset ('css/stylebutton.css') }}">
 		<style>
-		.password-toggle {
+		.password-container {
+    position: relative;
+}
+
+.password-toggle {
     position: absolute;
     top: 50%;
-    right: 20px;
+    right: 15px;
     transform: translateY(-50%);
     cursor: pointer;
+    font-size: 1.2rem;
     color: #555;
+    user-select: none;
 }
+
 </style>
 	{% endblock %}
 
@@ -66,14 +73,16 @@
 								<div class="mb-3">
 									{{ form_row(registrationForm.email, {'attr': {'class': 'form-control  rounded-pill','style':'background-color: #dfdfdf;', 'placeholder':'Email'}}) }}
 								</div>
-<div class="mb-3 position-relative">
-    {{ form_row(registrationForm.plainPassword) }}
-    <span class="password-toggle"
-          style="position:absolute; top:50%; right:15px; transform:translateY(-50%); cursor:pointer;"
-          onclick="togglePassword(this)">
-        👁
-    </span>
+<div class="mb-3 position-relative password-container">
+    {{ form_row(registrationForm.plainPassword.first) }}
+    <span class="password-toggle" onclick="togglePassword('first')">👁</span>
 </div>
+
+<div class="mb-3 position-relative password-container">
+    {{ form_row(registrationForm.plainPassword.second) }}
+    <span class="password-toggle" onclick="togglePassword('second')">👁</span>
+</div>
+
 
 								<div class="mb-3">
 									<div class="g-recaptcha" data-sitekey="6Ld_nrsZAAAAAO-MowQQPfbD9yoio52GiMgUrmRX"></div>
@@ -101,23 +110,29 @@
 {% block javascript %}
     {{ parent() }}
    
-   <script>
-function togglePassword() {
-    const passwordInput = document.getElementById('password-field');
-    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-}
-</script>
 <script>
-function togglePassword(el) {
-    const input = el.parentElement.querySelector('.password-field');
-    if (input.type === "password") {
-        input.type = "text";
-        el.textContent = "🙈";
+function togglePassword(field) {
+    const input = document.querySelector(
+        field === 'first'
+            ? '#registration_form_plainPassword_first'
+            : '#registration_form_plainPassword_second'
+    );
+
+    const toggle = field === 'first'
+        ? document.querySelector('.password-container:nth-of-type(1) .password-toggle')
+        : document.querySelector('.password-container:nth-of-type(2) .password-toggle');
+
+    if (!input) return;
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        toggle.textContent = '🙈';
     } else {
-        input.type = "password";
-        el.textContent = "👁";
+        input.type = 'password';
+        toggle.textContent = '👁';
     }
 }
+
 </script>
 
 {% endblock %}

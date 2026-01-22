@@ -67,9 +67,19 @@
 									{{ form_row(registrationForm.email, {'attr': {'class': 'form-control  rounded-pill','style':'background-color: #dfdfdf;', 'placeholder':'Email'}}) }}
 								</div>
 
-                                <div class="mb-3"> 
-                                    {{ form_row(registrationForm.plainPassword, {'attr': {'class': 'form-control rounded-pill','style':'background-color: #dfdfdf;', 'placeholder':'Mot de passe'}}) }}
-								</div>
+                              <div class="mb-3 position-relative">
+    {{ form_row(registrationForm.plainPassword, {
+        'attr': {
+            'class': 'form-control rounded-pill',
+            'style': 'background-color: #dfdfdf; color:#000;',
+            'placeholder': 'Mot de passe'
+        }
+    }) }}
+
+    <span class="position-absolute" style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;" onclick="togglePassword(this)">
+        👁
+    </span>
+</div>
 
 								<div class="mb-3">
 									<div class="g-recaptcha" data-sitekey="6Ld_nrsZAAAAAO-MowQQPfbD9yoio52GiMgUrmRX"></div>
@@ -105,4 +115,19 @@ function togglePassword() {
 </script>
 
 {% endblock %}
-
+{% block javascript %}
+{{ parent() }}
+<script>
+function togglePassword(el) {
+    const input = el.closest('.mb-3').querySelector('input[type="password"], input[type="text"]');
+    if (!input) return;
+    if (input.type === "password") {
+        input.type = "text";
+        el.textContent = "🙈";
+    } else {
+        input.type = "password";
+        el.textContent = "👁";
+    }
+}
+</script>
+{% endblock %}

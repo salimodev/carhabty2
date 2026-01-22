@@ -562,6 +562,19 @@ function filtrerDemandes() {
 
                     let detailUrl = "{{ path('detail_demande_accuill', {'code': 'ID_DEMANDE'}) }}".replace('ID_DEMANDE', d.code);
 
+                    // Déterminer le href et le onclick comme Twig
+                    let href = '#';
+                    let onclick = '';
+                    if (!d.estConnecte) {
+                        href = "{{ path('app_login') }}";
+                    } else if (d.estVendeur && !d.dejaPropose) {
+                        href = "{{ path('propose_offre', {'code': 'ID_DEMANDE'}) }}".replace('ID_DEMANDE', d.code);
+                    } else if (d.estConnecte && !d.estVendeur) {
+                        onclick = "AIZ.plugins.notify('danger','Seuls les vendeurs peuvent proposer une offre !'); return false;";
+                    } else if (d.dejaPropose) {
+                        onclick = "AIZ.plugins.notify('danger','Vous avez déjà proposé une offre pour cette demande !'); return false;";
+                    }
+
                     html += `
 <div class="col mb-3">
     <a href="${detailUrl}" class="text-decoration-none text-dark">
@@ -569,16 +582,13 @@ function filtrerDemandes() {
             <div class="request-card">
                 <div class="request-header">
                     <div class="request-title">${piecesTitle || (d.marque + " " + d.modele)}</div>
-                <div class="request-badge">
-  ${
-    d.type === 'neuve/occasion' ? 'Neuve / Occasion' :
-    (d.type === 'neuve' ? 'Neuve' :
-    (d.type === 'occasion' ? 'Occasion' : 'Non spécifié'))
-  }
-</div>
-
-
-
+                    <div class="request-badge">
+                        ${
+                            d.type === 'neuve/occasion' ? 'Neuve / Occasion' :
+                            (d.type === 'neuve' ? 'Neuve' :
+                            (d.type === 'occasion' ? 'Occasion' : 'Non spécifié'))
+                        }
+                    </div>
                 </div>
                 <div class="request-meta">
                     <span><i class="fas fa-map-marker-alt"></i> ${d.zone}</span>
@@ -589,18 +599,13 @@ function filtrerDemandes() {
                     <img src="${(d.pieces[0] && d.pieces[0].photo) || '/image/placeholder.png'}" alt="photo" class="img-fit mx-auto rounded">
                 </div>
                 <p class="request-description">${piecesDesc || 'Pas de description disponible.'}</p>
-                <button class="btn btn-register w-100 propose-btn" 
-                    style="pointer-events: auto;"
-                    data-id="${d.code}" 
-                    data-deja="${d.dejaPropose}" 
-                    data-vendeur="${d.estVendeur}" 
-                    data-connecte="${d.estConnecte}"
-                    data-demandezone="${d.zone}"
-                    data-userzone="${d.userZone || 'Toute la Tunisie'}"
-                    data-type="${d.type}"
-                    data-vendeur-type="${d.vendeurType}">
-                    <i class="fas fa-envelope-open-text"></i> Proposer un prix | أعطي سومك
-                </button>
+
+                <a href="${href}" class="btn btn-register btn-circle w-100 text-center"
+                   style="pointer-events: auto;"
+                   ${onclick ? `onclick="${onclick}"` : ''}>
+                    <i class="fas fa-envelope-open-text me-2"></i> Proposer un prix | أعطي سومك
+                </a>
+
             </div>
         </div>
     </a>
@@ -609,46 +614,6 @@ function filtrerDemandes() {
             }
 
             $('#filterrech').html(html);
-
-            // Gestion des clics sur les boutons "Proposer un prix"
-            $('#filterrech').find('.propose-btn').each(function() {
-                $(this).on('click', function(e) {
-                    e.preventDefault();
-
-                    let deja = $(this).data('deja');
-                    let estVendeur = $(this).data('vendeur');
-                    let estConnecte = $(this).data('connecte');
-                    let demandeId = $(this).data('code');
-                    let demandeZone = $(this).data('demandezone');
-                    let userZone = $(this).data('userzone');
-                    let vendeurType = $(this).data('vendeurType');
-                    let demandeType = $(this).data('type');
-
-                    if (!estConnecte) {
-                        window.location.href = "{{ path('app_login') }}";
-                        return;
-                    }
-                    if (!estVendeur) {
-                        AIZ.plugins.notify('danger', 'Seuls les vendeurs peuvent proposer une offre !');
-                        return;
-                    }
-                    if (deja) {
-                        AIZ.plugins.notify('danger', 'Vous avez déjà proposé une offre pour cette demande !');
-                        return;
-                    }
-                    if (demandeZone !== 'Toute la Tunisie' && demandeZone !== userZone) {
-                        AIZ.plugins.notify('danger', 'Vous pouvez proposer des offres uniquement dans votre zone !');
-                        return;
-                    }
-                    if (vendeurType === 'neuf' && demandeType === 'occasion') {
-                        AIZ.plugins.notify('danger', 'Vous ne pouvez proposer des offres que pour les demandes de type Neuf !');
-                        return;
-                    }
-
-                    let url = "{{ path('propose_offre', {'code': 'ID_DEMANDE'}) }}".replace('ID_DEMANDE', demandeId);
-                    window.location.href = url;
-                });
-            });
         }
     });
 }

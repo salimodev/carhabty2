@@ -80,11 +80,11 @@ $unreadCount = $messageRepo->createQueryBuilder('m')
     }
 
     
-     #[Route('/particulier/annonces', name: 'app_particulier_annonces')]
+     #[Route('/particulier/annonces', name: 'part_ann')]
 public function mesannonces(Request $request, EntityManagerInterface $em, PaginatorInterface $paginator): Response
 {
     $session = $request->getSession();
-    $session->set('PageMenu', 'app_particulier_annonces');
+    $session->set('PageMenu', 'part_ann');
 
     $user = $this->getUser();
     if (!$user) {

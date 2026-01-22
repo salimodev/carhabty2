@@ -340,23 +340,22 @@
 
 
 											<br>
-											<h6>État du moteur
-												<span class="text-danger">*</span>
-											</h6>
-											<div class="checkbox-group">
-												<label class="aiz-switch aiz-switch-success mb-0">
-													<input class="switch1" id="Origine" name="etatmoteurinput" type="checkbox"/>
-													<span class="slider round" style="margin: 5px;margin-bottom: -5px"></span>
-													Origine</label>
-												<label class="aiz-switch aiz-switch-success mb-0">
-													<input class="switch1" id="Changé" name="etatmoteurinput" type="checkbox"/>
-													<span class="slider round" style="margin: 5px;margin-bottom: -5px"></span>
-													Changé</label>
-												<label class="aiz-switch aiz-switch-success mb-0">
-													<input class="switch1" id="autreetat" name="etatmoteurinput" type="checkbox"/>
-													<span class="slider round" style="margin: 5px;margin-bottom: -5px"></span>
-													Je ne sais pas</label>
-											</div>
+											<h6>État du moteur <span class="text-danger">*</span></h6>
+<div class="radio-group" style="display: flex; flex-direction: column; gap: 10px;">
+    <label>
+        <input type="radio" name="etatmoteurinput" value="Origine" style="accent-color: #000000;" />
+        Origine
+    </label>
+    <label>
+        <input type="radio" name="etatmoteurinput" value="Changé" style="accent-color: #000000;" />
+        Changé
+    </label>
+    <label>
+        <input type="radio" name="etatmoteurinput" value="Je ne sais pas" style="accent-color: #000000;" />
+        Je ne sais pas
+    </label>
+</div>
+
 										</div>
 
 									</div>

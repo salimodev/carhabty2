@@ -169,9 +169,9 @@
 {% set isVendeurOcc = app.user and 'ROLE_VENDEUR_OCCASION' in app.user.roles %}
 
 {% if isVendeurNeuf %}
-    {% set lienProposer = path('propose_offre', {'id': demande.id}) %}
+    {% set lienProposer = path('propose_offre', {'code': demande.code}) %}
 {% elseif isVendeurOcc %}
-    {% set lienProposer = path('propose_offre_vo', {'id': demande.id}) %}
+    {% set lienProposer = path('propose_offre_vo', {'code': demande.code}) %}
 {% else %}
     {% set lienProposer = null %}
 {% endif %}
